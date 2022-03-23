@@ -65,13 +65,20 @@
 
 \section{Introduction}
 
+\newcommand*{\probavailable}{\ensuremath{p_{\textnormal{a}}}}
+\newcommand*{\probpairaa}{\ensuremath{p_{\textnormal{aa}}}}
+\newcommand*{\probpairan}{\ensuremath{p_{\textnormal{an}}}}
+\newcommand*{\probpairnn}{\ensuremath{p_{\textnormal{nn}}}}
+
+\newcommand*{\probpage}{\ensuremath{p_{\text{page}}}}
+
 \section{Algorithm description}
 \begin{algorithm}[h!]
   \caption{\algname{DASHA}-\algname{PP}}
   \label{alg:main_algorithm}
   \begin{algorithmic}[1]
   \STATE \textbf{Input:} starting point $x^0 \in \R^d$, stepsize $\gamma > 0$, momentum $a \in (0, 1]$, 
-  momentum $b \in (0, 1]$, probability $p \in (0, 1]$ that a node is \textit{available}\footnote{}, 
+  momentum $b \in (0, 1]$, probability $\probavailable \in (0, 1]$ that a node is \textit{available}\footnote{}, 
   batch size $B$ (only in \algname{DASHA}-\algname{PP}-\algname{PAGE} and \algname{DASHA}-\algname{PP}-\algname{MVR}), 
   number of iterations $T \geq 1$
   \STATE Initialize $g^0_i\in \R^d$, $h^0_i\in \R^d$ on the nodes and  $g^0 = \frac{1}{n}\sum_{i=1}^n g^0_i$ on the server
@@ -86,13 +93,13 @@
           \nabla f_i(x^{t+1}) - \nabla f_i(x^{t}) - b \left(h^t_i - \nabla f_i(x^{t})\right) \\
           \vspace{0.15cm}
           \begin{cases}
-              \nabla f_i(x^{t+1}) - \nabla f_i(x^{t}) - \frac{b}{p'} \left(h^t_i - \nabla f_i(x^{t})\right),& \textnormal{with probability $p'$ on all \textit{available} nodes} \\
-              \frac{1}{B}\sum_{j \in I^t_i}\left(\nabla f_{ij}(x^{t+1}) - \nabla f_{ij}(x^{t})\right), & \textnormal{with probability $1 - p'$ on all \textit{available} nodes} 
+              \nabla f_i(x^{t+1}) - \nabla f_i(x^{t}) - \frac{b}{\probpage} \left(h^t_i - \nabla f_i(x^{t})\right),& \textnormal{with probability $\probpage$ on all \textit{available} nodes} \\
+              \frac{1}{B}\sum_{j \in I^t_i}\left(\nabla f_{ij}(x^{t+1}) - \nabla f_{ij}(x^{t})\right), & \textnormal{with probability $1 - \probpage$ on all \textit{available} nodes} 
           \end{cases}  \\
           \frac{1}{B}\sum_{j=1}^B \nabla f_i(x^{t+1};\xi^{t+1}_{ij}) - \frac{1}{B}\sum_{j=1}^B \nabla f_i(x^{t};\xi^{t+1}_{ij}) - b \left(h^t_i - \frac{1}{B}\sum_{j=1}^B \nabla f_i(x^{t};\xi^{t+1}_{ij})\right),
       \end{cases}$
-      \STATE $h^{t+1}_i = h^t_i + \frac{1}{p}k^{t+1}_i$ 
-      \STATE $m^{t+1}_i = \cC_i\Bigg(\frac{1}{p}k^{t+1}_i - \frac{a}{p} \left(g^{t}_i - h^{t}_i\right)\Bigg)$
+      \STATE $h^{t+1}_i = h^t_i + \frac{1}{\probavailable}k^{t+1}_i$ 
+      \STATE $m^{t+1}_i = \cC_i\Bigg(\frac{1}{\probavailable}k^{t+1}_i - \frac{a}{\probavailable} \left(g^{t}_i - h^{t}_i\right)\Bigg)$
       \STATE $g^{t+1}_i = g^{t}_i + m^{t+1}_i$
       \STATE Send $m^{t+1}_i$ to the server
   \ELSE
@@ -109,6 +116,129 @@
 
 \newpage
 \appendix
+
+\section{Auxiliary Facts}
+We list auxiliary facts that we use in our proofs:
+\begin{enumerate}
+    \item 
+        For all $x, y \in \R^d,$ we have
+        \begin{align}
+            \norm{x + y}^2 \leq 2\norm{x}^2 + 2\norm{y}^2
+            \label{auxiliary:jensen_inequality}
+        \end{align}
+    \item
+        Let us take a \textit{random vector} $\xi \in \R^d$, then
+        \begin{align}
+            \Exp{\norm{\xi}^2} = \Exp{\norm{\xi - \Exp{\xi}}^2} + \norm{\Exp{\xi}}^2.
+            \label{auxiliary:variance_decomposition}
+        \end{align}
+\end{enumerate}
+
+\section{Proofs of theorems}
+
+There are three different sources of randomness in Algorithm~\ref{alg:main_algorithm}: the first one from vectors $\{h_i^{t+1}\}_{i=1}^n$, the second one from compressors $\{\cC_i\}_{i=1}^n$, and the third one from availability of nodes. In this section, we define $\ExpSub{h}{\cdot}$, $\ExpSub{\cC}{\cdot}$ and $\ExpSub{\probavailable}{\cdot}$ to be conditional expectations w.r.t.\,$\{h_i^{t+1}\}_{i=1}^n$, $\{\cC_i\}_{i=1}^n, $ and availability, accordingly, conditioned on all previous randomness. Moreover, we define $\ExpSub{t+1}{\cdot}$ to be a conditional expectation w.r.t. all randomness in iteration $t+1$ conditioned on all previous randomness. Note, that $\ExpSub{t+1}{\cdot}{\cdot} = \ExpSub{h}{\ExpSub{\cC}{\ExpSub{\probavailable}{\cdot}}}.$
+
+\begin{lemma}
+  Suppose that Assumption~\ref{ass:compressors} holds and let us consider sequences $g^{t+1}_i$, $h^{t+1}_i,$ and $k^{t+1}_i$ from Algorithm~\ref{alg:main_algorithm}, then
+  \begin{align}
+      \label{eq:compressor_global_error}
+      \ExpSub{\cC}{\ExpSub{\probavailable}{\norm{g^{t+1} - h^{t+1}}^2}}
+      \leq \frac{2 \omega}{\probavailable n^2}\sum_{i=1}^n\norm{k^{t+1}_i}^2 + \frac{a^2 (2\omega + 1 - p)}{\probavailable n^2}\sum_{i=1}^n\norm{g^{t}_i - h^{t}_i}^2 + (1 - a)^2\norm{g^{t} - h^{t}}^2,
+  \end{align}
+  and
+  \begin{align}
+      \label{eq:compressor_local_error}
+      \ExpSub{\cC}{\ExpSub{\probavailable}{\norm{g^{t+1}_i - h^{t+1}_i}^2}} \leq \frac{2 \omega}{\probavailable}\norm{k^{t+1}_i}^2 + \frac{a^2 (2\omega + 1 - p)}{\probavailable}\norm{g^{t}_i - h^{t}_i}^2 + (1 - a)^2\norm{g^{t}_i - h^{t}_i}^2, \quad \forall i \in [n].
+  \end{align}
+\end{lemma}
+\begin{proof}
+  First, we estimate $\ExpSub{\cC}{\ExpSub{\probavailable}{\norm{g^{t+1} - h^{t+1}}^2}}$:
+  \begin{align*}
+      &\ExpSub{\cC}{\ExpSub{\probavailable}{\norm{g^{t+1} - h^{t+1}}^2}} \\
+      &=\ExpSub{\cC}{\ExpSub{\probavailable}{\norm{g^{t+1} - h^{t+1} - \ExpSub{\cC}{\ExpSub{\probavailable}{g^{t+1} - h^{t+1}}}}^2}} + \norm{\ExpSub{\cC}{\ExpSub{\probavailable}{g^{t+1} - h^{t+1}}}}^2,
+  \end{align*}
+  where we used \eqref{auxiliary:variance_decomposition}.
+  Using
+  \begin{align*}
+      &\ExpSub{\cC}{\ExpSub{\probavailable}{g^{t+1}_i}} \\
+      &=\probavailable \ExpSub{\cC}{g^{t}_i + \cC_i\Bigg(\frac{1}{\probavailable}k^{t+1}_i - \frac{a}{\probavailable} \left(g^{t}_i - h^{t}_i\right)\Bigg)} + (1 - \probavailable) g^{t}_i \\
+      &=g^{t}_i  + \probavailable\ExpSub{\cC}{\cC_i\Bigg(\frac{1}{\probavailable}k^{t+1}_i - \frac{a}{\probavailable} \left(g^{t}_i - h^{t}_i\right)\Bigg)} \\
+      &=g^{t}_i  + k^{t+1}_i - a \left(g^{t}_i - h^{t}_i\right), \\
+  \end{align*}
+  and 
+  \begin{align*}
+      &\ExpSub{\cC}{\ExpSub{\probavailable}{h^{t+1}_i}} = \probavailable \ExpSub{\cC}{h^t_i + \frac{1}{\probavailable}k^{t+1}_i} + (1 - \probavailable) h^{t}_i = h^{t}_i + k^{t+1}_i, \\
+  \end{align*}
+  we can get
+  \begin{align*}
+      &\ExpSub{\cC}{\ExpSub{\probavailable}{\norm{g^{t+1} - h^{t+1}}^2}} \\
+      &=\ExpSub{\cC}{\ExpSub{\probavailable}{\norm{g^{t+1} - h^{t+1} - \ExpSub{\cC}{\ExpSub{\probavailable}{g^{t+1} - h^{t+1}}}}^2}} + (1 - a)^2\norm{g^{t} - h^{t}}^2.
+  \end{align*}
+  Next, we have
+  \begin{align*}
+    &\ExpSub{\cC}{\ExpSub{\probavailable}{\norm{g^{t+1} - h^{t+1}}^2}} \\
+    &=\frac{1}{n^2}\sum_{i=1}^n\ExpSub{\cC}{\ExpSub{\probavailable}{\norm{g^{t+1}_i - h^{t+1}_i - \ExpSub{\cC}{\ExpSub{\probavailable}{g^{t+1}_i - h^{t+1}_i}}}^2}} \\
+    &\quad +\frac{1}{n^2}\sum_{i \neq j}^n\ExpSub{\cC}{\ExpSub{\probavailable}{\inp{g^{t+1}_i - h^{t+1}_i - \ExpSub{\cC}{\ExpSub{\probavailable}{g^{t+1}_i - h^{t+1}_i}}}{g^{t+1}_j - h^{t+1}_j - \ExpSub{\cC}{\ExpSub{\probavailable}{g^{t+1}_j - h^{t+1}_j}}}}} \\
+    &\quad + (1 - a)^2\norm{g^{t} - h^{t}}^2\\
+    &=\frac{1}{n^2}\sum_{i=1}^n\ExpSub{\cC}{\ExpSub{\probavailable}{\norm{g^{t+1}_i - h^{t+1}_i - g^{t}_i + a \left(g^{t}_i - h^{t}_i\right) + h^{t}_i}^2}} \\
+    &\quad +\frac{1}{n^2}\sum_{i \neq j}^n\ExpSub{\cC}{\ExpSub{\probavailable}{\inp{g^{t+1}_i - h^{t+1}_i - g^{t}_i + a \left(g^{t}_i - h^{t}_i\right) + h^{t}_i}{g^{t+1}_j - h^{t+1}_j - g^{t}_j + a \left(g^{t}_j - h^{t}_j\right) + h^{t}_j}}} \\
+    &\quad + (1 - a)^2\norm{g^{t} - h^{t}}^2\\
+    &=\frac{\probavailable}{n^2}\sum_{i=1}^n\ExpSub{\cC}{\norm{g^{t}_i + \cC_i\Bigg(\frac{1}{\probavailable}k^{t+1}_i - \frac{a}{\probavailable} \left(g^{t}_i - h^{t}_i\right)\Bigg) - h^{t}_i - \frac{1}{\probavailable}k^{t+1}_i - g^{t}_i + a \left(g^{t}_i - h^{t}_i\right) + h^{t}_i}^2} \\
+    &\quad+ \frac{(1 - \probavailable)}{n^2}\sum_{i=1}^n\ExpSub{\cC}{\norm{g^{t}_i - h^{t}_i - g^{t}_i + a \left(g^{t}_i - h^{t}_i\right) + h^{t}_i}^2} \\
+    &\quad +\frac{\probpairaa}{n^2}\sum_{i \neq j}^n{\rm E}_{\cC}\Bigg[\Bigg\langle g^{t}_i + \cC_i\Bigg(\frac{1}{\probavailable}k^{t+1}_i - \frac{a}{\probavailable} \left(g^{t}_i - h^{t}_i\right)\Bigg) - h^{t}_i - \frac{1}{\probavailable}k^{t+1}_i - g^{t}_i + a \left(g^{t}_i - h^{t}_i\right) + h^{t}_i, \\
+    &\qquad\qquad\qquad\qquad g^{t}_j + \cC_j\Bigg(\frac{1}{\probavailable}k^{t+1}_j - \frac{a}{\probavailable}\left(g^{t}_j - h^{t}_j\right)\Bigg) - h^{t}_j - \frac{1}{\probavailable}k^{t+1}_j - g^{t}_j + a \left(g^{t}_j - h^{t}_j\right) + h^{t}_j\Bigg\rangle\Bigg] \\
+    &\quad +\frac{2\probpairan}{n^2}\sum_{i \neq j}^n{\rm E}_{\cC}\Bigg[\Bigg\langle g^{t}_i + \cC_i\Bigg(\frac{1}{\probavailable}k^{t+1}_i - \frac{a}{\probavailable} \left(g^{t}_i - h^{t}_i\right)\Bigg) - h^{t}_i - \frac{1}{\probavailable}k^{t+1}_i - g^{t}_i + a \left(g^{t}_i - h^{t}_i\right) + h^{t}_i,\\
+    &\qquad\qquad\qquad\qquad g^{t}_j - h^{t}_j - g^{t}_j + a \left(g^{t}_j - h^{t}_j\right) + h^{t}_j\Bigg\rangle\Bigg] \\
+    &\quad +\frac{\probpairnn}{n^2}\sum_{i \neq j}^n\ExpSub{\cC}{\inp{g^{t}_i - h^{t}_i - g^{t}_i + a \left(g^{t}_i - h^{t}_i\right) + h^{t}_i}{g^{t}_j - h^{t}_j - g^{t}_j + a \left(g^{t}_j - h^{t}_j\right) + h^{t}_j}} \\
+    &\quad + (1 - a)^2\norm{g^{t} - h^{t}}^2.\\
+  \end{align*}
+  In the last equality, we use Assumption~\ref{ass:prob_sampling}. Using the independence of compressors, we get
+  \begin{align*}
+    &\ExpSub{\cC}{\ExpSub{\probavailable}{\norm{g^{t+1} - h^{t+1}}^2}} \\
+    &=\frac{\probavailable}{n^2}\sum_{i=1}^n\ExpSub{\cC}{\norm{\cC_i\Bigg(\frac{1}{\probavailable}k^{t+1}_i - \frac{a}{\probavailable} \left(g^{t}_i - h^{t}_i\right)\Bigg) - \frac{1}{\probavailable}k^{t+1}_i + a \left(g^{t}_i - h^{t}_i\right)}^2} \\
+    &\quad+ \frac{a^2 (1 - \probavailable)}{n^2}\sum_{i=1}^n\norm{g^{t}_i - h^{t}_i}^2 \\
+    &\quad +\frac{a^2 \probpairaa (\probavailable - 1)^2}{n^2 \probavailable^2}\sum_{i \neq j}^n\inp{g^{t}_i - h^{t}}{g^{t}_j - h^{t}_j} \\
+    &\quad +\frac{2a^2\probpairan (\probavailable - 1)}{n^2 \probavailable}\sum_{i \neq j}^n\inp{g^{t}_i - h^{t}_i}{g^{t}_j - h^{t}_j} \\
+    &\quad +\frac{a^2 \probpairnn}{n^2}\sum_{i \neq j}^n\inp{g^{t}_i - h^{t}_i}{g^{t}_j - h^{t}_j} \\
+    &\quad + (1 - a)^2\norm{g^{t} - h^{t}}^2.\\
+  \end{align*}
+  Using $\probpairaa + \probpairnn + 2\probpairan = 1$ and $\probavailable = \probpairaa + \probpairan,$ we have
+  \begin{align*}
+    &\ExpSub{\cC}{\ExpSub{\probavailable}{\norm{g^{t+1} - h^{t+1}}^2}} \\
+    &=\frac{\probavailable}{n^2}\sum_{i=1}^n\ExpSub{\cC}{\norm{\cC_i\Bigg(\frac{1}{\probavailable}k^{t+1}_i - \frac{a}{\probavailable} \left(g^{t}_i - h^{t}_i\right)\Bigg) - \frac{1}{\probavailable}k^{t+1}_i + a \left(g^{t}_i - h^{t}_i\right)}^2} \\
+    &\quad+ \frac{a^2 (1 - \probavailable)}{n^2}\sum_{i=1}^n\norm{g^{t}_i - h^{t}_i}^2 \\
+    &\quad +\frac{a^2 (\probpairaa - \probavailable^2)}{n^2 \probavailable^2}\sum_{i \neq j}^n\inp{g^{t}_i - h^{t}}{g^{t}_j - h^{t}_j} \\
+    &\quad + (1 - a)^2\norm{g^{t} - h^{t}}^2.\\
+  \end{align*}
+  Next, we get
+  \begin{align*}
+    &\ExpSub{\cC}{\ExpSub{\probavailable}{\norm{g^{t+1} - h^{t+1}}^2}} \\
+    &\overset{\eqref{auxiliary:variance_decomposition}}{=}\frac{\probavailable}{n^2}\sum_{i=1}^n\ExpSub{\cC}{\norm{\cC_i\Bigg(\frac{1}{\probavailable}k^{t+1}_i - \frac{a}{\probavailable} \left(g^{t}_i - h^{t}_i\right)\Bigg) - \left(\frac{1}{\probavailable}k^{t+1}_i - \frac{a}{\probavailable} \left(g^{t}_i - h^{t}_i\right)\right)}^2} \\
+    &\quad +\frac{a^2 (1 - \probavailable)^2}{n^2 \probavailable}\sum_{i=1}^n\norm{g^{t}_i - h^{t}_i}^2 \\
+    &\quad+ \frac{a^2 (1 - \probavailable)}{n^2}\sum_{i=1}^n\norm{g^{t}_i - h^{t}_i}^2 \\
+    &\quad +\frac{a^2 (\probpairaa - \probavailable^2)}{n^2 \probavailable^2}\sum_{i \neq j}^n\inp{g^{t}_i - h^{t}}{g^{t}_j - h^{t}_j} \\
+    &\quad + (1 - a)^2\norm{g^{t} - h^{t}}^2.\\
+    &=\frac{\probavailable}{n^2}\sum_{i=1}^n\ExpSub{\cC}{\norm{\cC_i\Bigg(\frac{1}{\probavailable}k^{t+1}_i - \frac{a}{\probavailable} \left(g^{t}_i - h^{t}_i\right)\Bigg) - \left(\frac{1}{\probavailable}k^{t+1}_i - \frac{a}{\probavailable} \left(g^{t}_i - h^{t}_i\right)\right)}^2} \\
+    &\quad +\frac{a^2 (1 - \probavailable)}{n^2 \probavailable}\sum_{i=1}^n\norm{g^{t}_i - h^{t}_i}^2 \\
+    &\quad +\frac{a^2 (\probpairaa - \probavailable^2)}{n^2 \probavailable^2}\sum_{i \neq j}^n\inp{g^{t}_i - h^{t}}{g^{t}_j - h^{t}_j} \\
+    &\quad + (1 - a)^2\norm{g^{t} - h^{t}}^2.\\
+  \end{align*}
+  Using Assumption~\ref{} and \eqref{auxiliary:jensen_inequality}, we obtain
+  \begin{align*}
+    &\ExpSub{\cC}{\ExpSub{\probavailable}{\norm{g^{t+1} - h^{t+1}}^2}} \\
+    &\leq\frac{\omega}{n^2 \probavailable}\sum_{i=1}^n\norm{k^{t+1}_i - a \left(g^{t}_i - h^{t}_i\right)}^2 +\frac{a^2 (1 - \probavailable)}{n^2 \probavailable}\sum_{i=1}^n\norm{g^{t}_i - h^{t}_i}^2 \\
+    &\quad +\frac{a^2 (\probpairaa - \probavailable^2)}{n^2 \probavailable^2}\sum_{i \neq j}^n\inp{g^{t}_i - h^{t}}{g^{t}_j - h^{t}_j} + (1 - a)^2\norm{g^{t} - h^{t}}^2.\\
+    &\leq\frac{2 \omega}{n^2 \probavailable}\sum_{i=1}^n\norm{k^{t+1}_i}^2 +\frac{a^2 (2 \omega + 1 - \probavailable)}{n^2 \probavailable}\sum_{i=1}^n\norm{g^{t}_i - h^{t}_i}^2 \\
+    &\quad +\frac{a^2 (\probpairaa - \probavailable^2)}{n^2 \probavailable^2}\sum_{i \neq j}^n\inp{g^{t}_i - h^{t}}{g^{t}_j - h^{t}_j} \\
+    &\quad + (1 - a)^2\norm{g^{t} - h^{t}}^2.\\
+    &=\frac{2 \omega}{n^2 \probavailable}\sum_{i=1}^n\norm{k^{t+1}_i}^2 +\frac{a^2 (2 \omega + 1 - \probavailable)}{n^2 \probavailable}\sum_{i=1}^n\norm{g^{t}_i - h^{t}_i}^2 \\
+    &\quad -\frac{a^2 (\probpairaa - \probavailable^2)}{n^2 \probavailable^2}\sum_{i=1}^n\norm{g^{t}_i - h^{t}_i}^2 + \frac{a^2 (\probpairaa - \probavailable^2)}{\probavailable^2}\norm{g^{t} - h^{t}}^2 \\
+    &\quad + (1 - a)^2\norm{g^{t} - h^{t}}^2.\\
+    &=\frac{2 \omega}{n^2 \probavailable}\sum_{i=1}^n\norm{k^{t+1}_i}^2 +\frac{a^2 (\left(2 \omega + 1\right)\probavailable - \probpairaa)}{n^2 \probavailable^2}\sum_{i=1}^n\norm{g^{t}_i - h^{t}_i}^2 \\
+    &\quad + \frac{a^2 (\probpairaa - \probavailable^2)}{\probavailable^2}\norm{g^{t} - h^{t}}^2 \\
+    &\quad + (1 - a)^2\norm{g^{t} - h^{t}}^2.\\
+  \end{align*}
+\end{proof}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section*{Checklist}
