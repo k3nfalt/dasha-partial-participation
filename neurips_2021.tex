@@ -289,7 +289,7 @@ In the case of \algname{DASHA}-\algname{PP}-\algname{PAGE}, there are two differ
       &\qquad\qquad\qquad\qquad h^{t}_j - h^{t}_j - \nabla f_j(x^{t+1}) + \nabla f_j(x^{t}) + b(h^t_j - \nabla f_j(x^{t}))\Bigg\rangle \\
       &\quad + \left(1 - b\right)^2 \norm{h^{t} - \nabla f(x^{t})}^2.
   \end{align*}
-  Next, from the independence of stochastic gradients, we obtain
+  Next, from the independence of stochastic gradients and Assumption~\ref{ass:prob_sampling}, we obtain
   \begin{align*}
     &\ExpSub{k}{\ExpSub{\probavailable}{\norm{h^{t+1} - \nabla f(x^{t+1})}^2}} \\
     &=\frac{\probavailable}{n^2}\sum_{i=1}^n \ExpSub{k}{\norm{\frac{1}{\probavailable}k^{t+1}_i - \nabla f_i(x^{t+1}) + \nabla f_i(x^{t}) + b(h^t_i - \nabla f_i(x^{t}))}^2} \\
@@ -378,15 +378,90 @@ Finally, from the unbiasedness of stochastic gradients, the equality holds for \
       &k^{t+1}_{i, 1} \eqdef \nabla f_i(x^{t+1}) - \nabla f_i(x^{t}) - \frac{b}{\probpage} \left(h^t_i - \nabla f_i(x^{t})\right), \\
       &k^{t+1}_{i, 2} \eqdef \frac{1}{B}\sum_{j \in I^t_i}\left(\nabla f_{ij}(x^{t+1}) - \nabla f_{ij}(x^{t})\right), \\
       &h^{t+1}_{i,1} \eqdef \begin{cases}
-          h^t_i + \frac{1}{p} k^{t+1}_{i, 1},& \textnormal{with probability $\probavailable$,} \\
+          h^t_i + \frac{1}{\probavailable} k^{t+1}_{i, 1},& \textnormal{with probability $\probavailable$,} \\
           h^t_i, & \textnormal{with probability $1 - \probavailable$,} 
       \end{cases}  \\
       &h^{t+1}_{i,2} \eqdef \begin{cases}
-          h^t_i + \frac{1}{p} k^{t+1}_{i, 2},& \textnormal{with probability $\probavailable$,} \\
+          h^t_i + \frac{1}{\probavailable} k^{t+1}_{i, 2},& \textnormal{with probability $\probavailable$,} \\
           h^t_i, & \textnormal{with probability $1 - \probavailable$,}
       \end{cases}  \\
   \end{align*}
-  $h^{t+1}_{1} \eqdef \frac{1}{n}\sum_{i=1}^n h^{t+1}_{i,1},$ and $h^{t+1}_{2} \eqdef \frac{1}{n}\sum_{i=1}^n h^{t+1}_{i,2}.$
+  $h^{t+1}_{1} \eqdef \frac{1}{n}\sum_{i=1}^n h^{t+1}_{i,1},$ and $h^{t+1}_{2} \eqdef \frac{1}{n}\sum_{i=1}^n h^{t+1}_{i,2}.$ Note, that
+  \begin{align*}
+    &h^{t+1} = \begin{cases}
+      h^{t+1}_{1},& \textnormal{with probability $\probpage$,} \\
+      h^{t+1}_{2},& \textnormal{with probability $1 - \probpage$.} 
+    \end{cases}
+  \end{align*}
+  Thus, we have
+  \begin{align*}
+    &\ExpSub{B}{\ExpSub{\probavailable}{\ExpSub{\probpage}{\norm{h^{t+1} - \nabla f(x^{t+1})}^2}}} \\
+    &=\probpage\ExpSub{B}{\ExpSub{\probavailable}{\norm{h^{t+1}_{1} - \nabla f(x^{t+1})}^2}} + (1 - \probpage)\ExpSub{B}{\ExpSub{\probavailable}{\norm{h^{t+1}_{2} - \nabla f(x^{t+1})}^2}}.\\
+  \end{align*}
+  Using 
+  \begin{align*}
+    &\ExpSub{B}{\ExpSub{\probavailable}{h^{t+1}_{i,1}}} = \\
+    &=\probavailable h^t_i +  \nabla f_i(x^{t+1}) - \nabla f_i(x^{t}) - \frac{b}{\probpage} \left(h^t_i - \nabla f_i(x^{t})\right) + (1 - \probavailable) h^t_i \\
+    &= h^t_i + \nabla f_i(x^{t+1}) - \nabla f_i(x^{t}) - \frac{b}{\probpage} \left(h^t_i - \nabla f_i(x^{t})\right).
+  \end{align*}
+  and 
+  \begin{align*}
+    &\ExpSub{B}{\ExpSub{\probavailable}{h^{t+1}_{i,2}}} = \\
+    &=\probavailable h^t_i +  \ExpSub{B}{\frac{1}{B}\sum_{j \in I^t_i}\left(\nabla f_{ij}(x^{t+1}) - \nabla f_{ij}(x^{t})\right)} + (1 - \probavailable) h^t_i \\
+    &= h^t_i + \nabla f_i(x^{t+1}) - \nabla f_i(x^{t}),
+  \end{align*}
+  we obtaine
+  \begin{align*}
+    &\ExpSub{B}{\ExpSub{\probavailable}{\ExpSub{\probpage}{\norm{h^{t+1} - \nabla f(x^{t+1})}^2}}} \\
+    &\overset{\eqref{auxiliary:variance_decomposition}}{=}\probpage\ExpSub{B}{\ExpSub{\probavailable}{\norm{h^{t+1}_{1} - \ExpSub{B}{\ExpSub{\probavailable}{h^{t+1}_{1}}}}^2}} + (1 - \probpage)\ExpSub{B}{\ExpSub{\probavailable}{\norm{h^{t+1}_{2} - \ExpSub{B}{\ExpSub{\probavailable}{h^{t+1}_{2}}}}^2}} \\
+    &\quad +\probpage\norm{\ExpSub{B}{\ExpSub{\probavailable}{h^{t+1}_{1}}} - \nabla f(x^{t+1})}^2 + (1 - \probpage)\norm{\ExpSub{B}{\ExpSub{\probavailable}{h^{t+1}_{2}}} - \nabla f(x^{t+1})}^2 \\
+    &=\probpage\ExpSub{B}{\ExpSub{\probavailable}{\norm{h^{t+1}_{1} - \ExpSub{B}{\ExpSub{\probavailable}{h^{t+1}_{1}}}}^2}} + (1 - \probpage)\ExpSub{B}{\ExpSub{\probavailable}{\norm{h^{t+1}_{2} - \ExpSub{B}{\ExpSub{\probavailable}{h^{t+1}_{2}}}}^2}} \\
+    &\quad +\left(\probpage\left(1 - \frac{b}{\probpage}\right)^2 + (1 - \probpage)\right)\norm{h^{t} - \nabla f(x^{t})}^2.
+  \end{align*}
+  Next, we consider $\ExpSub{B}{\ExpSub{\probavailable}{\norm{h^{t+1}_{1} - \ExpSub{B}{\ExpSub{\probavailable}{h^{t+1}_{1}}}}^2}}$:
+  \begin{align*}
+    &\ExpSub{B}{\ExpSub{\probavailable}{\norm{h^{t+1}_{1} - \ExpSub{B}{\ExpSub{\probavailable}{h^{t+1}_{1}}}}^2}}\\
+    &=\ExpSub{\probavailable}{\norm{h^{t+1}_{1} - \ExpSub{B}{\ExpSub{\probavailable}{h^{t+1}_{1}}}}^2} \\
+    &=\frac{1}{n^2}\sum_{i=1}^n\ExpSub{\probavailable}{\norm{h^{t+1}_{i,1} - \ExpSub{B}{\ExpSub{\probavailable}{h^{t+1}_{i,1}}}}^2} \\
+    &\quad +\frac{1}{n^2}\sum_{i\neq j}^n\ExpSub{\probavailable}{\inp{h^{t+1}_{i,1} - \ExpSub{B}{\ExpSub{\probavailable}{h^{t+1}_{i,1}}}}{h^{t+1}_{j,1} - \ExpSub{B}{\ExpSub{\probavailable}{h^{t+1}_{j,1}}}}} \\
+    &=\frac{(1 - \probavailable)^2}{n^2 \probavailable}\sum_{i=1}^n\norm{\nabla f_i(x^{t+1}) - \nabla f_i(x^{t}) - \frac{b}{\probpage} \left(h^t_i - \nabla f_i(x^{t})\right)}^2 \\
+    &\quad + \frac{1 - \probavailable}{n^2}\sum_{i=1}^n\norm{\nabla f_i(x^{t+1}) - \nabla f_i(x^{t}) - \frac{b}{\probpage} \left(h^t_i - \nabla f_i(x^{t})\right)}^2\\
+    &\quad +\frac{\probpairaa(\probavailable - 1)^2}{n^2 \probavailable^2}\sum_{i\neq j}^n\inp{\nabla f_i(x^{t+1}) - \nabla f_i(x^{t}) - \frac{b}{\probpage} \left(h^t_i - \nabla f_i(x^{t})\right)}{\nabla f_j(x^{t+1}) - \nabla f_j(x^{t}) - \frac{b}{\probpage} \left(h^t_j - \nabla f_j(x^{t})\right)} \\
+    &\quad +\frac{2\probpairan (\probavailable - 1)}{n^2 \probavailable}\sum_{i\neq j}^n\inp{\nabla f_i(x^{t+1}) - \nabla f_i(x^{t}) - \frac{b}{\probpage} \left(h^t_i - \nabla f_i(x^{t})\right)}{\nabla f_j(x^{t+1}) - \nabla f_j(x^{t}) - \frac{b}{\probpage} \left(h^t_j - \nabla f_j(x^{t})\right)} \\
+    &\quad +\frac{\probpairnn}{n^2}\sum_{i\neq j}^n\inp{\nabla f_i(x^{t+1}) - \nabla f_i(x^{t}) - \frac{b}{\probpage} \left(h^t_i - \nabla f_i(x^{t})\right)}{\nabla f_j(x^{t+1}) - \nabla f_j(x^{t}) - \frac{b}{\probpage} \left(h^t_j - \nabla f_j(x^{t})\right)} \\
+  \end{align*}
+  Considering Assumption~\ref{ass:prob_sampling}, we have
+  \begin{align*}
+    &\ExpSub{B}{\ExpSub{\probavailable}{\norm{h^{t+1}_{1} - \ExpSub{B}{\ExpSub{\probavailable}{h^{t+1}_{1}}}}^2}}\\
+    &=\frac{1 - \probavailable}{n^2 \probavailable}\sum_{i=1}^n\norm{\nabla f_i(x^{t+1}) - \nabla f_i(x^{t}) - \frac{b}{\probpage} \left(h^t_i - \nabla f_i(x^{t})\right)}^2 \\
+    &\quad +\frac{\probpairaa - \probavailable^2}{n^2 \probavailable^2}\sum_{i\neq j}^n\inp{\nabla f_i(x^{t+1}) - \nabla f_i(x^{t}) - \frac{b}{\probpage} \left(h^t_i - \nabla f_i(x^{t})\right)}{\nabla f_j(x^{t+1}) - \nabla f_j(x^{t}) - \frac{b}{\probpage} \left(h^t_j - \nabla f_j(x^{t})\right)} \\
+    &=\frac{\probavailable - \probpairaa}{n^2 \probavailable}\sum_{i=1}^n\norm{\nabla f_i(x^{t+1}) - \nabla f_i(x^{t}) - \frac{b}{\probpage} \left(h^t_i - \nabla f_i(x^{t})\right)}^2 \\
+    &\quad +\frac{\probpairaa - \probavailable^2}{\probavailable^2}\norm{\nabla f(x^{t+1}) - \nabla f(x^{t}) - \frac{b}{\probpage} \left(h^t - \nabla f(x^{t})\right)}^2. \\
+  \end{align*}
+  Now, we bound $\ExpSub{B}{\ExpSub{\probavailable}{\norm{h^{t+1}_{2} - \ExpSub{B}{\ExpSub{\probavailable}{h^{t+1}_{2}}}}^2}}$:
+  \begin{align*}
+    &\ExpSub{B}{\ExpSub{\probavailable}{\norm{h^{t+1}_{2} - \ExpSub{B}{\ExpSub{\probavailable}{h^{t+1}_{2}}}}^2}}\\
+    &=\frac{1}{n^2}\sum_{i=1}^n\ExpSub{B}{\ExpSub{\probavailable}{\norm{h^{t+1}_{i,2} - \ExpSub{B}{\ExpSub{\probavailable}{h^{t+1}_{i,2}}}}^2}} \\
+    &\quad +\frac{1}{n^2}\sum_{i\neq j}^n\ExpSub{B}{\ExpSub{\probavailable}{\inp{h^{t+1}_{i,2} - \ExpSub{B}{\ExpSub{\probavailable}{h^{t+1}_{i,2}}}}{h^{t+1}_{j,2} - \ExpSub{B}{\ExpSub{\probavailable}{h^{t+1}_{j,2}}}}}} \\
+    &=\frac{\probavailable}{n^2}\sum_{i=1}^n\ExpSub{B}{\norm{h^t_i + \frac{1}{\probavailable} k^{t+1}_{i, 2} - \left(h^t_i + \nabla f_i(x^{t+1}) - \nabla f_i(x^{t})\right)}^2} \\
+    &\quad + \frac{1 - \probavailable}{n^2}\sum_{i=1}^n\norm{\nabla f_i(x^{t+1}) - \nabla f_i(x^{t})}^2 \\
+    &\quad +\frac{\probpairaa}{n^2}\sum_{i\neq j}^n\ExpSub{B}{\inp{h^t_i + \frac{1}{\probavailable} k^{t+1}_{i, 2} - \left(h^t_i + \nabla f_i(x^{t+1}) - \nabla f_i(x^{t})\right)}{h^t_j + \frac{1}{\probavailable} k^{t+1}_{j, 2} - \left(h^t_j + \nabla f_j(x^{t+1}) - \nabla f_j(x^{t})\right)}} \\
+    &\quad +\frac{2\probpairan}{n^2}\sum_{i\neq j}^n\ExpSub{B}{\inp{h^t_i + \frac{1}{\probavailable} k^{t+1}_{i, 2} - \left(h^t_i + \nabla f_i(x^{t+1}) - \nabla f_i(x^{t})\right)}{h^t_j - \left(h^t_j + \nabla f_j(x^{t+1}) - \nabla f_j(x^{t})\right)}} \\
+    &\quad +\frac{\probpairnn}{n^2}\sum_{i\neq j}^n\inp{h^t_i - \left(h^t_i + \nabla f_i(x^{t+1}) - \nabla f_i(x^{t})\right)}{h^t_j - \left(h^t_j + \nabla f_j(x^{t+1}) - \nabla f_j(x^{t})\right)} \\
+    &=\frac{\probavailable}{n^2}\sum_{i=1}^n\ExpSub{B}{\norm{\frac{1}{\probavailable} k^{t+1}_{i, 2} - \left(\nabla f_i(x^{t+1}) - \nabla f_i(x^{t})\right)}^2} \\
+    &\quad + \frac{1 - \probavailable}{n^2}\sum_{i=1}^n\norm{\nabla f_i(x^{t+1}) - \nabla f_i(x^{t})}^2 \\
+    &\quad +\left(\frac{\probpairaa (\probavailable - 1)^2}{n^2 \probavailable^2} + \frac{2\probpairan (\probavailable - 1)}{n^2 \probavailable} + \frac{\probpairnn}{n^2}\right)\sum_{i\neq j}^n\inp{\nabla f_i(x^{t+1}) - \nabla f_i(x^{t})}{\nabla f_j(x^{t+1}) - \nabla f_j(x^{t})}.
+  \end{align*}
+  Using Assumption~\ref{prob} and \eqref{auxiliary:variance_decomposition}, we get
+  \begin{align*}
+    &\ExpSub{B}{\ExpSub{\probavailable}{\norm{h^{t+1}_{2} - \ExpSub{B}{\ExpSub{\probavailable}{h^{t+1}_{2}}}}^2}}\\
+    &=\frac{1}{n^2 \probavailable}\sum_{i=1}^n\ExpSub{B}{\norm{k^{t+1}_{i, 2} - \left(\nabla f_i(x^{t+1}) - \nabla f_i(x^{t})\right)}^2} \\
+    &\quad + \frac{1 - \probavailable}{n^2 \probavailable}\sum_{i=1}^n\norm{\nabla f_i(x^{t+1}) - \nabla f_i(x^{t})}^2 \\
+    &\quad +\frac{\probpairaa - \probavailable^2}{n^2 \probavailable^2}\sum_{i\neq j}^n\inp{\nabla f_i(x^{t+1}) - \nabla f_i(x^{t})}{\nabla f_j(x^{t+1}) - \nabla f_j(x^{t})} \\
+    &=\frac{1}{n^2 \probavailable}\sum_{i=1}^n\ExpSub{B}{\norm{k^{t+1}_{i, 2} - \left(\nabla f_i(x^{t+1}) - \nabla f_i(x^{t})\right)}^2} \\
+    &\quad + \frac{\probavailable - \probpairaa}{n^2 \probavailable^2}\sum_{i=1}^n\norm{\nabla f_i(x^{t+1}) - \nabla f_i(x^{t})}^2 \\
+    &\quad +\frac{\probpairaa - \probavailable^2}{\probavailable^2}\norm{\nabla f(x^{t+1}) - \nabla f(x^{t})}^2.
+  \end{align*}
 \end{proof}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
