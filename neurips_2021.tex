@@ -120,7 +120,7 @@
 \newpage
 \appendix
 
-\section{Auxiliary Facts}
+\section{Auxiliary facts}
 We list auxiliary facts that we use in our proofs:
 \begin{enumerate}
     \item 
@@ -139,7 +139,9 @@ We list auxiliary facts that we use in our proofs:
 
 \section{Proofs of theorems}
 
-There are three different sources of randomness in Algorithm~\ref{alg:main_algorithm}: the first one from vectors $\{h_i^{t+1}\}_{i=1}^n$, the second one from compressors $\{\cC_i\}_{i=1}^n$, and the third one from availability of nodes. In this section, we define $\ExpSub{h}{\cdot}$, $\ExpSub{\cC}{\cdot}$ and $\ExpSub{\probavailable}{\cdot}$ to be conditional expectations w.r.t.\,$\{h_i^{t+1}\}_{i=1}^n$, $\{\cC_i\}_{i=1}^n, $ and availability, accordingly, conditioned on all previous randomness. Moreover, we define $\ExpSub{t+1}{\cdot}$ to be a conditional expectation w.r.t. all randomness in iteration $t+1$ conditioned on all previous randomness. Note, that $\ExpSub{t+1}{\cdot}{\cdot} = \ExpSub{h}{\ExpSub{\cC}{\ExpSub{\probavailable}{\cdot}}}.$
+There are three different sources of randomness in Algorithm~\ref{alg:main_algorithm}: the first one from vectors $\{k_i^{t+1}\}_{i=1}^n$, the second one from compressors $\{\cC_i\}_{i=1}^n$, and the third one from availability of nodes. We define $\ExpSub{k}{\cdot}$, $\ExpSub{\cC}{\cdot}$ and $\ExpSub{\probavailable}{\cdot}$ to be conditional expectations w.r.t.\,$\{k_i^{t+1}\}_{i=1}^n$, $\{\cC_i\}_{i=1}^n, $ and availability, accordingly, conditioned on all previous randomness. Moreover, we define $\ExpSub{t+1}{\cdot}$ to be a conditional expectation w.r.t. all randomness in iteration $t+1$ conditioned on all previous randomness. Note, that $\ExpSub{t+1}{\cdot} = \ExpSub{k}{\ExpSub{\cC}{\ExpSub{\probavailable}{\cdot}}}.$
+
+In the case of \algname{DASHA}-\algname{PP}-\algname{PAGE}, there are two different sources of randomness from $\{k_i^{t+1}\}_{i=1}^n$. We define $\ExpSub{\probpage}{\cdot}$ and $\ExpSub{B}{\cdot}$ to be conditional expectations w.r.t.\, the probabilistic switching and mini-batch indices $I_{i}^t$, accordingly, conditioned on all previous randomness. Note, that $\ExpSub{t+1}{\cdot} = \ExpSub{B}{\ExpSub{\cC}{\ExpSub{\probavailable}{\ExpSub{\probpage}{\cdot}}}}$ and $\ExpSub{t+1}{\cdot} = \ExpSub{B}{\ExpSub{\probpage}{\ExpSub{\cC}{\ExpSub{\probavailable}{\cdot}}}}.$
 
 \begin{lemma}
   Suppose that Assumption~\ref{ass:compressors} holds and let us consider sequences $g^{t+1}_i$, $h^{t+1}_i,$ and $k^{t+1}_i$ from Algorithm~\ref{alg:main_algorithm}, then
@@ -249,35 +251,35 @@ There are three different sources of randomness in Algorithm~\ref{alg:main_algor
   \begin{enumerate}
   \item
       \begin{align*}
-          &\ExpSub{h}{\ExpSub{\probavailable}{\norm{h^{t+1} - \nabla f(x^{t+1})}^2}} \\
+          &\ExpSub{k}{\ExpSub{\probavailable}{\norm{h^{t+1} - \nabla f(x^{t+1})}^2}} \\
           & \leq .
       \end{align*}
   \item
       \begin{align*}
-          &\ExpSub{h}{\ExpSub{\probavailable}{\norm{h^{t+1}_i - \nabla f_i(x^{t+1})}^2}} \\
+          &\ExpSub{k}{\ExpSub{\probavailable}{\norm{h^{t+1}_i - \nabla f_i(x^{t+1})}^2}} \\
           & \leq , \quad \forall i \in [n].
       \end{align*}
   \end{enumerate}
 \end{lemma}
 
 \begin{proof}
-  First, let us proof the bound for $\ExpSub{h}{\ExpSub{\probavailable}{\norm{h^{t+1} - \nabla f(x^{t+1})}^2}}$:
+  First, let us proof the bound for $\ExpSub{k}{\ExpSub{\probavailable}{\norm{h^{t+1} - \nabla f(x^{t+1})}^2}}$:
   \begin{align*}
-      &\ExpSub{h}{\ExpSub{\probavailable}{\norm{h^{t+1} - \nabla f(x^{t+1})}^2}} \\
-      &=\ExpSub{h}{\ExpSub{\probavailable}{\norm{h^{t+1} - \ExpSub{h}{\ExpSub{\probavailable}{h^{t+1}}}}^2}} + \norm{\ExpSub{h}{\ExpSub{\probavailable}{h^{t+1}}} - \nabla f(x^{t+1})}^2.
+      &\ExpSub{k}{\ExpSub{\probavailable}{\norm{h^{t+1} - \nabla f(x^{t+1})}^2}} \\
+      &=\ExpSub{k}{\ExpSub{\probavailable}{\norm{h^{t+1} - \ExpSub{k}{\ExpSub{\probavailable}{h^{t+1}}}}^2}} + \norm{\ExpSub{k}{\ExpSub{\probavailable}{h^{t+1}}} - \nabla f(x^{t+1})}^2.
   \end{align*}
   Using
   \begin{align*}
-      \ExpSub{h}{\ExpSub{\probavailable}{h^{t+1}_i}} = h^{t}_i + \ExpSub{h}{k^{t+1}_i} = h^{t}_i + \nabla f_i(x^{t+1}) - \nabla f_i(x^{t}) - b(h^t_i - \nabla f_i(x^{t}))
+      \ExpSub{k}{\ExpSub{\probavailable}{h^{t+1}_i}} = h^{t}_i + \ExpSub{k}{k^{t+1}_i} = h^{t}_i + \nabla f_i(x^{t+1}) - \nabla f_i(x^{t}) - b(h^t_i - \nabla f_i(x^{t}))
   \end{align*}
   and Assumption~\ref{ass:prob_sampling}, we have
   \begin{align*}
-      &\ExpSub{h}{\ExpSub{\probavailable}{\norm{h^{t+1} - \nabla f(x^{t+1})}^2}} \\
-      &=\ExpSub{h}{\ExpSub{\probavailable}{\norm{h^{t+1} - \ExpSub{h}{\ExpSub{\probavailable}{h^{t+1}}}}^2}} + \left(1 - b\right)^2 \norm{h^{t} - \nabla f(x^{t})}^2\\
-      &=\frac{1}{n^2}\sum_{i=1}^n \ExpSub{h}{\ExpSub{\probavailable}{\norm{h^{t+1}_i - \ExpSub{h}{\ExpSub{\probavailable}{h^{t+1}_i}}}^2}} \\
-      &\quad+ \frac{1}{n^2}\sum_{i\neq j}^n \ExpSub{h}{\ExpSub{\probavailable}{\inp{h^{t+1}_i - \ExpSub{h}{\ExpSub{\probavailable}{h^{t+1}_i}}}{h^{t+1}_j - \ExpSub{h}{\ExpSub{\probavailable}{h^{t+1}_j}}}}} \\
+      &\ExpSub{k}{\ExpSub{\probavailable}{\norm{h^{t+1} - \nabla f(x^{t+1})}^2}} \\
+      &=\ExpSub{k}{\ExpSub{\probavailable}{\norm{h^{t+1} - \ExpSub{k}{\ExpSub{\probavailable}{h^{t+1}}}}^2}} + \left(1 - b\right)^2 \norm{h^{t} - \nabla f(x^{t})}^2\\
+      &=\frac{1}{n^2}\sum_{i=1}^n \ExpSub{k}{\ExpSub{\probavailable}{\norm{h^{t+1}_i - \ExpSub{k}{\ExpSub{\probavailable}{h^{t+1}_i}}}^2}} \\
+      &\quad+ \frac{1}{n^2}\sum_{i\neq j}^n \ExpSub{k}{\ExpSub{\probavailable}{\inp{h^{t+1}_i - \ExpSub{k}{\ExpSub{\probavailable}{h^{t+1}_i}}}{h^{t+1}_j - \ExpSub{k}{\ExpSub{\probavailable}{h^{t+1}_j}}}}} \\
       &\quad + \left(1 - b\right)^2 \norm{h^{t} - \nabla f(x^{t})}^2 \\
-      &=\frac{\probavailable}{n^2}\sum_{i=1}^n \ExpSub{h}{\norm{h^{t}_i + \frac{1}{\probavailable}k^{t+1}_i - h^{t}_i - \nabla f_i(x^{t+1}) + \nabla f_i(x^{t}) + b(h^t_i - \nabla f_i(x^{t}))}^2} \\
+      &=\frac{\probavailable}{n^2}\sum_{i=1}^n \ExpSub{k}{\norm{h^{t}_i + \frac{1}{\probavailable}k^{t+1}_i - h^{t}_i - \nabla f_i(x^{t+1}) + \nabla f_i(x^{t}) + b(h^t_i - \nabla f_i(x^{t}))}^2} \\
       &\quad + \frac{1 - \probavailable}{n^2}\sum_{i=1}^n \norm{h^{t}_i - h^{t}_i - \nabla f_i(x^{t+1}) + \nabla f_i(x^{t}) + b(h^t_i - \nabla f_i(x^{t}))}^2 \\
       &\quad +\frac{\probpairaa}{n^2}\sum_{i \neq j}^n{\rm E}_{h}\Bigg[\Bigg\langle h^{t}_i + \frac{1}{\probavailable}k^{t+1}_i - h^{t}_i - \nabla f_i(x^{t+1}) + \nabla f_i(x^{t}) + b(h^t_i - \nabla f_i(x^{t})), \\
       &\qquad\qquad\qquad\qquad h^{t}_j + \frac{1}{\probavailable}k^{t+1}_j - h^{t}_j - \nabla f_j(x^{t+1}) + \nabla f_j(x^{t}) + b(h^t_j - \nabla f_j(x^{t}))\Bigg\rangle\Bigg] \\
@@ -289,8 +291,8 @@ There are three different sources of randomness in Algorithm~\ref{alg:main_algor
   \end{align*}
   Next, from the independence of stochastic gradients, we obtain
   \begin{align*}
-    &\ExpSub{h}{\ExpSub{\probavailable}{\norm{h^{t+1} - \nabla f(x^{t+1})}^2}} \\
-    &=\frac{\probavailable}{n^2}\sum_{i=1}^n \ExpSub{h}{\norm{\frac{1}{\probavailable}k^{t+1}_i - \nabla f_i(x^{t+1}) + \nabla f_i(x^{t}) + b(h^t_i - \nabla f_i(x^{t}))}^2} \\
+    &\ExpSub{k}{\ExpSub{\probavailable}{\norm{h^{t+1} - \nabla f(x^{t+1})}^2}} \\
+    &=\frac{\probavailable}{n^2}\sum_{i=1}^n \ExpSub{k}{\norm{\frac{1}{\probavailable}k^{t+1}_i - \nabla f_i(x^{t+1}) + \nabla f_i(x^{t}) + b(h^t_i - \nabla f_i(x^{t}))}^2} \\
     &\quad + \frac{1 - \probavailable}{n^2}\sum_{i=1}^n \norm{\nabla f_i(x^{t+1}) - \nabla f_i(x^{t}) - b(h^t_i - \nabla f_i(x^{t}))}^2 \\
     &\quad +\frac{\probpairaa(\probavailable - 1)^2}{n^2 \probavailable^2}\sum_{i \neq j}^n\Bigg\langle \nabla f_i(x^{t+1}) - \nabla f_i(x^{t}) - b(h^t_i - \nabla f_i(x^{t})), \\
     &\qquad\qquad\qquad\qquad \nabla f_j(x^{t+1}) - \nabla f_j(x^{t}) - b(h^t_j - \nabla f_j(x^{t}))\Bigg\rangle \\
@@ -299,12 +301,12 @@ There are three different sources of randomness in Algorithm~\ref{alg:main_algor
     &\quad +\frac{\probpairnn}{n^2}\sum_{i \neq j}^n\Bigg\langle \nabla f_i(x^{t+1}) - \nabla f_i(x^{t}) - b(h^t_i - \nabla f_i(x^{t})), \\
     &\qquad\qquad\qquad\qquad \nabla f_j(x^{t+1}) - \nabla f_j(x^{t}) - b(h^t_j - \nabla f_j(x^{t}))\Bigg\rangle \\
     &\quad + \left(1 - b\right)^2 \norm{h^{t} - \nabla f(x^{t})}^2 \\
-    &=\frac{\probavailable}{n^2}\sum_{i=1}^n \ExpSub{h}{\norm{\frac{1}{\probavailable}k^{t+1}_i - \nabla f_i(x^{t+1}) + \nabla f_i(x^{t}) + b(h^t_i - \nabla f_i(x^{t}))}^2} \\
+    &=\frac{\probavailable}{n^2}\sum_{i=1}^n \ExpSub{k}{\norm{\frac{1}{\probavailable}k^{t+1}_i - \nabla f_i(x^{t+1}) + \nabla f_i(x^{t}) + b(h^t_i - \nabla f_i(x^{t}))}^2} \\
     &\quad + \frac{1 - \probavailable}{n^2}\sum_{i=1}^n \norm{\nabla f_i(x^{t+1}) - \nabla f_i(x^{t}) - b(h^t_i - \nabla f_i(x^{t}))}^2 \\
     &\quad +\frac{\probpairaa - \probavailable^2}{n^2 \probavailable^2}\sum_{i \neq j}^n\Bigg\langle \nabla f_i(x^{t+1}) - \nabla f_i(x^{t}) - b(h^t_i - \nabla f_i(x^{t})), \\
     &\qquad\qquad\qquad\qquad \nabla f_j(x^{t+1}) - \nabla f_j(x^{t}) - b(h^t_j - \nabla f_j(x^{t}))\Bigg\rangle \\
     &\quad + \left(1 - b\right)^2 \norm{h^{t} - \nabla f(x^{t})}^2 \\
-    &\overset{\eqref{auxiliary:variance_decomposition}}{=}\frac{1}{n^2 \probavailable}\sum_{i=1}^n \ExpSub{h}{\norm{k^{t+1}_i - \ExpSub{h}{k^{t+1}_i}}^2} \\
+    &\overset{\eqref{auxiliary:variance_decomposition}}{=}\frac{1}{n^2 \probavailable}\sum_{i=1}^n \ExpSub{k}{\norm{k^{t+1}_i - \ExpSub{k}{k^{t+1}_i}}^2} \\
     &\quad + \frac{(1 - \probavailable)^2}{n^2 \probavailable}\sum_{i=1}^n \norm{\nabla f_i(x^{t+1}) - \nabla f_i(x^{t}) - b(h^t_i - \nabla f_i(x^{t}))}^2 \\
     &\quad + \frac{1 - \probavailable}{n^2}\sum_{i=1}^n \norm{\nabla f_i(x^{t+1}) - \nabla f_i(x^{t}) - b(h^t_i - \nabla f_i(x^{t}))}^2 \\
     &\quad +\frac{\probpairaa - \probavailable^2}{n^2 \probavailable^2}\sum_{i \neq j}^n\Bigg\langle \nabla f_i(x^{t+1}) - \nabla f_i(x^{t}) - b(h^t_i - \nabla f_i(x^{t})), \\
@@ -313,18 +315,18 @@ There are three different sources of randomness in Algorithm~\ref{alg:main_algor
   \end{align*}
   After rearranging the terms, we have
   \begin{align*}
-    &\ExpSub{h}{\ExpSub{\probavailable}{\norm{h^{t+1} - \nabla f(x^{t+1})}^2}} \\
-    &=\frac{1}{n^2 \probavailable}\sum_{i=1}^n \ExpSub{h}{\norm{k^{t+1}_i - \ExpSub{h}{k^{t+1}_i}}^2} \\
+    &\ExpSub{k}{\ExpSub{\probavailable}{\norm{h^{t+1} - \nabla f(x^{t+1})}^2}} \\
+    &=\frac{1}{n^2 \probavailable}\sum_{i=1}^n \ExpSub{k}{\norm{k^{t+1}_i - \ExpSub{k}{k^{t+1}_i}}^2} \\
     &\quad + \frac{1 - \probavailable}{n^2 \probavailable}\sum_{i=1}^n \norm{\nabla f_i(x^{t+1}) - \nabla f_i(x^{t}) - b(h^t_i - \nabla f_i(x^{t}))}^2 \\
     &\quad +\frac{\probpairaa - \probavailable^2}{n^2 \probavailable^2}\sum_{i \neq j}^n\Bigg\langle \nabla f_i(x^{t+1}) - \nabla f_i(x^{t}) - b(h^t_i - \nabla f_i(x^{t})), \\
     &\qquad\qquad\qquad\qquad \nabla f_j(x^{t+1}) - \nabla f_j(x^{t}) - b(h^t_j - \nabla f_j(x^{t}))\Bigg\rangle \\
     &\quad + \left(1 - b\right)^2 \norm{h^{t} - \nabla f(x^{t})}^2. \\
-    &=\frac{1}{n^2 \probavailable}\sum_{i=1}^n \ExpSub{h}{\norm{k^{t+1}_i - \ExpSub{h}{k^{t+1}_i}}^2} \\
+    &=\frac{1}{n^2 \probavailable}\sum_{i=1}^n \ExpSub{k}{\norm{k^{t+1}_i - \ExpSub{k}{k^{t+1}_i}}^2} \\
     &\quad + \frac{1 - \probavailable}{n^2 \probavailable}\sum_{i=1}^n \norm{\nabla f_i(x^{t+1}) - \nabla f_i(x^{t}) - b(h^t_i - \nabla f_i(x^{t}))}^2 \\
     &\quad - \frac{\probpairaa - \probavailable^2}{n^2 \probavailable^2} \sum_{i=1}^n \norm{\nabla f_i(x^{t+1}) - \nabla f_i(x^{t}) - b(h^t_i - \nabla f_i(x^{t}))}^2 \\
     &\quad + \frac{\probpairaa - \probavailable^2}{\probavailable^2} \norm{\nabla f(x^{t+1}) - \nabla f(x^{t}) - b(h^t - \nabla f(x^{t}))}^2 \\
     &\quad + \left(1 - b\right)^2 \norm{h^{t} - \nabla f(x^{t})}^2. \\
-    &=\frac{1}{n^2 \probavailable}\sum_{i=1}^n \ExpSub{h}{\norm{k^{t+1}_i - \ExpSub{h}{k^{t+1}_i}}^2} \\
+    &=\frac{1}{n^2 \probavailable}\sum_{i=1}^n \ExpSub{k}{\norm{k^{t+1}_i - \ExpSub{k}{k^{t+1}_i}}^2} \\
     &\quad + \frac{\probavailable - \probpairaa}{n^2 \probavailable^2} \sum_{i=1}^n \norm{\nabla f_i(x^{t+1}) - \nabla f_i(x^{t}) - b(h^t_i - \nabla f_i(x^{t}))}^2 \\
     &\quad + \frac{\probpairaa - \probavailable^2}{\probavailable^2} \norm{\nabla f(x^{t+1}) - \nabla f(x^{t}) - b(h^t - \nabla f(x^{t}))}^2 \\
     &\quad + \left(1 - b\right)^2 \norm{h^{t} - \nabla f(x^{t})}^2. \\
@@ -337,21 +339,54 @@ In the following lemma, we provide a helpful observation about $k^{t+1}_i$.
   \label{lemma:expectation_k_t}
   Suppose that Assumptions \ref{}, \ref{} and \ref{} hold. For $k^{t+1}_i$ from Algorithm~\ref{alg:main_algorithm} we have
   \begin{align*}
-      &\ExpSub{h}{k^{t+1}_i} = \nabla f_i(x^{t+1}) - \nabla f_i(x^{t}) - b(h^t_i - \nabla f_i(x^{t})).
+      &\ExpSub{k}{k^{t+1}_i} = \nabla f_i(x^{t+1}) - \nabla f_i(x^{t}) - b(h^t_i - \nabla f_i(x^{t})).
   \end{align*}
 \end{lemma}
 
 \begin{proof}
-  Clearly, this is holds for \algname{DASHA}-\algname{PP}. Next, we show it for \algname{DASHA}-\algname{PP}-\algname{PAGE}:
+  Clearly, the equality holds for \algname{DASHA}-\algname{PP}. Next, we show it for \algname{DASHA}-\algname{PP}-\algname{PAGE}:
   \begin{align*}
-    &\ExpSub{h}{k^{t+1}_i} \\
+    &\ExpSub{k}{k^{t+1}_i} \\
     &= \probpage \left(\nabla f_i(x^{t+1}) - \nabla f_i(x^{t}) - \frac{b}{\probpage} \left(h^t_i - \nabla f_i(x^{t})\right)\right) \\
-    &\quad + (1 - \probpage) \ExpSub{h}{\frac{1}{B}\sum_{j \in I^t_i}\left(\nabla f_{ij}(x^{t+1}) - \nabla f_{ij}(x^{t})\right)} \\
+    &\quad + (1 - \probpage) \ExpSub{k}{\frac{1}{B}\sum_{j \in I^t_i}\left(\nabla f_{ij}(x^{t+1}) - \nabla f_{ij}(x^{t})\right)} \\
     &= \probpage \left(\nabla f_i(x^{t+1}) - \nabla f_i(x^{t}) - \frac{b}{\probpage} \left(h^t_i - \nabla f_i(x^{t})\right)\right) \\
     &\quad + (1 - \probpage) \left(\nabla f_i(x^{t+1}) - \nabla f_i(x^{t})\right) \\
     &= \nabla f_i(x^{t+1}) - \nabla f_i(x^{t}) - b \left(h^t_i - \nabla f_i(x^{t})\right).
 \end{align*}
 Finally, from the unbiasedness of stochastic gradients, the equality holds for \algname{DASHA}-\algname{PP}-\algname{MVR}.
+\end{proof}
+
+\begin{lemma}
+  Suppose that Assumptions \ref{} hold. For $h^{t+1}_i$ from Algorithm~\ref{alg:main_algorithm} (\algname{DASHA}-\algname{PP}-\algname{PAGE}) we have
+  \begin{enumerate}
+  \item
+      \begin{align*}
+          &\ExpSub{k}{\ExpSub{\probavailable}{\norm{h^{t+1} - \nabla f(x^{t+1})}^2}} \\
+          & \leq .
+      \end{align*}
+  \item
+      \begin{align*}
+          &\ExpSub{k}{\ExpSub{\probavailable}{\norm{h^{t+1}_i - \nabla f_i(x^{t+1})}^2}} \\
+          & \leq , \quad \forall i \in [n].
+      \end{align*}
+  \end{enumerate}
+\end{lemma}
+
+\begin{proof}
+  Let us denote
+  \begin{align*}
+      &k^{t+1}_{i, 1} \eqdef \nabla f_i(x^{t+1}) - \nabla f_i(x^{t}) - \frac{b}{\probpage} \left(h^t_i - \nabla f_i(x^{t})\right), \\
+      &k^{t+1}_{i, 2} \eqdef \frac{1}{B}\sum_{j \in I^t_i}\left(\nabla f_{ij}(x^{t+1}) - \nabla f_{ij}(x^{t})\right), \\
+      &h^{t+1}_{i,1} \eqdef \begin{cases}
+          h^t_i + \frac{1}{p} k^{t+1}_{i, 1},& \textnormal{with probability $\probavailable$,} \\
+          h^t_i, & \textnormal{with probability $1 - \probavailable$,} 
+      \end{cases}  \\
+      &h^{t+1}_{i,2} \eqdef \begin{cases}
+          h^t_i + \frac{1}{p} k^{t+1}_{i, 2},& \textnormal{with probability $\probavailable$,} \\
+          h^t_i, & \textnormal{with probability $1 - \probavailable$,}
+      \end{cases}  \\
+  \end{align*}
+  $h^{t+1}_{1} \eqdef \frac{1}{n}\sum_{i=1}^n h^{t+1}_{i,1},$ and $h^{t+1}_{2} \eqdef \frac{1}{n}\sum_{i=1}^n h^{t+1}_{i,2}.$
 \end{proof}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
