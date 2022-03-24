@@ -331,6 +331,29 @@ There are three different sources of randomness in Algorithm~\ref{alg:main_algor
   \end{align*}
 \end{proof}
 
+In the following lemma, we provide a helpful observation about $k^{t+1}_i$.
+
+\begin{lemma}
+  \label{lemma:expectation_k_t}
+  Suppose that Assumptions \ref{}, \ref{} and \ref{} hold. For $k^{t+1}_i$ from Algorithm~\ref{alg:main_algorithm} we have
+  \begin{align*}
+      &\ExpSub{h}{k^{t+1}_i} = \nabla f_i(x^{t+1}) - \nabla f_i(x^{t}) - b(h^t_i - \nabla f_i(x^{t})).
+  \end{align*}
+\end{lemma}
+
+\begin{proof}
+  Clearly, this is holds for \algname{DASHA}-\algname{PP}. Next, we show it for \algname{DASHA}-\algname{PP}-\algname{PAGE}:
+  \begin{align*}
+    &\ExpSub{h}{k^{t+1}_i} \\
+    &= \probpage \left(\nabla f_i(x^{t+1}) - \nabla f_i(x^{t}) - \frac{b}{\probpage} \left(h^t_i - \nabla f_i(x^{t})\right)\right) \\
+    &\quad + (1 - \probpage) \ExpSub{h}{\frac{1}{B}\sum_{j \in I^t_i}\left(\nabla f_{ij}(x^{t+1}) - \nabla f_{ij}(x^{t})\right)} \\
+    &= \probpage \left(\nabla f_i(x^{t+1}) - \nabla f_i(x^{t}) - \frac{b}{\probpage} \left(h^t_i - \nabla f_i(x^{t})\right)\right) \\
+    &\quad + (1 - \probpage) \left(\nabla f_i(x^{t+1}) - \nabla f_i(x^{t})\right) \\
+    &= \nabla f_i(x^{t+1}) - \nabla f_i(x^{t}) - b \left(h^t_i - \nabla f_i(x^{t})\right).
+\end{align*}
+Finally, from the unbiasedness of stochastic gradients, the equality holds for \algname{DASHA}-\algname{PP}-\algname{MVR}.
+\end{proof}
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \newpage
 \section*{Checklist}
