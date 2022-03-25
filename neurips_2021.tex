@@ -68,6 +68,17 @@
 
 \section{Introduction}
 
+\section{Theorems}
+
+\begin{restatable}{theorem}{CONVERGENCE}
+  \label{theorem:gradient_oracle}
+  Suppose that Assumptions \ref{ass:lower_bound}, \ref{ass:lipschitz_constant}, \ref{ass:nodes_lipschitz_constant} and \ref{ass:compressors} hold. Let us take $a = ,$ $$\gamma \leq \left(L + \sqrt{\frac{16 \omega \left(2 \omega + 1\right)}{n}} \widehat{L}\right)^{-1},$$ and $g^{0}_i = h^{0}_i = \nabla f_i(x^0)$ for all $i \in [n]$
+  in Algorithm~\ref{alg:main_algorithm} \algname{DASHA}-\algname{PP}, then
+  \begin{align*}
+      &\Exp{\norm{\nabla f(\widehat{x}^T)}^2} \leq .
+  \end{align*}
+\end{restatable}
+
 \newcommand*{\probavailable}{\ensuremath{p_{\textnormal{a}}}}
 \newcommand*{\probpairaa}{\ensuremath{p_{\textnormal{aa}}}}
 \newcommand*{\probpairan}{\ensuremath{p_{\textnormal{an}}}}
@@ -142,6 +153,48 @@ We list auxiliary facts that we use in our proofs:
 There are three different sources of randomness in Algorithm~\ref{alg:main_algorithm}: the first one from vectors $\{k_i^{t+1}\}_{i=1}^n$, the second one from compressors $\{\cC_i\}_{i=1}^n$, and the third one from availability of nodes. We define $\ExpSub{k}{\cdot}$, $\ExpSub{\cC}{\cdot}$ and $\ExpSub{\probavailable}{\cdot}$ to be conditional expectations w.r.t.\,$\{k_i^{t+1}\}_{i=1}^n$, $\{\cC_i\}_{i=1}^n, $ and availability, accordingly, conditioned on all previous randomness. Moreover, we define $\ExpSub{t+1}{\cdot}$ to be a conditional expectation w.r.t. all randomness in iteration $t+1$ conditioned on all previous randomness. Note, that $\ExpSub{t+1}{\cdot} = \ExpSub{k}{\ExpSub{\cC}{\ExpSub{\probavailable}{\cdot}}}.$
 
 In the case of \algname{DASHA}-\algname{PP}-\algname{PAGE}, there are two different sources of randomness from $\{k_i^{t+1}\}_{i=1}^n$. We define $\ExpSub{\probpage}{\cdot}$ and $\ExpSub{B}{\cdot}$ to be conditional expectations w.r.t.\, the probabilistic switching and mini-batch indices $I_{i}^t$, accordingly, conditioned on all previous randomness. Note, that $\ExpSub{t+1}{\cdot} = \ExpSub{B}{\ExpSub{\cC}{\ExpSub{\probavailable}{\ExpSub{\probpage}{\cdot}}}}$ and $\ExpSub{t+1}{\cdot} = \ExpSub{B}{\ExpSub{\probpage}{\ExpSub{\cC}{\ExpSub{\probavailable}{\cdot}}}}.$
+
+\subsection{Standard lemmas in nonconvex setting}
+
+We start the proof of theorems by providing standard lemmas from the nonconvex optimization.
+
+\begin{lemma}
+  \label{lemma:page_lemma}
+  Suppose that Assumption~\ref{ass:lipschitz_constant} holds and let $x^{t+1} = x^{t} - \gamma g^{t}$. Then for any $g^{t} \in \R^d$ and $\gamma > 0$, we have
+  \begin{eqnarray}
+    \label{eq:page_lemma}
+    f(x^{t + 1}) \leq f(x^t) - \frac{\gamma}{2}\norm{\nabla f(x^t)}^2 - \left(\frac{1}{2\gamma} - \frac{L}{2}\right)
+    \norm{x^{t+1} - x^t}^2 + \frac{\gamma}{2}\norm{g^{t} - \nabla f(x^t)}^2.
+  \end{eqnarray}
+\end{lemma}
+
+The proof of Lemma \ref{lemma:page_lemma} is provided in \cite{PAGE}.
+
+\begin{lemma}
+  \label{lemma:good_recursion}
+  Suppose that Assumption \ref{ass:lower_bound} holds and
+  \begin{align*}
+      \Exp{f(x^{t+1})} + \gamma \Psi^{t+1} \leq \Exp{f(x^t)} - \frac{\gamma}{2}\Exp{\norm{\nabla f(x^t)}^2} + \gamma \Psi^{t} + \gamma C,
+  \end{align*}
+  where $\Psi^{t}$ is a sequence of numbers, $\Psi^{t} \geq 0$ for all $t \in [T]$, constant $C \geq 0$, and constant $\gamma > 0.$ Then 
+  \begin{align}
+      \label{eq:good_recursion}
+      \Exp{\norm{\nabla f(\widehat{x}^T)}^2} \leq \frac{2 \left(f(x^0) - f^*\right)}{\gamma T} + \frac{2\Psi^{0}}{T} + 2 C,
+  \end{align}
+  where a point $\widehat{x}^T$ is chosen uniformly from a set of points $\{x^t\}_{t=0}^{T-1}.$
+\end{lemma}
+
+\begin{proof}
+  By unrolling \eqref{eq:good_recursion} for $t$ from $0$ to $T - 1$, we obtain
+  \begin{align*}
+      \frac{\gamma}{2}\sum_{t = 0}^{T - 1}\Exp{\norm{\nabla f(x^t)}^2} + \Exp{f(x^{T})} + \gamma \Psi^{T} \leq f(x^0) + \gamma \Psi^{0} + \gamma T C.
+  \end{align*}
+  We subtract $f^*$, divide inequality by $\frac{\gamma T}{2},$ and take into account that $f(x) \geq f^*$ for all $x \in \R$, and $\Psi^{t} \geq 0$ for all $t \in [T],$ to get the following inequality:
+  \begin{align*}
+      \frac{1}{T}\sum_{t = 0}^{T - 1}\Exp{\norm{\nabla f(x^t)}^2} \leq \frac{2 \left(f(x^0) - f^*\right)}{\gamma T} + \frac{2\Psi^{0}}{T} + 2 C.
+  \end{align*}
+  It is left to consider the choice of a point $\widehat{x}^T$ to complete the proof of the lemma.
+\end{proof}
 
 \begin{lemma}
   Suppose that Assumption~\ref{ass:compressors} holds and let us consider sequences $g^{t+1}_i$, $h^{t+1}_i,$ and $k^{t+1}_i$ from Algorithm~\ref{alg:main_algorithm}, then
