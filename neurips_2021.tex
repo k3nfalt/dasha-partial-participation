@@ -153,7 +153,8 @@ In the case of \algname{DASHA}-\algname{PP}-\algname{PAGE}, there are two differ
   and
   \begin{align}
       \label{eq:compressor_local_error}
-      \ExpSub{\cC}{\ExpSub{\probavailable}{\norm{g^{t+1}_i - h^{t+1}_i}^2}} \leq \quad \forall i \in [n].
+      &\ExpSub{\cC}{\ExpSub{\probavailable}{\norm{g^{t+1}_i - h^{t+1}_i}^2}} \nonumber \\
+      &\leq \frac{2 \omega}{\probavailable}\norm{k^{t+1}_i}^2 + \frac{a^2(2\omega + 1 - \probavailable)}{\probavailable} \norm{g^{t}_i - h^{t}_i}^2 + (1 - a)^2\norm{g^{t}_i - h^{t}_i}^2\quad \forall i \in [n].
   \end{align}
 \end{lemma}
 \begin{proof}
@@ -243,7 +244,20 @@ In the case of \algname{DASHA}-\algname{PP}-\algname{PAGE}, there are two differ
     &\quad + \frac{a^2 (\probpairaa - \probavailable^2)}{\probavailable^2}\norm{g^{t} - h^{t}}^2 \\
     &\quad + (1 - a)^2\norm{g^{t} - h^{t}}^2.\\
   \end{align*}
-  \alexander{TODO: second inequality}
+  It is left to consider \eqref{asdasd} to prove \eqref{eq:compressor_global_error}. The second inequality can be proved almost in the same way:
+  \begin{align*}
+    &\ExpSub{\cC}{\ExpSub{\probavailable}{\norm{g^{t+1}_i - h^{t+1}_i}^2}} \\
+    &=\ExpSub{\cC}{\ExpSub{\probavailable}{\norm{g^{t+1}_i - h^{t+1}_i - \ExpSub{\cC}{\ExpSub{\probavailable}{g^{t+1}_i - h^{t+1}_i}}}^2}} + \norm{\ExpSub{\cC}{\ExpSub{\probavailable}{g^{t+1}_i - h^{t+1}_i}}}^2 \\
+    &=\ExpSub{\cC}{\ExpSub{\probavailable}{\norm{g^{t+1}_i - h^{t+1}_i - g^{t}_i + a \left(g^{t}_i - h^{t}_i\right) + h^{t}_i}^2}} + (1 - a)^2\norm{g^{t}_i - h^{t}_i}^2 \\
+    &=\probavailable\ExpSub{\cC}{\norm{\cC_i\Bigg(\frac{1}{\probavailable}k^{t+1}_i - \frac{a}{\probavailable} \left(g^{t}_i - h^{t}_i\right)\Bigg) - \frac{1}{\probavailable}k^{t+1}_i + a \left(g^{t}_i - h^{t}_i\right)}^2} \\
+    &\quad + a^2(1 - \probavailable)\norm{g^{t}_i - h^{t}_i}^2 + (1 - a)^2\norm{g^{t}_i - h^{t}_i}^2 \\
+    &\overset{\eqref{auxiliary:variance_decomposition}}{=}\probavailable\ExpSub{\cC}{\norm{\cC_i\Bigg(\frac{1}{\probavailable}k^{t+1}_i - \frac{a}{\probavailable} \left(g^{t}_i - h^{t}_i\right)\Bigg) - \left(\frac{1}{\probavailable}k^{t+1}_i - \frac{a}{\probavailable} \left(g^{t}_i - h^{t}_i\right)\right)}^2} \\
+    &\quad + a^2 \frac{(1 - \probavailable)^2}{\probavailable} \norm{g^{t}_i - h^{t}_i}^2 \\
+    &\quad + a^2(1 - \probavailable)\norm{g^{t}_i - h^{t}_i}^2 + (1 - a)^2\norm{g^{t}_i - h^{t}_i}^2 \\
+    &\leq \frac{\omega}{\probavailable}\norm{k^{t+1}_i - a \left(g^{t}_i - h^{t}_i\right)}^2 \\
+    &\quad + \frac{a^2(1 - \probavailable)}{\probavailable} \norm{g^{t}_i - h^{t}_i}^2 + (1 - a)^2\norm{g^{t}_i - h^{t}_i}^2 \\
+    &\overset{\eqref{auxiliary:jensen_inequality}}{\leq} \frac{2 \omega}{\probavailable}\norm{k^{t+1}_i}^2 + \frac{a^2(2\omega + 1 - \probavailable)}{\probavailable} \norm{g^{t}_i - h^{t}_i}^2 + (1 - a)^2\norm{g^{t}_i - h^{t}_i}^2.
+  \end{align*}
 \end{proof}
 
 \begin{lemma}
