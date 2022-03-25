@@ -388,7 +388,7 @@ The proof of Lemma \ref{lemma:page_lemma} is provided in \cite{PAGE}.
   \item
       \begin{align*}
           &\ExpSub{\probavailable}{\norm{h^{t+1} - \nabla f(x^{t+1})}^2} \\
-          & \leq .
+          & \leq \frac{2\left(\probavailable - \probpairaa\right)\widehat{L}^2}{n \probavailable^2} \norm{x^{t+1} - x^{t}}^2 + \frac{2 b^2 \left(\probavailable - \probpairaa\right)}{n^2 \probavailable^2} \sum_{i=1}^n \norm{h^t_i - \nabla f_i(x^{t})}^2 + \left(1 - b\right)^2 \norm{h^{t} - \nabla f(x^{t})}^2.
       \end{align*}
   \item
       \begin{align*}
@@ -448,8 +448,14 @@ The proof of Lemma \ref{lemma:page_lemma} is provided in \cite{PAGE}.
     &= \frac{\probavailable - \probpairaa}{n^2 \probavailable^2} \sum_{i=1}^n \norm{\nabla f_i(x^{t+1}) - \nabla f_i(x^{t}) - b(h^t_i - \nabla f_i(x^{t}))}^2 \\
     &\quad + \frac{\probpairaa - \probavailable^2}{\probavailable^2} \norm{\nabla f(x^{t+1}) - \nabla f(x^{t}) - b(h^t - \nabla f(x^{t}))}^2 \\
     &\quad + \left(1 - b\right)^2 \norm{h^{t} - \nabla f(x^{t})}^2. \\
+    &\overset{\eqref{probaa_leq}}{\leq}\frac{\probavailable - \probpairaa}{n^2 \probavailable^2} \sum_{i=1}^n \norm{\nabla f_i(x^{t+1}) - \nabla f_i(x^{t}) - b(h^t_i - \nabla f_i(x^{t}))}^2 \\
+    &\quad + \left(1 - b\right)^2 \norm{h^{t} - \nabla f(x^{t})}^2. \\
+    &\overset{\eqref{auxiliary:jensen_inequality}}{\leq}\frac{2\left(\probavailable - \probpairaa\right)}{n^2 \probavailable^2} \sum_{i=1}^n \norm{\nabla f_i(x^{t+1}) - \nabla f_i(x^{t})}^2 + \frac{2 b^2 \left(\probavailable - \probpairaa\right)}{n^2 \probavailable^2} \sum_{i=1}^n \norm{h^t_i - \nabla f_i(x^{t})}^2 \\
+    &\quad + \left(1 - b\right)^2 \norm{h^{t} - \nabla f(x^{t})}^2. \\
+    &\leq\frac{2\left(\probavailable - \probpairaa\right)\widehat{L}^2}{n \probavailable^2} \norm{x^{t+1} - x^{t}}^2 + \frac{2 b^2 \left(\probavailable - \probpairaa\right)}{n^2 \probavailable^2} \sum_{i=1}^n \norm{h^t_i - \nabla f_i(x^{t})}^2 \\
+    &\quad + \left(1 - b\right)^2 \norm{h^{t} - \nabla f(x^{t})}^2. \\
   \end{align*}
-  Considering Assumption~\ref{}, we can finish the proof of the first inequality. Using the same reasoning, we can prove the second inequality:
+  In the last in inequality, we used Assumption~\ref{}. Using the same reasoning, we can prove the second inequality:
   \begin{align*}
     &\ExpSub{\probavailable}{\norm{h^{t+1}_i - \nabla f_i(x^{t+1})}^2} \\
     &=\ExpSub{\probavailable}{\norm{h^{t+1}_i - \ExpSub{\probavailable}{h^{t+1}_i}}^2} + \norm{\ExpSub{\probavailable}{h^{t+1}_i  } - \nabla f_i(x^{t+1})}^2 \\
