@@ -174,3 +174,10 @@
 \newtheorem{rem}[theorem]{Remark}
 \newtheorem{que}[theorem]{Question}
 \newtheorem{definition}[theorem]{Definition}
+
+% Hack that enables labeling of lines in algorithms
+\newcommand{\alglinelabel}{%
+  \addtocounter{ALC@line}{-1}% Reduce line counter by 1
+  \refstepcounter{ALC@line}% Increment line counter with reference capability
+  \label% Regular \label
+}

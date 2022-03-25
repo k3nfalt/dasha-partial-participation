@@ -97,7 +97,7 @@
   number of iterations $T \geq 1$
   \STATE Initialize $g^0_i\in \R^d$, $h^0_i\in \R^d$ on the nodes and  $g^0 = \frac{1}{n}\sum_{i=1}^n g^0_i$ on the server
   \FOR{$t = 0, 1, \dots, T - 1$}
-  \STATE $x^{t+1} = x^t - \gamma g^t$
+  \STATE $x^{t+1} = x^t - \gamma g^t$ \alglinelabel{alg:main_algorithm:x_update} 
   \STATE Broadcast $x^{t+1}, x^{t}$ to all \textit{available}\footnote{} nodes
   \FOR{$i = 1, \dots, n$ in parallel}
   \IF{$i$ is \textit{available}\footnote{}}
@@ -200,14 +200,14 @@ The proof of Lemma \ref{lemma:page_lemma} is provided in \cite{PAGE}.
   Suppose that Assumption~\ref{ass:compressors} holds and let us consider sequences $g^{t+1}_i$, $h^{t+1}_i,$ and $k^{t+1}_i$ from Algorithm~\ref{alg:main_algorithm}, then
   \begin{align}
       \label{eq:compressor_global_error}
-      \ExpSub{\cC}{\ExpSub{\probavailable}{\norm{g^{t+1} - h^{t+1}}^2}}
-      \leq ,
+      &\ExpSub{\cC}{\ExpSub{\probavailable}{\norm{g^{t+1} - h^{t+1}}^2}} \\
+      &\leq \frac{2 \omega}{n^2 \probavailable}\sum_{i=1}^n\norm{k^{t+1}_i}^2 +\frac{a^2 (\left(2 \omega + 1\right)\probavailable - \probpairaa)}{n^2 \probavailable^2}\sum_{i=1}^n\norm{g^{t}_i - h^{t}_i}^2 + (1 - a)^2\norm{g^{t} - h^{t}}^2,
   \end{align}
   and
   \begin{align}
       \label{eq:compressor_local_error}
       &\ExpSub{\cC}{\ExpSub{\probavailable}{\norm{g^{t+1}_i - h^{t+1}_i}^2}} \nonumber \\
-      &\leq \frac{2 \omega}{\probavailable}\norm{k^{t+1}_i}^2 + \frac{a^2(2\omega + 1 - \probavailable)}{\probavailable} \norm{g^{t}_i - h^{t}_i}^2 + (1 - a)^2\norm{g^{t}_i - h^{t}_i}^2\quad \forall i \in [n].
+      &\leq \frac{2 \omega}{\probavailable}\norm{k^{t+1}_i}^2 + \left(\frac{a^2(2\omega + 1 - \probavailable)}{\probavailable} + (1 - a)^2\right)\norm{g^{t}_i - h^{t}_i}^2\quad \forall i \in [n].
   \end{align}
 \end{lemma}
 \begin{proof}
@@ -314,6 +314,75 @@ The proof of Lemma \ref{lemma:page_lemma} is provided in \cite{PAGE}.
 \end{proof}
 
 \begin{lemma}
+  \label{lemma:main_lemma}
+  Suppose that Assumptions \ref{ass:lipschitz_constant} and \ref{ass:compressors} hold and let us take $a = \frac{\probavailable}{2 \omega + 1},$ then
+  \begin{align*}
+    &\Exp{f(x^{t + 1})} + \frac{\gamma (2 \omega + 1)}{\probavailable} \Exp{\norm{g^{t+1} - h^{t+1}}^2} + \frac{\gamma (\left(2 \omega + 1\right)\probavailable - \probpairaa)}{n \probavailable^2} \Exp{\frac{1}{n}\sum_{i=1}^n\norm{g^{t+1}_i - h^{t+1}_i}^2}\\
+    &\leq \Exp{f(x^t) - \frac{\gamma}{2}\norm{\nabla f(x^t)}^2 - \left(\frac{1}{2\gamma} - \frac{L}{2}\right)
+    \norm{x^{t+1} - x^t}^2 + \gamma \norm{h^{t} - \nabla f(x^t)}^2}\nonumber\\
+    &\quad + \frac{\gamma (2 \omega + 1)}{\probavailable}\Exp{\norm{g^{t} - h^t}^2}+ \frac{\gamma (\left(2 \omega + 1\right)\probavailable - \probpairaa)}{n \probavailable^2}\Exp{\frac{1}{n} \sum_{i=1}^n\norm{g^t_i - h^{t}_i}^2} + \frac{4 \gamma \omega (2 \omega + 1)}{n \probavailable^2} \Exp{\frac{1}{n} \sum_{i=1}^n\norm{k^{t+1}_i}^2}.
+  \end{align*}
+\end{lemma}
+
+\begin{proof}
+  Due to Lemma \ref{lemma:page_lemma} and the update step from Line~\ref{alg:main_algorithm:x_update} in Algorithm~\ref{alg:main_algorithm}, we have
+  \begin{eqnarray}
+      \Exp{f(x^{t + 1})} &\leq& \Exp{f(x^t) - \frac{\gamma}{2}\norm{\nabla f(x^t)}^2 - \left(\frac{1}{2\gamma} - \frac{L}{2}\right)
+      \norm{x^{t+1} - x^t}^2 + \frac{\gamma}{2}\norm{g^{t} - \nabla f(x^t)}^2} \nonumber \\
+      &=& \Exp{f(x^t) - \frac{\gamma}{2}\norm{\nabla f(x^t)}^2 - \left(\frac{1}{2\gamma} - \frac{L}{2}\right)
+      \norm{x^{t+1} - x^t}^2 + \frac{\gamma}{2}\norm{g^{t} - h^t + h^t - \nabla f(x^t)}^2} \label{eq:page_lemma_decompose} \\
+      &\overset{\eqref{auxiliary:variance_decomposition}}{\leq}& \Exp{f(x^t) - \frac{\gamma}{2}\norm{\nabla f(x^t)}^2 - \left(\frac{1}{2\gamma} - \frac{L}{2}\right)
+      \norm{x^{t+1} - x^t}^2 + \gamma\left(\norm{g^{t} - h^t}^2 + \norm{h^t - \nabla f(x^t)}^2}\right). \nonumber \\
+      \nonumber
+  \end{eqnarray}
+  Let us fix some constants $\kappa, \eta \in [0,\infty)$ that we will define later. Combining bounds \eqref{eq:page_lemma_decompose}, \eqref{eq:compressor_global_error}, \eqref{eq:compressor_local_error} and using the law of total expectation, we get
+  \begin{align*}
+      &\Exp{f(x^{t + 1})} \nonumber \\
+      &\quad  + \kappa \Exp{\norm{g^{t+1} - h^{t+1}}^2} + \eta \Exp{\frac{1}{n}\sum_{i=1}^n\norm{g^{t+1}_i - h^{t+1}_i}^2} \nonumber\\
+      &=\Exp{\ExpSub{t+1}{f(x^{t + 1})}} \nonumber \\
+      &\quad  + \kappa \Exp{\ExpSub{\cC}{\ExpSub{\probavailable}{\norm{g^{t+1} - h^{t+1}}^2}}} + \eta \Exp{\ExpSub{\cC}{\ExpSub{\probavailable}{\frac{1}{n}\sum_{i=1}^n\norm{g^{t+1}_i - h^{t+1}_i}^2}}} \nonumber\\
+      &\leq \Exp{f(x^t) - \frac{\gamma}{2}\norm{\nabla f(x^t)}^2 - \left(\frac{1}{2\gamma} - \frac{L}{2}\right)
+      \norm{x^{t+1} - x^t}^2 + \gamma\left(\norm{g^{t} - h^t}^2 + \norm{h^{t} - \nabla f(x^t)}^2\right)} \nonumber\\
+      &\quad +\kappa \Exp{\frac{2 \omega}{n^2 \probavailable}\sum_{i=1}^n\norm{k^{t+1}_i}^2 +\frac{a^2 (\left(2 \omega + 1\right)\probavailable - \probpairaa)}{n^2 \probavailable^2}\sum_{i=1}^n\norm{g^{t}_i - h^{t}_i}^2 + (1 - a)^2\norm{g^{t} - h^{t}}^2} \nonumber\\
+      &\quad +\eta \Exp{\frac{2 \omega}{n \probavailable} \sum_{i=1}^n \norm{k^{t+1}_i}^2 + \left(\frac{a^2(2\omega + 1 - \probavailable)}{\probavailable} + (1 - a)^2\right)\frac{1}{n}\sum_{i=1}^n\norm{g^{t}_i - h^{t}_i}^2} \\
+      &= \Exp{f(x^t) - \frac{\gamma}{2}\norm{\nabla f(x^t)}^2 - \left(\frac{1}{2\gamma} - \frac{L}{2}\right)
+      \norm{x^{t+1} - x^t}^2 + \gamma \norm{h^{t} - \nabla f(x^t)}^2}\nonumber\\
+      &\quad + \left(\gamma + \kappa \left(1 - a\right)^2\right)\Exp{\norm{g^{t} - h^t}^2}\nonumber\\
+      &\quad + \left(\frac{\kappa a^2 (\left(2 \omega + 1\right)\probavailable - \probpairaa)}{n \probavailable^2} + \eta\left(\frac{a^2(2\omega + 1 - \probavailable)}{\probavailable} + (1 - a)^2\right)\right)\Exp{\frac{1}{n} \sum_{i=1}^n\norm{g^t_i - h^{t}_i}^2}\nonumber\\
+      &\quad + \left(\frac{2 \kappa \omega}{n \probavailable} + \frac{2 \eta \omega}{\probavailable}\right)\Exp{\frac{1}{n} \sum_{i=1}^n\norm{k^{t+1}_i}^2}.
+  \end{align*}
+  Now, by taking $\kappa = \frac{\gamma}{a}$, we can see that $\gamma + \kappa \left(1 - a\right)^2 \leq \kappa, $ and thus
+  \begin{align*}
+      &\Exp{f(x^{t + 1})} \\
+      &\quad  + \frac{\gamma}{a} \Exp{\norm{g^{t+1} - h^{t+1}}^2} + \eta \Exp{\frac{1}{n}\sum_{i=1}^n\norm{g^{t+1}_i - h^{t+1}_i}^2}\\
+      &\leq \Exp{f(x^t) - \frac{\gamma}{2}\norm{\nabla f(x^t)}^2 - \left(\frac{1}{2\gamma} - \frac{L}{2}\right)
+      \norm{x^{t+1} - x^t}^2 + \gamma \norm{h^{t} - \nabla f(x^t)}^2}\nonumber\\
+      &\quad + \frac{\gamma}{a}\Exp{\norm{g^{t} - h^t}^2}\nonumber\\
+      &\quad + \left(\frac{\gamma a (\left(2 \omega + 1\right)\probavailable - \probpairaa)}{n \probavailable^2} + \eta\left(\frac{a^2(2\omega + 1 - \probavailable)}{\probavailable} + (1 - a)^2\right)\right)\Exp{\frac{1}{n} \sum_{i=1}^n\norm{g^t_i - h^{t}_i}^2}\nonumber\\
+      &\quad + \left(\frac{2 \gamma \omega}{a n \probavailable} + \frac{2 \eta \omega}{\probavailable}\right)\Exp{\frac{1}{n} \sum_{i=1}^n\norm{k^{t+1}_i}^2}.
+  \end{align*}
+  Next, by taking $\eta = \frac{\gamma (\left(2 \omega + 1\right)\probavailable - \probpairaa)}{n \probavailable^2}$ and considering the choice of $a$, one can show that $\left(\frac{\gamma a (\left(2 \omega + 1\right)\probavailable - \probpairaa)}{n \probavailable^2} + \eta\left(\frac{a^2(2\omega + 1 - \probavailable)}{\probavailable} + (1 - a)^2\right)\right) \leq \eta.$ Thus
+
+  \begin{align*}
+    &\Exp{f(x^{t + 1})} \\
+    &\quad  + \frac{\gamma (2 \omega + 1)}{\probavailable} \Exp{\norm{g^{t+1} - h^{t+1}}^2} + \frac{\gamma (\left(2 \omega + 1\right)\probavailable - \probpairaa)}{n \probavailable^2} \Exp{\frac{1}{n}\sum_{i=1}^n\norm{g^{t+1}_i - h^{t+1}_i}^2}\\
+    &\leq \Exp{f(x^t) - \frac{\gamma}{2}\norm{\nabla f(x^t)}^2 - \left(\frac{1}{2\gamma} - \frac{L}{2}\right)
+    \norm{x^{t+1} - x^t}^2 + \gamma \norm{h^{t} - \nabla f(x^t)}^2}\nonumber\\
+    &\quad + \frac{\gamma (2 \omega + 1)}{\probavailable}\Exp{\norm{g^{t} - h^t}^2}+ \frac{\gamma (\left(2 \omega + 1\right)\probavailable - \probpairaa)}{n \probavailable^2}\Exp{\frac{1}{n} \sum_{i=1}^n\norm{g^t_i - h^{t}_i}^2}\nonumber\\
+    &\quad + \left(\frac{2 \gamma (2 \omega + 1)\omega}{n \probavailable^2} + \frac{2 \gamma (\left(2 \omega + 1\right)\probavailable - \probpairaa) \omega}{n \probavailable^3}\right)\Exp{\frac{1}{n} \sum_{i=1}^n\norm{k^{t+1}_i}^2}.
+  \end{align*}
+  Considering that $\probpairaa \geq 0,$ we can simplify the last term and get
+  \begin{align*}
+    &\Exp{f(x^{t + 1})} \\
+    &\quad  + \frac{\gamma (2 \omega + 1)}{\probavailable} \Exp{\norm{g^{t+1} - h^{t+1}}^2} + \frac{\gamma (\left(2 \omega + 1\right)\probavailable - \probpairaa)}{n \probavailable^2} \Exp{\frac{1}{n}\sum_{i=1}^n\norm{g^{t+1}_i - h^{t+1}_i}^2}\\
+    &\leq \Exp{f(x^t) - \frac{\gamma}{2}\norm{\nabla f(x^t)}^2 - \left(\frac{1}{2\gamma} - \frac{L}{2}\right)
+    \norm{x^{t+1} - x^t}^2 + \gamma \norm{h^{t} - \nabla f(x^t)}^2}\nonumber\\
+    &\quad + \frac{\gamma (2 \omega + 1)}{\probavailable}\Exp{\norm{g^{t} - h^t}^2}+ \frac{\gamma (\left(2 \omega + 1\right)\probavailable - \probpairaa)}{n \probavailable^2}\Exp{\frac{1}{n} \sum_{i=1}^n\norm{g^t_i - h^{t}_i}^2}\nonumber\\
+    &\quad + \frac{4 \gamma (2 \omega + 1)\omega}{n \probavailable^2} \Exp{\frac{1}{n} \sum_{i=1}^n\norm{k^{t+1}_i}^2}.
+  \end{align*}
+\end{proof}
+
+\begin{lemma}
   Suppose that Assumptions \ref{} hold. For $h^{t+1}_i$ from Algorithm~\ref{alg:main_algorithm} (\algname{DASHA}-\algname{PP}) we have
   \begin{enumerate}
   \item
@@ -391,6 +460,29 @@ The proof of Lemma \ref{lemma:page_lemma} is provided in \cite{PAGE}.
     &\leq \frac{2(1 - \probavailable)}{\probavailable} L^2_i \norm{x^{t+1} - x^{t}}^2 + \left(\frac{2 b^2 (1 - \probavailable)}{\probavailable} + (1 - b)^2\right) \norm{h^{t}_i - \nabla f_i(x^{t})}^2.
   \end{align*}
 \end{proof}
+
+
+
+% \CONVERGENCE*
+
+% \begin{proof}
+%     Considering Lemma~\ref{lemma:main_lemma}, Lemma~\ref{lemma:gradient}, and the law of total expectation, we obtain
+%     \begin{align*}
+%         &\Exp{f(x^{t + 1})} + \gamma \left(2 \omega + 1\right) \Exp{\norm{g^{t+1} - h^{t+1}}^2} + \frac{2 \gamma \omega}{n} \Exp{\frac{1}{n}\sum_{i=1}^n\norm{g^{t+1}_i - h^{t+1}_i}^2}\\
+%         &\leq \Exp{f(x^t) - \frac{\gamma}{2}\norm{\nabla f(x^t)}^2 - \left(\frac{1}{2\gamma} - \frac{L}{2}\right)
+%         \norm{x^{t+1} - x^t}^2}\\
+%         &\quad + \gamma \left(2 \omega + 1\right) \Exp{\norm{g^{t} - h^t}^2} + \frac{2 \gamma \omega}{n} \Exp{\frac{1}{n} \sum_{i=1}^n\norm{g^t_i - h^{t}_i}^2} + \frac{8 \gamma \omega \left(2 \omega + 1\right)}{n} \widehat{L}^2 \norm{x^{t+1} - x^t}^2 \\
+%         &= \Exp{f(x^t)} - \frac{\gamma}{2}\Exp{\norm{\nabla f(x^t)}^2} \\
+%         &\quad + \gamma \left(2 \omega + 1\right) \Exp{\norm{g^{t} - h^t}^2} + \frac{2 \gamma \omega}{n} \Exp{\frac{1}{n} \sum_{i=1}^n\norm{g^t_i - h^{t}_i}^2} \\
+%         &\quad - \left(\frac{1}{2\gamma} - \frac{L}{2} - \frac{8 \gamma \omega \left(2 \omega + 1\right)}{n} \widehat{L}^2\right)\Exp{\norm{x^{t+1} - x^t}^2}.
+%     \end{align*}
+%     Using assumption about $\gamma,$ we can show that $\frac{1}{2\gamma} - \frac{L}{2} - \frac{8 \gamma \omega \left(2 \omega + 1\right)}{n} \widehat{L}^2 \geq 0$ (see Lemma~\ref{lemma:gamma}), thus
+%     \begin{align*}
+%         &\Exp{f(x^{t + 1})} + \gamma \left(2 \omega + 1\right) \Exp{\norm{g^{t+1} - h^{t+1}}^2} + \frac{2 \gamma \omega}{n} \Exp{\frac{1}{n}\sum_{i=1}^n\norm{g^{t+1}_i - h^{t+1}_i}^2}\\
+%         &\leq \Exp{f(x^t)} - \frac{\gamma}{2}\Exp{\norm{\nabla f(x^t)}^2} + \gamma \left(2 \omega + 1\right) \Exp{\norm{g^{t} - h^t}^2} + \frac{2 \gamma \omega}{n} \Exp{\frac{1}{n} \sum_{i=1}^n\norm{g^t_i - h^{t}_i}^2}.
+%     \end{align*}
+%     In the view of Lemma~\ref{lemma:good_recursion} with $\Psi^t = \left(2 \omega + 1\right) \Exp{\norm{g^{t} - h^t}^2} + \frac{2 \omega}{n} \Exp{\frac{1}{n} \sum_{i=1}^n\norm{g^t_i - h^{t}_i}^2}$ we can conclude the proof.
+% \end{proof}
 
 \begin{lemma}
   Suppose that Assumptions \ref{ass:nodes_lipschitz_constant}, \ref{ass:stochastic_unbiased_and_variance_bounded} and \ref{ass:mean_square_smoothness} hold. For $h^{t+1}_i$ from Algorithm~\ref{alg:main_algorithm} (\algname{DASHA}-\algname{PP}-\algname{MVR}) we have
