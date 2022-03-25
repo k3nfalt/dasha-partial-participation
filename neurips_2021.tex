@@ -271,7 +271,7 @@ In the case of \algname{DASHA}-\algname{PP}-\algname{PAGE}, there are two differ
   \item
       \begin{align*}
           &\ExpSub{\probavailable}{\norm{h^{t+1}_i - \nabla f_i(x^{t+1})}^2} \\
-          & \leq , \quad \forall i \in [n].
+          & \leq \frac{2(1 - \probavailable)}{\probavailable} L^2_i \norm{x^{t+1} - x^{t}}^2 + \left(\frac{2 b^2 (1 - \probavailable)}{\probavailable} + (1 - b)^2\right) \norm{h^{t}_i - \nabla f_i(x^{t})}^2, \quad \forall i \in [n].
       \end{align*}
   \end{enumerate}
 \end{lemma}
@@ -326,6 +326,16 @@ In the case of \algname{DASHA}-\algname{PP}-\algname{PAGE}, there are two differ
     &= \frac{\probavailable - \probpairaa}{n^2 \probavailable^2} \sum_{i=1}^n \norm{\nabla f_i(x^{t+1}) - \nabla f_i(x^{t}) - b(h^t_i - \nabla f_i(x^{t}))}^2 \\
     &\quad + \frac{\probpairaa - \probavailable^2}{\probavailable^2} \norm{\nabla f(x^{t+1}) - \nabla f(x^{t}) - b(h^t - \nabla f(x^{t}))}^2 \\
     &\quad + \left(1 - b\right)^2 \norm{h^{t} - \nabla f(x^{t})}^2. \\
+  \end{align*}
+  Considering Assumption~\ref{}, we can finish the proof of the first inequality. Using the same reasoning, we can prove the second inequality:
+  \begin{align*}
+    &\ExpSub{\probavailable}{\norm{h^{t+1}_i - \nabla f_i(x^{t+1})}^2} \\
+    &=\ExpSub{\probavailable}{\norm{h^{t+1}_i - \ExpSub{\probavailable}{h^{t+1}_i}}^2} + \norm{\ExpSub{\probavailable}{h^{t+1}_i  } - \nabla f_i(x^{t+1})}^2 \\
+    &=\ExpSub{\probavailable}{\norm{h^{t+1}_i - \left(h^{t}_i + \nabla f_i(x^{t+1}) - \nabla f_i(x^{t}) - b(h^t_i - \nabla f_i(x^{t}))\right)}^2} + (1 - b)^2 \norm{h^{t}_i - \nabla f_i(x^{t})}^2 \\
+    &=\frac{(1 - \probavailable)^2}{\probavailable} \norm{\nabla f_i(x^{t+1}) - \nabla f_i(x^{t}) - b(h^t_i - \nabla f_i(x^{t}))}^2 \\
+    &\quad + (1 - \probavailable)\norm{\nabla f_i(x^{t+1}) - \nabla f_i(x^{t}) - b(h^t_i - \nabla f_i(x^{t}))}^2 + (1 - b)^2 \norm{h^{t}_i - \nabla f_i(x^{t})}^2 \\
+    &=\frac{(1 - \probavailable)}{\probavailable} \norm{\nabla f_i(x^{t+1}) - \nabla f_i(x^{t}) - b(h^t_i - \nabla f_i(x^{t}))}^2 + (1 - b)^2 \norm{h^{t}_i - \nabla f_i(x^{t})}^2 \\
+    &\leq \frac{2(1 - \probavailable)}{\probavailable} L^2_i \norm{x^{t+1} - x^{t}}^2 + \left(\frac{2 b^2 (1 - \probavailable)}{\probavailable} + (1 - b)^2\right) \norm{h^{t}_i - \nabla f_i(x^{t})}^2.
   \end{align*}
 \end{proof}
 
