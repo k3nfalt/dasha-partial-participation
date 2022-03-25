@@ -395,6 +395,10 @@ The proof of Lemma \ref{lemma:page_lemma} is provided in \cite{PAGE}.
           &\ExpSub{\probavailable}{\norm{h^{t+1}_i - \nabla f_i(x^{t+1})}^2} \\
           & \leq \frac{2(1 - \probavailable)}{\probavailable} L^2_i \norm{x^{t+1} - x^{t}}^2 + \left(\frac{2 b^2 (1 - \probavailable)}{\probavailable} + (1 - b)^2\right) \norm{h^{t}_i - \nabla f_i(x^{t})}^2, \quad \forall i \in [n].
       \end{align*}
+  \item
+      \begin{align*}
+        &\norm{k^{t+1}_i}^2 \leq 2L^2_i\norm{x^{t+1} - x^{t}} + 2b^2 \norm{h^t_i - \nabla f_i(x^{t})}^2, \quad \forall i \in [n].
+      \end{align*}
   \end{enumerate}
 \end{lemma}
 
@@ -465,6 +469,7 @@ The proof of Lemma \ref{lemma:page_lemma} is provided in \cite{PAGE}.
     &=\frac{(1 - \probavailable)}{\probavailable} \norm{\nabla f_i(x^{t+1}) - \nabla f_i(x^{t}) - b(h^t_i - \nabla f_i(x^{t}))}^2 + (1 - b)^2 \norm{h^{t}_i - \nabla f_i(x^{t})}^2 \\
     &\leq \frac{2(1 - \probavailable)}{\probavailable} L^2_i \norm{x^{t+1} - x^{t}}^2 + \left(\frac{2 b^2 (1 - \probavailable)}{\probavailable} + (1 - b)^2\right) \norm{h^{t}_i - \nabla f_i(x^{t})}^2.
   \end{align*}
+  Finally, the third inequality of the theorem follows from \eqref{auxiliary:jensen_inequality} and Assumption~\ref{}.
 \end{proof}
 
 
