@@ -200,7 +200,7 @@ The proof of Lemma \ref{lemma:page_lemma} is provided in \cite{PAGE}.
   Suppose that Assumption~\ref{ass:compressors} holds and let us consider sequences $g^{t+1}_i$, $h^{t+1}_i,$ and $k^{t+1}_i$ from Algorithm~\ref{alg:main_algorithm}, then
   \begin{align}
       \label{eq:compressor_global_error}
-      &\ExpSub{\cC}{\ExpSub{\probavailable}{\norm{g^{t+1} - h^{t+1}}^2}} \\
+      &\ExpSub{\cC}{\ExpSub{\probavailable}{\norm{g^{t+1} - h^{t+1}}^2}} \nonumber \\
       &\leq \frac{2 \omega}{n^2 \probavailable}\sum_{i=1}^n\norm{k^{t+1}_i}^2 +\frac{a^2 (\left(2 \omega + 1\right)\probavailable - \probpairaa)}{n^2 \probavailable^2}\sum_{i=1}^n\norm{g^{t}_i - h^{t}_i}^2 + (1 - a)^2\norm{g^{t} - h^{t}}^2,
   \end{align}
   and
@@ -326,15 +326,16 @@ The proof of Lemma \ref{lemma:page_lemma} is provided in \cite{PAGE}.
 
 \begin{proof}
   Due to Lemma \ref{lemma:page_lemma} and the update step from Line~\ref{alg:main_algorithm:x_update} in Algorithm~\ref{alg:main_algorithm}, we have
-  \begin{eqnarray}
-      \Exp{f(x^{t + 1})} &\leq& \Exp{f(x^t) - \frac{\gamma}{2}\norm{\nabla f(x^t)}^2 - \left(\frac{1}{2\gamma} - \frac{L}{2}\right)
+  \begin{align}
+    &\ExpSub{t+1}{f(x^{t + 1})} \\
+    &\leq \ExpSub{t+1}{f(x^t) - \frac{\gamma}{2}\norm{\nabla f(x^t)}^2 - \left(\frac{1}{2\gamma} - \frac{L}{2}\right)
       \norm{x^{t+1} - x^t}^2 + \frac{\gamma}{2}\norm{g^{t} - \nabla f(x^t)}^2} \nonumber \\
-      &=& \Exp{f(x^t) - \frac{\gamma}{2}\norm{\nabla f(x^t)}^2 - \left(\frac{1}{2\gamma} - \frac{L}{2}\right)
+      &= \ExpSub{t+1}{f(x^t) - \frac{\gamma}{2}\norm{\nabla f(x^t)}^2 - \left(\frac{1}{2\gamma} - \frac{L}{2}\right)
       \norm{x^{t+1} - x^t}^2 + \frac{\gamma}{2}\norm{g^{t} - h^t + h^t - \nabla f(x^t)}^2} \label{eq:page_lemma_decompose} \\
-      &\overset{\eqref{auxiliary:variance_decomposition}}{\leq}& \Exp{f(x^t) - \frac{\gamma}{2}\norm{\nabla f(x^t)}^2 - \left(\frac{1}{2\gamma} - \frac{L}{2}\right)
+      &\overset{\eqref{auxiliary:variance_decomposition}}{\leq} \ExpSub{t+1}{f(x^t) - \frac{\gamma}{2}\norm{\nabla f(x^t)}^2 - \left(\frac{1}{2\gamma} - \frac{L}{2}\right)
       \norm{x^{t+1} - x^t}^2 + \gamma\left(\norm{g^{t} - h^t}^2 + \norm{h^t - \nabla f(x^t)}^2}\right). \nonumber \\
       \nonumber
-  \end{eqnarray}
+  \end{align}
   Let us fix some constants $\kappa, \eta \in [0,\infty)$ that we will define later. Combining bounds \eqref{eq:page_lemma_decompose}, \eqref{eq:compressor_global_error}, \eqref{eq:compressor_local_error} and using the law of total expectation, we get
   \begin{align*}
       &\Exp{f(x^{t + 1})} \nonumber \\
@@ -383,6 +384,7 @@ The proof of Lemma \ref{lemma:page_lemma} is provided in \cite{PAGE}.
 \end{proof}
 
 \begin{lemma}
+  \label{lemma:gradient}
   Suppose that Assumptions \ref{} hold. For $h^{t+1}_i$ from Algorithm~\ref{alg:main_algorithm} (\algname{DASHA}-\algname{PP}) we have
   \begin{enumerate}
   \item
