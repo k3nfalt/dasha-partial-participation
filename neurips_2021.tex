@@ -80,7 +80,7 @@
 \begin{restatable}{theorem}{CONVERGENCE}
   \label{theorem:gradient_oracle}
   Suppose that Assumptions \ref{ass:lower_bound}, \ref{ass:lipschitz_constant}, \ref{ass:nodes_lipschitz_constant} and \ref{ass:compressors} hold. Let us take $a = \frac{\probavailable}{2 \omega + 1} ,$ $b = \frac{\probavailable}{2 - \probavailable},$ $$\gamma \leq \left(L + \sqrt{\frac{48 \omega \left(2 \omega + 1\right)}{n \probavailable^2} + \frac{16 \left(\probavailable - \probpairaa\right)}{n \probavailable^3}} \widehat{L}\right)^{-1},$$ and $g^{0}_i = h^{0}_i = \nabla f_i(x^0)$ for all $i \in [n]$
-  in Algorithm~\ref{alg:main_algorithm} \algname{DASHA}-\algname{PP}, then
+  in Algorithm~\ref{alg:main_algorithm} (\algname{DASHA}-\algname{PP}), then
   \begin{align*}
       &\Exp{\norm{\nabla f(\widehat{x}^T)}^2} \leq \frac{1}{T}\Bigg[2 \left(f(x^0) - f^*\right)\left(L + \sqrt{\frac{48 \omega \left(2 \omega + 1\right)}{n \probavailable^2} + \frac{16 \left(\probavailable - \probpairaa\right)}{n \probavailable^3}} \widehat{L}\right)\Bigg].
   \end{align*}
