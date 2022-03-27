@@ -112,6 +112,19 @@ The two assumptions below are provided for the stochastic setting \eqref{eq:task
 \end{assumption}
 
 \subsection{Compressors assumptions}
+\begin{definition}
+    A stochastic mapping $\cC\,:\,\R^d \rightarrow \R^d$ is an \textit{unbiased compressor} if
+    there exists $\omega \in \R$ such that
+    \begin{align}
+        \label{eq:compressor}
+        \hspace{-0.2cm}\Exp{\cC(x)} = x, \qquad \Exp{\norm{\cC(x) - x}^2} \leq \omega \norm{x}^2, \qquad \forall x \in \R^d.
+    \end{align}
+    We denote this class of unbiased compressors  as $\mathbb{U}(\omega).$
+\end{definition}
+\begin{assumption}
+\label{ass:compressors}
+ $\cC_i \in \mathbb{U}(\omega)$ for all $i\in [n]$, and the compressors are  \textit{independent}.
+\end{assumption}
 
 \subsection{Nodes partial participation assumptions}
 \begin{assumption}
