@@ -133,7 +133,7 @@ The two assumptions below are provided for the stochastic setting \eqref{eq:task
   \end{enumerate}
   and these events from different communication rounds are independent.
 \end{assumption}
-Standard partial participation strategies, including $s$--nice sampling (with $\probavailable = \frac{s}{n}$ and $\probpairaa = \frac{s(s-1)}{n(n-1)}$) and independent participation (with $\probpairaa = \probavailable^2$) satisfy the assumptions.
+Standard partial participation strategies, including $s$--nice sampling (with $\probavailable = \frac{s}{n}$ and $\probpairaa = \frac{s(s-1)}{n(n-1)}$) and independent participation (with $\probpairaa = \probavailable^2$), satisfy the assumptions.
 
 \section{Algorithm description}
 
@@ -144,7 +144,6 @@ Standard partial participation strategies, including $s$--nice sampling (with $\
   \begin{algorithmic}[1]
   \STATE \textbf{Input:} starting point $x^0 \in \R^d$, stepsize $\gamma > 0$, momentum $a \in (0, 1]$, 
   momentum $b \in (0, 1]$, probability $\probavailable \in (0, 1]$ that a node is \textit{participating}\textsuperscript{\red (a)},
-  % \footnote{\label{footnote:participating} This is the labeled footnote}, 
   batch size $B$ (only in \algname{DASHA}-\algname{PP}-\algname{PAGE} and \algname{DASHA}-\algname{PP}-\algname{MVR}), 
   number of iterations $T \geq 1$
   \STATE Initialize $g^0_i\in \R^d$, $h^0_i\in \R^d$ on the nodes and  $g^0 = \frac{1}{n}\sum_{i=1}^n g^0_i$ on the server
