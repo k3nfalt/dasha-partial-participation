@@ -188,7 +188,7 @@ Standard partial participation strategies, including $s$--nice sampling (with $\
 
 \begin{restatable}{theorem}{CONVERGENCE}
   \label{theorem:gradient_oracle}
-  Suppose that Assumptions \ref{ass:lower_bound}, \ref{ass:lipschitz_constant}, \ref{ass:nodes_lipschitz_constant} and \ref{ass:compressors} hold. Let us take $a = \frac{\probavailable}{2 \omega + 1} ,$ $b = \frac{\probavailable}{2 - \probavailable},$ $$\gamma \leq \left(L + \sqrt{\frac{48 \omega \left(2 \omega + 1\right)}{n \probavailable^2} + \frac{16 \left(1 - \frac{\probpairaa}{\probavailable}\right)}{n \probavailable^2}} \widehat{L}\right)^{-1},$$ and $g^{0}_i = h^{0}_i = \nabla f_i(x^0)$ for all $i \in [n]$
+  Suppose that Assumptions \ref{ass:lower_bound}, \ref{ass:lipschitz_constant}, \ref{ass:nodes_lipschitz_constant}, \ref{ass:compressors} and \ref{ass:partial_participation} hold. Let us take $a = \frac{\probavailable}{2 \omega + 1} ,$ $b = \frac{\probavailable}{2 - \probavailable},$ $$\gamma \leq \left(L + \sqrt{\frac{48 \omega \left(2 \omega + 1\right)}{n \probavailable^2} + \frac{16 \left(1 - \frac{\probpairaa}{\probavailable}\right)}{n \probavailable^2}} \widehat{L}\right)^{-1},$$ and $g^{0}_i = h^{0}_i = \nabla f_i(x^0)$ for all $i \in [n]$
   in Algorithm~\ref{alg:main_algorithm} (\algname{DASHA}-\algname{PP}), then
   \begin{align*}
       &\Exp{\norm{\nabla f(\widehat{x}^T)}^2} \leq \frac{1}{T}\Bigg[2 \left(f(x^0) - f^*\right)\left(L + \sqrt{\frac{48 \omega \left(2 \omega + 1\right)}{n \probavailable^2} + \frac{16 \left(1 - \frac{\probpairaa}{\probavailable}\right)}{n \probavailable^2}} \widehat{L}\right)\Bigg].
@@ -229,7 +229,16 @@ Let us define additional constants $\probpairan$ and $\probpairnn$, such that
   \item $\Prob\left(i^{\textnormal{th}} \textnormal{ node is \textit{participating}}, j^{\textnormal{th}} \textnormal{ node is \textit{not participating}}\right) = \probpairan, \quad \forall i \neq j \in [n],$
   \item $\Prob\left(i^{\textnormal{th}} \textnormal{ node is \textit{not participating}}, j^{\textnormal{th}} \textnormal{ node is \textit{not participating}}\right) = \probpairnn, \quad \forall i \neq j \in [n].$
 \end{enumerate}
-Note, that $\probpairan = \probpairaa - \probavailable$ and $\probpairnn = 1 - \probpairaa - 2 \probpairan.$
+Note, that 
+\begin{align}
+  \label{sec:auxiliary_facts_partial_participation:one}
+  \probpairan = \probpairaa - \probavailable
+\end{align}
+and 
+\begin{align}
+  \label{sec:auxiliary_facts_partial_participation:two}
+  \probpairnn = 1 - \probpairaa - 2 \probpairan.
+\end{align}
 
 \subsection{Standard lemmas in the nonconvex setting}
 
@@ -466,34 +475,34 @@ The proof of Lemma \ref{lemma:page_lemma} is provided in \cite{PAGE}.
   \end{align*}
 \end{proof}
 
-In the following lemma, we provide a helpful observation about $k^{t+1}_i$.
+% In the following lemma, we provide a helpful observation about $k^{t+1}_i$.
 
-\begin{lemma}
-  \label{lemma:expectation_k_t}
-  Suppose that Assumptions \ref{}, \ref{} and \ref{} hold. For $k^{t+1}_i$ from Algorithm~\ref{alg:main_algorithm} we have
-  \begin{align*}
-      &\ExpSub{k}{k^{t+1}_i} = \nabla f_i(x^{t+1}) - \nabla f_i(x^{t}) - b(h^t_i - \nabla f_i(x^{t})).
-  \end{align*}
-\end{lemma}
+% \begin{lemma}
+%   \label{lemma:expectation_k_t}
+%   Suppose that Assumptions \ref{}, \ref{} and \ref{} hold. For $k^{t+1}_i$ from Algorithm~\ref{alg:main_algorithm} we have
+%   \begin{align*}
+%       &\ExpSub{k}{k^{t+1}_i} = \nabla f_i(x^{t+1}) - \nabla f_i(x^{t}) - b(h^t_i - \nabla f_i(x^{t})).
+%   \end{align*}
+% \end{lemma}
 
-\begin{proof}
-  Clearly, the equality holds for \algname{DASHA}-\algname{PP}. Next, we show it for \algname{DASHA}-\algname{PP}-\algname{PAGE}:
-  \begin{align*}
-    &\ExpSub{k}{k^{t+1}_i} \\
-    &= \probpage \left(\nabla f_i(x^{t+1}) - \nabla f_i(x^{t}) - \frac{b}{\probpage} \left(h^t_i - \nabla f_i(x^{t})\right)\right) \\
-    &\quad + (1 - \probpage) \ExpSub{k}{\frac{1}{B}\sum_{j \in I^t_i}\left(\nabla f_{ij}(x^{t+1}) - \nabla f_{ij}(x^{t})\right)} \\
-    &= \probpage \left(\nabla f_i(x^{t+1}) - \nabla f_i(x^{t}) - \frac{b}{\probpage} \left(h^t_i - \nabla f_i(x^{t})\right)\right) \\
-    &\quad + (1 - \probpage) \left(\nabla f_i(x^{t+1}) - \nabla f_i(x^{t})\right) \\
-    &= \nabla f_i(x^{t+1}) - \nabla f_i(x^{t}) - b \left(h^t_i - \nabla f_i(x^{t})\right).
-\end{align*}
-Finally, from the unbiasedness of stochastic gradients, the equality holds for \algname{DASHA}-\algname{PP}-\algname{MVR}.
-\end{proof}
+% \begin{proof}
+%   Clearly, the equality holds for \algname{DASHA}-\algname{PP}. Next, we show it for \algname{DASHA}-\algname{PP}-\algname{PAGE}:
+%   \begin{align*}
+%     &\ExpSub{k}{k^{t+1}_i} \\
+%     &= \probpage \left(\nabla f_i(x^{t+1}) - \nabla f_i(x^{t}) - \frac{b}{\probpage} \left(h^t_i - \nabla f_i(x^{t})\right)\right) \\
+%     &\quad + (1 - \probpage) \ExpSub{k}{\frac{1}{B}\sum_{j \in I^t_i}\left(\nabla f_{ij}(x^{t+1}) - \nabla f_{ij}(x^{t})\right)} \\
+%     &= \probpage \left(\nabla f_i(x^{t+1}) - \nabla f_i(x^{t}) - \frac{b}{\probpage} \left(h^t_i - \nabla f_i(x^{t})\right)\right) \\
+%     &\quad + (1 - \probpage) \left(\nabla f_i(x^{t+1}) - \nabla f_i(x^{t})\right) \\
+%     &= \nabla f_i(x^{t+1}) - \nabla f_i(x^{t}) - b \left(h^t_i - \nabla f_i(x^{t})\right).
+% \end{align*}
+% Finally, from the unbiasedness of stochastic gradients, the equality holds for \algname{DASHA}-\algname{PP}-\algname{MVR}.
+% \end{proof}
 
 \subsection{Proof for \algname{DASHA}-\algname{PP}}
 
 \begin{lemma}
   \label{lemma:gradient}
-  Suppose that Assumptions \ref{} hold. For $h^{t+1}_i$ from Algorithm~\ref{alg:main_algorithm} (\algname{DASHA}-\algname{PP}) we have
+  Suppose that Assumptions~\ref{ass:nodes_lipschitz_constant} and \ref{ass:partial_participation} hold. For $h^{t+1}_i$ from Algorithm~\ref{alg:main_algorithm} (\algname{DASHA}-\algname{PP}) we have
   \begin{enumerate}
   \item
       \begin{align*}
@@ -522,7 +531,7 @@ Finally, from the unbiasedness of stochastic gradients, the equality holds for \
   \begin{align*}
       \ExpSub{\probavailable}{h^{t+1}_i} = h^{t}_i + \nabla f_i(x^{t+1}) - \nabla f_i(x^{t}) - b(h^t_i - \nabla f_i(x^{t}))
   \end{align*}
-  and Assumption~\ref{ass:prob_sampling}, we have
+  and Assumption~\ref{ass:partial_participation}, we have
   \begin{align*}
       &\ExpSub{\probavailable}{\norm{h^{t+1} - \nabla f(x^{t+1})}^2} \\
       &=\ExpSub{\probavailable}{\norm{h^{t+1} - \ExpSub{\probavailable}{h^{t+1}}}^2} + \left(1 - b\right)^2 \norm{h^{t} - \nabla f(x^{t})}^2\\
@@ -539,7 +548,7 @@ Finally, from the unbiasedness of stochastic gradients, the equality holds for \
       &\qquad\qquad\qquad\qquad h^{t}_j - h^{t}_j - \nabla f_j(x^{t+1}) + \nabla f_j(x^{t}) + b(h^t_j - \nabla f_j(x^{t}))\Bigg\rangle \\
       &\quad + \left(1 - b\right)^2 \norm{h^{t} - \nabla f(x^{t})}^2.
   \end{align*}
-  Using Assumption~\ref{ass:prob_sampling} and a direct calculation, we obtain
+  Using \eqref{sec:auxiliary_facts_partial_participation:one}, \eqref{sec:auxiliary_facts_partial_participation:two} and a direct calculation, we obtain
   \begin{align*}
     &\ExpSub{\probavailable}{\norm{h^{t+1} - \nabla f(x^{t+1})}^2} \\
     &=\frac{(1 - \probavailable)^2}{n^2 \probavailable}\sum_{i=1}^n \norm{\nabla f_i(x^{t+1}) - \nabla f_i(x^{t}) - b(h^t_i - \nabla f_i(x^{t}))}^2 \\
@@ -556,20 +565,20 @@ Finally, from the unbiasedness of stochastic gradients, the equality holds for \
     &\qquad\qquad\qquad\qquad \nabla f_j(x^{t+1}) - \nabla f_j(x^{t}) - b(h^t_j - \nabla f_j(x^{t}))\Bigg\rangle \\
     &\quad + \left(1 - b\right)^2 \norm{h^{t} - \nabla f(x^{t})}^2. \\
   \end{align*}
-  After rearranging the terms, we have
+  Using inequality $\probpairaa \leq \probavailable^2$, we have
   \begin{align*}
     &\ExpSub{k}{\ExpSub{\probavailable}{\norm{h^{t+1} - \nabla f(x^{t+1})}^2}} \\
     &= \frac{\probavailable - \probpairaa}{n^2 \probavailable^2} \sum_{i=1}^n \norm{\nabla f_i(x^{t+1}) - \nabla f_i(x^{t}) - b(h^t_i - \nabla f_i(x^{t}))}^2 \\
     &\quad + \frac{\probpairaa - \probavailable^2}{\probavailable^2} \norm{\nabla f(x^{t+1}) - \nabla f(x^{t}) - b(h^t - \nabla f(x^{t}))}^2 \\
     &\quad + \left(1 - b\right)^2 \norm{h^{t} - \nabla f(x^{t})}^2. \\
-    &\overset{\eqref{probaa_leq}}{\leq}\frac{\probavailable - \probpairaa}{n^2 \probavailable^2} \sum_{i=1}^n \norm{\nabla f_i(x^{t+1}) - \nabla f_i(x^{t}) - b(h^t_i - \nabla f_i(x^{t}))}^2 \\
+    &\leq\frac{\probavailable - \probpairaa}{n^2 \probavailable^2} \sum_{i=1}^n \norm{\nabla f_i(x^{t+1}) - \nabla f_i(x^{t}) - b(h^t_i - \nabla f_i(x^{t}))}^2 \\
     &\quad + \left(1 - b\right)^2 \norm{h^{t} - \nabla f(x^{t})}^2. \\
     &\overset{\eqref{auxiliary:jensen_inequality}}{\leq}\frac{2\left(\probavailable - \probpairaa\right)}{n^2 \probavailable^2} \sum_{i=1}^n \norm{\nabla f_i(x^{t+1}) - \nabla f_i(x^{t})}^2 + \frac{2 b^2 \left(\probavailable - \probpairaa\right)}{n^2 \probavailable^2} \sum_{i=1}^n \norm{h^t_i - \nabla f_i(x^{t})}^2 \\
     &\quad + \left(1 - b\right)^2 \norm{h^{t} - \nabla f(x^{t})}^2. \\
     &\leq\frac{2\left(\probavailable - \probpairaa\right)\widehat{L}^2}{n \probavailable^2} \norm{x^{t+1} - x^{t}}^2 + \frac{2 b^2 \left(\probavailable - \probpairaa\right)}{n^2 \probavailable^2} \sum_{i=1}^n \norm{h^t_i - \nabla f_i(x^{t})}^2 \\
     &\quad + \left(1 - b\right)^2 \norm{h^{t} - \nabla f(x^{t})}^2. \\
   \end{align*}
-  In the last in inequality, we used Assumption~\ref{}. Using the same reasoning, we can prove the second inequality:
+  In the last in inequality, we used Assumption~\ref{ass:nodes_lipschitz_constant}. Using the same reasoning, we can prove the second inequality:
   \begin{align*}
     &\ExpSub{\probavailable}{\norm{h^{t+1}_i - \nabla f_i(x^{t+1})}^2} \\
     &=\ExpSub{\probavailable}{\norm{h^{t+1}_i - \ExpSub{\probavailable}{h^{t+1}_i}}^2} + \norm{\ExpSub{\probavailable}{h^{t+1}_i  } - \nabla f_i(x^{t+1})}^2 \\
@@ -579,7 +588,7 @@ Finally, from the unbiasedness of stochastic gradients, the equality holds for \
     &=\frac{(1 - \probavailable)}{\probavailable} \norm{\nabla f_i(x^{t+1}) - \nabla f_i(x^{t}) - b(h^t_i - \nabla f_i(x^{t}))}^2 + (1 - b)^2 \norm{h^{t}_i - \nabla f_i(x^{t})}^2 \\
     &\leq \frac{2(1 - \probavailable)}{\probavailable} L^2_i \norm{x^{t+1} - x^{t}}^2 + \left(\frac{2 b^2 (1 - \probavailable)}{\probavailable} + (1 - b)^2\right) \norm{h^{t}_i - \nabla f_i(x^{t})}^2.
   \end{align*}
-  Finally, the third inequality of the theorem follows from \eqref{auxiliary:jensen_inequality} and Assumption~\ref{}.
+  Finally, the third inequality of the theorem follows from \eqref{auxiliary:jensen_inequality} and Assumption~\ref{ass:nodes_lipschitz_constant}.
 \end{proof}
 
 \CONVERGENCE*
