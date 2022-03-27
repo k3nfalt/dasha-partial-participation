@@ -29,6 +29,7 @@
 
 \include{macros}
 \usepackage[textsize=tiny]{todonotes}
+\usepackage{footnote}
 
 \newcommand{\alexander}[1]{\todo[inline]{\textbf{Alexander: }#1}}
 
@@ -66,11 +67,6 @@
 \maketitle
 
 \begin{abstract}
-  The abstract paragraph should be indented \nicefrac{1}{2}~inch (3~picas) on
-  both the left- and right-hand margins. Use 10~point type, with a vertical
-  spacing (leading) of 11~points.  The word \textbf{Abstract} must be centered,
-  bold, and in point size 12. Two line spaces precede the abstract. The abstract
-  must be limited to one paragraph.
 \end{abstract}
 
 \section{Introduction}
@@ -127,39 +123,44 @@ The two assumptions below are provided for the stochastic setting \eqref{eq:task
 \end{assumption}
 
 \subsection{Nodes partial participation assumptions}
+\label{sec:partial_participation}
 \begin{assumption}
   The partial participation of nodes has the following distribution: exists constants $\probavailable \in (0, 1]$ and $\probpairaa \in [0, 1],$ such that
   \begin{enumerate}
     \item $\Prob\left(i^{\textnormal{th}} \textnormal{ node is \textit{participating}}\right) = \probavailable, \quad \forall i \in [n],$
     \item $\Prob\left(i^{\textnormal{th}} \textnormal{ node is \textit{participating}}, j^{\textnormal{th}} \textnormal{ node is \textit{participating}}\right) = \probpairaa, \quad \forall i \neq j \in [n],$
-    \item $\probpairaa \leq \probavailable^2.$
+    \item $\probpairaa \leq \probavailable^2,$
   \end{enumerate}
+  and these events from different communication rounds are independent.
 \end{assumption}
 Standard partial participation strategies, including $s$--nice sampling (with $\probavailable = \frac{s}{n}$ and $\probpairaa = \frac{s(s-1)}{n(n-1)}$) and independent participation (with $\probpairaa = \probavailable^2$) satisfy the assumptions.
 
 \section{Algorithm description}
-\begin{algorithm}[h!]
+
+\begin{minipage}{\textwidth}
+\begin{algorithm}[H]
   \caption{\algname{DASHA}-\algname{PP}}
   \label{alg:main_algorithm}
   \begin{algorithmic}[1]
   \STATE \textbf{Input:} starting point $x^0 \in \R^d$, stepsize $\gamma > 0$, momentum $a \in (0, 1]$, 
-  momentum $b \in (0, 1]$, probability $\probavailable \in (0, 1]$ that a node is \textit{participating}\footnote{}, 
+  momentum $b \in (0, 1]$, probability $\probavailable \in (0, 1]$ that a node is \textit{participating}\textsuperscript{\red (a)},
+  % \footnote{\label{footnote:participating} This is the labeled footnote}, 
   batch size $B$ (only in \algname{DASHA}-\algname{PP}-\algname{PAGE} and \algname{DASHA}-\algname{PP}-\algname{MVR}), 
   number of iterations $T \geq 1$
   \STATE Initialize $g^0_i\in \R^d$, $h^0_i\in \R^d$ on the nodes and  $g^0 = \frac{1}{n}\sum_{i=1}^n g^0_i$ on the server
   \FOR{$t = 0, 1, \dots, T - 1$}
   \STATE $x^{t+1} = x^t - \gamma g^t$ \alglinelabel{alg:main_algorithm:x_update} 
-  \STATE Broadcast $x^{t+1}, x^{t}$ to all \textit{participating}\footnote{} nodes
+  \STATE Broadcast $x^{t+1}, x^{t}$ to all \textit{participating}\textsuperscript{\red (a)} nodes
   \FOR{$i = 1, \dots, n$ in parallel}
-  \IF{$i^{\textnormal{th}} \textnormal{ node is \textit{participating}}$\footnote{}}
+  \IF{$i^{\textnormal{th}} \textnormal{ node is \textit{participating}}$\textsuperscript{\red (a)}}
       \STATE $k^{t+1}_i = 
       \begin{cases}
           \vspace{0.15cm}
           \nabla f_i(x^{t+1}) - \nabla f_i(x^{t}) - b \left(h^t_i - \nabla f_i(x^{t})\right) \\
           \vspace{0.15cm}
           \begin{cases}
-              \nabla f_i(x^{t+1}) - \nabla f_i(x^{t}) - \frac{b}{\probpage} \left(h^t_i - \nabla f_i(x^{t})\right),& \textnormal{with probability $\probpage$ on all \textit{participating} nodes} \\
-              \frac{1}{B}\sum_{j \in I^t_i}\left(\nabla f_{ij}(x^{t+1}) - \nabla f_{ij}(x^{t})\right), & \textnormal{with probability $1 - \probpage$ on all \textit{participating} nodes} 
+              \nabla f_i(x^{t+1}) - \nabla f_i(x^{t}) - \frac{b}{\probpage} \left(h^t_i - \nabla f_i(x^{t})\right),& \textnormal{with probability $\probpage$ on all \textit{participating}\textsuperscript{\red (a)} nodes} \\
+              \frac{1}{B}\sum_{j \in I^t_i}\left(\nabla f_{ij}(x^{t+1}) - \nabla f_{ij}(x^{t})\right), & \textnormal{with probability $1 - \probpage$ on all \textit{participating}\textsuperscript{\red (a)} nodes} 
           \end{cases}  \\
           \frac{1}{B}\sum_{j=1}^B \nabla f_i(x^{t+1};\xi^{t+1}_{ij}) - \frac{1}{B}\sum_{j=1}^B \nabla f_i(x^{t};\xi^{t+1}_{ij}) - b \left(h^t_i - \frac{1}{B}\sum_{j=1}^B \nabla f_i(x^{t};\xi^{t+1}_{ij})\right),
       \end{cases}$
@@ -177,7 +178,11 @@ Standard partial participation strategies, including $s$--nice sampling (with $\
   \ENDFOR
   \STATE \textbf{Output:} $\hat{x}^T$ chosen uniformly at random from $\{x^t\}_{k=0}^{T-1}$ (or $x^T$ under the P\L-condition)
   \end{algorithmic}
+  % {\red (a)}: 
 \end{algorithm}
+{\red (a)}: For the formal description see Section~\ref{sec:partial_participation}.
+\end{minipage}
+% \footnotetext{}
 
 \section{Theorems}
 
