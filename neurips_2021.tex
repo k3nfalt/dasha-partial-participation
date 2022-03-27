@@ -769,6 +769,7 @@ The proof of Lemma \ref{lemma:page_lemma} is provided in \cite{PAGE}.
     &\quad +\frac{\probpairaa - \probavailable^2}{n^2 \probavailable^2}\sum_{i\neq j}^n\inp{\nabla f_i(x^{t+1}) - \nabla f_i(x^{t}) - \frac{b}{\probpage} \left(h^t_i - \nabla f_i(x^{t})\right)}{\nabla f_j(x^{t+1}) - \nabla f_j(x^{t}) - \frac{b}{\probpage} \left(h^t_j - \nabla f_j(x^{t})\right)} \\
     &=\frac{\probavailable - \probpairaa}{n^2 \probavailable^2}\sum_{i=1}^n\norm{\nabla f_i(x^{t+1}) - \nabla f_i(x^{t}) - \frac{b}{\probpage} \left(h^t_i - \nabla f_i(x^{t})\right)}^2 \\
     &\quad +\frac{\probpairaa - \probavailable^2}{\probavailable^2}\norm{\nabla f(x^{t+1}) - \nabla f(x^{t}) - \frac{b}{\probpage} \left(h^t - \nabla f(x^{t})\right)}^2. \\
+    &\leq \frac{\probavailable - \probpairaa}{n^2 \probavailable^2}\sum_{i=1}^n\norm{\nabla f_i(x^{t+1}) - \nabla f_i(x^{t}) - \frac{b}{\probpage} \left(h^t_i - \nabla f_i(x^{t})\right)}^2.
   \end{align*}
   Now, we bound $\ExpSub{B}{\ExpSub{\probavailable}{\norm{h^{t+1}_{2} - \ExpSub{B}{\ExpSub{\probavailable}{h^{t+1}_{2}}}}^2}}$:
   \begin{align*}
@@ -792,8 +793,11 @@ The proof of Lemma \ref{lemma:page_lemma} is provided in \cite{PAGE}.
     &\quad +\frac{\probpairaa - \probavailable^2}{n^2 \probavailable^2}\sum_{i\neq j}^n\inp{\nabla f_i(x^{t+1}) - \nabla f_i(x^{t})}{\nabla f_j(x^{t+1}) - \nabla f_j(x^{t})} \\
     &=\frac{1}{n^2 \probavailable}\sum_{i=1}^n\ExpSub{B}{\norm{k^{t+1}_{i, 2} - \left(\nabla f_i(x^{t+1}) - \nabla f_i(x^{t})\right)}^2} \\
     &\quad + \frac{\probavailable - \probpairaa}{n^2 \probavailable^2}\sum_{i=1}^n\norm{\nabla f_i(x^{t+1}) - \nabla f_i(x^{t})}^2 \\
-    &\quad +\frac{\probpairaa - \probavailable^2}{\probavailable^2}\norm{\nabla f(x^{t+1}) - \nabla f(x^{t})}^2.
+    &\quad +\frac{\probpairaa - \probavailable^2}{\probavailable^2}\norm{\nabla f(x^{t+1}) - \nabla f(x^{t})}^2 \\
+    &\leq \frac{1}{n^2 \probavailable}\sum_{i=1}^n\ExpSub{B}{\norm{k^{t+1}_{i, 2} - \left(\nabla f_i(x^{t+1}) - \nabla f_i(x^{t})\right)}^2} \\
+    &\quad + \frac{\probavailable - \probpairaa}{n^2 \probavailable^2}\sum_{i=1}^n\norm{\nabla f_i(x^{t+1}) - \nabla f_i(x^{t})}^2.
   \end{align*}
+  In the last inequality, we used \eqref{eq:partial_participation_constraint}.
 \end{proof}
 
 \subsection{Proof for \algname{DASHA}-\algname{PP}-\algname{MVR}}
