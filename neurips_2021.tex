@@ -125,6 +125,7 @@ The two assumptions below are provided for the stochastic setting \eqref{eq:task
 \subsection{Nodes partial participation assumptions}
 \label{sec:partial_participation}
 \begin{assumption}
+  \label{ass:partial_participation}
   The partial participation of nodes has the following distribution: exists constants $\probavailable \in (0, 1]$ and $\probpairaa \in [0, 1],$ such that
   \begin{enumerate}
     \item $\Prob\left(i^{\textnormal{th}} \textnormal{ node is \textit{participating}}\right) = \probavailable, \quad \forall i \in [n],$
@@ -279,7 +280,7 @@ The proof of Lemma \ref{lemma:page_lemma} is provided in \cite{PAGE}.
 
 \subsection{Generic lemmas}
 \begin{lemma}
-  Suppose that Assumption~\ref{ass:compressors} holds and let us consider sequences $g^{t+1}_i$, $h^{t+1}_i,$ and $k^{t+1}_i$ from Algorithm~\ref{alg:main_algorithm}, then
+  Suppose that Assumptions~\ref{ass:compressors} and \ref{ass:partial_participation} hold and let us consider sequences $g^{t+1}_i$, $h^{t+1}_i,$ and $k^{t+1}_i$ from Algorithm~\ref{alg:main_algorithm}, then
   \begin{align}
       \label{eq:compressor_global_error}
       &\ExpSub{\cC}{\ExpSub{\probavailable}{\norm{g^{t+1} - h^{t+1}}^2}} \nonumber \\
@@ -299,7 +300,7 @@ The proof of Lemma \ref{lemma:page_lemma} is provided in \cite{PAGE}.
       &=\ExpSub{\cC}{\ExpSub{\probavailable}{\norm{g^{t+1} - h^{t+1} - \ExpSub{\cC}{\ExpSub{\probavailable}{g^{t+1} - h^{t+1}}}}^2}} + \norm{\ExpSub{\cC}{\ExpSub{\probavailable}{g^{t+1} - h^{t+1}}}}^2,
   \end{align*}
   where we used \eqref{auxiliary:variance_decomposition}.
-  Using
+  Due to Assumption~\ref{ass:partial_participation}, we have
   \begin{align*}
       &\ExpSub{\cC}{\ExpSub{\probavailable}{g^{t+1}_i}} \\
       &=\probavailable \ExpSub{\cC}{g^{t}_i + \cC_i\Bigg(\frac{1}{\probavailable}k^{t+1}_i - \frac{a}{\probavailable} \left(g^{t}_i - h^{t}_i\right)\Bigg)} + (1 - \probavailable) g^{t}_i \\
@@ -308,9 +309,9 @@ The proof of Lemma \ref{lemma:page_lemma} is provided in \cite{PAGE}.
   \end{align*}
   and 
   \begin{align*}
-      &\ExpSub{\cC}{\ExpSub{\probavailable}{h^{t+1}_i}} = \probavailable \ExpSub{\cC}{h^t_i + \frac{1}{\probavailable}k^{t+1}_i} + (1 - \probavailable) h^{t}_i = h^{t}_i + k^{t+1}_i, \\
+      &\ExpSub{\cC}{\ExpSub{\probavailable}{h^{t+1}_i}} = \probavailable \ExpSub{\cC}{h^t_i + \frac{1}{\probavailable}k^{t+1}_i} + (1 - \probavailable) h^{t}_i = h^{t}_i + k^{t+1}_i. \\
   \end{align*}
-  we can get
+  Thus, we can get
   \begin{align*}
       &\ExpSub{\cC}{\ExpSub{\probavailable}{\norm{g^{t+1} - h^{t+1}}^2}} \\
       &=\ExpSub{\cC}{\ExpSub{\probavailable}{\norm{g^{t+1} - h^{t+1} - \ExpSub{\cC}{\ExpSub{\probavailable}{g^{t+1} - h^{t+1}}}}^2}} + (1 - a)^2\norm{g^{t} - h^{t}}^2.
@@ -333,7 +334,7 @@ The proof of Lemma \ref{lemma:page_lemma} is provided in \cite{PAGE}.
     &\quad +\frac{\probpairnn}{n^2}\sum_{i \neq j}^n\ExpSub{\cC}{\inp{g^{t}_i - h^{t}_i - g^{t}_i + a \left(g^{t}_i - h^{t}_i\right) + h^{t}_i}{g^{t}_j - h^{t}_j - g^{t}_j + a \left(g^{t}_j - h^{t}_j\right) + h^{t}_j}} \\
     &\quad + (1 - a)^2\norm{g^{t} - h^{t}}^2.\\
   \end{align*}
-  In the last equality, we use Assumption~\ref{ass:prob_sampling}. Using the independence of compressors, we get
+  In the last equality, we use Assumption~\ref{ass:partial_participation}. Using the independence of compressors, we get
   \begin{align*}
     &\ExpSub{\cC}{\ExpSub{\probavailable}{\norm{g^{t+1} - h^{t+1}}^2}} \\
     &=\frac{\probavailable}{n^2}\sum_{i=1}^n\ExpSub{\cC}{\norm{\cC_i\Bigg(\frac{1}{\probavailable}k^{t+1}_i - \frac{a}{\probavailable} \left(g^{t}_i - h^{t}_i\right)\Bigg) - \frac{1}{\probavailable}k^{t+1}_i + a \left(g^{t}_i - h^{t}_i\right)}^2} \\
@@ -343,7 +344,7 @@ The proof of Lemma \ref{lemma:page_lemma} is provided in \cite{PAGE}.
     &\quad +\frac{a^2 \probpairnn}{n^2}\sum_{i \neq j}^n\inp{g^{t}_i - h^{t}_i}{g^{t}_j - h^{t}_j} \\
     &\quad + (1 - a)^2\norm{g^{t} - h^{t}}^2.\\
   \end{align*}
-  Using $\probpairaa + \probpairnn + 2\probpairan = 1$ and $\probavailable = \probpairaa + \probpairan,$ we have
+  Using $\probpairaa + \probpairnn + 2\probpairan = 1$ and $\probavailable = \probpairaa + \probpairan$ (see Section~\ref{sec:auxiliary_facts_partial_participation}), we have
   \begin{align*}
     &\ExpSub{\cC}{\ExpSub{\probavailable}{\norm{g^{t+1} - h^{t+1}}^2}} \\
     &=\frac{\probavailable}{n^2}\sum_{i=1}^n\ExpSub{\cC}{\norm{\cC_i\Bigg(\frac{1}{\probavailable}k^{t+1}_i - \frac{a}{\probavailable} \left(g^{t}_i - h^{t}_i\right)\Bigg) - \frac{1}{\probavailable}k^{t+1}_i + a \left(g^{t}_i - h^{t}_i\right)}^2} \\
@@ -364,7 +365,7 @@ The proof of Lemma \ref{lemma:page_lemma} is provided in \cite{PAGE}.
     &\quad +\frac{a^2 (\probpairaa - \probavailable^2)}{n^2 \probavailable^2}\sum_{i \neq j}^n\inp{g^{t}_i - h^{t}}{g^{t}_j - h^{t}_j} \\
     &\quad + (1 - a)^2\norm{g^{t} - h^{t}}^2.\\
   \end{align*}
-  Using Assumption~\ref{} and \eqref{auxiliary:jensen_inequality}, we obtain
+  Using Assumption~\ref{ass:compressors} and \eqref{auxiliary:jensen_inequality}, we obtain
   \begin{align*}
     &\ExpSub{\cC}{\ExpSub{\probavailable}{\norm{g^{t+1} - h^{t+1}}^2}} \\
     &\leq\frac{\omega}{n^2 \probavailable}\sum_{i=1}^n\norm{k^{t+1}_i - a \left(g^{t}_i - h^{t}_i\right)}^2 +\frac{a^2 (1 - \probavailable)}{n^2 \probavailable}\sum_{i=1}^n\norm{g^{t}_i - h^{t}_i}^2 \\
@@ -379,7 +380,7 @@ The proof of Lemma \ref{lemma:page_lemma} is provided in \cite{PAGE}.
     &\quad + \frac{a^2 (\probpairaa - \probavailable^2)}{\probavailable^2}\norm{g^{t} - h^{t}}^2 \\
     &\quad + (1 - a)^2\norm{g^{t} - h^{t}}^2.\\
   \end{align*}
-  It is left to consider \eqref{asdasd} to prove \eqref{eq:compressor_global_error}. The second inequality can be proved almost in the same way:
+  It is left to consider that $\probpairaa \leq \probavailable^2$ to prove \eqref{eq:compressor_global_error}. The second inequality can be proved almost in the same way:
   \begin{align*}
     &\ExpSub{\cC}{\ExpSub{\probavailable}{\norm{g^{t+1}_i - h^{t+1}_i}^2}} \\
     &=\ExpSub{\cC}{\ExpSub{\probavailable}{\norm{g^{t+1}_i - h^{t+1}_i - \ExpSub{\cC}{\ExpSub{\probavailable}{g^{t+1}_i - h^{t+1}_i}}}^2}} + \norm{\ExpSub{\cC}{\ExpSub{\probavailable}{g^{t+1}_i - h^{t+1}_i}}}^2 \\
@@ -397,7 +398,7 @@ The proof of Lemma \ref{lemma:page_lemma} is provided in \cite{PAGE}.
 
 \begin{lemma}
   \label{lemma:main_lemma}
-  Suppose that Assumptions \ref{ass:lipschitz_constant} and \ref{ass:compressors} hold and let us take $a = \frac{\probavailable}{2 \omega + 1},$ then
+  Suppose that Assumptions \ref{ass:lipschitz_constant}, \ref{ass:compressors}, and \ref{ass:partial_participation} hold and let us take $a = \frac{\probavailable}{2 \omega + 1},$ then
   \begin{align*}
     &\Exp{f(x^{t + 1})} + \frac{\gamma (2 \omega + 1)}{\probavailable} \Exp{\norm{g^{t+1} - h^{t+1}}^2} + \frac{\gamma (\left(2 \omega + 1\right)\probavailable - \probpairaa)}{n \probavailable^2} \Exp{\frac{1}{n}\sum_{i=1}^n\norm{g^{t+1}_i - h^{t+1}_i}^2}\\
     &\leq \Exp{f(x^t) - \frac{\gamma}{2}\norm{\nabla f(x^t)}^2 - \left(\frac{1}{2\gamma} - \frac{L}{2}\right)
@@ -408,17 +409,17 @@ The proof of Lemma \ref{lemma:page_lemma} is provided in \cite{PAGE}.
 
 \begin{proof}
   Due to Lemma \ref{lemma:page_lemma} and the update step from Line~\ref{alg:main_algorithm:x_update} in Algorithm~\ref{alg:main_algorithm}, we have
-  \begin{align}
-    &\ExpSub{t+1}{f(x^{t + 1})} \\
+  \begin{align*}
+    &\ExpSub{t+1}{f(x^{t + 1})} \nonumber\\
     &\leq \ExpSub{t+1}{f(x^t) - \frac{\gamma}{2}\norm{\nabla f(x^t)}^2 - \left(\frac{1}{2\gamma} - \frac{L}{2}\right)
       \norm{x^{t+1} - x^t}^2 + \frac{\gamma}{2}\norm{g^{t} - \nabla f(x^t)}^2} \nonumber \\
       &= \ExpSub{t+1}{f(x^t) - \frac{\gamma}{2}\norm{\nabla f(x^t)}^2 - \left(\frac{1}{2\gamma} - \frac{L}{2}\right)
-      \norm{x^{t+1} - x^t}^2 + \frac{\gamma}{2}\norm{g^{t} - h^t + h^t - \nabla f(x^t)}^2} \label{eq:page_lemma_decompose} \\
+      \norm{x^{t+1} - x^t}^2 + \frac{\gamma}{2}\norm{g^{t} - h^t + h^t - \nabla f(x^t)}^2} \nonumber \\
       &\overset{\eqref{auxiliary:variance_decomposition}}{\leq} \ExpSub{t+1}{f(x^t) - \frac{\gamma}{2}\norm{\nabla f(x^t)}^2 - \left(\frac{1}{2\gamma} - \frac{L}{2}\right)
       \norm{x^{t+1} - x^t}^2 + \gamma\left(\norm{g^{t} - h^t}^2 + \norm{h^t - \nabla f(x^t)}^2}\right). \nonumber \\
       \nonumber
-  \end{align}
-  Let us fix some constants $\kappa, \eta \in [0,\infty)$ that we will define later. Combining bounds \eqref{eq:page_lemma_decompose}, \eqref{eq:compressor_global_error}, \eqref{eq:compressor_local_error} and using the law of total expectation, we get
+  \end{align*}
+  Let us fix some constants $\kappa, \eta \in [0,\infty)$ that we will define later. Combining the last inequality, bounds \eqref{eq:compressor_global_error}, \eqref{eq:compressor_local_error} and using the law of total expectation, we get
   \begin{align*}
       &\Exp{f(x^{t + 1})} \nonumber \\
       &\quad  + \kappa \Exp{\norm{g^{t+1} - h^{t+1}}^2} + \eta \Exp{\frac{1}{n}\sum_{i=1}^n\norm{g^{t+1}_i - h^{t+1}_i}^2} \nonumber\\
