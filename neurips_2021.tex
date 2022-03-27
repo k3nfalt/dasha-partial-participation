@@ -75,29 +75,78 @@
 
 \section{Introduction}
 
+\section{Assumptions}
+
+In this section, we list the assumptions that we use in the paper.
+
+\subsection{Functions assumptions}
+Now, we provide assumptions for the functions $f_i.$
+\begin{assumption}
+    \label{ass:lower_bound}
+    There exists $f^* \in \R$ such that $f(x) \geq f^*$ for all $x \in \R$.
+\end{assumption}
+\begin{assumption}
+    \label{ass:lipschitz_constant}
+    The function $f$ is $L$--smooth for all $i \in [n]$, i.e., $\norm{\nabla f(x) - \nabla f(y)} \leq L \norm{x - y}$ for all $x, y \in \R^d.$
+\end{assumption}
+\begin{assumption} \leavevmode
+    \label{ass:nodes_lipschitz_constant}
+    The functions $f_i$ are $L_i$--smooth. We define $\widehat{L}^2 \eqdef \frac{1}{n} \sum_{i=1}^{n} L_i^2.$
+\end{assumption}
+The next assumption is used in the finite-sum setting \eqref{eq:task_minibatch}.
+\begin{assumption}
+    \label{ass:max_lipschitz_constant}
+    The function $f_{ij}$ is $L_{ij}$-smooth for all $i \in [n], j \in [m].$ Let $L_{\max} \eqdef \max_{i \in [n], j \in [m]} L_{ij}.$
+\end{assumption}
+The two assumptions below are provided for the stochastic setting \eqref{eq:task_staochastic}.
+\begin{assumption}
+    \label{ass:stochastic_unbiased_and_variance_bounded}
+    For all $i \in [n]$ and for all $x \in \R^d,$ the stochastic gradient $\nabla f_i(x;\xi)$ is unbiased and has bounded variance, i.e.,
+    $$\ExpSub{\xi}{\nabla f_i(x;\xi)} = \nabla f_i(x), \qquad \text{and} \qquad \ExpSub{\xi}{\norm{\nabla f_i(x;\xi) - \nabla f_i(x)}^2} \leq \sigma^2,$$ 
+    where $\sigma^2 \geq 0.$
+\end{assumption}
+\begin{assumption}
+    \label{ass:mean_square_smoothness}
+    For all $i \in [n]$ and for all $x, y \in \R,$ the stochastic gradient $\nabla f_i(x;\xi)$ satisfies the mean-squared smoothness property, i.e.,
+    $$\ExpSub{\xi}{\norm{\nabla f_i(x;\xi) - \nabla f_i(y;\xi) - \left(\nabla f_i(x) - \nabla f_i(y)\right)}^2} \leq L_{\sigma}^2 \norm{x - y}^2.$$
+\end{assumption}
+
+\subsection{Compressors assumptions}
+
+\subsection{Nodes partial participation assumptions}
+\begin{assumption}
+  The partial participation of nodes has the following distribution: exists constants $\probavailable \in (0, 1]$ and $\probpairaa \in [0, 1],$ such that
+  \begin{enumerate}
+    \item $\Prob\left(i^{\textnormal{th}} \textnormal{ node is \textit{participating}}\right) = \probavailable, \quad \forall i \in [n],$
+    \item $\Prob\left(i^{\textnormal{th}} \textnormal{ node is \textit{participating}}, j^{\textnormal{th}} \textnormal{ node is \textit{participating}}\right) = \probpairaa, \quad \forall i \neq j \in [n],$
+    \item $\probpairaa \leq \probavailable^2.$
+  \end{enumerate}
+\end{assumption}
+Standard partial participation strategies, including $s$--nice sampling (with $\probavailable = \frac{s}{n}$ and $\probpairaa = \frac{s(s-1)}{n(n-1)}$) and independent participation (with $\probpairaa = \probavailable^2$) satisfy the assumptions.
+
 \section{Algorithm description}
 \begin{algorithm}[h!]
   \caption{\algname{DASHA}-\algname{PP}}
   \label{alg:main_algorithm}
   \begin{algorithmic}[1]
   \STATE \textbf{Input:} starting point $x^0 \in \R^d$, stepsize $\gamma > 0$, momentum $a \in (0, 1]$, 
-  momentum $b \in (0, 1]$, probability $\probavailable \in (0, 1]$ that a node is \textit{available}\footnote{}, 
+  momentum $b \in (0, 1]$, probability $\probavailable \in (0, 1]$ that a node is \textit{participating}\footnote{}, 
   batch size $B$ (only in \algname{DASHA}-\algname{PP}-\algname{PAGE} and \algname{DASHA}-\algname{PP}-\algname{MVR}), 
   number of iterations $T \geq 1$
   \STATE Initialize $g^0_i\in \R^d$, $h^0_i\in \R^d$ on the nodes and  $g^0 = \frac{1}{n}\sum_{i=1}^n g^0_i$ on the server
   \FOR{$t = 0, 1, \dots, T - 1$}
   \STATE $x^{t+1} = x^t - \gamma g^t$ \alglinelabel{alg:main_algorithm:x_update} 
-  \STATE Broadcast $x^{t+1}, x^{t}$ to all \textit{available}\footnote{} nodes
+  \STATE Broadcast $x^{t+1}, x^{t}$ to all \textit{participating}\footnote{} nodes
   \FOR{$i = 1, \dots, n$ in parallel}
-  \IF{$i$ is \textit{available}\footnote{}}
+  \IF{$i^{\textnormal{th}} \textnormal{ node is \textit{participating}}$\footnote{}}
       \STATE $k^{t+1}_i = 
       \begin{cases}
           \vspace{0.15cm}
           \nabla f_i(x^{t+1}) - \nabla f_i(x^{t}) - b \left(h^t_i - \nabla f_i(x^{t})\right) \\
           \vspace{0.15cm}
           \begin{cases}
-              \nabla f_i(x^{t+1}) - \nabla f_i(x^{t}) - \frac{b}{\probpage} \left(h^t_i - \nabla f_i(x^{t})\right),& \textnormal{with probability $\probpage$ on all \textit{available} nodes} \\
-              \frac{1}{B}\sum_{j \in I^t_i}\left(\nabla f_{ij}(x^{t+1}) - \nabla f_{ij}(x^{t})\right), & \textnormal{with probability $1 - \probpage$ on all \textit{available} nodes} 
+              \nabla f_i(x^{t+1}) - \nabla f_i(x^{t}) - \frac{b}{\probpage} \left(h^t_i - \nabla f_i(x^{t})\right),& \textnormal{with probability $\probpage$ on all \textit{participating} nodes} \\
+              \frac{1}{B}\sum_{j \in I^t_i}\left(\nabla f_{ij}(x^{t+1}) - \nabla f_{ij}(x^{t})\right), & \textnormal{with probability $1 - \probpage$ on all \textit{participating} nodes} 
           \end{cases}  \\
           \frac{1}{B}\sum_{j=1}^B \nabla f_i(x^{t+1};\xi^{t+1}_{ij}) - \frac{1}{B}\sum_{j=1}^B \nabla f_i(x^{t};\xi^{t+1}_{ij}) - b \left(h^t_i - \frac{1}{B}\sum_{j=1}^B \nabla f_i(x^{t};\xi^{t+1}_{ij})\right),
       \end{cases}$
