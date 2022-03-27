@@ -124,13 +124,20 @@ The two assumptions below are provided for the stochastic setting \eqref{eq:task
 
 \subsection{Nodes partial participation assumptions}
 \label{sec:partial_participation}
+
+\newcommand\Item[1][]{%
+  \ifx\relax#1\relax  \item \else \item[#1] \fi
+  \abovedisplayskip=0pt\abovedisplayshortskip=0pt~\vspace*{-\baselineskip}}
+
 \begin{assumption}
   \label{ass:partial_participation}
   The partial participation of nodes has the following distribution: exists constants $\probavailable \in (0, 1]$ and $\probpairaa \in [0, 1],$ such that
   \begin{enumerate}
-    \item $\Prob\left(i^{\textnormal{th}} \textnormal{ node is \textit{participating}}\right) = \probavailable, \quad \forall i \in [n],$
-    \item $\Prob\left(i^{\textnormal{th}} \textnormal{ node is \textit{participating}}, j^{\textnormal{th}} \textnormal{ node is \textit{participating}}\right) = \probpairaa, \quad \forall i \neq j \in [n],$
-    \item $\probpairaa \leq \probavailable^2,$
+    \Item \begin{align*}\Prob\left(i^{\textnormal{th}} \textnormal{ node is \textit{participating}}\right) = \probavailable, \quad \forall i \in [n],\end{align*}
+    \Item \begin{align*}\Prob\left(i^{\textnormal{th}} \textnormal{ node is \textit{participating}}, j^{\textnormal{th}} \textnormal{ node is \textit{participating}}\right) = \probpairaa, \quad \forall i \neq j \in [n],\end{align*}
+    \Item \begin{align} \label{eq:partial_participation_constraint}
+      \probpairaa \leq \probavailable^2,
+    \end{align}
   \end{enumerate}
   and these events from different communication rounds are independent.
 \end{assumption}
@@ -389,7 +396,7 @@ The proof of Lemma \ref{lemma:page_lemma} is provided in \cite{PAGE}.
     &\quad + \frac{a^2 (\probpairaa - \probavailable^2)}{\probavailable^2}\norm{g^{t} - h^{t}}^2 \\
     &\quad + (1 - a)^2\norm{g^{t} - h^{t}}^2.\\
   \end{align*}
-  It is left to consider that $\probpairaa \leq \probavailable^2$ to prove \eqref{eq:compressor_global_error}. The second inequality can be proved almost in the same way:
+  It is left to consider \eqref{eq:partial_participation_constraint} to prove \eqref{eq:compressor_global_error}. The second inequality can be proved almost in the same way:
   \begin{align*}
     &\ExpSub{\cC}{\ExpSub{\probavailable}{\norm{g^{t+1}_i - h^{t+1}_i}^2}} \\
     &=\ExpSub{\cC}{\ExpSub{\probavailable}{\norm{g^{t+1}_i - h^{t+1}_i - \ExpSub{\cC}{\ExpSub{\probavailable}{g^{t+1}_i - h^{t+1}_i}}}^2}} + \norm{\ExpSub{\cC}{\ExpSub{\probavailable}{g^{t+1}_i - h^{t+1}_i}}}^2 \\
@@ -565,7 +572,7 @@ The proof of Lemma \ref{lemma:page_lemma} is provided in \cite{PAGE}.
     &\qquad\qquad\qquad\qquad \nabla f_j(x^{t+1}) - \nabla f_j(x^{t}) - b(h^t_j - \nabla f_j(x^{t}))\Bigg\rangle \\
     &\quad + \left(1 - b\right)^2 \norm{h^{t} - \nabla f(x^{t})}^2. \\
   \end{align*}
-  Using inequality $\probpairaa \leq \probavailable^2$, we have
+  Using inequality \eqref{eq:partial_participation_constraint}, we have
   \begin{align*}
     &\ExpSub{k}{\ExpSub{\probavailable}{\norm{h^{t+1} - \nabla f(x^{t+1})}^2}} \\
     &= \frac{\probavailable - \probpairaa}{n^2 \probavailable^2} \sum_{i=1}^n \norm{\nabla f_i(x^{t+1}) - \nabla f_i(x^{t}) - b(h^t_i - \nabla f_i(x^{t}))}^2 \\
@@ -682,7 +689,7 @@ The proof of Lemma \ref{lemma:page_lemma} is provided in \cite{PAGE}.
 \subsection{Proof for \algname{DASHA}-\algname{PP}-\algname{PAGE}}
 
 \begin{lemma}
-  Suppose that Assumptions \ref{} hold. For $h^{t+1}_i$ from Algorithm~\ref{alg:main_algorithm} (\algname{DASHA}-\algname{PP}-\algname{PAGE}) we have
+  Suppose that Assumptions \ref{ass:nodes_lipschitz_constant}, \ref{ass:max_lipschitz_constant}, and \ref{ass:partial_participation} hold. For $h^{t+1}_i$ from Algorithm~\ref{alg:main_algorithm} (\algname{DASHA}-\algname{PP}-\algname{PAGE}) we have
   \begin{enumerate}
   \item
       \begin{align*}
@@ -755,7 +762,7 @@ The proof of Lemma \ref{lemma:page_lemma} is provided in \cite{PAGE}.
     &\quad +\frac{2\probpairan (\probavailable - 1)}{n^2 \probavailable}\sum_{i\neq j}^n\inp{\nabla f_i(x^{t+1}) - \nabla f_i(x^{t}) - \frac{b}{\probpage} \left(h^t_i - \nabla f_i(x^{t})\right)}{\nabla f_j(x^{t+1}) - \nabla f_j(x^{t}) - \frac{b}{\probpage} \left(h^t_j - \nabla f_j(x^{t})\right)} \\
     &\quad +\frac{\probpairnn}{n^2}\sum_{i\neq j}^n\inp{\nabla f_i(x^{t+1}) - \nabla f_i(x^{t}) - \frac{b}{\probpage} \left(h^t_i - \nabla f_i(x^{t})\right)}{\nabla f_j(x^{t+1}) - \nabla f_j(x^{t}) - \frac{b}{\probpage} \left(h^t_j - \nabla f_j(x^{t})\right)} \\
   \end{align*}
-  Considering Assumption~\ref{ass:prob_sampling}, we have
+  Considering \eqref{sec:auxiliary_facts_partial_participation:one}, \eqref{sec:auxiliary_facts_partial_participation:two}, and \eqref{eq:partial_participation_constraint}, we have
   \begin{align*}
     &\ExpSub{B}{\ExpSub{\probavailable}{\norm{h^{t+1}_{1} - \ExpSub{B}{\ExpSub{\probavailable}{h^{t+1}_{1}}}}^2}}\\
     &=\frac{1 - \probavailable}{n^2 \probavailable}\sum_{i=1}^n\norm{\nabla f_i(x^{t+1}) - \nabla f_i(x^{t}) - \frac{b}{\probpage} \left(h^t_i - \nabla f_i(x^{t})\right)}^2 \\
@@ -777,7 +784,7 @@ The proof of Lemma \ref{lemma:page_lemma} is provided in \cite{PAGE}.
     &\quad + \frac{1 - \probavailable}{n^2}\sum_{i=1}^n\norm{\nabla f_i(x^{t+1}) - \nabla f_i(x^{t})}^2 \\
     &\quad +\left(\frac{\probpairaa (\probavailable - 1)^2}{n^2 \probavailable^2} + \frac{2\probpairan (\probavailable - 1)}{n^2 \probavailable} + \frac{\probpairnn}{n^2}\right)\sum_{i\neq j}^n\inp{\nabla f_i(x^{t+1}) - \nabla f_i(x^{t})}{\nabla f_j(x^{t+1}) - \nabla f_j(x^{t})}.
   \end{align*}
-  Using Assumption~\ref{prob} and \eqref{auxiliary:variance_decomposition}, we get
+  Using \eqref{sec:auxiliary_facts_partial_participation:one}, \eqref{sec:auxiliary_facts_partial_participation:two}, and \eqref{auxiliary:variance_decomposition}, we get
   \begin{align*}
     &\ExpSub{B}{\ExpSub{\probavailable}{\norm{h^{t+1}_{2} - \ExpSub{B}{\ExpSub{\probavailable}{h^{t+1}_{2}}}}^2}}\\
     &=\frac{1}{n^2 \probavailable}\sum_{i=1}^n\ExpSub{B}{\norm{k^{t+1}_{i, 2} - \left(\nabla f_i(x^{t+1}) - \nabla f_i(x^{t})\right)}^2} \\
