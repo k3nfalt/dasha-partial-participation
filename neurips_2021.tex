@@ -723,7 +723,8 @@ $h^{t+1}_{1} \eqdef \frac{1}{n}\sum_{i=1}^n h^{t+1}_{i,1},$ and $h^{t+1}_{2} \eq
   \item
       \begin{align*}
           &\ExpSub{k}{\ExpSub{\probavailable}{\norm{h^{t+1}_i - \nabla f_i(x^{t+1})}^2}} \\
-          & \leq , \quad \forall i \in [n].
+          & \leq \frac{2\left(1 - \probavailable\right)L_i^2}{\probavailable} \norm{x^{t+1} - x^{t}}^2 + \frac{1 - \probpage}{\probavailable} \ExpSub{B}{\norm{k^{t+1}_{i, 2} - \left(\nabla f_i(x^{t+1}) - \nabla f_i(x^{t})\right)}^2} \\
+          &\quad +\left(\frac{2\left(1 - \probavailable\right)b^2}{\probavailable \probpage} + \probpage\left(1 - \frac{b}{\probpage}\right)^2 + (1 - \probpage)\right)\norm{h^{t}_i - \nabla f_i(x^{t})}^2, \quad \forall i \in [n].
       \end{align*}
   \end{enumerate}
 \end{lemma}
@@ -848,12 +849,20 @@ $h^{t+1}_{1} \eqdef \frac{1}{n}\sum_{i=1}^n h^{t+1}_{i,1},$ and $h^{t+1}_{2} \eq
     &\quad +(1 - \probavailable) \ExpSub{B}{\norm{h^{t}_{i} - \left(h^t_i + \nabla f_i(x^{t+1}) - \nabla f_i(x^{t})\right)}^2}\nonumber \\
     &= \probavailable \ExpSub{B}{\norm{\frac{1}{\probavailable} k^{t+1}_{i, 2} - \left(\nabla f_i(x^{t+1}) - \nabla f_i(x^{t})\right)}^2}\nonumber \\
     &\quad +(1 - \probavailable) \norm{\nabla f_i(x^{t+1}) - \nabla f_i(x^{t})}^2\nonumber \\
-    &\overset{\eqref{auxiliary:variance_decomposition}}{=} \frac{1}{\probavailable} \ExpSub{B}{\norm{k^{t+1}_{i, 2} - \left(\nabla f_i(x^{t+1}) - \nabla f_i(x^{t})\right)}^2} + \frac{(1 - \probavailable)^2}{\probavailable} \ExpSub{B}{\norm{\nabla f_i(x^{t+1}) - \nabla f_i(x^{t})}^2}\nonumber \\
+    &\overset{\eqref{auxiliary:variance_decomposition}}{=} \frac{1}{\probavailable} \ExpSub{B}{\norm{k^{t+1}_{i, 2} - \left(\nabla f_i(x^{t+1}) - \nabla f_i(x^{t})\right)}^2} + \frac{(1 - \probavailable)^2}{\probavailable} \norm{\nabla f_i(x^{t+1}) - \nabla f_i(x^{t})}^2\nonumber \\
     &\quad +(1 - \probavailable) \norm{\nabla f_i(x^{t+1}) - \nabla f_i(x^{t})}^2 \nonumber \\
-    &= \frac{1}{\probavailable} \ExpSub{B}{\norm{k^{t+1}_{i, 2} - \left(\nabla f_i(x^{t+1}) - \nabla f_i(x^{t})\right)}^2} + \frac{1 - \probavailable}{\probavailable} \ExpSub{B}{\norm{\nabla f_i(x^{t+1}) - \nabla f_i(x^{t})}^2} \nonumber \\
-    &\leq \frac{1}{\probavailable} \ExpSub{B}{\norm{k^{t+1}_{i, 2} - \left(\nabla f_i(x^{t+1}) - \nabla f_i(x^{t})\right)}^2} + \frac{1 - \probavailable}{\probavailable} \ExpSub{B}{\norm{\nabla f_i(x^{t+1}) - \nabla f_i(x^{t})}^2}, \label{eq:page_proof:mini:h_2}
+    &= \frac{1}{\probavailable} \ExpSub{B}{\norm{k^{t+1}_{i, 2} - \left(\nabla f_i(x^{t+1}) - \nabla f_i(x^{t})\right)}^2} + \frac{1 - \probavailable}{\probavailable} \norm{\nabla f_i(x^{t+1}) - \nabla f_i(x^{t})}^2 \nonumber \\
+    &\leq \frac{1}{\probavailable} \ExpSub{B}{\norm{k^{t+1}_{i, 2} - \left(\nabla f_i(x^{t+1}) - \nabla f_i(x^{t})\right)}^2} + \frac{\left(1 - \probavailable\right)L^2_i}{\probavailable} \norm{x^{t+1} - x^{t}}^2, \label{eq:page_proof:mini:h_2}
   \end{align}
   where we used Assumption~\ref{ass:nodes_lipschitz_constant}. By plugging \eqref{eq:page_proof:mini:h_1} and \eqref{eq:page_proof:mini:h_2} into \eqref{eq:page_proof:mini:orig}, we get
+  \begin{align*}
+    &\ExpSub{B}{\ExpSub{\probavailable}{\ExpSub{\probpage}{\norm{h^{t+1}_i - \nabla f_i(x^{t+1})}^2}}} \nonumber \\
+    &\leq\probpage\left(\frac{2\left(1 - \probavailable\right)L_i^2}{\probavailable} \norm{x^{t+1} - x^{t}}^2 + \frac{2\left(1 - \probavailable\right)b^2}{\probavailable \probpage^2} \norm{h^t_i - \nabla f_i(x^{t})}^2\right) \\
+    &\quad + (1 - \probpage)\left(\frac{1}{\probavailable} \ExpSub{B}{\norm{k^{t+1}_{i, 2} - \left(\nabla f_i(x^{t+1}) - \nabla f_i(x^{t})\right)}^2} + \frac{\left(1 - \probavailable\right)L^2_i}{\probavailable} \norm{x^{t+1} - x^{t}}^2\right) \\
+    &\quad +\left(\probpage\left(1 - \frac{b}{\probpage}\right)^2 + (1 - \probpage)\right)\norm{h^{t}_i - \nabla f_i(x^{t})}^2 \\
+    &\leq \frac{2\left(1 - \probavailable\right)L_i^2}{\probavailable} \norm{x^{t+1} - x^{t}}^2 + \frac{1 - \probpage}{\probavailable} \ExpSub{B}{\norm{k^{t+1}_{i, 2} - \left(\nabla f_i(x^{t+1}) - \nabla f_i(x^{t})\right)}^2} \\
+    &\quad +\left(\frac{2\left(1 - \probavailable\right)b^2}{\probavailable \probpage} + \probpage\left(1 - \frac{b}{\probpage}\right)^2 + (1 - \probpage)\right)\norm{h^{t}_i - \nabla f_i(x^{t})}^2.
+  \end{align*}
 \end{proof}
 
 \subsection{Proof for \algname{DASHA}-\algname{PP}-\algname{MVR}}
