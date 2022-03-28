@@ -529,7 +529,7 @@ The proof of Lemma \ref{lemma:page_lemma} is provided in \cite{PAGE}.
 
 \begin{lemma}
   \label{lemma:gradient}
-  Suppose that Assumptions~\ref{ass:nodes_lipschitz_constant} and \ref{ass:partial_participation} hold. For $h^{t+1}_i$ from Algorithm~\ref{alg:main_algorithm} (\algname{DASHA}-\algname{PP}) we have
+  Suppose that Assumptions~\ref{ass:nodes_lipschitz_constant} and \ref{ass:partial_participation} hold. For $h^{t+1}_i$ and $k^{t+1}_i$ from Algorithm~\ref{alg:main_algorithm} (\algname{DASHA}-\algname{PP}) we have
   \begin{enumerate}
   \item
       \begin{align*}
@@ -731,7 +731,7 @@ $h^{t+1}_{1} \eqdef \frac{1}{n}\sum_{i=1}^n h^{t+1}_{i,1},$ and $h^{t+1}_{2} \eq
 
 \begin{lemma}
   \label{lemma:gradient_page}
-  Suppose that Assumptions \ref{ass:nodes_lipschitz_constant}, \ref{ass:max_lipschitz_constant}, and \ref{ass:partial_participation} hold. For $h^{t+1}_i$ from Algorithm~\ref{alg:main_algorithm} (\algname{DASHA}-\algname{PP}-\algname{PAGE}) we have
+  Suppose that Assumptions \ref{ass:nodes_lipschitz_constant}, \ref{ass:max_lipschitz_constant}, and \ref{ass:partial_participation} hold. For $h^{t+1}_i$ and $k^{t+1}_i$ from Algorithm~\ref{alg:main_algorithm} (\algname{DASHA}-\algname{PP}-\algname{PAGE}) we have
   \begin{enumerate}
   \item
       \begin{align*}
@@ -842,7 +842,7 @@ $h^{t+1}_{1} \eqdef \frac{1}{n}\sum_{i=1}^n h^{t+1}_{i,1},$ and $h^{t+1}_{2} \eq
     &\leq\frac{2 \left(\probavailable - \probpairaa\right) \widehat{L}^2}{n \probavailable^2} \norm{x^{t+1} - x^{t}}^2 + \frac{1 - \probpage}{n^2 \probavailable}\sum_{i=1}^n\ExpSub{B}{\norm{k^{t+1}_{i, 2} - \left(\nabla f_i(x^{t+1}) - \nabla f_i(x^{t})\right)}^2}\\
     &\quad + \frac{2\left(\probavailable - \probpairaa\right) b^2}{n^2 \probavailable^2 \probpage}\sum_{i=1}^n\norm{ h^t_i - \nabla f_i(x^{t})}^2 + \left(\probpage\left(1 - \frac{b}{\probpage}\right)^2 + (1 - \probpage)\right)\norm{h^{t} - \nabla f(x^{t})}^2.
   \end{align*}
-  Using the independence of mini-batches, we can continue:
+  Using the independence of elements in the mini-batches, we can continue:
   \begin{align*}
     &\ExpSub{B}{\ExpSub{\probavailable}{\ExpSub{\probpage}{\norm{h^{t+1} - \nabla f(x^{t+1})}^2}}} \\
     &\leq \frac{2 \left(\probavailable - \probpairaa\right) \widehat{L}^2}{n \probavailable^2} \norm{x^{t+1} - x^{t}}^2 + \frac{1 - \probpage}{n^2 \probavailable}\sum_{i=1}^n\ExpSub{B}{\norm{\frac{1}{B}\sum_{j \in I^t_i}\left(\nabla f_{ij}(x^{t+1}) - \nabla f_{ij}(x^{t})\right) - \left(\nabla f_i(x^{t+1}) - \nabla f_i(x^{t})\right)}^2}\\
@@ -905,7 +905,7 @@ $h^{t+1}_{1} \eqdef \frac{1}{n}\sum_{i=1}^n h^{t+1}_{i,1},$ and $h^{t+1}_{2} \eq
     &\leq \frac{2\left(1 - \probavailable\right)L_i^2}{\probavailable} \norm{x^{t+1} - x^{t}}^2 + \frac{1 - \probpage}{\probavailable} \ExpSub{B}{\norm{k^{t+1}_{i, 2} - \left(\nabla f_i(x^{t+1}) - \nabla f_i(x^{t})\right)}^2} \\
     &\quad +\left(\frac{2\left(1 - \probavailable\right)b^2}{\probavailable \probpage} + \probpage\left(1 - \frac{b}{\probpage}\right)^2 + (1 - \probpage)\right)\norm{h^{t}_i - \nabla f_i(x^{t})}^2.
   \end{align*}
-  From the independence of mini-batches, we obtain
+  From the independence of elements in the mini-batch, we obtain
   \begin{align*}
     &\ExpSub{B}{\ExpSub{\probavailable}{\ExpSub{\probpage}{\norm{h^{t+1}_i - \nabla f_i(x^{t+1})}^2}}} \nonumber \\
     &\leq \frac{2\left(1 - \probavailable\right)L_i^2}{\probavailable} \norm{x^{t+1} - x^{t}}^2 + \frac{1 - \probpage}{\probavailable} \ExpSub{B}{\norm{\frac{1}{B}\sum_{j \in I^t_i}\left(\nabla f_{ij}(x^{t+1}) - \nabla f_{ij}(x^{t})\right) - \left(\nabla f_i(x^{t+1}) - \nabla f_i(x^{t})\right)}^2} \\
@@ -933,7 +933,7 @@ $h^{t+1}_{1} \eqdef \frac{1}{n}\sum_{i=1}^n h^{t+1}_{i,1},$ and $h^{t+1}_{2} \eq
     &\leq2 \norm{\nabla f_i(x^{t+1}) - \nabla f_i(x^{t})}^2 +  \frac{2b^2}{\probpage} \norm{h^t_i - \nabla f_i(x^{t})}^2 \\
     &\quad + (1 - \probpage) \ExpSub{B}{\norm{\frac{1}{B}\sum_{j \in I^t_i}\left(\nabla f_{ij}(x^{t+1}) - \nabla f_{ij}(x^{t})\right) - \left(\nabla f_{i}(x^{t+1}) - \nabla f_{i}(x^{t})\right)}^2}.
   \end{align*}
-  Using the independence of mini-batches, we have
+  Using the independence of elements in the mini-batch, we have
   \begin{align*}
     &\ExpSub{B}{\ExpSub{\probpage}{\norm{k^{t+1}_i}^2}} \\
     &\leq 2 \norm{\nabla f_i(x^{t+1}) - \nabla f_i(x^{t})}^2 +  \frac{2b^2}{\probpage} \norm{h^t_i - \nabla f_i(x^{t})}^2 \\
@@ -1027,7 +1027,7 @@ $h^{t+1}_{1} \eqdef \frac{1}{n}\sum_{i=1}^n h^{t+1}_{i,1},$ and $h^{t+1}_{2} \eq
       &\leq \frac{16 \gamma \omega (2 \omega + 1)}{n \probavailable^2} \left(\widehat{L}^2 + \frac{(1 - \probpage)L_{\max}^2}{B}\right) \\
       &\quad + \frac{4 \gamma}{n \probavailable^2 \probpage} \left(\left(1 - \frac{\probpairaa}{\probavailable}\right)\widehat{L}^2 + \frac{(1 - \probpage)L_{\max}^2}{B}\right).
     \end{align*}
-    Combining all bounds together, we the following simplified inequality:
+    Combining all bounds together, we obtain the following simplified inequality:
     \begin{align*}
       &\Exp{f(x^{t + 1})} + \frac{\gamma (2 \omega + 1)}{\probavailable} \Exp{\norm{g^{t+1} - h^{t+1}}^2} + \frac{\gamma (\left(2 \omega + 1\right)\probavailable - \probpairaa)}{n \probavailable^2} \Exp{\frac{1}{n}\sum_{i=1}^n\norm{g^{t+1}_i - h^{t+1}_i}^2}\\
       &\quad  + \frac{\gamma}{b} \Exp{\norm{h^{t+1} - \nabla f(x^{t+1})}^2} + \left(\frac{8 b \gamma \omega (2 \omega + 1)}{n \probavailable^2 \probpage} + \frac{2 \gamma \left(\probavailable - \probpairaa\right)}{n \probavailable^2 \probpage}\right) \Exp{\frac{1}{n}\sum_{i=1}^n\norm{h^{t+1}_i - \nabla f_i(x^{t+1})}^2}\\
@@ -1054,13 +1054,17 @@ $h^{t+1}_{1} \eqdef \frac{1}{n}\sum_{i=1}^n h^{t+1}_{i,1},$ and $h^{t+1}_{2} \eq
   \end{proof}
 
 \subsection{Proof for \algname{DASHA}-\algname{PP}-\algname{MVR}}
+
+Let us denote $\nabla f_i(x^{t+1};\xi^{t+1}_i) \eqdef \frac{1}{B} \sum_{j=1}^B \nabla f_i(x^{t+1};\xi^{t+1}_{ij}).$
+
 \begin{lemma}
-  Suppose that Assumptions \ref{ass:nodes_lipschitz_constant}, \ref{ass:stochastic_unbiased_and_variance_bounded} and \ref{ass:mean_square_smoothness} hold. For $h^{t+1}_i$ from Algorithm~\ref{alg:main_algorithm} (\algname{DASHA}-\algname{PP}-\algname{MVR}) we have
+  Suppose that Assumptions \ref{ass:nodes_lipschitz_constant}, \ref{ass:stochastic_unbiased_and_variance_bounded}, \ref{ass:mean_square_smoothness} and \ref{ass:partial_participation} hold. For $h^{t+1}_i$ and $k^{t+1}_i$ from Algorithm~\ref{alg:main_algorithm} (\algname{DASHA}-\algname{PP}-\algname{MVR}) we have
   \begin{enumerate}
   \item
       \begin{align*}
           &\ExpSub{k}{\ExpSub{\probavailable}{\norm{h^{t+1} - \nabla f(x^{t+1})}^2}} \\
-          & \leq .
+          & \leq \frac{2 b^2 \sigma^2}{n \probavailable} + \left(\frac{2 (1 - b)^2 L_{\sigma}^2}{n \probavailable B} + \frac{2\left(\probavailable - \probpairaa\right) \widehat{L}^2}{n \probavailable^2} \right) \norm{x^{t+1} - x^{t}}^2\\
+          &\quad + \frac{2 \left(\probavailable - \probpairaa\right) b^2}{n^2 \probavailable^2} \sum_{i=1}^n \norm{h^t_i - \nabla f_i(x^{t})}^2 + \left(1 - b\right)^2 \norm{h^{t} - \nabla f(x^{t})}^2.
       \end{align*}
   \item
       \begin{align*}
@@ -1080,7 +1084,7 @@ $h^{t+1}_{1} \eqdef \frac{1}{n}\sum_{i=1}^n h^{t+1}_{i,1},$ and $h^{t+1}_{2} \eq
   \begin{align*}
       \ExpSub{k}{\ExpSub{\probavailable}{h^{t+1}_i}} = h^{t}_i + \ExpSub{k}{k^{t+1}_i} = h^{t}_i + \nabla f_i(x^{t+1}) - \nabla f_i(x^{t}) - b(h^t_i - \nabla f_i(x^{t}))
   \end{align*}
-  and Assumption~\ref{ass:prob_sampling}, we have
+  and Assumption~\ref{ass:partial_participation}, we have
   \begin{align*}
       &\ExpSub{k}{\ExpSub{\probavailable}{\norm{h^{t+1} - \nabla f(x^{t+1})}^2}} \\
       &=\ExpSub{k}{\ExpSub{\probavailable}{\norm{h^{t+1} - \ExpSub{k}{\ExpSub{\probavailable}{h^{t+1}}}}^2}} + \left(1 - b\right)^2 \norm{h^{t} - \nabla f(x^{t})}^2\\
@@ -1097,7 +1101,7 @@ $h^{t+1}_{1} \eqdef \frac{1}{n}\sum_{i=1}^n h^{t+1}_{i,1},$ and $h^{t+1}_{2} \eq
       &\qquad\qquad\qquad\qquad h^{t}_j - h^{t}_j - \nabla f_j(x^{t+1}) + \nabla f_j(x^{t}) + b(h^t_j - \nabla f_j(x^{t}))\Bigg\rangle \\
       &\quad + \left(1 - b\right)^2 \norm{h^{t} - \nabla f(x^{t})}^2.
   \end{align*}
-  Next, from the independence of stochastic gradients and Assumption~\ref{ass:prob_sampling}, we obtain
+  Next, from the independence of stochastic gradients, \eqref{sec:auxiliary_facts_partial_participation:one} and \eqref{sec:auxiliary_facts_partial_participation:two}, we obtain
   \begin{align*}
     &\ExpSub{k}{\ExpSub{\probavailable}{\norm{h^{t+1} - \nabla f(x^{t+1})}^2}} \\
     &=\frac{\probavailable}{n^2}\sum_{i=1}^n \ExpSub{k}{\norm{\frac{1}{\probavailable}k^{t+1}_i - \nabla f_i(x^{t+1}) + \nabla f_i(x^{t}) + b(h^t_i - \nabla f_i(x^{t}))}^2} \\
@@ -1137,7 +1141,44 @@ $h^{t+1}_{1} \eqdef \frac{1}{n}\sum_{i=1}^n h^{t+1}_{i,1},$ and $h^{t+1}_{2} \eq
     &=\frac{1}{n^2 \probavailable}\sum_{i=1}^n \ExpSub{k}{\norm{k^{t+1}_i - \ExpSub{k}{k^{t+1}_i}}^2} \\
     &\quad + \frac{\probavailable - \probpairaa}{n^2 \probavailable^2} \sum_{i=1}^n \norm{\nabla f_i(x^{t+1}) - \nabla f_i(x^{t}) - b(h^t_i - \nabla f_i(x^{t}))}^2 \\
     &\quad + \frac{\probpairaa - \probavailable^2}{\probavailable^2} \norm{\nabla f(x^{t+1}) - \nabla f(x^{t}) - b(h^t - \nabla f(x^{t}))}^2 \\
+    &\quad + \left(1 - b\right)^2 \norm{h^{t} - \nabla f(x^{t})}^2 \\
+    &\overset{\eqref{eq:partial_participation_constraint}}{\leq} \frac{1}{n^2 \probavailable}\sum_{i=1}^n \ExpSub{k}{\norm{k^{t+1}_i - \ExpSub{k}{k^{t+1}_i}}^2} \\
+    &\quad + \frac{\probavailable - \probpairaa}{n^2 \probavailable^2} \sum_{i=1}^n \norm{\nabla f_i(x^{t+1}) - \nabla f_i(x^{t}) - b(h^t_i - \nabla f_i(x^{t}))}^2 \\
+    &\quad + \left(1 - b\right)^2 \norm{h^{t} - \nabla f(x^{t})}^2 \\
+    &= \frac{1}{n^2 \probavailable}\sum_{i=1}^n \ExpSub{k}{\norm{\nabla f_i(x^{t+1};\xi^{t+1}_i) - (1 - b)\nabla f_i(x^{t};\xi^{t+1}_i) - \left(\nabla f_i(x^{t+1}) - (1 - b)\nabla f_i(x^{t})\right)}^2} \\
+    &\quad + \frac{\probavailable - \probpairaa}{n^2 \probavailable^2} \sum_{i=1}^n \norm{\nabla f_i(x^{t+1}) - \nabla f_i(x^{t}) - b(h^t_i - \nabla f_i(x^{t}))}^2 \\
+    &\quad + \left(1 - b\right)^2 \norm{h^{t} - \nabla f(x^{t})}^2 \\
+    &\overset{\eqref{auxiliary:jensen_inequality}}{\leq} \frac{2}{n^2 \probavailable}\sum_{i=1}^n \ExpSub{k}{\norm{b \left(\nabla f_i(x^{t+1};\xi^{t+1}_i) - \nabla f_i(x^{t+1})\right)}^2} \\
+    & \quad + \frac{2}{n^2 \probavailable}\sum_{i=1}^n \ExpSub{k}{\norm{(1 - b)\left(\nabla f_i(x^{t+1};\xi^{t+1}_i) - \nabla f_i(x^{t};\xi^{t+1}_i) - \left(\nabla f_i(x^{t+1}) - \nabla f_i(x^{t})\right)\right)}^2} \\
+    &\quad + \frac{\probavailable - \probpairaa}{n^2 \probavailable^2} \sum_{i=1}^n \norm{\nabla f_i(x^{t+1}) - \nabla f_i(x^{t}) - b(h^t_i - \nabla f_i(x^{t}))}^2 \\
+    &\quad + \left(1 - b\right)^2 \norm{h^{t} - \nabla f(x^{t})}^2 \\
+    &= \frac{2 b^2}{n^2 \probavailable}\sum_{i=1}^n \ExpSub{k}{\norm{\nabla f_i(x^{t+1};\xi^{t+1}_i) - \nabla f_i(x^{t+1})}^2} \\
+    & \quad + \frac{2 (1 - b)^2}{n^2 \probavailable}\sum_{i=1}^n \ExpSub{k}{\norm{\nabla f_i(x^{t+1};\xi^{t+1}_i) - \nabla f_i(x^{t};\xi^{t+1}_i) - \left(\nabla f_i(x^{t+1}) - \nabla f_i(x^{t})\right)}^2} \\
+    &\quad + \frac{\probavailable - \probpairaa}{n^2 \probavailable^2} \sum_{i=1}^n \norm{\nabla f_i(x^{t+1}) - \nabla f_i(x^{t}) - b(h^t_i - \nabla f_i(x^{t}))}^2 \\
     &\quad + \left(1 - b\right)^2 \norm{h^{t} - \nabla f(x^{t})}^2. \\
+  \end{align*}
+  Due to Assumption~\ref{ass:stochastic_unbiased_and_variance_bounded}, we get
+  \begin{align*}
+    &\ExpSub{k}{\ExpSub{\probavailable}{\norm{h^{t+1} - \nabla f(x^{t+1})}^2}} \\
+    &\leq \frac{2 b^2 \sigma^2}{n \probavailable}\\
+    & \quad + \frac{2 (1 - b)^2}{n^2 \probavailable}\sum_{i=1}^n \ExpSub{k}{\norm{\nabla f_i(x^{t+1};\xi^{t+1}_i) - \nabla f_i(x^{t};\xi^{t+1}_i) - \left(\nabla f_i(x^{t+1}) - \nabla f_i(x^{t})\right)}^2} \\
+    &\quad + \frac{\probavailable - \probpairaa}{n^2 \probavailable^2} \sum_{i=1}^n \norm{\nabla f_i(x^{t+1}) - \nabla f_i(x^{t}) - b(h^t_i - \nabla f_i(x^{t}))}^2 \\
+    &\quad + \left(1 - b\right)^2 \norm{h^{t} - \nabla f(x^{t})}^2 \\
+    &\overset{\eqref{auxiliary:jensen_inequality}}{\leq} \frac{2 b^2 \sigma^2}{n \probavailable}\\
+    & \quad + \frac{2 (1 - b)^2}{n^2 \probavailable}\sum_{i=1}^n \ExpSub{k}{\norm{\nabla f_i(x^{t+1};\xi^{t+1}_i) - \nabla f_i(x^{t};\xi^{t+1}_i) - \left(\nabla f_i(x^{t+1}) - \nabla f_i(x^{t})\right)}^2} \\
+    &\quad + \frac{2\left(\probavailable - \probpairaa\right)}{n^2 \probavailable^2} \sum_{i=1}^n \norm{\nabla f_i(x^{t+1}) - \nabla f_i(x^{t})}^2 + \frac{2 \left(\probavailable - \probpairaa\right) b^2}{n^2 \probavailable^2} \sum_{i=1}^n \norm{h^t_i - \nabla f_i(x^{t})}^2 \\
+    &\quad + \left(1 - b\right)^2 \norm{h^{t} - \nabla f(x^{t})}^2. \\
+    &= \frac{2 b^2 \sigma^2}{n \probavailable}\\
+    & \quad + \frac{2 (1 - b)^2}{n^2 \probavailable B^2}\sum_{i=1}^n \sum_{j=1}^B \ExpSub{k}{\norm{\nabla f_i(x^{t+1};\xi^{t+1}_{ij}) - \nabla f_i(x^{t};\xi^{t+1}_{ij}) - \left(\nabla f_i(x^{t+1}) - \nabla f_i(x^{t})\right)}^2} \\
+    &\quad + \frac{2\left(\probavailable - \probpairaa\right)}{n^2 \probavailable^2} \sum_{i=1}^n \norm{\nabla f_i(x^{t+1}) - \nabla f_i(x^{t})}^2 + \frac{2 \left(\probavailable - \probpairaa\right) b^2}{n^2 \probavailable^2} \sum_{i=1}^n \norm{h^t_i - \nabla f_i(x^{t})}^2 \\
+    &\quad + \left(1 - b\right)^2 \norm{h^{t} - \nabla f(x^{t})}^2, \\
+  \end{align*}
+  where we use the independence of elements in the mini-batches.
+  Using Assumptions~\ref{ass:nodes_lipschitz_constant} and \ref{ass:mean_square_smoothness}, we obtain
+  \begin{align*}
+    &\ExpSub{k}{\ExpSub{\probavailable}{\norm{h^{t+1} - \nabla f(x^{t+1})}^2}} \\
+    &\leq \frac{2 b^2 \sigma^2}{n \probavailable} + \left(\frac{2 (1 - b)^2 L_{\sigma}^2}{n \probavailable B} + \frac{2\left(\probavailable - \probpairaa\right) \widehat{L}^2}{n \probavailable^2} \right) \norm{x^{t+1} - x^{t}}^2\\
+    &\quad + \frac{2 \left(\probavailable - \probpairaa\right) b^2}{n^2 \probavailable^2} \sum_{i=1}^n \norm{h^t_i - \nabla f_i(x^{t})}^2 + \left(1 - b\right)^2 \norm{h^{t} - \nabla f(x^{t})}^2.
   \end{align*}
 \end{proof}
 
