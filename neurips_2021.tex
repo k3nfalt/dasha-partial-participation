@@ -690,6 +690,27 @@ The proof of Lemma \ref{lemma:page_lemma} is provided in \cite{PAGE}.
 
 \subsection{Proof for \algname{DASHA}-\algname{PP}-\algname{PAGE}}
 
+Let us denote
+\begin{align*}
+    &k^{t+1}_{i, 1} \eqdef \nabla f_i(x^{t+1}) - \nabla f_i(x^{t}) - \frac{b}{\probpage} \left(h^t_i - \nabla f_i(x^{t})\right), \\
+    &k^{t+1}_{i, 2} \eqdef \frac{1}{B}\sum_{j \in I^t_i}\left(\nabla f_{ij}(x^{t+1}) - \nabla f_{ij}(x^{t})\right), \\
+    &h^{t+1}_{i,1} \eqdef \begin{cases}
+        h^t_i + \frac{1}{\probavailable} k^{t+1}_{i, 1},& \textnormal{with probability $\probavailable$,} \\
+        h^t_i, & \textnormal{with probability $1 - \probavailable$,} 
+    \end{cases}  \\
+    &h^{t+1}_{i,2} \eqdef \begin{cases}
+        h^t_i + \frac{1}{\probavailable} k^{t+1}_{i, 2},& \textnormal{with probability $\probavailable$,} \\
+        h^t_i, & \textnormal{with probability $1 - \probavailable$,}
+    \end{cases}  \\
+\end{align*}
+$h^{t+1}_{1} \eqdef \frac{1}{n}\sum_{i=1}^n h^{t+1}_{i,1},$ and $h^{t+1}_{2} \eqdef \frac{1}{n}\sum_{i=1}^n h^{t+1}_{i,2}.$ Note, that
+\begin{align*}
+  &h^{t+1} = \begin{cases}
+    h^{t+1}_{1},& \textnormal{with probability $\probpage$,} \\
+    h^{t+1}_{2},& \textnormal{with probability $1 - \probpage$.} 
+  \end{cases}
+\end{align*}
+
 \begin{lemma}
   Suppose that Assumptions \ref{ass:nodes_lipschitz_constant}, \ref{ass:max_lipschitz_constant}, and \ref{ass:partial_participation} hold. For $h^{t+1}_i$ from Algorithm~\ref{alg:main_algorithm} (\algname{DASHA}-\algname{PP}-\algname{PAGE}) we have
   \begin{enumerate}
@@ -708,27 +729,7 @@ The proof of Lemma \ref{lemma:page_lemma} is provided in \cite{PAGE}.
 \end{lemma}
 
 \begin{proof}
-  Let us denote
-  \begin{align*}
-      &k^{t+1}_{i, 1} \eqdef \nabla f_i(x^{t+1}) - \nabla f_i(x^{t}) - \frac{b}{\probpage} \left(h^t_i - \nabla f_i(x^{t})\right), \\
-      &k^{t+1}_{i, 2} \eqdef \frac{1}{B}\sum_{j \in I^t_i}\left(\nabla f_{ij}(x^{t+1}) - \nabla f_{ij}(x^{t})\right), \\
-      &h^{t+1}_{i,1} \eqdef \begin{cases}
-          h^t_i + \frac{1}{\probavailable} k^{t+1}_{i, 1},& \textnormal{with probability $\probavailable$,} \\
-          h^t_i, & \textnormal{with probability $1 - \probavailable$,} 
-      \end{cases}  \\
-      &h^{t+1}_{i,2} \eqdef \begin{cases}
-          h^t_i + \frac{1}{\probavailable} k^{t+1}_{i, 2},& \textnormal{with probability $\probavailable$,} \\
-          h^t_i, & \textnormal{with probability $1 - \probavailable$,}
-      \end{cases}  \\
-  \end{align*}
-  $h^{t+1}_{1} \eqdef \frac{1}{n}\sum_{i=1}^n h^{t+1}_{i,1},$ and $h^{t+1}_{2} \eqdef \frac{1}{n}\sum_{i=1}^n h^{t+1}_{i,2}.$ Note, that
-  \begin{align*}
-    &h^{t+1} = \begin{cases}
-      h^{t+1}_{1},& \textnormal{with probability $\probpage$,} \\
-      h^{t+1}_{2},& \textnormal{with probability $1 - \probpage$.} 
-    \end{cases}
-  \end{align*}
-  Thus, we have
+  First, we prove the first inequality of the theorem:
   \begin{align*}
     &\ExpSub{B}{\ExpSub{\probavailable}{\ExpSub{\probpage}{\norm{h^{t+1} - \nabla f(x^{t+1})}^2}}} \\
     &=\probpage\ExpSub{B}{\ExpSub{\probavailable}{\norm{h^{t+1}_{1} - \nabla f(x^{t+1})}^2}} + (1 - \probpage)\ExpSub{B}{\ExpSub{\probavailable}{\norm{h^{t+1}_{2} - \nabla f(x^{t+1})}^2}}.\\
