@@ -734,6 +734,11 @@ $h^{t+1}_{1} \eqdef \frac{1}{n}\sum_{i=1}^n h^{t+1}_{i,1},$ and $h^{t+1}_{2} \eq
           & \leq \left(\frac{2\left(1 - \probavailable\right)L_i^2}{\probavailable} + \frac{(1 - \probpage)L_{\max}^2}{\probavailable B}\right) \norm{x^{t+1} - x^{t}}^2 \\
           &\quad +\left(\frac{2\left(1 - \probavailable\right)b^2}{\probavailable \probpage} + \probpage\left(1 - \frac{b}{\probpage}\right)^2 + (1 - \probpage)\right)\norm{h^{t}_i - \nabla f_i(x^{t})}^2, \quad \forall i \in [n].
       \end{align*}
+  \item
+      \begin{align*}
+        &\ExpSub{B}{\ExpSub{\probpage}{\norm{k^{t+1}_i}^2}} \\
+        &\leq \left(2 L_i^2 + \frac{(1 - \probpage)L_{\max}^2}{B}\right)\norm{x^{t+1} - x^{t}}^2 +  \frac{2b^2}{\probpage} \norm{h^t_i - \nabla f_i(x^{t})}^2, \quad \forall i \in [n].
+      \end{align*}
   \end{enumerate}
 \end{lemma}
 
@@ -903,7 +908,39 @@ $h^{t+1}_{1} \eqdef \frac{1}{n}\sum_{i=1}^n h^{t+1}_{i,1},$ and $h^{t+1}_{2} \eq
     &\leq \left(\frac{2\left(1 - \probavailable\right)L_i^2}{\probavailable} + \frac{(1 - \probpage)L_{\max}^2}{\probavailable B}\right) \norm{x^{t+1} - x^{t}}^2 \\
     &\quad +\left(\frac{2\left(1 - \probavailable\right)b^2}{\probavailable \probpage} + \probpage\left(1 - \frac{b}{\probpage}\right)^2 + (1 - \probpage)\right)\norm{h^{t}_i - \nabla f_i(x^{t})}^2, \\
   \end{align*}
-  where we used Assumption~\ref{ass:max_lipschitz_constant}.
+  where we used Assumption~\ref{ass:max_lipschitz_constant}. Finally, we prove the last inequality:
+  \begin{align*}
+    &\ExpSub{B}{\ExpSub{\probpage}{\norm{k^{t+1}_i}^2}} \\
+    &=\probpage \norm{\nabla f_i(x^{t+1}) - \nabla f_i(x^{t}) - \frac{b}{\probpage} \left(h^t_i - \nabla f_i(x^{t})\right)}^2 \\
+    &\quad + (1 - \probpage) \ExpSub{B}{\norm{\frac{1}{B}\sum_{j \in I^t_i}\left(\nabla f_{ij}(x^{t+1}) - \nabla f_{ij}(x^{t})\right)}^2} \\
+    &\overset{\eqref{auxiliary:variance_decomposition}}{=}\probpage \norm{\nabla f_i(x^{t+1}) - \nabla f_i(x^{t}) - \frac{b}{\probpage} \left(h^t_i - \nabla f_i(x^{t})\right)}^2 \\
+    &\quad + (1 - \probpage) \ExpSub{B}{\norm{\frac{1}{B}\sum_{j \in I^t_i}\left(\nabla f_{ij}(x^{t+1}) - \nabla f_{ij}(x^{t})\right) - \left(\nabla f_{i}(x^{t+1}) - \nabla f_{i}(x^{t})\right)}^2} \\
+    &\quad + (1 - \probpage) \norm{\nabla f_{i}(x^{t+1}) - \nabla f_{i}(x^{t})}^2\\
+    &\overset{\eqref{auxiliary:jensen_inequality}}{\leq}2 \probpage \norm{\nabla f_i(x^{t+1}) - \nabla f_i(x^{t})}^2 +  \frac{2b^2}{\probpage} \norm{h^t_i - \nabla f_i(x^{t})}^2 \\
+    &\quad + (1 - \probpage) \ExpSub{B}{\norm{\frac{1}{B}\sum_{j \in I^t_i}\left(\nabla f_{ij}(x^{t+1}) - \nabla f_{ij}(x^{t})\right) - \left(\nabla f_{i}(x^{t+1}) - \nabla f_{i}(x^{t})\right)}^2} \\
+    &\quad + (1 - \probpage) \norm{\nabla f_{i}(x^{t+1}) - \nabla f_{i}(x^{t})}^2\\
+    &\leq2 \norm{\nabla f_i(x^{t+1}) - \nabla f_i(x^{t})}^2 +  \frac{2b^2}{\probpage} \norm{h^t_i - \nabla f_i(x^{t})}^2 \\
+    &\quad + (1 - \probpage) \ExpSub{B}{\norm{\frac{1}{B}\sum_{j \in I^t_i}\left(\nabla f_{ij}(x^{t+1}) - \nabla f_{ij}(x^{t})\right) - \left(\nabla f_{i}(x^{t+1}) - \nabla f_{i}(x^{t})\right)}^2}.
+  \end{align*}
+  Using the independence of mini-batches, we have
+  \begin{align*}
+    &\ExpSub{B}{\ExpSub{\probpage}{\norm{k^{t+1}_i}^2}} \\
+    &\leq 2 \norm{\nabla f_i(x^{t+1}) - \nabla f_i(x^{t})}^2 +  \frac{2b^2}{\probpage} \norm{h^t_i - \nabla f_i(x^{t})}^2 \\
+    &\quad + \frac{1 - \probpage}{B^2} \ExpSub{B}{\sum_{j \in I^t_i}\norm{\left(\nabla f_{ij}(x^{t+1}) - \nabla f_{ij}(x^{t})\right) - \left(\nabla f_{i}(x^{t+1}) - \nabla f_{i}(x^{t})\right)}^2} \\ 
+    &= 2 \norm{\nabla f_i(x^{t+1}) - \nabla f_i(x^{t})}^2 +  \frac{2b^2}{\probpage} \norm{h^t_i - \nabla f_i(x^{t})}^2 \\
+    &\quad + \frac{1 - \probpage}{B m} \sum_{j=1}^m \norm{\left(\nabla f_{ij}(x^{t+1}) - \nabla f_{ij}(x^{t})\right) - \left(\nabla f_{i}(x^{t+1}) - \nabla f_{i}(x^{t})\right)}^2 \\ 
+    &\leq 2 \norm{\nabla f_i(x^{t+1}) - \nabla f_i(x^{t})}^2 +  \frac{2b^2}{\probpage} \norm{h^t_i - \nabla f_i(x^{t})}^2 \\
+    &\quad + \frac{1 - \probpage}{B m} \sum_{j=1}^m \norm{\nabla f_{ij}(x^{t+1}) - \nabla f_{ij}(x^{t})}^2 \\.
+  \end{align*}
+  It it left to consider Assumptions~\ref{ass:nodes_lipschitz_constant} and \ref{ass:max_lipschitz_constant} to get
+  \begin{align*}
+    &\ExpSub{B}{\ExpSub{\probpage}{\norm{k^{t+1}_i}^2}} \\
+    &\leq \left(2 L_i^2 + \frac{(1 - \probpage)L_{\max}^2}{B}\right)\norm{x^{t+1} - x^{t}}^2 +  \frac{2b^2}{\probpage} \norm{h^t_i - \nabla f_i(x^{t})}^2.
+  \end{align*}
+% \begin{cases}
+%   \nabla f_i(x^{t+1}) - \nabla f_i(x^{t}) - \frac{b}{\probpage} \left(h^t_i - \nabla f_i(x^{t})\right),& \textnormal{with probability $\probpage$ on all \textit{participating}\textsuperscript{\red (a)} nodes} \\
+%   \frac{1}{B}\sum_{j \in I^t_i}\left(\nabla f_{ij}(x^{t+1}) - \nabla f_{ij}(x^{t})\right), & \textnormal{with probability $1 - \probpage$ on all \textit{participating}\textsuperscript{\red (a)} nodes} 
+% \end{cases}  \\
 \end{proof}
 
 \CONVERGENCEPAGE*
