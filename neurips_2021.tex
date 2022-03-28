@@ -817,12 +817,43 @@ $h^{t+1}_{1} \eqdef \frac{1}{n}\sum_{i=1}^n h^{t+1}_{i,1},$ and $h^{t+1}_{2} \eq
     &\leq\frac{2 \left(\probavailable - \probpairaa\right) \widehat{L}^2}{n \probavailable^2} \norm{x^{t+1} - x^{t}}^2 + \frac{1 - \probpage}{n^2 \probavailable}\sum_{i=1}^n\ExpSub{B}{\norm{k^{t+1}_{i, 2} - \left(\nabla f_i(x^{t+1}) - \nabla f_i(x^{t})\right)}^2}\\
     &\quad + \frac{2\left(\probavailable - \probpairaa\right) b^2}{n^2 \probavailable^2 \probpage}\sum_{i=1}^n\norm{ h^t_i - \nabla f_i(x^{t})}^2 + \left(\probpage\left(1 - \frac{b}{\probpage}\right)^2 + (1 - \probpage)\right)\norm{h^{t} - \nabla f(x^{t})}^2.
   \end{align*}
-  % According to \eqref{auxiliary:jensen_inequality}, we obtain
-  % \begin{align}
-  %   &\ExpSub{B}{\ExpSub{\probavailable}{\norm{h^{t+1}_{2} - \ExpSub{B}{\ExpSub{\probavailable}{h^{t+1}_{2}}}}^2}} \nonumber\\
-  %   &\leq \frac{2}{n^2 \probavailable}\sum_{i=1}^n\ExpSub{B}{\norm{k^{t+1}_{i, 2}}^2} + \frac{2}{n^2 \probavailable}\sum_{i=1}^n\ExpSub{B}{\norm{k^{t+1}_{i, 2} - \left(\nabla f_i(x^{t+1}) - \nabla f_i(x^{t})\right)}^2} \\
-  %   &\quad + \frac{\probavailable - \probpairaa}{n^2 \probavailable^2}\sum_{i=1}^n\norm{\nabla f_i(x^{t+1}) - \nabla f_i(x^{t})}^2\nonumber \\
-  % \end{align}
+  The proof of the second inequality almost repeats the previous one:
+  \begin{align}
+    &\ExpSub{B}{\ExpSub{\probavailable}{\ExpSub{\probpage}{\norm{h^{t+1}_i - \nabla f_i(x^{t+1})}^2}}} \nonumber \\
+    &=\probpage\ExpSub{B}{\ExpSub{\probavailable}{\norm{h^{t+1}_{i,1} - \nabla f_i(x^{t+1})}^2}} + (1 - \probpage)\ExpSub{B}{\ExpSub{\probavailable}{\norm{h^{t+1}_{i,2} - \nabla f_i(x^{t+1})}^2}}.\\
+    &\overset{\eqref{auxiliary:variance_decomposition}}{=}\probpage\ExpSub{B}{\ExpSub{\probavailable}{\norm{h^{t+1}_{i,1} - \ExpSub{B}{\ExpSub{\probavailable}{h^{t+1}_{i,1}}}}^2}} + (1 - \probpage)\ExpSub{B}{\ExpSub{\probavailable}{\norm{h^{t+1}_{i,2} - \ExpSub{B}{\ExpSub{\probavailable}{h^{t+1}_{i,2}}}}^2}} \nonumber\\
+    &\quad +\probpage\norm{\ExpSub{B}{\ExpSub{\probavailable}{h^{t+1}_{i,1}}} - \nabla f_i(x^{t+1})}^2 + (1 - \probpage)\norm{\ExpSub{B}{\ExpSub{\probavailable}{h^{t+1}_{i,2}}} - \nabla f_i(x^{t+1})}^2 \nonumber \\
+    &=\probpage\ExpSub{B}{\ExpSub{\probavailable}{\norm{h^{t+1}_{i,1} - \ExpSub{B}{\ExpSub{\probavailable}{h^{t+1}_{i,1}}}}^2}} + (1 - \probpage)\ExpSub{B}{\ExpSub{\probavailable}{\norm{h^{t+1}_{i,2} - \ExpSub{B}{\ExpSub{\probavailable}{h^{t+1}_{i,2}}}}^2}} \nonumber\\
+    &\quad +\left(\probpage\left(1 - \frac{b}{\probpage}\right)^2 + (1 - \probpage)\right)\norm{h^{t}_i - \nabla f_i(x^{t})}^2 \label{eq:page_proof:mini:orig}.
+  \end{align}
+  Let us consider $\ExpSub{B}{\ExpSub{\probavailable}{\norm{h^{t+1}_{i,1} - \ExpSub{B}{\ExpSub{\probavailable}{h^{t+1}_{i,1}}}}^2}}$:
+  \begin{align*}
+    &\ExpSub{B}{\ExpSub{\probavailable}{\norm{h^{t+1}_{i,1} - \ExpSub{B}{\ExpSub{\probavailable}{h^{t+1}_{i,1}}}}^2}}\\
+    &=\ExpSub{\probavailable}{\norm{h^{t+1}_{i,1} - \ExpSub{B}{\ExpSub{\probavailable}{h^{t+1}_{i,1}}}}^2} \\
+    &=\probavailable \norm{h^t_i + \frac{1}{\probavailable} k^{t+1}_{i, 1} - \left(h^t_i + \nabla f_i(x^{t+1}) - \nabla f_i(x^{t}) - \frac{b}{\probpage} \left(h^t_i - \nabla f_i(x^{t})\right)\right)}^2 \\
+    &\quad + (1 - \probavailable) \norm{h^t_i - \left(h^t_i + \nabla f_i(x^{t+1}) - \nabla f_i(x^{t}) - \frac{b}{\probpage} \left(h^t_i - \nabla f_i(x^{t})\right)\right)}^2 \\
+    &=\frac{(1 - \probavailable)^2}{\probavailable} \norm{h^t_i + \nabla f_i(x^{t+1}) - \nabla f_i(x^{t}) - \frac{b}{\probpage} \left(h^t_i - \nabla f_i(x^{t})\right)}^2 \\
+    &\quad + (1 - \probavailable) \norm{\nabla f_i(x^{t+1}) - \nabla f_i(x^{t}) - \frac{b}{\probpage} \left(h^t_i - \nabla f_i(x^{t})\right)}^2 \\
+    &=\frac{1 - \probavailable}{\probavailable} \norm{\nabla f_i(x^{t+1}) - \nabla f_i(x^{t}) - \frac{b}{\probpage} \left(h^t_i - \nabla f_i(x^{t})\right)}^2.
+  \end{align*}
+  Considering \eqref{auxiliary:jensen_inequality} and Assumption~\ref{ass:nodes_lipschitz_constant}, we obtain
+  \begin{align}
+    &\ExpSub{B}{\ExpSub{\probavailable}{\norm{h^{t+1}_{i,1} - \ExpSub{B}{\ExpSub{\probavailable}{h^{t+1}_{i,1}}}}^2}} \nonumber\\
+    &\leq \frac{2\left(1 - \probavailable\right)L_i^2}{\probavailable} \norm{x^{t+1} - x^{t}}^2 + \frac{2\left(1 - \probavailable\right)b^2}{\probavailable \probpage^2} \norm{h^t_i - \nabla f_i(x^{t})}^2 \label{eq:page_proof:mini:h_1}.
+  \end{align}
+  Next, we obtain the bound for $\ExpSub{B}{\ExpSub{\probavailable}{\norm{h^{t+1}_{i,2} - \ExpSub{B}{\ExpSub{\probavailable}{h^{t+1}_{i,2}}}}^2}}$:
+  \begin{align}
+    &\ExpSub{B}{\ExpSub{\probavailable}{\norm{h^{t+1}_{i,2} - \ExpSub{B}{\ExpSub{\probavailable}{h^{t+1}_{i,2}}}}^2}} \nonumber \\
+    &= \probavailable \ExpSub{B}{\norm{h^t_i + \frac{1}{\probavailable} k^{t+1}_{i, 2} - \left(h^t_i + \nabla f_i(x^{t+1}) - \nabla f_i(x^{t})\right)}^2} \nonumber\\
+    &\quad +(1 - \probavailable) \ExpSub{B}{\norm{h^{t}_{i} - \left(h^t_i + \nabla f_i(x^{t+1}) - \nabla f_i(x^{t})\right)}^2}\nonumber \\
+    &= \probavailable \ExpSub{B}{\norm{\frac{1}{\probavailable} k^{t+1}_{i, 2} - \left(\nabla f_i(x^{t+1}) - \nabla f_i(x^{t})\right)}^2}\nonumber \\
+    &\quad +(1 - \probavailable) \norm{\nabla f_i(x^{t+1}) - \nabla f_i(x^{t})}^2\nonumber \\
+    &\overset{\eqref{auxiliary:variance_decomposition}}{=} \frac{1}{\probavailable} \ExpSub{B}{\norm{k^{t+1}_{i, 2} - \left(\nabla f_i(x^{t+1}) - \nabla f_i(x^{t})\right)}^2} + \frac{(1 - \probavailable)^2}{\probavailable} \ExpSub{B}{\norm{\nabla f_i(x^{t+1}) - \nabla f_i(x^{t})}^2}\nonumber \\
+    &\quad +(1 - \probavailable) \norm{\nabla f_i(x^{t+1}) - \nabla f_i(x^{t})}^2 \nonumber \\
+    &= \frac{1}{\probavailable} \ExpSub{B}{\norm{k^{t+1}_{i, 2} - \left(\nabla f_i(x^{t+1}) - \nabla f_i(x^{t})\right)}^2} + \frac{1 - \probavailable}{\probavailable} \ExpSub{B}{\norm{\nabla f_i(x^{t+1}) - \nabla f_i(x^{t})}^2} \nonumber \\
+    &\leq \frac{1}{\probavailable} \ExpSub{B}{\norm{k^{t+1}_{i, 2} - \left(\nabla f_i(x^{t+1}) - \nabla f_i(x^{t})\right)}^2} + \frac{1 - \probavailable}{\probavailable} \ExpSub{B}{\norm{\nabla f_i(x^{t+1}) - \nabla f_i(x^{t})}^2}, \label{eq:page_proof:mini:h_2}
+  \end{align}
+  where we used Assumption~\ref{ass:nodes_lipschitz_constant}. By plugging \eqref{eq:page_proof:mini:h_1} and \eqref{eq:page_proof:mini:h_2} into \eqref{eq:page_proof:mini:orig}, we get
 \end{proof}
 
 \subsection{Proof for \algname{DASHA}-\algname{PP}-\algname{MVR}}
