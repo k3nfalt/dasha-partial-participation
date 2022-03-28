@@ -785,19 +785,18 @@ The proof of Lemma \ref{lemma:page_lemma} is provided in \cite{PAGE}.
     &\quad + \frac{1 - \probavailable}{n^2}\sum_{i=1}^n\norm{\nabla f_i(x^{t+1}) - \nabla f_i(x^{t})}^2 \\
     &\quad +\left(\frac{\probpairaa (\probavailable - 1)^2}{n^2 \probavailable^2} + \frac{2\probpairan (\probavailable - 1)}{n^2 \probavailable} + \frac{\probpairnn}{n^2}\right)\sum_{i\neq j}^n\inp{\nabla f_i(x^{t+1}) - \nabla f_i(x^{t})}{\nabla f_j(x^{t+1}) - \nabla f_j(x^{t})}.
   \end{align*}
-  Using \eqref{sec:auxiliary_facts_partial_participation:one}, \eqref{sec:auxiliary_facts_partial_participation:two}, and \eqref{auxiliary:variance_decomposition}, we get
+  Using \eqref{sec:auxiliary_facts_partial_participation:one} and \eqref{sec:auxiliary_facts_partial_participation:two}, we get
   \begin{align*}
     &\ExpSub{B}{\ExpSub{\probavailable}{\norm{h^{t+1}_{2} - \ExpSub{B}{\ExpSub{\probavailable}{h^{t+1}_{2}}}}^2}}\\
     &=\frac{1}{n^2 \probavailable}\sum_{i=1}^n\ExpSub{B}{\norm{k^{t+1}_{i, 2} - \left(\nabla f_i(x^{t+1}) - \nabla f_i(x^{t})\right)}^2} \\
     &\quad + \frac{1 - \probavailable}{n^2 \probavailable}\sum_{i=1}^n\norm{\nabla f_i(x^{t+1}) - \nabla f_i(x^{t})}^2 \\
     &\quad +\frac{\probpairaa - \probavailable^2}{n^2 \probavailable^2}\sum_{i\neq j}^n\inp{\nabla f_i(x^{t+1}) - \nabla f_i(x^{t})}{\nabla f_j(x^{t+1}) - \nabla f_j(x^{t})} \\
-    &=\frac{1}{n^2 \probavailable}\sum_{i=1}^n\ExpSub{B}{\norm{k^{t+1}_{i, 2} - \left(\nabla f_i(x^{t+1}) - \nabla f_i(x^{t})\right)}^2} \\
+    &\overset{\eqref{auxiliary:variance_decomposition}}{=}\frac{1}{n^2 \probavailable}\sum_{i=1}^n\ExpSub{B}{\norm{k^{t+1}_{i, 2} - \left(\nabla f_i(x^{t+1}) - \nabla f_i(x^{t})\right)}^2} \\
     &\quad + \frac{\probavailable - \probpairaa}{n^2 \probavailable^2}\sum_{i=1}^n\norm{\nabla f_i(x^{t+1}) - \nabla f_i(x^{t})}^2 \\
     &\quad +\frac{\probpairaa - \probavailable^2}{\probavailable^2}\norm{\nabla f(x^{t+1}) - \nabla f(x^{t})}^2 \\
-    &\leq \frac{1}{n^2 \probavailable}\sum_{i=1}^n\ExpSub{B}{\norm{k^{t+1}_{i, 2} - \left(\nabla f_i(x^{t+1}) - \nabla f_i(x^{t})\right)}^2} \\
+    &\overset{\eqref{eq:partial_participation_constraint}}{\leq} \frac{1}{n^2 \probavailable}\sum_{i=1}^n\ExpSub{B}{\norm{k^{t+1}_{i, 2} - \left(\nabla f_i(x^{t+1}) - \nabla f_i(x^{t})\right)}^2} \\
     &\quad + \frac{\probavailable - \probpairaa}{n^2 \probavailable^2}\sum_{i=1}^n\norm{\nabla f_i(x^{t+1}) - \nabla f_i(x^{t})}^2.
   \end{align*}
-  In the last inequality, we used \eqref{eq:partial_participation_constraint}.
 \end{proof}
 
 \subsection{Proof for \algname{DASHA}-\algname{PP}-\algname{MVR}}
