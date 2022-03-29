@@ -1063,13 +1063,18 @@ Let us denote $\nabla f_i(x^{t+1};\xi^{t+1}_i) \eqdef \frac{1}{B} \sum_{j=1}^B \
   \item
       \begin{align*}
           &\ExpSub{k}{\ExpSub{\probavailable}{\norm{h^{t+1} - \nabla f(x^{t+1})}^2}} \\
-          & \leq \frac{2 b^2 \sigma^2}{n \probavailable} + \left(\frac{2 (1 - b)^2 L_{\sigma}^2}{n \probavailable B} + \frac{2\left(\probavailable - \probpairaa\right) \widehat{L}^2}{n \probavailable^2} \right) \norm{x^{t+1} - x^{t}}^2\\
+          & \leq \frac{2 b^2 \sigma^2}{n \probavailable B} + \left(\frac{2 (1 - b)^2 L_{\sigma}^2}{n \probavailable B} + \frac{2\left(\probavailable - \probpairaa\right) \widehat{L}^2}{n \probavailable^2} \right) \norm{x^{t+1} - x^{t}}^2\\
           &\quad + \frac{2 \left(\probavailable - \probpairaa\right) b^2}{n^2 \probavailable^2} \sum_{i=1}^n \norm{h^t_i - \nabla f_i(x^{t})}^2 + \left(1 - b\right)^2 \norm{h^{t} - \nabla f(x^{t})}^2.
       \end{align*}
   \item
       \begin{align*}
           &\ExpSub{k}{\ExpSub{\probavailable}{\norm{h^{t+1}_i - \nabla f_i(x^{t+1})}^2}} \\
-          & \leq , \quad \forall i \in [n].
+          & \leq \frac{2 b^2 \sigma^2}{\probavailable B}  + \left(\frac{2 (1 - b)^2 L_{\sigma}^2}{\probavailable B} + \frac{2(1 - \probavailable) L_i^2}{\probavailable}\right)\norm{x^{t+1} - x^{t}}^2 \\
+          &\quad + \left(\frac{2 (1 - \probavailable) b^2}{\probavailable} + (1 - b)^2\right)\norm{h^t_i - \nabla f_i(x^{t})}^2, \quad \forall i \in [n].
+      \end{align*}
+  \item
+      \begin{align*}
+        &\ExpSub{k}{\norm{k^{t+1}_i}^2} \frac{2 b^2 \sigma^2}{B} + \left(\frac{2 (1 - b)^2 L_{\sigma}^2}{B} + 2 L_i^2\right)\norm{x^{t+1} - x^{t}}^2 + 2 b^2 \norm{h^t_i - \nabla f_i(x^{t})}^2, \quad \forall i \in [n].
       \end{align*}
   \end{enumerate}
 \end{lemma}
@@ -1156,19 +1161,23 @@ Let us denote $\nabla f_i(x^{t+1};\xi^{t+1}_i) \eqdef \frac{1}{B} \sum_{j=1}^B \
     & \quad + \frac{2 (1 - b)^2}{n^2 \probavailable}\sum_{i=1}^n \ExpSub{k}{\norm{\nabla f_i(x^{t+1};\xi^{t+1}_i) - \nabla f_i(x^{t};\xi^{t+1}_i) - \left(\nabla f_i(x^{t+1}) - \nabla f_i(x^{t})\right)}^2} \\
     &\quad + \frac{\probavailable - \probpairaa}{n^2 \probavailable^2} \sum_{i=1}^n \norm{\nabla f_i(x^{t+1}) - \nabla f_i(x^{t}) - b(h^t_i - \nabla f_i(x^{t}))}^2 \\
     &\quad + \left(1 - b\right)^2 \norm{h^{t} - \nabla f(x^{t})}^2. \\
+    &= \frac{2 b^2}{n^2 \probavailable B^2}\sum_{i=1}^n \sum_{j=1}^B \ExpSub{k}{\norm{\nabla f_i(x^{t+1};\xi^{t+1}_{ij}) - \nabla f_i(x^{t+1})}^2} \\
+    & \quad + \frac{2 (1 - b)^2}{n^2 \probavailable}\sum_{i=1}^n \ExpSub{k}{\norm{\nabla f_i(x^{t+1};\xi^{t+1}_i) - \nabla f_i(x^{t};\xi^{t+1}_i) - \left(\nabla f_i(x^{t+1}) - \nabla f_i(x^{t})\right)}^2} \\
+    &\quad + \frac{\probavailable - \probpairaa}{n^2 \probavailable^2} \sum_{i=1}^n \norm{\nabla f_i(x^{t+1}) - \nabla f_i(x^{t}) - b(h^t_i - \nabla f_i(x^{t}))}^2 \\
+    &\quad + \left(1 - b\right)^2 \norm{h^{t} - \nabla f(x^{t})}^2. \\
   \end{align*}
-  Due to Assumption~\ref{ass:stochastic_unbiased_and_variance_bounded}, we get
+  In the last equality, we use the independence of elements in the mini-batches. Due to Assumption~\ref{ass:stochastic_unbiased_and_variance_bounded}, we get
   \begin{align*}
     &\ExpSub{k}{\ExpSub{\probavailable}{\norm{h^{t+1} - \nabla f(x^{t+1})}^2}} \\
-    &\leq \frac{2 b^2 \sigma^2}{n \probavailable}\\
+    &\leq \frac{2 b^2 \sigma^2}{n \probavailable B}\\
     & \quad + \frac{2 (1 - b)^2}{n^2 \probavailable}\sum_{i=1}^n \ExpSub{k}{\norm{\nabla f_i(x^{t+1};\xi^{t+1}_i) - \nabla f_i(x^{t};\xi^{t+1}_i) - \left(\nabla f_i(x^{t+1}) - \nabla f_i(x^{t})\right)}^2} \\
     &\quad + \frac{\probavailable - \probpairaa}{n^2 \probavailable^2} \sum_{i=1}^n \norm{\nabla f_i(x^{t+1}) - \nabla f_i(x^{t}) - b(h^t_i - \nabla f_i(x^{t}))}^2 \\
     &\quad + \left(1 - b\right)^2 \norm{h^{t} - \nabla f(x^{t})}^2 \\
-    &\overset{\eqref{auxiliary:jensen_inequality}}{\leq} \frac{2 b^2 \sigma^2}{n \probavailable}\\
+    &\overset{\eqref{auxiliary:jensen_inequality}}{\leq} \frac{2 b^2 \sigma^2}{n \probavailable B}\\
     & \quad + \frac{2 (1 - b)^2}{n^2 \probavailable}\sum_{i=1}^n \ExpSub{k}{\norm{\nabla f_i(x^{t+1};\xi^{t+1}_i) - \nabla f_i(x^{t};\xi^{t+1}_i) - \left(\nabla f_i(x^{t+1}) - \nabla f_i(x^{t})\right)}^2} \\
     &\quad + \frac{2\left(\probavailable - \probpairaa\right)}{n^2 \probavailable^2} \sum_{i=1}^n \norm{\nabla f_i(x^{t+1}) - \nabla f_i(x^{t})}^2 + \frac{2 \left(\probavailable - \probpairaa\right) b^2}{n^2 \probavailable^2} \sum_{i=1}^n \norm{h^t_i - \nabla f_i(x^{t})}^2 \\
     &\quad + \left(1 - b\right)^2 \norm{h^{t} - \nabla f(x^{t})}^2. \\
-    &= \frac{2 b^2 \sigma^2}{n \probavailable}\\
+    &= \frac{2 b^2 \sigma^2}{n \probavailable B}\\
     & \quad + \frac{2 (1 - b)^2}{n^2 \probavailable B^2}\sum_{i=1}^n \sum_{j=1}^B \ExpSub{k}{\norm{\nabla f_i(x^{t+1};\xi^{t+1}_{ij}) - \nabla f_i(x^{t};\xi^{t+1}_{ij}) - \left(\nabla f_i(x^{t+1}) - \nabla f_i(x^{t})\right)}^2} \\
     &\quad + \frac{2\left(\probavailable - \probpairaa\right)}{n^2 \probavailable^2} \sum_{i=1}^n \norm{\nabla f_i(x^{t+1}) - \nabla f_i(x^{t})}^2 + \frac{2 \left(\probavailable - \probpairaa\right) b^2}{n^2 \probavailable^2} \sum_{i=1}^n \norm{h^t_i - \nabla f_i(x^{t})}^2 \\
     &\quad + \left(1 - b\right)^2 \norm{h^{t} - \nabla f(x^{t})}^2, \\
@@ -1177,8 +1186,98 @@ Let us denote $\nabla f_i(x^{t+1};\xi^{t+1}_i) \eqdef \frac{1}{B} \sum_{j=1}^B \
   Using Assumptions~\ref{ass:nodes_lipschitz_constant} and \ref{ass:mean_square_smoothness}, we obtain
   \begin{align*}
     &\ExpSub{k}{\ExpSub{\probavailable}{\norm{h^{t+1} - \nabla f(x^{t+1})}^2}} \\
-    &\leq \frac{2 b^2 \sigma^2}{n \probavailable} + \left(\frac{2 (1 - b)^2 L_{\sigma}^2}{n \probavailable B} + \frac{2\left(\probavailable - \probpairaa\right) \widehat{L}^2}{n \probavailable^2} \right) \norm{x^{t+1} - x^{t}}^2\\
+    &\leq \frac{2 b^2 \sigma^2}{n \probavailable B} + \left(\frac{2 (1 - b)^2 L_{\sigma}^2}{n \probavailable B} + \frac{2\left(\probavailable - \probpairaa\right) \widehat{L}^2}{n \probavailable^2} \right) \norm{x^{t+1} - x^{t}}^2\\
     &\quad + \frac{2 \left(\probavailable - \probpairaa\right) b^2}{n^2 \probavailable^2} \sum_{i=1}^n \norm{h^t_i - \nabla f_i(x^{t})}^2 + \left(1 - b\right)^2 \norm{h^{t} - \nabla f(x^{t})}^2.
+  \end{align*}
+  Now, we prove the second inequality:
+  % \alexander{Alternative approach:}
+  % \begin{align*}
+  %   &\ExpSub{k}{\ExpSub{\probavailable}{\norm{h^{t+1}_i - \nabla f_i(x^{t+1})}^2}} \\
+  %   &=\probavailable \ExpSub{k}{\norm{h^t_i + \frac{1}{\probavailable}k^{t+1}_i - \nabla f_i(x^{t+1})}^2} \\
+  %   &\quad +(1 - \probavailable) \ExpSub{k}{\norm{h^t_i - \nabla f_i(x^{t+1})}^2} \\
+  %   &=\probavailable \norm{h^t_i + \frac{1}{\probavailable}k^{t+1}_i - \nabla f_i(x^{t+1})}^2 \\
+  %   &\quad +(1 - \probavailable) \norm{\nabla f_i(x^{t+1}) - \nabla f_i(x^{t}) + \nabla f_i(x^{t}) - h^t_i}^2 \\
+  %   &\leq\probavailable \ExpSub{k}{\norm{h^t_i + \frac{1}{\probavailable}k^{t+1}_i - \nabla f_i(x^{t+1})}^2} \\
+  %   &\quad +(1 - \probavailable) \ExpSub{k}{\norm{h^t_i - \nabla f_i(x^{t+1})}^2} \\
+  %   &=\frac{1}{\probavailable} \ExpSub{k}{\norm{k^{t+1}_i - \ExpSub{k}{k^{t+1}_i}}^2} \\
+  %   &\quad + \probavailable \ExpSub{k}{\norm{h^t_i + \frac{1}{\probavailable}\left( \nabla f_i(x^{t+1}) - \nabla f_i(x^{t}) - b \left(h^t_i - f_i(x^{t})\right)\right) - \nabla f_i(x^{t+1})}^2} \\
+  %   &\quad +(1 - \probavailable) \ExpSub{k}{\norm{h^t_i - \nabla f_i(x^{t+1})}^2} \\
+  %   &=\frac{1}{\probavailable} \ExpSub{k}{\norm{k^{t+1}_i - \ExpSub{k}{k^{t+1}_i}}^2} \\
+  %   &\quad + \probavailable \norm{h^t_i + \frac{1}{\probavailable}\left( \nabla f_i(x^{t+1}) - \nabla f_i(x^{t}) - b \left(h^t_i - f_i(x^{t})\right)\right) - \nabla f_i(x^{t+1})}^2 \\
+  %   &\quad +(1 - \probavailable) \ExpSub{k}{\norm{h^t_i - \nabla f_i(x^{t+1})}^2} \\
+  %   &=\frac{1}{\probavailable} \ExpSub{k}{\norm{k^{t+1}_i - \ExpSub{k}{k^{t+1}_i}}^2} \\
+  %   &\quad + \probavailable \norm{h^t_i + \frac{1}{\probavailable}\left( \nabla f_i(x^{t+1}) - \nabla f_i(x^{t})\right) - \nabla f_i(x^{t+1}) - \frac{b}{\probavailable} \left(h^t_i - f_i(x^{t})\right)}^2 \\
+  %   &\quad +(1 - \probavailable) \ExpSub{k}{\norm{h^t_i - \nabla f_i(x^{t+1})}^2} \\
+  %   &=\frac{1}{\probavailable} \ExpSub{k}{\norm{k^{t+1}_i - \ExpSub{k}{k^{t+1}_i}}^2} \\
+  %   &\quad + \probavailable \norm{\left(\frac{1}{\probavailable} - 1\right)\left( \nabla f_i(x^{t+1}) - \nabla f_i(x^{t})\right) + \left(1 - \frac{b}{\probavailable}\right) \left(h^t_i - f_i(x^{t})\right)}^2 \\
+  %   &\quad +(1 - \probavailable) \ExpSub{k}{\norm{h^t_i - \nabla f_i(x^{t+1})}^2} \\
+  %   &=\frac{1}{\probavailable} \ExpSub{k}{\norm{\frac{1}{B}\sum_{j=1}^B \nabla f_i(x^{t+1};\xi^{t+1}_{ij}) - \frac{1}{B}\sum_{j=1}^B \nabla f_i(x^{t};\xi^{t+1}_{ij}) - b \left(h^t_i - \frac{1}{B}\sum_{j=1}^B \nabla f_i(x^{t};\xi^{t+1}_{ij})\right) - \left(\nabla f_i(x^{t+1}) - \nabla f_i(x^{t}) - b \left(h^t_i - \nabla f_i(x^{t})\right)\right)}^2} \\
+  %   &\quad + \probavailable \norm{\left(\frac{1}{\probavailable} - 1\right)\left( \nabla f_i(x^{t+1}) - \nabla f_i(x^{t})\right) + \left(1 - \frac{b}{\probavailable}\right) \left(h^t_i - f_i(x^{t})\right)}^2 \\
+  %   &\quad +(1 - \probavailable) \ExpSub{k}{\norm{h^t_i - \nabla f_i(x^{t+1})}^2} \\
+  % \end{align*}
+  % \alexander{Normal approach (It is better to understand the difference):}
+  \begin{align*}
+    &\ExpSub{k}{\ExpSub{\probavailable}{\norm{h^{t+1}_i - \nabla f_i(x^{t+1})}^2}} \\
+    &=\ExpSub{k}{\ExpSub{\probavailable}{\norm{h^{t+1}_i - \ExpSub{k}{\ExpSub{\probavailable}{h^{t+1}_i}}}^2}} \\
+    &\quad + \norm{\ExpSub{k}{\ExpSub{\probavailable}{h^{t+1}_i}} - \nabla f_i(x^{t+1})}^2 \\
+    &=\ExpSub{k}{\ExpSub{\probavailable}{\norm{h^{t+1}_i - \left(h^{t}_i + \nabla f_i(x^{t+1}) - \nabla f_i(x^{t}) - b(h^t_i - \nabla f_i(x^{t}))\right)}^2}} \\
+    &\quad + \norm{h^{t}_i + \nabla f_i(x^{t+1}) - \nabla f_i(x^{t}) - b(h^t_i - \nabla f_i(x^{t})) - \nabla f_i(x^{t+1})}^2 \\
+    &=\ExpSub{k}{\ExpSub{\probavailable}{\norm{h^{t+1}_i - \left(h^{t}_i + \nabla f_i(x^{t+1}) - \nabla f_i(x^{t}) - b(h^t_i - \nabla f_i(x^{t}))\right)}^2}} \\
+    &\quad + (1 - b)^2\norm{h^t_i - \nabla f_i(x^{t})}^2 \\
+    &=\probavailable \ExpSub{k}{\norm{h^{t}_i + \frac{1}{\probavailable}k^{t+1}_i - \left(h^{t}_i + \nabla f_i(x^{t+1}) - \nabla f_i(x^{t}) - b(h^t_i - \nabla f_i(x^{t}))\right)}^2} \\
+    &\quad + (1 - \probavailable)\norm{h^{t}_i - \left(h^{t}_i + \nabla f_i(x^{t+1}) - \nabla f_i(x^{t}) - b(h^t_i - \nabla f_i(x^{t}))\right)}^2 \\
+    &\quad + (1 - b)^2\norm{h^t_i - \nabla f_i(x^{t})}^2 \\
+    &=\probavailable \ExpSub{k}{\norm{\frac{1}{\probavailable}k^{t+1}_i - \left(\nabla f_i(x^{t+1}) - \nabla f_i(x^{t}) - b(h^t_i - \nabla f_i(x^{t}))\right)}^2} \\
+    &\quad + (1 - \probavailable)\norm{\nabla f_i(x^{t+1}) - \nabla f_i(x^{t}) - b(h^t_i - \nabla f_i(x^{t}))}^2 \\
+    &\quad + (1 - b)^2\norm{h^t_i - \nabla f_i(x^{t})}^2 \\
+    &\overset{\eqref{auxiliary:variance_decomposition}}{=}\frac{1}{\probavailable} \ExpSub{k}{\norm{k^{t+1}_i - \left(\nabla f_i(x^{t+1}) - \nabla f_i(x^{t}) - b(h^t_i - \nabla f_i(x^{t}))\right)}^2} \\
+    &\quad + \frac{(1 - \probavailable)^2}{\probavailable} \norm{\nabla f_i(x^{t+1}) - \nabla f_i(x^{t}) - b(h^t_i - \nabla f_i(x^{t}))}^2 \\
+    &\quad + (1 - \probavailable)\norm{\nabla f_i(x^{t+1}) - \nabla f_i(x^{t}) - b(h^t_i - \nabla f_i(x^{t}))}^2 \\
+    &\quad + (1 - b)^2\norm{h^t_i - \nabla f_i(x^{t})}^2 \\
+    &=\frac{1}{\probavailable} \ExpSub{k}{\norm{\nabla f_i(x^{t+1};\xi^{t+1}_{i}) - \nabla f_i(x^{t};\xi^{t+1}_{i}) - b \left(h^t_i - \nabla f_i(x^{t};\xi^{t+1}_{i})\right) - \left(\nabla f_i(x^{t+1}) - \nabla f_i(x^{t}) - b(h^t_i - \nabla f_i(x^{t}))\right)}^2} \\
+    &\quad + \frac{1 - \probavailable}{\probavailable} \norm{\nabla f_i(x^{t+1}) - \nabla f_i(x^{t}) - b(h^t_i - \nabla f_i(x^{t}))}^2 \\
+    &\quad + (1 - b)^2\norm{h^t_i - \nabla f_i(x^{t})}^2 \\
+    &=\frac{1}{\probavailable} \ExpSub{k}{\norm{b \left(\nabla f_i(x^{t+1};\xi^{t+1}_{i}) - \nabla f_i(x^{t+1})\right) + (1 - b) \left(\nabla f_i(x^{t+1};\xi^{t+1}_{i}) - \nabla f_i(x^{t};\xi^{t+1}_{i}) - \left(\nabla f_i(x^{t+1}) - \nabla f_i(x^{t})\right)\right)}^2} \\
+    &\quad + \frac{1 - \probavailable}{\probavailable} \norm{\nabla f_i(x^{t+1}) - \nabla f_i(x^{t}) - b(h^t_i - \nabla f_i(x^{t}))}^2 \\
+    &\quad + (1 - b)^2\norm{h^t_i - \nabla f_i(x^{t})}^2 \\
+    &\overset{\eqref{auxiliary:jensen_inequality}}{\leq} \frac{2 b^2}{\probavailable} \ExpSub{k}{\norm{\nabla f_i(x^{t+1};\xi^{t+1}_{i}) - \nabla f_i(x^{t+1})}^2} \\
+    &\quad + \frac{2 (1 - b)^2}{\probavailable} \ExpSub{k}{\norm{\nabla f_i(x^{t+1};\xi^{t+1}_{i}) - \nabla f_i(x^{t};\xi^{t+1}_{i}) - \left(\nabla f_i(x^{t+1}) - \nabla f_i(x^{t})\right)}^2} \\
+    &\quad + \frac{1 - \probavailable}{\probavailable} \norm{\nabla f_i(x^{t+1}) - \nabla f_i(x^{t}) - b(h^t_i - \nabla f_i(x^{t}))}^2 \\
+    &\quad + (1 - b)^2\norm{h^t_i - \nabla f_i(x^{t})}^2.
+  \end{align*}
+  Considering the independence of elements in the mini-batch, we obtain
+  \begin{align*}
+    &\ExpSub{k}{\ExpSub{\probavailable}{\norm{h^{t+1}_i - \nabla f_i(x^{t+1})}^2}} \\
+    &= \frac{2 b^2}{\probavailable B^2} \sum_{j=1}^B \ExpSub{k}{\norm{\nabla f_i(x^{t+1};\xi^{t+1}_{ij}) - \nabla f_i(x^{t+1})}^2} \\
+    &\quad + \frac{2 (1 - b)^2}{\probavailable B^2} \sum_{j=1}^B \ExpSub{k}{\norm{\nabla f_i(x^{t+1};\xi^{t+1}_{ij}) - \nabla f_i(x^{t};\xi^{t+1}_{ij}) - \left(\nabla f_i(x^{t+1}) - \nabla f_i(x^{t})\right)}^2} \\
+    &\quad + \frac{1 - \probavailable}{\probavailable} \norm{\nabla f_i(x^{t+1}) - \nabla f_i(x^{t}) - b(h^t_i - \nabla f_i(x^{t}))}^2 \\
+    &\quad + (1 - b)^2\norm{h^t_i - \nabla f_i(x^{t})}^2. \\
+    &\overset{\eqref{auxiliary:jensen_inequality}}{\leq} \frac{2 b^2}{\probavailable B^2} \sum_{j=1}^B \ExpSub{k}{\norm{\nabla f_i(x^{t+1};\xi^{t+1}_{ij}) - \nabla f_i(x^{t+1})}^2} \\
+    &\quad + \frac{2 (1 - b)^2}{\probavailable B^2} \sum_{j=1}^B \ExpSub{k}{\norm{\nabla f_i(x^{t+1};\xi^{t+1}_{ij}) - \nabla f_i(x^{t};\xi^{t+1}_{ij}) - \left(\nabla f_i(x^{t+1}) - \nabla f_i(x^{t})\right)}^2} \\
+    &\quad + \frac{2(1 - \probavailable)}{\probavailable} \norm{\nabla f_i(x^{t+1}) - \nabla f_i(x^{t})}^2 + \left(\frac{2 (1 - \probavailable) b^2}{\probavailable} + (1 - b)^2\right)\norm{h^t_i - \nabla f_i(x^{t})}^2 \\
+  \end{align*}
+  Next, we use Assumptions~\ref{ass:nodes_lipschitz_constant}, \ref{ass:mean_square_smoothness}, \ref{ass:stochastic_unbiased_and_variance_bounded}, to get
+  \begin{align*}
+    &\ExpSub{k}{\ExpSub{\probavailable}{\norm{h^{t+1}_i - \nabla f_i(x^{t+1})}^2}} \\
+    &\leq \frac{2 b^2 \sigma^2}{\probavailable B}  + \left(\frac{2 (1 - b)^2 L_{\sigma}^2}{\probavailable B} + \frac{2(1 - \probavailable) L_i^2}{\probavailable}\right)\norm{x^{t+1} - x^{t}}^2 \\
+    &\quad + \left(\frac{2 (1 - \probavailable) b^2}{\probavailable} + (1 - b)^2\right)\norm{h^t_i - \nabla f_i(x^{t})}^2.\\
+  \end{align*}
+  It is left to prove the bound for $\ExpSub{k}{\norm{k^{t+1}_i}^2}$:
+  \begin{align*}
+    &\ExpSub{k}{\norm{k^{t+1}_i}^2} \\
+    &= \ExpSub{k}{\norm{\nabla f_i(x^{t+1};\xi^{t+1}_{i}) - \nabla f_i(x^{t};\xi^{t+1}_{i}) - b \left(h^t_i - \nabla f_i(x^{t};\xi^{t+1}_{i})\right)}^2} \\
+    &\overset{\eqref{auxiliary:variance_decomposition}}{=} \ExpSub{k}{\norm{\nabla f_i(x^{t+1};\xi^{t+1}_{i}) - \nabla f_i(x^{t};\xi^{t+1}_{i}) - b \left(h^t_i - \nabla f_i(x^{t};\xi^{t+1}_{i})\right) - \left(\nabla f_i(x^{t+1}) - \nabla f_i(x^{t}) - b(h^t_i - \nabla f_i(x^{t}))\right)}^2} \\
+    &\quad + \norm{\nabla f_i(x^{t+1}) - \nabla f_i(x^{t}) - b(h^t_i - \nabla f_i(x^{t}))}^2 \\
+    &= \ExpSub{k}{\norm{b \left(\nabla f_i(x^{t+1};\xi^{t+1}_{i}) - \nabla f_i(x^{t+1})\right) + (1 - b) \left(\nabla f_i(x^{t+1};\xi^{t+1}_{i}) - \nabla f_i(x^{t};\xi^{t+1}_{i}) - \left(\nabla f_i(x^{t+1}) - \nabla f_i(x^{t})\right)\right)}^2} \\
+    &\quad + \norm{\nabla f_i(x^{t+1}) - \nabla f_i(x^{t}) - b(h^t_i - \nabla f_i(x^{t}))}^2 \\
+    &\overset{\eqref{auxiliary:jensen_inequality}}{\leq} 2 b^2 \ExpSub{k}{\norm{\nabla f_i(x^{t+1};\xi^{t+1}_{i}) - \nabla f_i(x^{t+1})}^2} \\
+    &\quad + 2 (1 - b)^2 \ExpSub{k}{\norm{\nabla f_i(x^{t+1};\xi^{t+1}_{i}) - \nabla f_i(x^{t};\xi^{t+1}_{i}) - \left(\nabla f_i(x^{t+1}) - \nabla f_i(x^{t})\right)}^2} \\
+    &\quad + 2 \norm{\nabla f_i(x^{t+1}) - \nabla f_i(x^{t})}^2 + 2 b^2 \norm{h^t_i - \nabla f_i(x^{t})}^2.
+  \end{align*}
+  Using Assumptions~\ref{ass:nodes_lipschitz_constant}, \ref{ass:mean_square_smoothness}, \ref{ass:stochastic_unbiased_and_variance_bounded} and the independence of elements in the mini-batch, we get
+  \begin{align*}
+    &\ExpSub{k}{\norm{k^{t+1}_i}^2} \\
+    &\leq \frac{2 b^2 \sigma^2}{B} + \left(\frac{2 (1 - b)^2 L_{\sigma}^2}{B} + 2 L_i^2\right)\norm{x^{t+1} - x^{t}}^2 + 2 b^2 \norm{h^t_i - \nabla f_i(x^{t})}^2.
   \end{align*}
 \end{proof}
 
