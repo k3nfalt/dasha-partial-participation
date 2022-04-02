@@ -31,6 +31,7 @@
 \usepackage[textsize=tiny]{todonotes}
 \usepackage{footnote}
 \usepackage{mathtools}
+\usepackage[flushleft]{threeparttable}
 
 \newcommand{\alexander}[1]{\todo[inline]{\textbf{Alexander: }#1}}
 
@@ -40,12 +41,16 @@
 \newcommand*{\probpairnn}{\ensuremath{p_{\textnormal{nn}}}}
 
 \newcommand*{\probpage}{\ensuremath{p_{\text{page}}}}
+\newcommand*{\probmega}{\ensuremath{p_{\text{mega}}}}
 
 \allowdisplaybreaks
 \makeatletter
 \newcommand{\vast}{\bBigg@{4}}
 \newcommand{\Vast}{\bBigg@{5}}
 \makeatother
+
+\newcommand{\improvement}[1]{{\color{orange}#1}}
+\newcommand{\degeneration}[1]{{\color{red}#1}}
 
 \title{Formatting Instructions For NeurIPS 2021}
 
@@ -77,6 +82,45 @@
 \end{abstract}
 
 \section{Introduction}
+
+\alexander{
+  TODO: 
+  1) Rewrite the proof of DASHA-PP-PAGE
+  2) Add Hessian Varaince
+  3) In general, refactor proofs for simplicity
+}
+
+\begin{table*}
+  \caption{\textbf{General Nonconvex Case.} The number of communication rounds (iterations) and the oracle complexity of algorithms to get an $\varepsilon$-solution ($\Exp{\norm{\nabla f(\widehat{x})}^2} \leq \varepsilon$).}
+  \label{table:general_case}
+  \centering 
+  \small
+  \begin{threeparttable}
+    \begin{tabular}{cccccc}
+      \midrule
+    Setting & Method & Communication Rounds\tnote{\color{blue}(a)}& 
+    Oracle Complexity & Sync?\tnote{\color{blue}(b)} \\
+     \midrule\midrule
+     \multirow{2}{*}{\tablesmall{Gradient}} 
+     & \algnamesmall{PP-MARINA} &   $\frac{1}{\varepsilon} + \frac{(\omega + 1)\sqrt{n}}{\varepsilon s}$ & $T$ & Yes \\
+     & \algnamesmall{FRECON} &   $\frac{1}{\varepsilon} + \frac{(\omega + 1)\sqrt{n}}{\varepsilon s}$ & $T$ & Yes \\
+     & \algnamesmall{DASHA-PP} (New) \tablescriptsize{(Cor.~\ref{cor:gradient_oracle})} &  $\frac{1}{\varepsilon} + \frac{(\omega + 1)\sqrt{n}}{\varepsilon s}$ & $T$ & \improvement{No} \\
+      \cmidrule(l  r ){1-5}
+      \multirow{2}{*}{\tablesmall{\begin{tabular}{c}Finite-Sum\\ \eqref{eq:task_minibatch}\end{tabular}}} 
+      & \algnamesmall{DASHA-PP-PAGE} \tablescriptsize{(Cor.~\ref{cor:mini_batch_oracle})} &  $\frac{1 + \nicefrac{\omega}{\sqrt{n}}}{\varepsilon} + \improvement{\frac{\sqrt{m}}{\varepsilon \sqrt{n} B}}$ & $m + B T$ & \improvement{No} \\
+    \cmidrule(l  r ){1-5}
+    \multirow{3}{*}{\tablesmall{\begin{tabular}{c}Stochastic\\ \eqref{eq:task_staochastic}\end{tabular}}} & \algnamesmall{VR-MARINA (online)} &   $\frac{1 + \nicefrac{\omega}{\sqrt{n}}}{\varepsilon} + \frac{\sigma^2}{\varepsilon n B} + \frac{\sqrt{1 + \omega}\sigma}{\varepsilon^{\nicefrac{3}{2}} n B}$ & $B\omega + BT$ & Yes \\
+                                & \algnamesmall{DASHA-MVR} \tablescriptsize{(Cor.~\ref{cor:stochastic})} &  $\frac{1 + \nicefrac{\omega}{\sqrt{n}}}{\varepsilon} + \frac{\sigma^2}{\varepsilon n B} + \improvement{\frac{\sigma}{\varepsilon^{\nicefrac{3}{2}} n B}}$ & $\degeneration{B\omega\sqrt{\frac{\sigma^2}{\varepsilon n B}}} + BT$ & \improvement{No} \\
+                                & \algnamesmall{DASHA-SYNC-MVR} \tablescriptsize{(Cor.~\ref{cor:sync_stochastic})} &  $\frac{1 + \nicefrac{\omega}{\sqrt{n}}}{\varepsilon} + \frac{\sigma^2}{\varepsilon n B} + \improvement{\frac{\sigma}{\varepsilon^{\nicefrac{3}{2}} n B}}$ & $B\omega + BT$ & Yes \\
+    \midrule\midrule
+    \end{tabular}
+\begin{tablenotes}
+% \scriptsize
+\item [{\color{blue}(a)}] Only dependencies w.r.t.\,the following variables are shown: $\omega = $ quantization parameter, $n = \#$ of nodes, $m = \#$ of local functions (only in finite-sum case \eqref{eq:task_minibatch}), $\sigma^2 = $ variance of stochastic gradients (only in stochastic case \eqref{eq:task_staochastic}), $B = $ batch size (only in finite-sum and stochastic case). To simplify bounds, we assume that $\omega + 1 = \Theta\left(\nicefrac{d}{\zeta_{\cC}}\right),$ where $d$ is dimension of $x$ in \eqref{eq:main_problem} and $\zeta_{\cC}$ is the expected number of nonzero coordinates that each compressor $\cC_i$ returns (see Definition~\ref{def:expected_density}).
+\item [{\color{blue}(b)}] Does the algorithm require periodic synchronization between nodes? (see Section~\ref{sec:contributions})
+\end{tablenotes}          
+\end{threeparttable}
+\end{table*}
 
 \section{Assumptions}
 
@@ -177,7 +221,18 @@ Standard partial participation strategies, including $s$--nice sampling (with $\
               \nabla f_i(x^{t+1}) - \nabla f_i(x^{t}) - \frac{b}{\probpage} \left(h^t_i - \nabla f_i(x^{t})\right),& \textnormal{with probability $\probpage$ on all \textit{participating}\textsuperscript{\red (a)} nodes} \\
               \frac{1}{B}\sum_{j \in I^t_i}\left(\nabla f_{ij}(x^{t+1}) - \nabla f_{ij}(x^{t})\right), & \textnormal{with probability $1 - \probpage$ on all \textit{participating}\textsuperscript{\red (a)} nodes} 
           \end{cases}  \\
-          \frac{1}{B}\sum_{j=1}^B \nabla f_i(x^{t+1};\xi^{t+1}_{ij}) - \frac{1}{B}\sum_{j=1}^B \nabla f_i(x^{t};\xi^{t+1}_{ij}) - b \left(h^t_i - \frac{1}{B}\sum_{j=1}^B \nabla f_i(x^{t};\xi^{t+1}_{ij})\right),
+          \begin{cases}
+            \nabla f_i(x^{t+1}) - h^t_i,& \textnormal{with probability $\probpage$ on all \textit{participating}\textsuperscript{\red (a)} nodes} \\
+            \frac{1}{B}\sum_{j \in I^t_i}\left(\nabla f_{ij}(x^{t+1}) - \nabla f_{ij}(x^{t})\right), & \textnormal{with probability $1 - \probpage$ on all \textit{participating}\textsuperscript{\red (a)} nodes} 
+          \end{cases}  \\
+          \vspace{0.15cm}
+          \frac{1}{B}\sum_{j=1}^B \nabla f_i(x^{t+1};\xi^{t+1}_{ij}) - \frac{1}{B}\sum_{j=1}^B \nabla f_i(x^{t};\xi^{t+1}_{ij}) - b \left(h^t_i - \frac{1}{B}\sum_{j=1}^B \nabla f_i(x^{t};\xi^{t+1}_{ij})\right), \\
+          \begin{cases}
+            \frac{1}{B'}\sum_{k=1}^{B'} \nabla f_i(x^{t+1};\xi^{t+1}_{k}) - h^t_i,& \\
+            \textnormal{with probability $\probmega$ on all \textit{participating}\textsuperscript{\red (a)} nodes} \\
+            \frac{1}{B}\sum_{j=1}^B \nabla f_i(x^{t+1};\xi^{t+1}_{ij}) - \frac{1}{B}\sum_{j=1}^B \nabla f_i(x^{t};\xi^{t+1}_{ij}), & \\
+            \textnormal{with probability $1 - \probmega$ on all \textit{participating}\textsuperscript{\red (a)} nodes} 
+        \end{cases}  \\
       \end{cases}$
       \STATE $h^{t+1}_i = h^t_i + \frac{1}{\probavailable}k^{t+1}_i$ 
       \STATE $m^{t+1}_i = \cC_i\Bigg(\frac{1}{\probavailable}k^{t+1}_i - \frac{a}{\probavailable} \left(g^{t}_i - h^{t}_i\right)\Bigg)$
@@ -197,6 +252,47 @@ Standard partial participation strategies, including $s$--nice sampling (with $\
 \end{algorithm}
 {\red (a)}: For the formal description see Section~\ref{sec:partial_participation}.
 \end{minipage}
+
+\begin{minipage}{\textwidth}
+  \begin{algorithm}[H]
+    \caption{\algname{DASHA}-\algname{PP}}
+    \label{alg:main_algorithm}
+    \begin{algorithmic}[1]
+    \STATE \textbf{Input:} starting point $x^0 \in \R^d$, stepsize $\gamma > 0$, momentum $a \in (0, 1]$, 
+    momentum $b \in (0, 1]$, probability $\probavailable \in (0, 1]$ that a node is \textit{participating}\textsuperscript{\red (a)},
+    batch size $B$ (only in \algname{DASHA}-\algname{PP}-\algname{PAGE} and \algname{DASHA}-\algname{PP}-\algname{MVR}), 
+    probability $\probpage \in (0, 1]$ (only in \algname{DASHA}-\algname{PP}-\algname{PAGE}),
+    number of iterations~$T \geq 1$
+    \STATE Initialize $g^0_i\in \R^d$, $h^0_i\in \R^d$ on the nodes and  $g^0 = \frac{1}{n}\sum_{i=1}^n g^0_i$ on the server
+    \FOR{$t = 0, 1, \dots, T - 1$}
+    \STATE $x^{t+1} = x^t - \gamma g^t$ \alglinelabel{alg:main_algorithm:x_update} 
+    \STATE Broadcast $x^{t+1}, x^{t}$ to all \textit{participating}\textsuperscript{\red (a)} nodes
+    \FOR{$i = 1, \dots, n$ in parallel}
+    \IF{$i^{\textnormal{th}} \textnormal{ node is \textit{participating}}$\textsuperscript{\red (a)}}
+        \STATE $k^{t+1}_{ij} = \begin{cases}
+          \frac{m}{B}\left(\nabla f_{ij}(x^{t+1}) - \nabla f_{ij}(x^{t}) - b \left(h^t_{ij} - \nabla f_{ij}(x^{t})\right)\right), & j \in I^t_i  \\
+          0 &  
+        \end{cases},$
+        \STATE $h^{t+1}_{ij} = h^t_{ij} + \frac{1}{\probavailable} k^{t+1}_{ij}$ 
+        \STATE $k^{t+1}_i = \frac{1}{m}\sum_{j=1}^m k^{t+1}_{ij},$
+        \STATE $h^{t+1}_i = h^t_i + \frac{1}{\probavailable}k^{t+1}_i$
+        \STATE $m^{t+1}_i = \cC_i\Bigg(\frac{1}{\probavailable}k^{t+1}_i - \frac{a}{\probavailable} \left(g^{t}_i - h^{t}_i\right)\Bigg)$
+        \STATE $g^{t+1}_i = g^{t}_i + m^{t+1}_i$
+        \STATE Send $m^{t+1}_i$ to the server
+    \ELSE
+        \STATE $h^{t+1}_i = h^{t}_i$
+        \STATE $m^{t+1}_i = 0$
+        \STATE $g^{t+1}_i = g^{t}_i$
+    \ENDIF
+    \ENDFOR
+    \STATE $g^{t+1} = g^t + \frac{1}{n} \sum_{i=1}^n m^{t+1}_i$
+    \ENDFOR
+    \STATE \textbf{Output:} $\hat{x}^T$ chosen uniformly at random from $\{x^t\}_{k=0}^{T-1}$ (or $x^T$ under the P\L-condition)
+    \end{algorithmic}
+    % {\red (a)}: 
+  \end{algorithm}
+  {\red (a)}: For the formal description see Section~\ref{sec:partial_participation}.
+  \end{minipage}
 % \footnotetext{}
 
 \section{Theorems}
@@ -237,14 +333,7 @@ Standard partial participation strategies, including $s$--nice sampling (with $\
 \end{align*}
 \end{restatable}
 
-% &\quad - \Bigg(\frac{1}{2\gamma} - \frac{L}{2} - \frac{24 \gamma \omega (2 \omega + 1)}{n \probavailable^2} \left(\frac{(1 - b)^2 L_{\sigma}^2}{B} + \widehat{L}^2\right) \\
-%       &\qquad\quad - \frac{6 \gamma}{n \probavailable b}\left(\frac{(1 - b)^2 L_{\sigma}^2}{B} + \left(1 - \frac{\probpairaa}{\probavailable}\right) \widehat{L}^2 \right)\Bigg) \Exp{\norm{x^{t+1} - x^t}^2} \\
-
-% \begin{eqnarray*}
-%   \Psi^t &=& \frac{(2 \omega + 1)}{\probavailable} \Exp{\norm{g^{t} - h^{t}}^2} + \frac{(\left(2 \omega + 1\right)\probavailable - \probpairaa)}{n \probavailable^2} \Exp{\frac{1}{n}\sum_{i=1}^n\norm{g^{t}_i - h^{t}_i}^2} \\
-%   &+& \frac{1}{b} \Exp{\norm{h^{t} - \nabla f(x^{t})}^2} + \left(\frac{8 b \omega (2 \omega + 1)}{n \probavailable^2} + \frac{2 \left(\probavailable - \probpairaa\right)}{n \probavailable^2}\right)\Exp{\frac{1}{n}\sum_{i=1}^n\norm{h^{t}_i - \nabla f_i(x^{t})}^2}
-% \end{eqnarray*}
-% and $C = \left(\frac{24 b^2 \omega (2 \omega + 1)}{\probavailable^2} + \frac{6b}{\probavailable}\right) \frac{\sigma^2}{n B}$
+\section{Experiments}
 
 \newpage
 \appendix
@@ -908,6 +997,176 @@ $h^{t+1}_{1} \eqdef \frac{1}{n}\sum_{i=1}^n h^{t+1}_{i,1},$ and $h^{t+1}_{2} \eq
     &\ExpSub{B}{\ExpSub{\probavailable}{\norm{h^{t+1}_{i,1} - \ExpSub{B}{\ExpSub{\probavailable}{h^{t+1}_{i,1}}}}^2}} \nonumber\\
     &\leq \frac{2\left(1 - \probavailable\right)L_i^2}{\probavailable} \norm{x^{t+1} - x^{t}}^2 + \frac{2\left(1 - \probavailable\right)b^2}{\probavailable \probpage^2} \norm{h^t_i - \nabla f_i(x^{t})}^2 \label{eq:page_proof:mini:h_1}.
   \end{align}
+  \alexander{Alternative approach:}
+  \begin{align*}
+    &\ExpSub{B}{\ExpSub{\probavailable}{\ExpSub{\probpage}{\norm{h^{t+1}_i - \nabla f_i(x^{t+1})}^2}}} \\
+    &=\ExpSub{B}{\ExpSub{\probavailable}{\ExpSub{\probpage}{\norm{h^{t+1}_i - \left(\nabla f_i(x^{t+1}) - (1 - b)( h^t_i - \nabla f_i(x^{t}))\right)}^2}}} \\
+    &\quad +(1 - b)^2\norm{h^{t}_i - \nabla f_i(x^{t})}^2 \\
+    &=\probavailable \ExpSub{B}{\ExpSub{\probpage}{\norm{h^{t}_i + \frac{1}{\probavailable}k^{t+1}_i - \left(\nabla f_i(x^{t+1}) - (1 - b)( h^t_i - \nabla f_i(x^{t}))\right)}^2}} \\
+    &\quad + (1 - \probavailable) \norm{h^{t}_i - \left(\nabla f_i(x^{t+1}) - (1 - b)( h^t_i - \nabla f_i(x^{t}))\right)}^2 \\
+    &\quad +(1 - b)^2\norm{h^{t}_i - \nabla f_i(x^{t})}^2 \\
+    &=\probavailable \ExpSub{B}{\ExpSub{\probpage}{\norm{h^{t}_i + \frac{1}{\probavailable}k^{t+1}_i - \left(\nabla f_i(x^{t+1}) - (1 - b)( h^t_i - \nabla f_i(x^{t}))\right)}^2}} \\
+    &\quad + (1 - \probavailable) \norm{\nabla f_i(x^{t+1}) - \nabla f_i(x^{t}) - b(h^t_i - \nabla f_i(x^{t}))}^2 \\
+    &\quad +(1 - b)^2\norm{h^{t}_i - \nabla f_i(x^{t})}^2 \\
+    &=\frac{1}{\probavailable} \ExpSub{B}{\ExpSub{\probpage}{\norm{k^{t+1}_i - \ExpSub{B}{\ExpSub{\probpage}{k^{t+1}_i}}}^2}} \\
+    &\quad + \frac{(1 - \probavailable)}{\probavailable} \norm{\nabla f_i(x^{t+1}) - \nabla f_i(x^{t}) - b(h^t_i - \nabla f_i(x^{t}))}^2 \\
+    &\quad +(1 - b)^2\norm{h^{t}_i - \nabla f_i(x^{t})}^2 \\
+    &=\frac{\probpage}{\probavailable} \ExpSub{B}{\norm{\nabla f_i(x^{t+1}) - \nabla f_i(x^{t}) - \frac{b}{\probpage} \left(h^t_i - \nabla f_i(x^{t})\right) - \left(\nabla f_i(x^{t+1}) - \nabla f_i(x^{t}) - b(h^t_i - \nabla f_i(x^{t}))\right)}^2} \\
+    &\quad + \frac{1 - \probpage}{\probavailable} \ExpSub{B}{\norm{\frac{1}{B}\sum_{j \in I^t_i}\left(\nabla f_{ij}(x^{t+1}) - \nabla f_{ij}(x^{t})\right) - \left(\nabla f_i(x^{t+1}) - \nabla f_i(x^{t}) - b(h^t_i - \nabla f_i(x^{t}))\right)}^2} \\
+    &\quad + \frac{(1 - \probavailable)}{\probavailable} \norm{\nabla f_i(x^{t+1}) - \nabla f_i(x^{t}) - b(h^t_i - \nabla f_i(x^{t}))}^2 \\
+    &\quad +(1 - b)^2\norm{h^{t}_i - \nabla f_i(x^{t})}^2 \\
+    &=\frac{b^2 (1 - \probpage)^2}{\probavailable \probpage} \norm{h^t_i - \nabla f_i(x^{t})}^2 \\
+    &\quad + \frac{1 - \probpage}{\probavailable} \ExpSub{B}{\norm{\frac{1}{B}\sum_{j \in I^t_i}\left(\nabla f_{ij}(x^{t+1}) - \nabla f_{ij}(x^{t})\right) - \left(\nabla f_i(x^{t+1}) - \nabla f_i(x^{t}) - b(h^t_i - \nabla f_i(x^{t}))\right)}^2} \\
+    &\quad + \frac{(1 - \probavailable)}{\probavailable} \norm{\nabla f_i(x^{t+1}) - \nabla f_i(x^{t}) - b(h^t_i - \nabla f_i(x^{t}))}^2 \\
+    &\quad +(1 - b)^2\norm{h^{t}_i - \nabla f_i(x^{t})}^2 \\
+    &=\frac{b^2 (1 - \probpage)}{\probavailable \probpage} \norm{h^t_i - \nabla f_i(x^{t})}^2 \\
+    &\quad + \frac{1 - \probpage}{\probavailable} \ExpSub{B}{\norm{\frac{1}{B}\sum_{j \in I^t_i}\left(\nabla f_{ij}(x^{t+1}) - \nabla f_{ij}(x^{t})\right) - \left(\nabla f_i(x^{t+1}) - \nabla f_i(x^{t})\right)}^2} \\
+    &\quad + \frac{(1 - \probavailable)}{\probavailable} \norm{\nabla f_i(x^{t+1}) - \nabla f_i(x^{t}) - b(h^t_i - \nabla f_i(x^{t}))}^2 \\
+    &\quad +(1 - b)^2\norm{h^{t}_i - \nabla f_i(x^{t})}^2 \\
+  \end{align*}
+
+  \alexander{New approach with $1 - \probpage$:}
+  \begin{align*}
+    &\ExpSub{B}{\ExpSub{\probavailable}{\ExpSub{\probpage}{\norm{h^{t+1}_i - \nabla f_i(x^{t+1})}^2}}} \\
+    &=\ExpSub{B}{\ExpSub{\probavailable}{\ExpSub{\probpage}{\norm{h^{t+1}_i - \left(\nabla f_i(x^{t+1}) - (1 - \probpage)( h^t_i - \nabla f_i(x^{t}))\right)}^2}}} \\
+    &\quad +(1 - \probpage)^2\norm{h^{t}_i - \nabla f_i(x^{t})}^2 \\
+    &=\probavailable \ExpSub{B}{\ExpSub{\probpage}{\norm{h^{t}_i + \frac{1}{\probavailable}k^{t+1}_i - \left(\nabla f_i(x^{t+1}) - (1 - \probpage)( h^t_i - \nabla f_i(x^{t}))\right)}^2}} \\
+    &\quad + (1 - \probavailable) \norm{h^{t}_i - \left(\nabla f_i(x^{t+1}) - (1 - \probpage)( h^t_i - \nabla f_i(x^{t}))\right)}^2 \\
+    &\quad +(1 - \probpage)^2\norm{h^{t}_i - \nabla f_i(x^{t})}^2 \\
+    &=\probavailable \ExpSub{B}{\ExpSub{\probpage}{\norm{h^{t}_i + \frac{1}{\probavailable}k^{t+1}_i - \left(\nabla f_i(x^{t+1}) - (1 - \probpage)( h^t_i - \nabla f_i(x^{t}))\right)}^2}} \\
+    &\quad + (1 - \probavailable) \norm{\nabla f_i(x^{t+1}) - \nabla f_i(x^{t}) - \probpage(h^t_i - \nabla f_i(x^{t}))}^2 \\
+    &\quad +(1 - \probpage)^2\norm{h^{t}_i - \nabla f_i(x^{t})}^2 \\
+    &=\frac{1}{\probavailable} \ExpSub{B}{\ExpSub{\probpage}{\norm{k^{t+1}_i - \ExpSub{B}{\ExpSub{\probpage}{k^{t+1}_i}}}^2}} \\
+    &\quad + \frac{(1 - \probavailable)}{\probavailable} \norm{\nabla f_i(x^{t+1}) - \nabla f_i(x^{t}) - \probpage(h^t_i - \nabla f_i(x^{t}))}^2 \\
+    &\quad +(1 - \probpage)^2\norm{h^{t}_i - \nabla f_i(x^{t})}^2 \\
+    &=\frac{\probpage}{\probavailable} \ExpSub{B}{\norm{\nabla f_i(x^{t+1}) - h^t_i - \left(\nabla f_i(x^{t+1}) - \nabla f_i(x^{t}) - \probpage(h^t_i - \nabla f_i(x^{t}))\right)}^2} \\
+    &\quad + \frac{1 - \probpage}{\probavailable} \ExpSub{B}{\norm{\frac{1}{B}\sum_{j \in I^t_i}\left(\nabla f_{ij}(x^{t+1}) - \nabla f_{ij}(x^{t})\right) - \left(\nabla f_i(x^{t+1}) - \nabla f_i(x^{t}) - \probpage(h^t_i - \nabla f_i(x^{t}))\right)}^2} \\
+    &\quad + \frac{(1 - \probavailable)}{\probavailable} \norm{\nabla f_i(x^{t+1}) - \nabla f_i(x^{t}) - \probpage(h^t_i - \nabla f_i(x^{t}))}^2 \\
+    &\quad +(1 - \probpage)^2\norm{h^{t}_i - \nabla f_i(x^{t})}^2 \\
+    &=\frac{\probpage (1 - \probpage)^2}{\probavailable} \ExpSub{B}{\norm{h^t_i - \nabla f_i(x^{t})}^2} \\
+    &\quad + \frac{1 - \probpage}{\probavailable} \ExpSub{B}{\norm{\frac{1}{B}\sum_{j \in I^t_i}\left(\nabla f_{ij}(x^{t+1}) - \nabla f_{ij}(x^{t})\right) - \left(\nabla f_i(x^{t+1}) - \nabla f_i(x^{t}) - \probpage(h^t_i - \nabla f_i(x^{t}))\right)}^2} \\
+    &\quad + \frac{(1 - \probavailable)}{\probavailable} \norm{\nabla f_i(x^{t+1}) - \nabla f_i(x^{t}) - \probpage(h^t_i - \nabla f_i(x^{t}))}^2 \\
+    &\quad +(1 - \probpage)^2\norm{h^{t}_i - \nabla f_i(x^{t})}^2 \\
+    &\leq \frac{\probpage (1 - \probpage)^2}{\probavailable} \ExpSub{B}{\norm{h^t_i - \nabla f_i(x^{t})}^2} \\
+    &\quad + \frac{2(1 - \probpage)}{\probavailable} \ExpSub{B}{\norm{\frac{1}{B}\sum_{j \in I^t_i}\left(\nabla f_{ij}(x^{t+1}) - \nabla f_{ij}(x^{t})\right) - \left(\nabla f_i(x^{t+1}) - \nabla f_i(x^{t})\right)}^2} \\
+    &\quad + \frac{2(1 - \probpage)\probpage^2}{\probavailable} \norm{h^t_i - \nabla f_i(x^{t})}^2 \\
+    &\quad + \frac{(1 - \probavailable)}{\probavailable} \norm{\nabla f_i(x^{t+1}) - \nabla f_i(x^{t}) - \probpage(h^t_i - \nabla f_i(x^{t}))}^2 \\
+    &\quad +(1 - \probpage)^2\norm{h^{t}_i - \nabla f_i(x^{t})}^2 \\
+  \end{align*}
+
+  % \begin{cases}
+  %   \nabla f_i(x^{t+1}) - h^t_i,& \textnormal{with probability $\probpage$ on all \textit{participating}\textsuperscript{\red (a)} nodes} \\
+  %   \frac{1}{B}\sum_{j \in I^t_i}\left(\nabla f_{ij}(x^{t+1}) - \nabla f_{ij}(x^{t})\right), & \textnormal{with probability $1 - \probpage$ on all \textit{participating}\textsuperscript{\red (a)} nodes} 
+  % \end{cases}  \\
+
+  \begin{align*}
+    &\ExpSub{B}{\ExpSub{\probavailable}{\ExpSub{\probpage}{\norm{h^{t+1}_i - \nabla f_i(x^{t+1})}^2}}} \\
+    &=\ExpSub{B}{\ExpSub{\probavailable}{\ExpSub{\probpage}{\norm{h^{t+1}_i - \left(\nabla f_i(x^{t+1}) - (1 - b)( h^t_i - \nabla f_i(x^{t}))\right)}^2}}} \\
+    &\quad +(1 - b)^2\norm{h^{t}_i - \nabla f_i(x^{t})}^2 \\
+    &=\probavailable \ExpSub{B}{\ExpSub{\probpage}{\norm{h^{t}_i + \frac{1}{\probavailable}k^{t+1}_i - \left(\nabla f_i(x^{t+1}) - (1 - b)( h^t_i - \nabla f_i(x^{t}))\right)}^2}} \\
+    &\quad + (1 - \probavailable) \norm{h^{t}_i - \left(\nabla f_i(x^{t+1}) - (1 - b)( h^t_i - \nabla f_i(x^{t}))\right)}^2 \\
+    &\quad +(1 - b)^2\norm{h^{t}_i - \nabla f_i(x^{t})}^2 \\
+    &=\probavailable \ExpSub{B}{\ExpSub{\probpage}{\norm{h^{t}_i + \frac{1}{\probavailable}k^{t+1}_i - \left(\nabla f_i(x^{t+1}) - (1 - b)( h^t_i - \nabla f_i(x^{t}))\right)}^2}} \\
+    &\quad + (1 - \probavailable) \norm{\nabla f_i(x^{t+1}) - \nabla f_i(x^{t}) - b(h^t_i - \nabla f_i(x^{t}))}^2 \\
+    &\quad +(1 - b)^2\norm{h^{t}_i - \nabla f_i(x^{t})}^2 \\
+    &=\frac{1}{\probavailable} \ExpSub{B}{\ExpSub{\probpage}{\norm{k^{t+1}_i - \ExpSub{B}{\ExpSub{\probpage}{k^{t+1}_i}}}^2}} \\
+    &\quad + \frac{(1 - \probavailable)}{\probavailable} \norm{\nabla f_i(x^{t+1}) - \nabla f_i(x^{t}) - b(h^t_i - \nabla f_i(x^{t}))}^2 \\
+    &\quad +(1 - b)^2\norm{h^{t}_i - \nabla f_i(x^{t})}^2 \\
+    &=\frac{\probpage}{\probavailable} \ExpSub{B}{\norm{\left(\frac{1}{\probpage} - \left(\frac{1}{\probpage} - 1\right)\beta_1\right) \nabla f_i(x^{t+1}) + \left(- \frac{1}{\probpage} \left(1 - b\right) + \left(\frac{1}{\probpage} - 1\right) \beta_1\right) \nabla f_i(x^{t}) + \left(-\frac{b}{\probpage} - \left(\frac{1}{\probpage} - 1\right) \beta_3 h^t_i\right)}^2} \\
+    &\quad + \frac{1 - \probpage}{\probavailable} \ExpSub{B}{\norm{\beta_1 \frac{1}{B}\sum_{j \in I^t_i}\left(\nabla f_{ij}(x^{t+1}) - \nabla f_{ij}(x^{t})\right) + \beta_3 h^t_i - (\nabla f_i(x^{t+1}) - \nabla f_i(x^{t}) - b(h^t_i - \nabla f_i(x^{t})))}^2} \\
+    &\quad + \frac{(1 - \probavailable)}{\probavailable} \norm{\nabla f_i(x^{t+1}) - \nabla f_i(x^{t}) - b(h^t_i - \nabla f_i(x^{t}))}^2 \\
+    &\quad +(1 - b)^2\norm{h^{t}_i - \nabla f_i(x^{t})}^2 \\
+  \end{align*}
+
+  \alexander{Memory:}
+
+  \begin{align*}
+    &\ExpSub{B}{\ExpSub{\probavailable}{\ExpSub{\probpage}{\norm{h^{t+1}_i - \nabla f_i(x^{t+1})}^2}}} \\
+    &=\ExpSub{B}{\ExpSub{\probavailable}{\ExpSub{\probpage}{\norm{h^{t+1}_i - \left(\nabla f_i(x^{t+1}) - (1 - b)( h^t_i - \nabla f_i(x^{t}))\right)}^2}}} \\
+    &\quad +(1 - b)^2\norm{h^{t}_i - \nabla f_i(x^{t})}^2 \\
+    &=\probavailable \ExpSub{B}{\ExpSub{\probpage}{\norm{h^{t}_i + \frac{1}{\probavailable}k^{t+1}_i - \left(\nabla f_i(x^{t+1}) - (1 - b)( h^t_i - \nabla f_i(x^{t}))\right)}^2}} \\
+    &\quad + (1 - \probavailable) \norm{h^{t}_i - \left(\nabla f_i(x^{t+1}) - (1 - b)( h^t_i - \nabla f_i(x^{t}))\right)}^2 \\
+    &\quad +(1 - b)^2\norm{h^{t}_i - \nabla f_i(x^{t})}^2 \\
+    &=\probavailable \ExpSub{B}{\ExpSub{\probpage}{\norm{h^{t}_i + \frac{1}{\probavailable}k^{t+1}_i - \left(\nabla f_i(x^{t+1}) - (1 - b)( h^t_i - \nabla f_i(x^{t}))\right)}^2}} \\
+    &\quad + (1 - \probavailable) \norm{\nabla f_i(x^{t+1}) - \nabla f_i(x^{t}) - b(h^t_i - \nabla f_i(x^{t}))}^2 \\
+    &\quad +(1 - b)^2\norm{h^{t}_i - \nabla f_i(x^{t})}^2 \\
+    &=\frac{1}{\probavailable} \ExpSub{B}{\ExpSub{\probpage}{\norm{k^{t+1}_i - \ExpSub{B}{\ExpSub{\probpage}{k^{t+1}_i}}}^2}} \\
+    &\quad + \frac{(1 - \probavailable)}{\probavailable} \norm{\nabla f_i(x^{t+1}) - \nabla f_i(x^{t}) - b(h^t_i - \nabla f_i(x^{t}))}^2 \\
+    &\quad +(1 - b)^2\norm{h^{t}_i - \nabla f_i(x^{t})}^2 \\
+    &=\frac{1}{\probavailable} \ExpSub{B}{\norm{\frac{1}{B}\sum_{j \in I^t_i}\left(\nabla f_{ij}(x^{t+1}) - \nabla f_{ij}(x^{t}) - b \left(h_{ij}^t - \nabla f_{ij}(x^t)\right)\right) - \left(\nabla f_i(x^{t+1}) - \nabla f_i(x^{t}) - b(h^t_i - \nabla f_i(x^{t}))\right)}^2} \\
+    &\quad + \frac{(1 - \probavailable)}{\probavailable} \norm{\nabla f_i(x^{t+1}) - \nabla f_i(x^{t}) - b(h^t_i - \nabla f_i(x^{t}))}^2 \\
+    &\quad +(1 - b)^2\norm{h^{t}_i - \nabla f_i(x^{t})}^2 \\
+    &=\frac{1}{\probavailable B m} \sum_{j=1}^m \norm{\nabla f_{ij}(x^{t+1}) - \nabla f_{ij}(x^{t}) - b \left(h_{ij}^t - \nabla f_{ij}(x^t)\right)}^2 \\
+    &\quad + \frac{(1 - \probavailable)}{\probavailable} \norm{\nabla f_i(x^{t+1}) - \nabla f_i(x^{t}) - b(h^t_i - \nabla f_i(x^{t}))}^2 \\
+    &\quad +(1 - b)^2\norm{h^{t}_i - \nabla f_i(x^{t})}^2 \\
+  \end{align*}
+
+  % \nabla f_i(x^{t+1}) - \nabla f_i(x^{t}) - \frac{b}{\probpage} \left(h^t_i - \nabla f_i(x^{t})\right) - \left(\nabla f_i(x^{t+1}) - \nabla f_i(x^{t}) - b(h^t_i - \nabla f_i(x^{t}))\right)
+
+  \alexander{Stochastic setting}
+
+  \begin{align*}
+    &\ExpSub{B}{\ExpSub{\probavailable}{\ExpSub{\probpage}{\norm{h^{t+1}_i - \nabla f_i(x^{t+1})}^2}}} \\
+    &=\ExpSub{B}{\ExpSub{\probavailable}{\ExpSub{\probpage}{\norm{h^{t+1}_i - \left(\nabla f_i(x^{t+1}) - (1 - b)( h^t_i - \nabla f_i(x^{t}))\right)}^2}}} \\
+    &\quad +(1 - b)^2\norm{h^{t}_i - \nabla f_i(x^{t})}^2 \\
+    &=\probavailable \ExpSub{B}{\ExpSub{\probpage}{\norm{h^{t}_i + \frac{1}{\probavailable}k^{t+1}_i - \left(\nabla f_i(x^{t+1}) - (1 - b)( h^t_i - \nabla f_i(x^{t}))\right)}^2}} \\
+    &\quad + (1 - \probavailable) \norm{h^{t}_i - \left(\nabla f_i(x^{t+1}) - (1 - b)( h^t_i - \nabla f_i(x^{t}))\right)}^2 \\
+    &\quad +(1 - b)^2\norm{h^{t}_i - \nabla f_i(x^{t})}^2 \\
+    &=\probavailable \ExpSub{B}{\ExpSub{\probpage}{\norm{h^{t}_i + \frac{1}{\probavailable}k^{t+1}_i - \left(\nabla f_i(x^{t+1}) - (1 - b)( h^t_i - \nabla f_i(x^{t}))\right)}^2}} \\
+    &\quad + (1 - \probavailable) \norm{\nabla f_i(x^{t+1}) - \nabla f_i(x^{t}) - b(h^t_i - \nabla f_i(x^{t}))}^2 \\
+    &\quad +(1 - b)^2\norm{h^{t}_i - \nabla f_i(x^{t})}^2 \\
+    &=\frac{1}{\probavailable} \ExpSub{B}{\ExpSub{\probpage}{\norm{k^{t+1}_i - \ExpSub{B}{\ExpSub{\probpage}{k^{t+1}_i}}}^2}} \\
+    &\quad + \frac{(1 - \probavailable)}{\probavailable} \norm{\nabla f_i(x^{t+1}) - \nabla f_i(x^{t}) - b(h^t_i - \nabla f_i(x^{t}))}^2 \\
+    &\quad +(1 - b)^2\norm{h^{t}_i - \nabla f_i(x^{t})}^2 \\
+    &=\frac{1}{\probavailable} \ExpSub{B}{\norm{\nabla f_i(x^{t+1};\xi^{t+1}_{i}) - \nabla f_i(x^{t};\xi^{t+1}_{i}) - b \left(h^t_i - \nabla f_i(x^{t};\xi^{t+1}_{i})\right) - \left(\nabla f_i(x^{t+1}) - \nabla f_i(x^{t}) - b(h^t_i - \nabla f_i(x^{t}))\right)}^2} \\
+    &\quad + \frac{(1 - \probavailable)}{\probavailable} \norm{\nabla f_i(x^{t+1}) - \nabla f_i(x^{t}) - b(h^t_i - \nabla f_i(x^{t}))}^2 \\
+    &\quad +(1 - b)^2\norm{h^{t}_i - \nabla f_i(x^{t})}^2 \\
+    &=\frac{1}{\probavailable} \ExpSub{B}{\norm{\nabla f_i(x^{t+1};\xi^{t+1}_{i}) - \nabla f_i(x^{t};\xi^{t+1}_{i}) + b \nabla f_i(x^{t};\xi^{t+1}_{i}) - (\nabla f_i(x^{t+1}) - \nabla f_i(x^{t}) + b \nabla f_i(x^{t}))}^2} \\
+    &\quad + \frac{(1 - \probavailable)}{\probavailable} \norm{\nabla f_i(x^{t+1}) - \nabla f_i(x^{t}) - b(h^t_i - \nabla f_i(x^{t}))}^2 \\
+    &\quad +(1 - b)^2\norm{h^{t}_i - \nabla f_i(x^{t})}^2 \\
+    &=\frac{1}{\probavailable} \ExpSub{B}{\norm{b \left(\nabla f_i(x^{t+1};\xi^{t+1}_{i}) - \nabla f_i(x^{t+1})\right) + (1 - b) \left(\nabla f_i(x^{t+1};\xi^{t+1}_{i}) - \nabla f_i(x^{t};\xi^{t}_{i}) - \left(\nabla f_i(x^{t+1}) - \nabla f_i(x^{t})\right)\right)}^2} \\
+    &\quad + \frac{(1 - \probavailable)}{\probavailable} \norm{\nabla f_i(x^{t+1}) - \nabla f_i(x^{t}) - b(h^t_i - \nabla f_i(x^{t}))}^2 \\
+    &\quad +(1 - b)^2\norm{h^{t}_i - \nabla f_i(x^{t})}^2 \\
+  \end{align*}
+
+  \begin{align*}
+    &\ExpSub{B}{\ExpSub{\probavailable}{\ExpSub{\probpage}{\norm{h^{t+1}_i - \nabla f_i(x^{t+1})}^2}}} \\
+    &=\ExpSub{B}{\ExpSub{\probavailable}{\ExpSub{\probpage}{\norm{h^{t+1}_i - \left(\nabla f_i(x^{t+1}) - (1 - b)( h^t_i - \nabla f_i(x^{t}))\right)}^2}}} \\
+    &\quad +(1 - b)^2\norm{h^{t}_i - \nabla f_i(x^{t})}^2 \\
+    &=\probavailable \ExpSub{B}{\ExpSub{\probpage}{\norm{h^{t}_i + \frac{1}{\probavailable}k^{t+1}_i - \left(\nabla f_i(x^{t+1}) - (1 - b)( h^t_i - \nabla f_i(x^{t}))\right)}^2}} \\
+    &\quad + (1 - \probavailable) \norm{h^{t}_i - \left(\nabla f_i(x^{t+1}) - (1 - b)( h^t_i - \nabla f_i(x^{t}))\right)}^2 \\
+    &\quad +(1 - b)^2\norm{h^{t}_i - \nabla f_i(x^{t})}^2 \\
+    &=\probavailable \ExpSub{B}{\ExpSub{\probpage}{\norm{h^{t}_i + \frac{1}{\probavailable}k^{t+1}_i - \left(\nabla f_i(x^{t+1}) - (1 - b)( h^t_i - \nabla f_i(x^{t}))\right)}^2}} \\
+    &\quad + (1 - \probavailable) \norm{\nabla f_i(x^{t+1}) - \nabla f_i(x^{t}) - b(h^t_i - \nabla f_i(x^{t}))}^2 \\
+    &\quad +(1 - b)^2\norm{h^{t}_i - \nabla f_i(x^{t})}^2 \\
+    &=\frac{1}{\probavailable} \ExpSub{B}{\ExpSub{\probpage}{\norm{k^{t+1}_i - \ExpSub{B}{\ExpSub{\probpage}{k^{t+1}_i}}}^2}} \\
+    &\quad + \frac{(1 - \probavailable)}{\probavailable} \norm{\nabla f_i(x^{t+1}) - \nabla f_i(x^{t}) - b(h^t_i - \nabla f_i(x^{t}))}^2 \\
+    &\quad +(1 - b)^2\norm{h^{t}_i - \nabla f_i(x^{t})}^2 \\
+    &=\frac{\probmega}{\probavailable} \ExpSub{B}{\norm{\nabla f_i(x^{t+1};\xi^{t+1}_{k}) - h^t_i - \left(\nabla f_i(x^{t+1}) - \nabla f_i(x^{t}) - \probmega(h^t_i - \nabla f_i(x^{t}))\right)}^2} \\
+    &\quad \frac{1 - \probmega}{\probavailable} \ExpSub{B}{\ExpSub{\probpage}{\norm{\nabla f_i(x^{t+1};\xi^{t+1}_{ij}) - \nabla f_i(x^{t};\xi^{t+1}_{ij})- \left(\nabla f_i(x^{t+1}) - \nabla f_i(x^{t}) - \probmega(h^t_i - \nabla f_i(x^{t}))\right)}^2}} \\
+    &\quad + \frac{(1 - \probavailable)}{\probavailable} \norm{\nabla f_i(x^{t+1}) - \nabla f_i(x^{t}) - \probmega(h^t_i - \nabla f_i(x^{t}))}^2 \\
+    &\quad +(1 - \probmega)^2\norm{h^{t}_i - \nabla f_i(x^{t})}^2 \\
+  \end{align*}
+
+%   \begin{cases}
+%     \frac{1}{B'}\sum_{k=1}^{B'} \nabla f_i(x^{t+1};\xi^{t+1}_{k}) - \frac{1}{B'}\sum_{k=1}^{B'} \nabla f_i(x^{t};\xi^{t+1}_{k}) - \frac{b}{\probmega}\left(h^t_i - \frac{1}{B'}\sum_{k=1}^{B'} \nabla f_i(x^{t};\xi^{t+1}_{k})\right),& \\
+%     \textnormal{with probability $\probmega$ on all \textit{participating}\textsuperscript{\red (a)} nodes} \\
+%     \frac{1}{B}\sum_{j=1}^B \nabla f_i(x^{t+1};\xi^{t+1}_{ij}) - \frac{1}{B}\sum_{j=1}^B \nabla f_i(x^{t};\xi^{t+1}_{ij}), & \\
+%     \textnormal{with probability $1 - \probmega$ on all \textit{participating}\textsuperscript{\red (a)} nodes} 
+% \end{cases}  \\
+
+  \alexander{End}
+%   \begin{cases}
+%     \nabla f_i(x^{t+1}) - \nabla f_i(x^{t}) - \frac{b}{\probpage} \left(h^t_i - \nabla f_i(x^{t})\right),& \textnormal{with probability $\probpage$ on all \textit{participating}\textsuperscript{\red (a)} nodes} \\
+%     \frac{1}{B}\sum_{j \in I^t_i}\left(\nabla f_{ij}(x^{t+1}) - \nabla f_{ij}(x^{t})\right), & \textnormal{with probability $1 - \probpage$ on all \textit{participating}\textsuperscript{\red (a)} nodes} 
+% \end{cases}  \\
+
+
+
+
+
+
+
   Next, we obtain the bound for $\ExpSub{B}{\ExpSub{\probavailable}{\norm{h^{t+1}_{i,2} - \ExpSub{B}{\ExpSub{\probavailable}{h^{t+1}_{i,2}}}}^2}}$:
   \begin{align}
     &\ExpSub{B}{\ExpSub{\probavailable}{\norm{h^{t+1}_{i,2} - \ExpSub{B}{\ExpSub{\probavailable}{h^{t+1}_{i,2}}}}^2}} \nonumber \\
@@ -1076,6 +1335,105 @@ $h^{t+1}_{1} \eqdef \frac{1}{n}\sum_{i=1}^n h^{t+1}_{i,1},$ and $h^{t+1}_{2} \eq
     \end{eqnarray*}
     to conclude the proof.
   \end{proof}
+
+
+\subsection{Proof for \algname{DASHA-PP-FINITE-MEMORY}}
+
+\begin{lemma}
+  Suppose that Assumptions \ref{ass:nodes_lipschitz_constant}, \ref{ass:max_lipschitz_constant}, and \ref{ass:partial_participation} hold. For $h^{t+1}_i$ and $k^{t+1}_i$ from Algorithm~\ref{alg:main_algorithm} (\algname{DASHA}-\algname{PP}-\algname{PAGE}) we have
+  \begin{enumerate}
+  \item
+      \begin{align*}
+          &\ExpSub{B}{\ExpSub{\probavailable}{\norm{h^{t+1} - \nabla f(x^{t+1})}^2}} \\
+          & \leq .
+      \end{align*}
+  \item
+      \begin{align*}
+          &\ExpSub{B}{\ExpSub{\probavailable}{\norm{h^{t+1}_i - \nabla f_i(x^{t+1})}^2}} \\
+          & \leq , \quad \forall i \in [n].
+      \end{align*}
+  \item
+      \begin{align*}
+        &\ExpSub{B}{\norm{k^{t+1}_i}^2} \\
+        &\leq , \quad \forall i \in [n].
+      \end{align*}
+  \end{enumerate}
+\end{lemma}
+
+% \STATE $k^{t+1}_{ij} = \begin{cases}
+%   \frac{m}{B}\left(\nabla f_{ij}(x^{t+1}) - \nabla f_{ij}(x^{t}) - b \left(h^t_{ij} - \nabla f_{ij}(x^{t})\right)\right), & j \in I^t_i  \\
+%   0 &  
+% \end{cases},$
+% \STATE $h^{t+1}_{ij} = h^t_{ij} + \frac{1}{\probavailable} k^{t+1}_{ij}$ 
+% \STATE $k^{t+1}_i = \frac{1}{m}\sum_{j=1}^m k^{t+1}_{ij},$
+% \STATE $h^{t+1}_i = h^t_i + \frac{1}{\probavailable}k^{t+1}_i$
+
+\begin{proof}
+  \begin{align*}
+    &\ExpSub{B}{\ExpSub{\probavailable}{\norm{h^{t+1} - \nabla f(x^{t+1})}^2}} \\
+    &=\ExpSub{B}{\ExpSub{\probavailable}{\norm{h^{t+1} - \left(\nabla f(x^{t+1}) + (1 - b)(h^t - \nabla f(x^{t}))\right)}^2}} \\
+    &\quad +(1 - b)^2\norm{h^{t} - \nabla f(x^{t})}^2 \\
+    &=\ExpSub{B}{\ExpSub{\probavailable}{\norm{h^{t} + \frac{1}{n \probavailable} \sum_{i \in S} \frac{1}{B} \sum_{j \in I^t_i} \left(\left(\nabla f_{ij}(x^{t+1}) - \nabla f_{ij}(x^{t}) - b \left(h^t_{ij} - \nabla f_{ij}(x^{t})\right)\right)\right) - \left(\nabla f(x^{t+1}) + (1 - b)(h^t - \nabla f(x^{t}))\right)}^2}} \\
+    &\quad +(1 - b)^2\norm{h^{t} - \nabla f(x^{t})}^2 \\  
+    &\leq 2\ExpSub{B}{\ExpSub{\probavailable}{\norm{\frac{1}{n \probavailable} \sum_{i \in S} \frac{1}{B} \sum_{j \in I^t_i} \left(\left(\nabla f_{ij}(x^{t+1}) - \nabla f_{ij}(x^{t}) - b \left(h^t_{ij} - \nabla f_{ij}(x^{t})\right)\right)\right) - \left(\nabla f(x^{t+1}) - b(h^t - \nabla f(x^{t}))\right)}^2}} \\
+    &\quad + 2\norm{\nabla f(x^{t+1}) - \nabla f(x^{t})}^2 \\
+    &\quad +(1 - b)^2\norm{h^{t} - \nabla f(x^{t})}^2 \\  
+    &= 2\ExpSub{B}{\ExpSub{\probavailable}{\norm{\frac{1}{s} \sum_{i \in S} \frac{1}{B} \sum_{j \in I^t_i} \left(\left(\nabla f_{ij}(x^{t+1}) - \nabla f_{ij}(x^{t}) - b \left(h^t_{ij} - \nabla f_{ij}(x^{t})\right)\right)\right) - \left(\nabla f(x^{t+1}) - b(h^t - \nabla f(x^{t}))\right)}^2}} \\
+    &\quad + 2\norm{\nabla f(x^{t+1}) - \nabla f(x^{t})}^2 \\
+    &\quad +(1 - b)^2\norm{h^{t} - \nabla f(x^{t})}^2 \\  
+  \end{align*}
+  \alexander{Independent, for simplicity:}
+  \begin{align*}
+    &\ExpSub{B}{\ExpSub{\probavailable}{\norm{h^{t+1} - \nabla f(x^{t+1})}^2}} \\
+    &=\ExpSub{B}{\ExpSub{\probavailable}{\norm{h^{t+1} - \left(\nabla f(x^{t+1}) + (1 - b)(h^t - \nabla f(x^{t}))\right)}^2}} \\
+    &\quad +(1 - b)^2\norm{h^{t} - \nabla f(x^{t})}^2 \\
+    &=\frac{1}{n^2} \sum_{i=1}^n \ExpSub{B}{\ExpSub{\probavailable}{\norm{h^{t+1}_i - \left(\nabla f_i(x^{t+1}) + (1 - b)(h^t_i - \nabla f_i(x^{t}))\right)}^2}} \\
+    &\quad +(1 - b)^2\norm{h^{t} - \nabla f(x^{t})}^2 \\
+    &=\frac{\probavailable}{n^2} \sum_{i=1}^n \ExpSub{B}{\norm{h^{t}_i + \frac{1}{\probavailable}k^{t+1}_i - \left(\nabla f_i(x^{t+1}) + (1 - b)(h^t_i - \nabla f_i(x^{t}))\right)}^2} \\
+    &\quad +\frac{1 - \probavailable}{n^2} \sum_{i=1}^n \norm{\nabla f_i(x^{t+1}) - \nabla f_i(x^{t}) - b(h^t_i - \nabla f_i(x^{t}))}^2 \\
+    &\quad +(1 - b)^2\norm{h^{t} - \nabla f(x^{t})}^2 \\
+    &=\frac{1}{\probavailable n^2} \sum_{i=1}^n \ExpSub{B}{\norm{\frac{1}{B}\sum_{j \in I^t_i}\left(\left(\nabla f_{ij}(x^{t+1}) - \nabla f_{ij}(x^{t}) - b \left(h^t_{ij} - \nabla f_{ij}(x^{t})\right)\right)\right) - \left(\nabla f_i(x^{t+1}) - \nabla f_i(x^{t}) - b(h^t_i - \nabla f_i(x^{t}))\right)}^2} \\
+    &\quad +\frac{1 - \probavailable}{n^2 \probavailable} \sum_{i=1}^n \norm{\nabla f_i(x^{t+1}) - \nabla f_i(x^{t}) - b(h^t_i - \nabla f_i(x^{t}))}^2 \\
+    &\quad +(1 - b)^2\norm{h^{t} - \nabla f(x^{t})}^2 \\
+    &=\frac{1}{\probavailable B n^2 m} \sum_{i=1}^n \sum_{i=1}^m \norm{\nabla f_{ij}(x^{t+1}) - \nabla f_{ij}(x^{t}) - b \left(h^t_{ij} - \nabla f_{ij}(x^{t})\right) - \left(\nabla f_i(x^{t+1}) - \nabla f_i(x^{t}) - b(h^t_i - \nabla f_i(x^{t}))\right)}^2 \\
+    &\quad +\frac{1 - \probavailable}{n^2 \probavailable} \sum_{i=1}^n \norm{\nabla f_i(x^{t+1}) - \nabla f_i(x^{t}) - b(h^t_i - \nabla f_i(x^{t}))}^2 \\
+    &\quad +(1 - b)^2\norm{h^{t} - \nabla f(x^{t})}^2 \\
+    &=\frac{1}{\probavailable B n^2 m} \sum_{i=1}^n \sum_{i=1}^m \norm{\nabla f_{ij}(x^{t+1}) - \nabla f_{ij}(x^{t}) - b \left(h^t_{ij} - \nabla f_{ij}(x^{t})\right)}^2 \\
+    &\quad +\left(\frac{1 - \probavailable}{n^2 \probavailable} - \frac{1}{\probavailable B n^2}\right) \sum_{i=1}^n \norm{\nabla f_i(x^{t+1}) - \nabla f_i(x^{t}) - b(h^t_i - \nabla f_i(x^{t}))}^2 \\
+    &\quad +(1 - b)^2\norm{h^{t} - \nabla f(x^{t})}^2 \\
+  \end{align*}
+
+  \begin{align*}
+    &\ExpSub{B}{\ExpSub{\probavailable}{\norm{h^{t+1}_i - \nabla f_i(x^{t+1})}^2}} \\
+    &=\ExpSub{B}{\ExpSub{\probavailable}{ \norm{h^{t+1}_i - \left(\nabla f_i(x^{t+1}) + (1 - b)(h^t_i - \nabla f_i(x^{t}))\right)}^2}} \\
+    &\quad +(1 - b)^2\norm{h^{t}_i - \nabla f_i(x^{t})}^2 \\
+    &=\frac{1}{\probavailable} \ExpSub{B}{\norm{\frac{1}{B}\sum_{j \in I^t_i}\left(\left(\nabla f_{ij}(x^{t+1}) - \nabla f_{ij}(x^{t}) - b \left(h^t_{ij} - \nabla f_{ij}(x^{t})\right)\right)\right) - \left(\nabla f_i(x^{t+1}) - \nabla f_i(x^{t}) - b(h^t_i - \nabla f_i(x^{t}))\right)}^2} \\
+    &\quad +\frac{1 - \probavailable}{\probavailable} \norm{\nabla f_i(x^{t+1}) - \nabla f_i(x^{t}) - b(h^t_i - \nabla f_i(x^{t}))}^2 \\
+    &\quad +(1 - b)^2\norm{h^{t}_i - \nabla f_i(x^{t})}^2 \\
+    &=\frac{1}{\probavailable B m} \sum_{j=1}^m \norm{\nabla f_{ij}(x^{t+1}) - \nabla f_{ij}(x^{t}) - b \left(h^t_{ij} - \nabla f_{ij}(x^{t})\right)}^2 \\
+    &\quad +\frac{1 - \probavailable}{\probavailable} \norm{\nabla f_i(x^{t+1}) - \nabla f_i(x^{t}) - b(h^t_i - \nabla f_i(x^{t}))}^2 \\
+    &\quad +(1 - b)^2\norm{h^{t}_i - \nabla f_i(x^{t})}^2 \\
+  \end{align*}
+
+  \begin{align*}
+    &\ExpSub{B}{\ExpSub{\probavailable}{\norm{h^{t+1}_{ij} - \nabla f_{ij}(x^{t+1})}^2}} \\
+    &=\ExpSub{B}{\ExpSub{\probavailable}{\norm{h^{t+1}_{ij} - \left(\nabla f_{ij}(x^{t+1}) + (1 - b)(h^t_{ij} - \nabla f_{ij}(x^{t}))\right)}^2}} \\
+    &\quad +(1 - b)^2\norm{h^{t}_{ij} - \nabla f_{ij}(x^{t})}^2 \\
+    &=\frac{\probavailable B}{m} \ExpSub{B}{\norm{h^{t}_{ij} + \frac{1}{\probavailable}\left(\frac{m}{B}\left(\nabla f_{ij}(x^{t+1}) - \nabla f_{ij}(x^{t}) - b \left(h^t_{ij} - \nabla f_{ij}(x^{t})\right)\right)\right) - \left(\nabla f_{ij}(x^{t+1}) + (1 - b)(h^t_{ij} - \nabla f_{ij}(x^{t}))\right)}^2} \\
+    &\quad + \left(1 - \frac{\probavailable B}{m}\right) \norm{h^{t}_{ij} - \left(\nabla f_{ij}(x^{t+1}) + (1 - b)(h^t_{ij} - \nabla f_{ij}(x^{t}))\right)}^2 \\
+    &\quad +(1 - b)^2\norm{h^{t}_{ij} - \nabla f_{ij}(x^{t})}^2 \\
+    &=\frac{\probavailable B}{m} \left(1 - \frac{1}{\frac{\probavailable B}{m}}\right)^2 \norm{\nabla f_{ij}(x^{t+1}) - \nabla f_{ij}(x^{t}) - b(h^t_{ij} - \nabla f_{ij}(x^{t}))}^2 \\
+    &\quad + \left(1 - \frac{\probavailable B}{m}\right) \norm{\nabla f_{ij}(x^{t+1}) - \nabla f_{ij}(x^{t}) - b(h^t_{ij} - \nabla f_{ij}(x^{t}))}^2 \\
+    &\quad +(1 - b)^2\norm{h^{t}_{ij} - \nabla f_{ij}(x^{t})}^2 \\
+    &= \frac{\left(1 - \frac{\probavailable B}{m}\right)}{\frac{\probavailable B}{m}} \norm{\nabla f_{ij}(x^{t+1}) - \nabla f_{ij}(x^{t}) - b(h^t_{ij} - \nabla f_{ij}(x^{t}))}^2 \\
+    &\quad +(1 - b)^2\norm{h^{t}_{ij} - \nabla f_{ij}(x^{t})}^2 \\
+  \end{align*}
+\end{proof}
+
+% \STATE $k^{t+1}_{ij} = \begin{cases}
+%   \frac{m}{B}\left(\nabla f_{ij}(x^{t+1}) - \nabla f_{ij}(x^{t}) - b \left(h^t_{ij} - \nabla f_{ij}(x^{t})\right)\right), & j \in I^t_i  \\
+%   0 &  
+% \end{cases},$
 
 \subsection{Proof for \algname{DASHA}-\algname{PP}-\algname{MVR}}
 
