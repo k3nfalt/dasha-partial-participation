@@ -220,18 +220,8 @@ Standard partial participation strategies, including $s$--nice sampling (with $\
               \nabla f_i(x^{t+1}) - \nabla f_i(x^{t}) - \frac{b}{\probpage} \left(h^t_i - \nabla f_i(x^{t})\right),& \textnormal{with probability $\probpage$ on all \textit{participating}\textsuperscript{\red (a)} nodes} \\
               \frac{1}{B}\sum_{j \in I^t_i}\left(\nabla f_{ij}(x^{t+1}) - \nabla f_{ij}(x^{t})\right), & \textnormal{with probability $1 - \probpage$ on all \textit{participating}\textsuperscript{\red (a)} nodes} 
           \end{cases}  \\
-          \begin{cases}
-            \nabla f_i(x^{t+1}) - h^t_i,& \textnormal{with probability $\probpage$ on all \textit{participating}\textsuperscript{\red (a)} nodes} \\
-            \frac{1}{B}\sum_{j \in I^t_i}\left(\nabla f_{ij}(x^{t+1}) - \nabla f_{ij}(x^{t})\right), & \textnormal{with probability $1 - \probpage$ on all \textit{participating}\textsuperscript{\red (a)} nodes} 
-          \end{cases}  \\
           \vspace{0.15cm}
           \frac{1}{B}\sum_{j=1}^B \nabla f_i(x^{t+1};\xi^{t+1}_{ij}) - \frac{1}{B}\sum_{j=1}^B \nabla f_i(x^{t};\xi^{t+1}_{ij}) - b \left(h^t_i - \frac{1}{B}\sum_{j=1}^B \nabla f_i(x^{t};\xi^{t+1}_{ij})\right), \\
-          \begin{cases}
-            \frac{1}{B'}\sum_{k=1}^{B'} \nabla f_i(x^{t+1};\xi^{t+1}_{k}) - h^t_i,& \\
-            \textnormal{with probability $\probmega$ on all \textit{participating}\textsuperscript{\red (a)} nodes} \\
-            \frac{1}{B}\sum_{j=1}^B \nabla f_i(x^{t+1};\xi^{t+1}_{ij}) - \frac{1}{B}\sum_{j=1}^B \nabla f_i(x^{t};\xi^{t+1}_{ij}), & \\
-            \textnormal{with probability $1 - \probmega$ on all \textit{participating}\textsuperscript{\red (a)} nodes} 
-        \end{cases}  \\
       \end{cases}$
       \STATE $h^{t+1}_i = h^t_i + \frac{1}{\probavailable}k^{t+1}_i$ 
       \STATE $m^{t+1}_i = \cC_i\Bigg(\frac{1}{\probavailable}k^{t+1}_i - \frac{a}{\probavailable} \left(g^{t}_i - h^{t}_i\right)\Bigg)$
@@ -251,48 +241,6 @@ Standard partial participation strategies, including $s$--nice sampling (with $\
 \end{algorithm}
 {\red (a)}: For the formal description see Section~\ref{sec:partial_participation}.
 \end{minipage}
-
-\begin{minipage}{\textwidth}
-  \begin{algorithm}[H]
-    \caption{\algname{DASHA}-\algname{PP}}
-    \label{alg:main_algorithm}
-    \begin{algorithmic}[1]
-    \STATE \textbf{Input:} starting point $x^0 \in \R^d$, stepsize $\gamma > 0$, momentum $a \in (0, 1]$, 
-    momentum $b \in (0, 1]$, probability $\probavailable \in (0, 1]$ that a node is \textit{participating}\textsuperscript{\red (a)},
-    batch size $B$ (only in \algname{DASHA}-\algname{PP}-\algname{PAGE} and \algname{DASHA}-\algname{PP}-\algname{MVR}), 
-    probability $\probpage \in (0, 1]$ (only in \algname{DASHA}-\algname{PP}-\algname{PAGE}),
-    number of iterations~$T \geq 1$
-    \STATE Initialize $g^0_i\in \R^d$, $h^0_i\in \R^d$ on the nodes and  $g^0 = \frac{1}{n}\sum_{i=1}^n g^0_i$ on the server
-    \FOR{$t = 0, 1, \dots, T - 1$}
-    \STATE $x^{t+1} = x^t - \gamma g^t$ \alglinelabel{alg:main_algorithm:x_update} 
-    \STATE Broadcast $x^{t+1}, x^{t}$ to all \textit{participating}\textsuperscript{\red (a)} nodes
-    \FOR{$i = 1, \dots, n$ in parallel}
-    \IF{$i^{\textnormal{th}} \textnormal{ node is \textit{participating}}$\textsuperscript{\red (a)}}
-        \STATE $k^{t+1}_{ij} = \begin{cases}
-          \frac{m}{B}\left(\nabla f_{ij}(x^{t+1}) - \nabla f_{ij}(x^{t}) - b \left(h^t_{ij} - \nabla f_{ij}(x^{t})\right)\right), & j \in I^t_i  \\
-          0 &  
-        \end{cases},$
-        \STATE $h^{t+1}_{ij} = h^t_{ij} + \frac{1}{\probavailable} k^{t+1}_{ij}$ 
-        \STATE $k^{t+1}_i = \frac{1}{m}\sum_{j=1}^m k^{t+1}_{ij},$
-        \STATE $h^{t+1}_i = h^t_i + \frac{1}{\probavailable}k^{t+1}_i$
-        \STATE $m^{t+1}_i = \cC_i\Bigg(\frac{1}{\probavailable}k^{t+1}_i - \frac{a}{\probavailable} \left(g^{t}_i - h^{t}_i\right)\Bigg)$
-        \STATE $g^{t+1}_i = g^{t}_i + m^{t+1}_i$
-        \STATE Send $m^{t+1}_i$ to the server
-    \ELSE
-        \STATE $h^{t+1}_i = h^{t}_i$
-        \STATE $m^{t+1}_i = 0$
-        \STATE $g^{t+1}_i = g^{t}_i$
-    \ENDIF
-    \ENDFOR
-    \STATE $g^{t+1} = g^t + \frac{1}{n} \sum_{i=1}^n m^{t+1}_i$
-    \ENDFOR
-    \STATE \textbf{Output:} $\hat{x}^T$ chosen uniformly at random from $\{x^t\}_{k=0}^{T-1}$ (or $x^T$ under the P\L-condition)
-    \end{algorithmic}
-    % {\red (a)}: 
-  \end{algorithm}
-  {\red (a)}: For the formal description see Section~\ref{sec:partial_participation}.
-  \end{minipage}
-% \footnotetext{}
 
 \section{Theorems}
 
