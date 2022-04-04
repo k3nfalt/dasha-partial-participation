@@ -83,43 +83,55 @@
 
 \section{Introduction}
 
-\alexander{
-  TODO: 
-  1) Rewrite the proof of DASHA-PP-PAGE
-  2) Add Hessian Varaince to improve bound
-}
+% \begin{table*}
+%   \caption{\textbf{General Nonconvex Case.} The number of communication rounds (iterations) and the oracle complexity of algorithms to get an $\varepsilon$-solution ($\Exp{\norm{\nabla f(\widehat{x})}^2} \leq \varepsilon$).}
+%   \label{table:general_case}
+%   \centering 
+%   \small
+%   \begin{threeparttable}
+%     \begin{tabular}{cccccc}
+%       \midrule
+%     Setting & Method & Comm. Rounds & Comm. Comp. & Oracle Comp. & Partial Participation \\
+%      \midrule\midrule
+%      \multirow{4}{*}{\tablesmall{Gradient}} 
+%      & \algnamesmall{PP-MARINA} &   $\frac{1}{\varepsilon} + \frac{(\omega + 1)\sqrt{n}}{\varepsilon s}$ & SOTA & Optimal & No \\
+%      & \algnamesmall{FRECON} &   $\frac{1}{\varepsilon} + \frac{(\omega + 1)\sqrt{n}}{\varepsilon s}$ & SOTA & Optimal & Yes \\
+%      & \algnamesmall{DASHA} &   $\frac{1}{\varepsilon} + \frac{(\omega + 1)\sqrt{n}}{\varepsilon s}$ & SOTA & Optimal & Yes \\
+%      & \algnamesmall{DASHA-PP} (New) &  $\frac{1}{\varepsilon} + \frac{(\omega + 1)\sqrt{n}}{\varepsilon s}$ & SOTA & Optimal & Yes \\
+%     \end{tabular}
+% \end{threeparttable}
+% \end{table*}
+% \begin{table*}
+%   \caption{\textbf{General Nonconvex Case.} The number of communication rounds (iterations) and the oracle complexity of algorithms to get an $\varepsilon$-solution ($\Exp{\norm{\nabla f(\widehat{x})}^2} \leq \varepsilon$).}
+%   \centering 
+%   \small
+%   \begin{threeparttable}
+%     \begin{tabular}{cccccc}
+%       \midrule
+%     Setting & Method & Comm. Rounds & Comm. Comp. & Oracle Comp. & Partial Participation \\
+%      \midrule\midrule
+%      \multirow{4}{*}{\tablesmall{Finite-Sum}} 
+%      & \algnamesmall{DASHA} &   $\frac{1}{\varepsilon} + \frac{(\omega + 1)\sqrt{n}}{\varepsilon s}$ & SOTA & Optimal & Yes \\
+%      & \algnamesmall{DASHA-PP} (New) &  $\frac{1}{\varepsilon} + \frac{(\omega + 1)\sqrt{n}}{\varepsilon s}$ & SOTA & Optimal & Yes \\
+%     \end{tabular}
+% \end{threeparttable}
+% \end{table*}
+% \begin{table*}
+%   \caption{\textbf{General Nonconvex Case.} The number of communication rounds (iterations) and the oracle complexity of algorithms to get an $\varepsilon$-solution ($\Exp{\norm{\nabla f(\widehat{x})}^2} \leq \varepsilon$).}
+%   \centering 
+%   \small
+%   \begin{threeparttable}
+%     \begin{tabular}{cccccc}
+%       \midrule
+%     Setting & Method & Comm. Rounds & Comm. Comp. & Oracle Comp. & Partial Participation \\
+%      \midrule\midrule
+%      \multirow{4}{*}{\tablesmall{Stochastic}} 
+%      & \algnamesmall{DASHA} &   $\frac{1}{\varepsilon} + \frac{(\omega + 1)\sqrt{n}}{\varepsilon s}$ & SOTA & Optimal & Yes \\
+%      & \algnamesmall{DASHA-PP} (New) &  $\frac{1}{\varepsilon} + \frac{(\omega + 1)\sqrt{n}}{\varepsilon s}$ & SOTA & Optimal & Yes \\
+%     \end{tabular}
+% \end{threeparttable}
+% \end{table*}
 
-\begin{table*}
-  \caption{\textbf{General Nonconvex Case.} The number of communication rounds (iterations) and the oracle complexity of algorithms to get an $\varepsilon$-solution ($\Exp{\norm{\nabla f(\widehat{x})}^2} \leq \varepsilon$).}
-  \label{table:general_case}
-  \centering 
-  \small
-  \begin{threeparttable}
-    \begin{tabular}{cccccc}
-      \midrule
-    Setting & Method & Communication Rounds\tnote{\color{blue}(a)}& 
-    Oracle Complexity & Sync?\tnote{\color{blue}(b)} \\
-     \midrule\midrule
-     \multirow{2}{*}{\tablesmall{Gradient}} 
-     & \algnamesmall{PP-MARINA} &   $\frac{1}{\varepsilon} + \frac{(\omega + 1)\sqrt{n}}{\varepsilon s}$ & $T$ & Yes \\
-     & \algnamesmall{FRECON} &   $\frac{1}{\varepsilon} + \frac{(\omega + 1)\sqrt{n}}{\varepsilon s}$ & $T$ & Yes \\
-     & \algnamesmall{DASHA-PP} (New) \tablescriptsize{(Cor.~\ref{cor:gradient_oracle})} &  $\frac{1}{\varepsilon} + \frac{(\omega + 1)\sqrt{n}}{\varepsilon s}$ & $T$ & \improvement{No} \\
-      \cmidrule(l  r ){1-5}
-      \multirow{2}{*}{\tablesmall{\begin{tabular}{c}Finite-Sum\\ \eqref{eq:task_minibatch}\end{tabular}}} 
-      & \algnamesmall{DASHA-PP-PAGE} \tablescriptsize{(Cor.~\ref{cor:mini_batch_oracle})} &  $\frac{1 + \nicefrac{\omega}{\sqrt{n}}}{\varepsilon} + \improvement{\frac{\sqrt{m}}{\varepsilon \sqrt{n} B}}$ & $m + B T$ & \improvement{No} \\
-    \cmidrule(l  r ){1-5}
-    \multirow{3}{*}{\tablesmall{\begin{tabular}{c}Stochastic\\ \eqref{eq:task_staochastic}\end{tabular}}} & \algnamesmall{VR-MARINA (online)} &   $\frac{1 + \nicefrac{\omega}{\sqrt{n}}}{\varepsilon} + \frac{\sigma^2}{\varepsilon n B} + \frac{\sqrt{1 + \omega}\sigma}{\varepsilon^{\nicefrac{3}{2}} n B}$ & $B\omega + BT$ & Yes \\
-                                & \algnamesmall{DASHA-MVR} \tablescriptsize{(Cor.~\ref{cor:stochastic})} &  $\frac{1 + \nicefrac{\omega}{\sqrt{n}}}{\varepsilon} + \frac{\sigma^2}{\varepsilon n B} + \improvement{\frac{\sigma}{\varepsilon^{\nicefrac{3}{2}} n B}}$ & $\degeneration{B\omega\sqrt{\frac{\sigma^2}{\varepsilon n B}}} + BT$ & \improvement{No} \\
-                                & \algnamesmall{DASHA-SYNC-MVR} \tablescriptsize{(Cor.~\ref{cor:sync_stochastic})} &  $\frac{1 + \nicefrac{\omega}{\sqrt{n}}}{\varepsilon} + \frac{\sigma^2}{\varepsilon n B} + \improvement{\frac{\sigma}{\varepsilon^{\nicefrac{3}{2}} n B}}$ & $B\omega + BT$ & Yes \\
-    \midrule\midrule
-    \end{tabular}
-\begin{tablenotes}
-% \scriptsize
-\item [{\color{blue}(a)}] Only dependencies w.r.t.\,the following variables are shown: $\omega = $ quantization parameter, $n = \#$ of nodes, $m = \#$ of local functions (only in finite-sum case \eqref{eq:task_minibatch}), $\sigma^2 = $ variance of stochastic gradients (only in stochastic case \eqref{eq:task_staochastic}), $B = $ batch size (only in finite-sum and stochastic case). To simplify bounds, we assume that $\omega + 1 = \Theta\left(\nicefrac{d}{\zeta_{\cC}}\right),$ where $d$ is dimension of $x$ in \eqref{eq:main_problem} and $\zeta_{\cC}$ is the expected number of nonzero coordinates that each compressor $\cC_i$ returns (see Definition~\ref{def:expected_density}).
-\item [{\color{blue}(b)}] Does the algorithm require periodic synchronization between nodes? (see Section~\ref{sec:contributions})
-\end{tablenotes}          
-\end{threeparttable}
-\end{table*}
 
 \section{Assumptions}
 
