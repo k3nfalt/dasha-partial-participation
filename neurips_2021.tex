@@ -209,13 +209,13 @@ Standard partial participation strategies, including $s$--nice sampling (with $\
 
 \begin{minipage}{\textwidth}
 \begin{algorithm}[H]
-  \caption{\algname{DASHA}-\algname{PP}}
+  \caption{\algname{DASHA-PP}}
   \label{alg:main_algorithm}
   \begin{algorithmic}[1]
   \STATE \textbf{Input:} starting point $x^0 \in \R^d$, stepsize $\gamma > 0$, momentum $a \in (0, 1]$, 
   momentum $b \in (0, 1]$, probability $\probavailable \in (0, 1]$ that a node is \textit{participating}\textsuperscript{\red (a)},
-  batch size $B$ (only in \algname{DASHA}-\algname{PP}-\algname{PAGE} and \algname{DASHA}-\algname{PP}-\algname{MVR}), 
-  probability $\probpage \in (0, 1]$ (only in \algname{DASHA}-\algname{PP}-\algname{PAGE}),
+  batch size $B$ (only in \algname{DASHA-PP-PAGE} and \algname{DASHA-PP-MVR}), 
+  probability $\probpage \in (0, 1]$ (only in \algname{DASHA-PP-PAGE}),
   number of iterations~$T \geq 1$
   \STATE Initialize $g^0_i\in \R^d$, $h^0_i\in \R^d$ on the nodes and  $g^0 = \frac{1}{n}\sum_{i=1}^n g^0_i$ on the server
   \STATE Initialize $h^0_{ij}\in \R^d$ on the nodes (only in \algname{DASHA-PP-FINITE-MVR})
@@ -374,7 +374,7 @@ and
 
 There are three different sources of randomness in Algorithm~\ref{alg:main_algorithm}: the first one from vectors $\{k_i^{t+1}\}_{i=1}^n$, the second one from compressors $\{\cC_i\}_{i=1}^n$, and the third one from availability of nodes. We define $\ExpSub{k}{\cdot}$, $\ExpSub{\cC}{\cdot}$ and $\ExpSub{\probavailable}{\cdot}$ to be conditional expectations w.r.t.\,$\{k_i^{t+1}\}_{i=1}^n$, $\{\cC_i\}_{i=1}^n, $ and availability, accordingly, conditioned on all previous randomness. Moreover, we define $\ExpSub{t+1}{\cdot}$ to be a conditional expectation w.r.t. all randomness in iteration $t+1$ conditioned on all previous randomness. Note, that $\ExpSub{t+1}{\cdot} = \ExpSub{k}{\ExpSub{\cC}{\ExpSub{\probavailable}{\cdot}}}.$
 
-In the case of \algname{DASHA}-\algname{PP}-\algname{PAGE}, there are two different sources of randomness from $\{k_i^{t+1}\}_{i=1}^n$. We define $\ExpSub{\probpage}{\cdot}$ and $\ExpSub{B}{\cdot}$ to be conditional expectations w.r.t.\, the probabilistic switching and mini-batch indices $I_{i}^t$, accordingly, conditioned on all previous randomness. Note, that $\ExpSub{t+1}{\cdot} = \ExpSub{B}{\ExpSub{\cC}{\ExpSub{\probavailable}{\ExpSub{\probpage}{\cdot}}}}$ and $\ExpSub{t+1}{\cdot} = \ExpSub{B}{\ExpSub{\probpage}{\ExpSub{\cC}{\ExpSub{\probavailable}{\cdot}}}}.$
+In the case of \algname{DASHA-PP-PAGE}, there are two different sources of randomness from $\{k_i^{t+1}\}_{i=1}^n$. We define $\ExpSub{\probpage}{\cdot}$ and $\ExpSub{B}{\cdot}$ to be conditional expectations w.r.t.\, the probabilistic switching and mini-batch indices $I_{i}^t$, accordingly, conditioned on all previous randomness. Note, that $\ExpSub{t+1}{\cdot} = \ExpSub{B}{\ExpSub{\cC}{\ExpSub{\probavailable}{\ExpSub{\probpage}{\cdot}}}}$ and $\ExpSub{t+1}{\cdot} = \ExpSub{B}{\ExpSub{\probpage}{\ExpSub{\cC}{\ExpSub{\probavailable}{\cdot}}}}.$
 
 \subsection{Standard lemmas in the nonconvex setting}
 
@@ -623,7 +623,7 @@ The lemma can be easily checked with the direct calculation.
 % \end{lemma}
 
 % \begin{proof}
-%   Clearly, the equality holds for \algname{DASHA}-\algname{PP}. Next, we show it for \algname{DASHA}-\algname{PP}-\algname{PAGE}:
+%   Clearly, the equality holds for \algname{DASHA-PP}. Next, we show it for \algname{DASHA-PP-PAGE}:
 %   \begin{align*}
 %     &\ExpSub{k}{k^{t+1}_i} \\
 %     &= \probpage \left(\nabla f_i(x^{t+1}) - \nabla f_i(x^{t}) - \frac{b}{\probpage} \left(h^t_i - \nabla f_i(x^{t})\right)\right) \\
@@ -632,14 +632,14 @@ The lemma can be easily checked with the direct calculation.
 %     &\quad + (1 - \probpage) \left(\nabla f_i(x^{t+1}) - \nabla f_i(x^{t})\right) \\
 %     &= \nabla f_i(x^{t+1}) - \nabla f_i(x^{t}) - b \left(h^t_i - \nabla f_i(x^{t})\right).
 % \end{align*}
-% Finally, from the unbiasedness of stochastic gradients, the equality holds for \algname{DASHA}-\algname{PP}-\algname{MVR}.
+% Finally, from the unbiasedness of stochastic gradients, the equality holds for \algname{DASHA-PP-MVR}.
 % \end{proof}
 
-\subsection{Proof for \algname{DASHA}-\algname{PP}}
+\subsection{Proof for \algname{DASHA-PP}}
 
 \begin{lemma}
   \label{lemma:gradient}
-  Suppose that Assumptions~\ref{ass:nodes_lipschitz_constant} and \ref{ass:partial_participation} hold. For $h^{t+1}_i$ and $k^{t+1}_i$ from Algorithm~\ref{alg:main_algorithm} (\algname{DASHA}-\algname{PP}) we have
+  Suppose that Assumptions~\ref{ass:nodes_lipschitz_constant} and \ref{ass:partial_participation} hold. For $h^{t+1}_i$ and $k^{t+1}_i$ from Algorithm~\ref{alg:main_algorithm} (\algname{DASHA-PP}) we have
   \begin{enumerate}
   \item
       \begin{align*}
@@ -816,7 +816,7 @@ The lemma can be easily checked with the direct calculation.
     to conclude the proof.
 \end{proof}
 
-\subsection{Proof for \algname{DASHA}-\algname{PP}-\algname{PAGE}}
+\subsection{Proof for \algname{DASHA-PP-PAGE}}
 
 Let us denote
 \begin{align*}
@@ -841,7 +841,7 @@ $h^{t+1}_{1} \eqdef \frac{1}{n}\sum_{i=1}^n h^{t+1}_{i,1},$ and $h^{t+1}_{2} \eq
 
 \begin{lemma}
   \label{lemma:gradient_page}
-  Suppose that Assumptions \ref{ass:nodes_lipschitz_constant}, \ref{ass:max_lipschitz_constant}, and \ref{ass:partial_participation} hold. For $h^{t+1}_i$ and $k^{t+1}_i$ from Algorithm~\ref{alg:main_algorithm} (\algname{DASHA}-\algname{PP}-\algname{PAGE}) we have
+  Suppose that Assumptions \ref{ass:nodes_lipschitz_constant}, \ref{ass:max_lipschitz_constant}, and \ref{ass:partial_participation} hold. For $h^{t+1}_i$ and $k^{t+1}_i$ from Algorithm~\ref{alg:main_algorithm} (\algname{DASHA-PP-PAGE}) we have
   \begin{enumerate}
   \item
       \begin{align*}
@@ -1186,12 +1186,15 @@ $h^{t+1}_{1} \eqdef \frac{1}{n}\sum_{i=1}^n h^{t+1}_{i,1},$ and $h^{t+1}_{2} \eq
     to conclude the proof.
   \end{proof}
 
-\subsection{Proof for \algname{DASHA}-\algname{PP}-\algname{MVR}}
+\subsection{Proof for \algname{DASHA-PP-FINITE-MVR}}
+
+
+\subsection{Proof for \algname{DASHA-PP-MVR}}
 
 Let us denote $\nabla f_i(x^{t+1};\xi^{t+1}_i) \eqdef \frac{1}{B} \sum_{j=1}^B \nabla f_i(x^{t+1};\xi^{t+1}_{ij}).$
 
 \begin{lemma}
-  Suppose that Assumptions \ref{ass:nodes_lipschitz_constant}, \ref{ass:stochastic_unbiased_and_variance_bounded}, \ref{ass:mean_square_smoothness} and \ref{ass:partial_participation} hold. For $h^{t+1}_i$ and $k^{t+1}_i$ from Algorithm~\ref{alg:main_algorithm} (\algname{DASHA}-\algname{PP}-\algname{MVR}) we have
+  Suppose that Assumptions \ref{ass:nodes_lipschitz_constant}, \ref{ass:stochastic_unbiased_and_variance_bounded}, \ref{ass:mean_square_smoothness} and \ref{ass:partial_participation} hold. For $h^{t+1}_i$ and $k^{t+1}_i$ from Algorithm~\ref{alg:main_algorithm} (\algname{DASHA-PP-MVR}) we have
   \begin{enumerate}
   \item
       \begin{align*}
