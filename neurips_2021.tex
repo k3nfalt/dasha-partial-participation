@@ -302,6 +302,18 @@ Standard partial participation strategies, including $s$--nice sampling (with $\
   \end{align*}
 \end{restatable}
 
+\begin{restatable}{theorem}{CONVERGENCEFINITEMVR}
+  \label{theorem:page}
+  Suppose that Assumptions \ref{ass:lower_bound}, \ref{ass:lipschitz_constant}, \ref{ass:nodes_lipschitz_constant}, \ref{ass:max_lipschitz_constant}, \ref{ass:compressors}, and \ref{ass:partial_participation} hold. Let us take $a = \frac{\probavailable}{2 \omega + 1} ,$ $b = \frac{\frac{\probpage B}{m}}{2 - \frac{\probpage B}{m}},$
+  $$\gamma \leq \left(L + \sqrt{\frac{148 \omega (2 \omega + 1)}{n \probavailable^2} \left(\widehat{L}^2 + \frac{L_{\max}^2}{B}\right) + \frac{72 m}{n \probavailable^2 B}\left(\left(1 - \frac{\probpairaa}{\probavailable}\right)\widehat{L}^2 + \frac{L_{\max}^2}{B}\right)}\right)^{-1},$$
+  $g^{0}_i = h^{0}_i = \nabla f_i(x^0)$ for all $i \in [n]$ and $h^{0}_{ij} = \nabla f_{ij}(x^0)$ for all $i \in [n], j \in [m]$ in Algorithm~\ref{alg:main_algorithm} \algname{(DASHA-PP-FINITE-MVR)}
+  then
+  \begin{align*}
+    &\Exp{\norm{\nabla f(\widehat{x}^T)}^2} \leq \frac{1}{T}\vast[2 \left(f(x^0) - f^*\right) \times \\
+    & \left(L + \sqrt{\frac{148 \omega (2 \omega + 1)}{n \probavailable^2} \left(\widehat{L}^2 + \frac{L_{\max}^2}{B}\right) + \frac{72 m}{n \probavailable^2 B}\left(\left(1 - \frac{\probpairaa}{\probavailable}\right)\widehat{L}^2 + \frac{L_{\max}^2}{B}\right)}\right)\vast].
+  \end{align*}
+\end{restatable}
+
 \begin{restatable}{theorem}{CONVERGENCEMVR}
   \label{theorem:stochastic}
   Suppose that Assumptions \ref{ass:lower_bound}, \ref{ass:lipschitz_constant}, \ref{ass:nodes_lipschitz_constant}, \ref{ass:stochastic_unbiased_and_variance_bounded}, \ref{ass:mean_square_smoothness}, \ref{ass:compressors} and \ref{ass:partial_participation} hold. Let us take $a = \frac{\probavailable}{2\omega + 1}$, $b~\in~\left(0, \frac{\probavailable}{2 - \probavailable}\right]$, 
@@ -1240,6 +1252,8 @@ $h^{t+1}_{1} \eqdef \frac{1}{n}\sum_{i=1}^n h^{t+1}_{i,1},$ and $h^{t+1}_{2} \eq
   where we used Assumptions \ref{ass:nodes_lipschitz_constant} and \ref{ass:max_lipschitz_constant}.
 \end{proof}
 
+\CONVERGENCEFINITEMVR*
+
 \begin{proof}
   Let us fix constants $\nu, \rho, \delta \in [0,\infty)$ that we will define later. Considering Lemma~\ref{lemma:main_lemma}, Lemma~\ref{lemma:finite_mvr}, and the law of total expectation, we obtain
     \begin{align*}
@@ -1375,7 +1389,7 @@ $h^{t+1}_{1} \eqdef \frac{1}{n}\sum_{i=1}^n h^{t+1}_{i,1},$ and $h^{t+1}_{2} \eq
       &\quad + \left(\frac{8 b \gamma \omega (2 \omega + 1)}{n \probavailable^2} + \frac{2 \gamma \left(\probavailable - \probpairaa\right)}{n \probavailable^2}\right) \left(\frac{2 L_{\max}^2}{\probavailable B} +\frac{2(1 - \probavailable) \widehat{L}^2}{\probavailable}\right) \\
       &\quad + \left(\frac{24 b \gamma \omega (2 \omega + 1)}{n \probavailable^2 B} + \frac{6 \gamma }{n \probavailable B}\right) \frac{2 m L_{\max}^2}{\probavailable B} \\
       &\leq \frac{36 \gamma \omega (2 \omega + 1)}{n \probavailable^2} \left(\frac{2 L_{\max}^2}{B} + 2 \widehat{L}^2\right) + \left(\frac{18 \gamma L_{\max}^2}{b n \probavailable B} + \frac{6 \gamma \left(\probavailable - \probpairaa\right) \widehat{L}^2}{b n \probavailable^2}\right) \\
-      &\leq \frac{36 \gamma \omega (2 \omega + 1)}{n \probavailable^2} \left(\frac{2 L_{\max}^2}{B} + 2 \widehat{L}^2\right) + \left(\frac{36 m \gamma L_{\max}^2}{n \probavailable B^2} + \frac{12 m \gamma \left(\probavailable - \probpairaa\right) \widehat{L}^2}{B n \probavailable^2}\right).
+      &\leq \frac{36 \gamma \omega (2 \omega + 1)}{n \probavailable^2} \left(\frac{2 L_{\max}^2}{B} + 2 \widehat{L}^2\right) + \left(\frac{36 m \gamma L_{\max}^2}{n \probavailable^2 B^2} + \frac{12 m \gamma \left(\probavailable - \probpairaa\right) \widehat{L}^2}{B n \probavailable^3}\right).
     \end{align*}
     All in all, we have
     \begin{align*}
@@ -1384,7 +1398,7 @@ $h^{t+1}_{1} \eqdef \frac{1}{n}\sum_{i=1}^n h^{t+1}_{i,1},$ and $h^{t+1}_{2} \eq
       &\quad + \left(\frac{24 b \gamma \omega (2 \omega + 1)}{n \probavailable^2 B} + \frac{6 \gamma }{n \probavailable B}\right) \Exp{\frac{1}{nm}\sum_{i=1}^n\sum_{j=1}^m\norm{h^{t+1}_{ij} - \nabla f_{ij}(x^{t+1})}^2} \\
       &\leq \Exp{f(x^t)} - \frac{\gamma}{2}\Exp{\norm{\nabla f(x^t)}^2} \\
       &\quad + \frac{\gamma (2 \omega + 1)}{\probavailable} \Exp{\norm{g^{t} - h^{t}}^2} + \frac{\gamma (\left(2 \omega + 1\right)\probavailable - \probpairaa)}{n \probavailable^2} \Exp{\frac{1}{n}\sum_{i=1}^n\norm{g^{t}_i - h^{t}_i}^2} \\
-      &\quad - \Bigg(\frac{1}{2\gamma} - \frac{L}{2} - \frac{36 \gamma \omega (2 \omega + 1)}{n \probavailable^2} \left(\frac{2 L_{\max}^2}{B} + 2 \widehat{L}^2\right) + \left(\frac{36 m \gamma L_{\max}^2}{n \probavailable B^2} + \frac{12 m \gamma \left(\probavailable - \probpairaa\right) \widehat{L}^2}{B n \probavailable^2}\right) \Bigg) \Exp{\norm{x^{t+1} - x^t}^2} \\
+      &\quad - \Bigg(\frac{1}{2\gamma} - \frac{L}{2} - \frac{36 \gamma \omega (2 \omega + 1)}{n \probavailable^2} \left(\frac{2 L_{\max}^2}{B} + 2 \widehat{L}^2\right) - \left(\frac{36 m \gamma L_{\max}^2}{n \probavailable^2 B^2} + \frac{12 m \gamma \left(\probavailable - \probpairaa\right) \widehat{L}^2}{B n \probavailable^3}\right) \Bigg) \Exp{\norm{x^{t+1} - x^t}^2} \\
       &\quad + \frac{\gamma}{b} \Exp{\norm{h^{t} - \nabla f(x^{t})}^2} \\
       &\quad + \left(\frac{8 b \gamma \omega (2 \omega + 1)}{n \probavailable^2} + \frac{2 \gamma \left(\probavailable - \probpairaa\right)}{n \probavailable^2}\right)\Exp{\frac{1}{n}\sum_{i=1}^n\norm{h^{t}_i - \nabla f_i(x^{t})}^2} \\
       &\quad + \left(\frac{24 b \gamma \omega (2 \omega + 1)}{n \probavailable^2 B} + \frac{6 \gamma }{n \probavailable B}\right)\Exp{\frac{1}{nm}\sum_{i=1}^n\sum_{j=1}^m\norm{h^{t}_{ij} - \nabla f_{ij}(x^{t})}^2}.
