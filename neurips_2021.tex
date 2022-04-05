@@ -858,29 +858,6 @@ $h^{t+1}_{1} \eqdef \frac{1}{n}\sum_{i=1}^n h^{t+1}_{i,1},$ and $h^{t+1}_{2} \eq
   \end{enumerate}
 \end{lemma}
 
-% \begin{cases}
-%   \nabla f_i(x^{t+1}) - \nabla f_i(x^{t}) - \frac{b}{\probpage} \left(h^t_i - \nabla f_i(x^{t})\right),& \textnormal{with probability $\probpage$ on all \textit{participating}\textsuperscript{\red (a)} nodes} \\
-%   \frac{1}{B}\sum_{j \in I^t_i}\left(\nabla f_{ij}(x^{t+1}) - \nabla f_{ij}(x^{t})\right), & \textnormal{with probability $1 - \probpage$ on all \textit{participating}\textsuperscript{\red (a)} nodes} 
-% \end{cases}  \\
-
-% \begin{align*}
-  %   &\ExpSub{B}{\ExpSub{\probavailable}{\ExpSub{\probpage}{\norm{h^{t+1} - \nabla f(x^{t+1})}^2}}} \\
-  %   &\overset{\eqref{auxiliary:variance_decomposition}}{=}\ExpSub{B}{\ExpSub{\probavailable}{\ExpSub{\probpage}{\norm{h^{t+1} - \ExpSub{B}{\ExpSub{\probavailable}{\ExpSub{\probpage}{h^{t+1}}}}}^2}}} + \norm{\ExpSub{B}{\ExpSub{\probavailable}{\ExpSub{\probpage}{h^{t+1}}}} - \nabla f(x^{t+1})}^2.\\
-  % \end{align*}
-
-  % \begin{align*}
-  %   &\ExpSub{B}{\ExpSub{\probavailable}{\ExpSub{\probpage}{\norm{h^{t+1} - \nabla f(x^{t+1})}^2}}} \\
-  %   &=\probpage\ExpSub{B}{\ExpSub{\probavailable}{\norm{h^{t+1}_{1} - \nabla f(x^{t+1})}^2}} + (1 - \probpage)\ExpSub{B}{\ExpSub{\probavailable}{\norm{h^{t+1}_{2} - \nabla f(x^{t+1})}^2}}.\\
-  % \end{align*}
-  % Using 
-  % \begin{align*}
-  %   &\ExpSub{B}{\ExpSub{\probavailable}{\ExpSub{\probpage}{h^{t+1}_{i}}}} = \\
-  %   &=\probavailable \ExpSub{B}{\ExpSub{\probavailable}{h^{t+1}_{i,1}}}\\
-  %   &\quad +(1 - \probavailable) \ExpSub{B}{\ExpSub{\probavailable}{h^{t+1}_{i,2}}}\\
-  %   &=\probavailable \ExpSub{B}{\ExpSub{\probavailable}{h^{t+1}_{i,1}}}\\
-  %   &\quad +(1 - \probavailable) \ExpSub{B}{\ExpSub{\probavailable}{h^{t+1}_{i,2}}}\\
-  % \end{align*}
-
 \begin{proof}
   First, we prove the first inequality of the theorem:
   \begin{align*}
@@ -902,90 +879,47 @@ $h^{t+1}_{1} \eqdef \frac{1}{n}\sum_{i=1}^n h^{t+1}_{i,1},$ and $h^{t+1}_{2} \eq
   we obtain
   \begin{align}
     &\ExpSub{B}{\ExpSub{\probavailable}{\ExpSub{\probpage}{\norm{h^{t+1} - \nabla f(x^{t+1})}^2}}} \nonumber\\
-    &\overset{\eqref{auxiliary:variance_decomposition}}{=}\probpage\ExpSub{B}{\ExpSub{\probavailable}{\norm{h^{t+1}_{1} - \ExpSub{B}{\ExpSub{\probavailable}{h^{t+1}_{1}}}}^2}} + (1 - \probpage)\ExpSub{B}{\ExpSub{\probavailable}{\norm{h^{t+1}_{2} - \ExpSub{B}{\ExpSub{\probavailable}{h^{t+1}_{2}}}}^2}} \nonumber\\
-    &\quad +\probpage\norm{\ExpSub{B}{\ExpSub{\probavailable}{h^{t+1}_{1}}} - \nabla f(x^{t+1})}^2 + (1 - \probpage)\norm{\ExpSub{B}{\ExpSub{\probavailable}{h^{t+1}_{2}}} - \nabla f(x^{t+1})}^2 \nonumber \\
-    &=\probpage\ExpSub{B}{\ExpSub{\probavailable}{\norm{h^{t+1}_{1} - \ExpSub{B}{\ExpSub{\probavailable}{h^{t+1}_{1}}}}^2}} + (1 - \probpage)\ExpSub{B}{\ExpSub{\probavailable}{\norm{h^{t+1}_{2} - \ExpSub{B}{\ExpSub{\probavailable}{h^{t+1}_{2}}}}^2}} \nonumber\\
+    &\overset{\eqref{auxiliary:variance_decomposition}}{=}\probpage\ExpSub{\probavailable}{\norm{h^{t+1}_{1} - \ExpSub{\probavailable}{h^{t+1}_{1}}}^2} + (1 - \probpage)\ExpSub{B}{\ExpSub{\probavailable}{\norm{h^{t+1}_{2} - \ExpSub{B}{\ExpSub{\probavailable}{h^{t+1}_{2}}}}^2}} \nonumber\\
+    &\quad +\probpage\norm{\ExpSub{\probavailable}{h^{t+1}_{1}} - \nabla f(x^{t+1})}^2 + (1 - \probpage)\norm{\ExpSub{B}{\ExpSub{\probavailable}{h^{t+1}_{2}}} - \nabla f(x^{t+1})}^2 \nonumber \\
+    &=\probpage\ExpSub{\probavailable}{\norm{h^{t+1}_{1} - \ExpSub{\probavailable}{h^{t+1}_{1}}}^2} + (1 - \probpage)\ExpSub{B}{\ExpSub{\probavailable}{\norm{h^{t+1}_{2} - \ExpSub{B}{\ExpSub{\probavailable}{h^{t+1}_{2}}}}^2}} \nonumber\\
     &\quad +\left(\probpage\left(1 - \frac{b}{\probpage}\right)^2 + (1 - \probpage)\right)\norm{h^{t} - \nabla f(x^{t})}^2. \label{eq:page_proof:orig}
   \end{align}
-  Next, we consider $\ExpSub{B}{\ExpSub{\probavailable}{\norm{h^{t+1}_{1} - \ExpSub{B}{\ExpSub{\probavailable}{h^{t+1}_{1}}}}^2}}$:
+  Next, we consider $\ExpSub{\probavailable}{\norm{h^{t+1}_{1} - \ExpSub{\probavailable}{h^{t+1}_{1}}}^2}$. We can use Lemma~\ref{lemma:sampling} with $r_i = h^{t}_i$ and $s_i = k^{t+1}_{i,1}$ to obtain
   \begin{align*}
-    &\ExpSub{B}{\ExpSub{\probavailable}{\norm{h^{t+1}_{1} - \ExpSub{B}{\ExpSub{\probavailable}{h^{t+1}_{1}}}}^2}}\\
-    &=\ExpSub{\probavailable}{\norm{h^{t+1}_{1} - \ExpSub{B}{\ExpSub{\probavailable}{h^{t+1}_{1}}}}^2} \\
-    &=\frac{1}{n^2}\sum_{i=1}^n\ExpSub{\probavailable}{\norm{h^{t+1}_{i,1} - \ExpSub{B}{\ExpSub{\probavailable}{h^{t+1}_{i,1}}}}^2} \\
-    &\quad +\frac{1}{n^2}\sum_{i\neq j}^n\ExpSub{\probavailable}{\inp{h^{t+1}_{i,1} - \ExpSub{B}{\ExpSub{\probavailable}{h^{t+1}_{i,1}}}}{h^{t+1}_{j,1} - \ExpSub{B}{\ExpSub{\probavailable}{h^{t+1}_{j,1}}}}} \\
-    &=\frac{(1 - \probavailable)^2}{n^2 \probavailable}\sum_{i=1}^n\norm{\nabla f_i(x^{t+1}) - \nabla f_i(x^{t}) - \frac{b}{\probpage} \left(h^t_i - \nabla f_i(x^{t})\right)}^2 \\
-    &\quad + \frac{1 - \probavailable}{n^2}\sum_{i=1}^n\norm{\nabla f_i(x^{t+1}) - \nabla f_i(x^{t}) - \frac{b}{\probpage} \left(h^t_i - \nabla f_i(x^{t})\right)}^2\\
-    &\quad +\frac{\probpairaa(\probavailable - 1)^2}{n^2 \probavailable^2}\sum_{i\neq j}^n\inp{\nabla f_i(x^{t+1}) - \nabla f_i(x^{t}) - \frac{b}{\probpage} \left(h^t_i - \nabla f_i(x^{t})\right)}{\nabla f_j(x^{t+1}) - \nabla f_j(x^{t}) - \frac{b}{\probpage} \left(h^t_j - \nabla f_j(x^{t})\right)} \\
-    &\quad +\frac{2\probpairan (\probavailable - 1)}{n^2 \probavailable}\sum_{i\neq j}^n\inp{\nabla f_i(x^{t+1}) - \nabla f_i(x^{t}) - \frac{b}{\probpage} \left(h^t_i - \nabla f_i(x^{t})\right)}{\nabla f_j(x^{t+1}) - \nabla f_j(x^{t}) - \frac{b}{\probpage} \left(h^t_j - \nabla f_j(x^{t})\right)} \\
-    &\quad +\frac{\probpairnn}{n^2}\sum_{i\neq j}^n\inp{\nabla f_i(x^{t+1}) - \nabla f_i(x^{t}) - \frac{b}{\probpage} \left(h^t_i - \nabla f_i(x^{t})\right)}{\nabla f_j(x^{t+1}) - \nabla f_j(x^{t}) - \frac{b}{\probpage} \left(h^t_j - \nabla f_j(x^{t})\right)} \\
+    &\ExpSub{\probavailable}{\norm{h^{t+1}_{1} - \ExpSub{\probavailable}{h^{t+1}_{1}}}^2}\\
+    &\leq \frac{1}{n^2 \probavailable}\sum_{i=1}^n\norm{k^{t+1}_{i,1} - k^{t+1}_{i,1}}^2 +\frac{\probavailable - \probpairaa}{n^2 \probavailable^2}\sum_{i=1}^n\norm{k^{t+1}_{i,1}}^2 \\
+    &= \frac{\probavailable - \probpairaa}{n^2 \probavailable^2}\sum_{i=1}^n\norm{\nabla f_i(x^{t+1}) - \nabla f_i(x^{t}) - \frac{b}{\probpage} \left(h^t_i - \nabla f_i(x^{t})\right)}^2 \\
+    &\overset{\eqref{auxiliary:jensen_inequality}}{\leq} \frac{2\left(\probavailable - \probpairaa\right)}{n^2 \probavailable^2}\sum_{i=1}^n\norm{\nabla f_i(x^{t+1}) - \nabla f_i(x^{t})}^2 + \frac{2 \left(\probavailable - \probpairaa\right) b^2}{n^2 \probavailable^2 \probpage^2}\sum_{i=1}^n\norm{h^t_i - \nabla f_i(x^{t})}^2.
   \end{align*}
-  Considering \eqref{sec:auxiliary_facts_partial_participation:one}, \eqref{sec:auxiliary_facts_partial_participation:two}, and \eqref{eq:partial_participation_constraint}, we have
-  \begin{align*}
-    &\ExpSub{B}{\ExpSub{\probavailable}{\norm{h^{t+1}_{1} - \ExpSub{B}{\ExpSub{\probavailable}{h^{t+1}_{1}}}}^2}}\\
-    &=\frac{1 - \probavailable}{n^2 \probavailable}\sum_{i=1}^n\norm{\nabla f_i(x^{t+1}) - \nabla f_i(x^{t}) - \frac{b}{\probpage} \left(h^t_i - \nabla f_i(x^{t})\right)}^2 \\
-    &\quad +\frac{\probpairaa - \probavailable^2}{n^2 \probavailable^2}\sum_{i\neq j}^n\inp{\nabla f_i(x^{t+1}) - \nabla f_i(x^{t}) - \frac{b}{\probpage} \left(h^t_i - \nabla f_i(x^{t})\right)}{\nabla f_j(x^{t+1}) - \nabla f_j(x^{t}) - \frac{b}{\probpage} \left(h^t_j - \nabla f_j(x^{t})\right)} \\
-    &=\frac{\probavailable - \probpairaa}{n^2 \probavailable^2}\sum_{i=1}^n\norm{\nabla f_i(x^{t+1}) - \nabla f_i(x^{t}) - \frac{b}{\probpage} \left(h^t_i - \nabla f_i(x^{t})\right)}^2 \\
-    &\quad +\frac{\probpairaa - \probavailable^2}{\probavailable^2}\norm{\nabla f(x^{t+1}) - \nabla f(x^{t}) - \frac{b}{\probpage} \left(h^t - \nabla f(x^{t})\right)}^2. \\
-    &\leq \frac{\probavailable - \probpairaa}{n^2 \probavailable^2}\sum_{i=1}^n\norm{\nabla f_i(x^{t+1}) - \nabla f_i(x^{t}) - \frac{b}{\probpage} \left(h^t_i - \nabla f_i(x^{t})\right)}^2.
-  \end{align*}
-  It is left to use \eqref{auxiliary:jensen_inequality} and Assumption~\ref{ass:nodes_lipschitz_constant}, to get
+  From Assumption~\ref{ass:nodes_lipschitz_constant}, we have
   \begin{align}
-    &\ExpSub{B}{\ExpSub{\probavailable}{\norm{h^{t+1}_{1} - \ExpSub{B}{\ExpSub{\probavailable}{h^{t+1}_{1}}}}^2}} \nonumber \\
-    &\leq \frac{2 \left(\probavailable - \probpairaa\right) \widehat{L}^2}{n \probavailable^2} \norm{x^{t+1} - x^{t}}^2 + \frac{2\left(\probavailable - \probpairaa\right) b^2}{n^2 \probavailable^2 \probpage^2}\sum_{i=1}^n\norm{ h^t_i - \nabla f_i(x^{t})}^2 \label{eq:page_proof:h_1}.
+    &\ExpSub{\probavailable}{\norm{h^{t+1}_{1} - \ExpSub{\probavailable}{h^{t+1}_{1}}}^2} \nonumber\\
+    &\leq \frac{2\left(\probavailable - \probpairaa\right) \widehat{L}^2}{n \probavailable^2}\norm{x^{t+1} - x^{t}}^2 + \frac{2 \left(\probavailable - \probpairaa\right)b^2}{n^2 \probavailable^2 \probpage^2}\sum_{i=1}^n\norm{h^t_i - \nabla f_i(x^{t})}^2 \label{eq:page_proof:h_1}.
   \end{align}
-  Due to the independence of mini-batches, we have:
+  Now, we prove the bound for $\ExpSub{B}{\ExpSub{\probavailable}{\norm{h^{t+1}_{2} - \ExpSub{B}{\ExpSub{\probavailable}{h^{t+1}_{2}}}}^2}}.$
+  Considering that mini-batches in the algorithm are independent, we can use Lemma~\ref{lemma:sampling} with $r_i = h^{t}_i$ and $s_i = k^{t+1}_{i,2}$ to obtain
   \begin{align*}
     &\ExpSub{B}{\ExpSub{\probavailable}{\norm{h^{t+1}_{2} - \ExpSub{B}{\ExpSub{\probavailable}{h^{t+1}_{2}}}}^2}}\\
-    &=\frac{1}{n^2}\sum_{i=1}^n\ExpSub{B}{\ExpSub{\probavailable}{\norm{h^{t+1}_{i,2} - \ExpSub{B}{\ExpSub{\probavailable}{h^{t+1}_{i,2}}}}^2}} \\
-    &\quad +\frac{1}{n^2}\sum_{i\neq j}^n\ExpSub{B}{\ExpSub{\probavailable}{\inp{h^{t+1}_{i,2} - \ExpSub{B}{\ExpSub{\probavailable}{h^{t+1}_{i,2}}}}{h^{t+1}_{j,2} - \ExpSub{B}{\ExpSub{\probavailable}{h^{t+1}_{j,2}}}}}} \\
-    &=\frac{\probavailable}{n^2}\sum_{i=1}^n\ExpSub{B}{\norm{h^t_i + \frac{1}{\probavailable} k^{t+1}_{i, 2} - \left(h^t_i + \nabla f_i(x^{t+1}) - \nabla f_i(x^{t})\right)}^2} \\
-    &\quad + \frac{1 - \probavailable}{n^2}\sum_{i=1}^n\norm{\nabla f_i(x^{t+1}) - \nabla f_i(x^{t})}^2 \\
-    &\quad +\frac{\probpairaa}{n^2}\sum_{i\neq j}^n\ExpSub{B}{\inp{h^t_i + \frac{1}{\probavailable} k^{t+1}_{i, 2} - \left(h^t_i + \nabla f_i(x^{t+1}) - \nabla f_i(x^{t})\right)}{h^t_j + \frac{1}{\probavailable} k^{t+1}_{j, 2} - \left(h^t_j + \nabla f_j(x^{t+1}) - \nabla f_j(x^{t})\right)}} \\
-    &\quad +\frac{2\probpairan}{n^2}\sum_{i\neq j}^n\ExpSub{B}{\inp{h^t_i + \frac{1}{\probavailable} k^{t+1}_{i, 2} - \left(h^t_i + \nabla f_i(x^{t+1}) - \nabla f_i(x^{t})\right)}{h^t_j - \left(h^t_j + \nabla f_j(x^{t+1}) - \nabla f_j(x^{t})\right)}} \\
-    &\quad +\frac{\probpairnn}{n^2}\sum_{i\neq j}^n\inp{h^t_i - \left(h^t_i + \nabla f_i(x^{t+1}) - \nabla f_i(x^{t})\right)}{h^t_j - \left(h^t_j + \nabla f_j(x^{t+1}) - \nabla f_j(x^{t})\right)} \\
-    &=\frac{\probavailable}{n^2}\sum_{i=1}^n\ExpSub{B}{\norm{\frac{1}{\probavailable} k^{t+1}_{i, 2} - \left(\nabla f_i(x^{t+1}) - \nabla f_i(x^{t})\right)}^2} \\
-    &\quad + \frac{1 - \probavailable}{n^2}\sum_{i=1}^n\norm{\nabla f_i(x^{t+1}) - \nabla f_i(x^{t})}^2 \\
-    &\quad +\left(\frac{\probpairaa (\probavailable - 1)^2}{n^2 \probavailable^2} + \frac{2\probpairan (\probavailable - 1)}{n^2 \probavailable} + \frac{\probpairnn}{n^2}\right)\sum_{i\neq j}^n\inp{\nabla f_i(x^{t+1}) - \nabla f_i(x^{t})}{\nabla f_j(x^{t+1}) - \nabla f_j(x^{t})}.
+    &\leq \frac{1}{n^2 \probavailable}\sum_{i=1}^n\ExpSub{B}{\norm{k^{t+1}_{i,2} - \ExpSub{B}{k^{t+1}_{i,2}}}^2} +\frac{\probavailable - \probpairaa}{n^2 \probavailable^2}\sum_{i=1}^n\norm{\ExpSub{B}{k^{t+1}_{i,2}}}^2 \\
+    &= \frac{1}{n^2 \probavailable}\sum_{i=1}^n\ExpSub{B}{\norm{\frac{1}{B}\sum_{j \in I^t_i}\left(\nabla f_{ij}(x^{t+1}) - \nabla f_{ij}(x^{t})\right) - \left(\nabla f_{i}(x^{t+1}) - \nabla f_{i}(x^{t})\right)}^2} \\
+    &\quad +\frac{\probavailable - \probpairaa}{n^2 \probavailable^2}\sum_{i=1}^n\norm{\nabla f_{i}(x^{t+1}) - \nabla f_{i}(x^{t})}^2 \\
+    &= \frac{1}{n^2 \probavailable B^2}\sum_{i=1}^n\ExpSub{B}{\sum_{j \in I^t_i}\norm{\left(\nabla f_{ij}(x^{t+1}) - \nabla f_{ij}(x^{t})\right) - \left(\nabla f_{i}(x^{t+1}) - \nabla f_{i}(x^{t})\right)}^2} \\
+    &\quad +\frac{\probavailable - \probpairaa}{n^2 \probavailable^2}\sum_{i=1}^n\norm{\nabla f_{i}(x^{t+1}) - \nabla f_{i}(x^{t})}^2 \\
+    &= \frac{1}{n^2 \probavailable B m}\sum_{i=1}^n \sum_{j=1}^m \norm{\left(\nabla f_{ij}(x^{t+1}) - \nabla f_{ij}(x^{t})\right) - \left(\nabla f_{i}(x^{t+1}) - \nabla f_{i}(x^{t})\right)}^2 \\
+    &\quad +\frac{\probavailable - \probpairaa}{n^2 \probavailable^2}\sum_{i=1}^n\norm{\nabla f_{i}(x^{t+1}) - \nabla f_{i}(x^{t})}^2 \\
+    &\leq \frac{1}{n^2 \probavailable B m}\sum_{i=1}^n \sum_{j=1}^m \norm{\nabla f_{ij}(x^{t+1}) - \nabla f_{ij}(x^{t})}^2 +\frac{\probavailable - \probpairaa}{n^2 \probavailable^2}\sum_{i=1}^n\norm{\nabla f_{i}(x^{t+1}) - \nabla f_{i}(x^{t})}^2.
   \end{align*}
-  Using \eqref{auxiliary:variance_decomposition}, \eqref{sec:auxiliary_facts_partial_participation:one} and \eqref{sec:auxiliary_facts_partial_participation:two}, we get
+  Next, we use Assumptions \ref{ass:nodes_lipschitz_constant} and \ref{ass:max_lipschitz_constant} to get
   \begin{align}
-    &\ExpSub{B}{\ExpSub{\probavailable}{\norm{h^{t+1}_{2} - \ExpSub{B}{\ExpSub{\probavailable}{h^{t+1}_{2}}}}^2}}\nonumber\\
-    &=\frac{1}{n^2 \probavailable}\sum_{i=1}^n\ExpSub{B}{\norm{k^{t+1}_{i, 2} - \left(\nabla f_i(x^{t+1}) - \nabla f_i(x^{t})\right)}^2} \nonumber\\
-    &\quad + \frac{1 - \probavailable}{n^2 \probavailable}\sum_{i=1}^n\norm{\nabla f_i(x^{t+1}) - \nabla f_i(x^{t})}^2 \nonumber\\
-    &\quad +\frac{\probpairaa - \probavailable^2}{n^2 \probavailable^2}\sum_{i\neq j}^n\inp{\nabla f_i(x^{t+1}) - \nabla f_i(x^{t})}{\nabla f_j(x^{t+1}) - \nabla f_j(x^{t})} \nonumber\\
-    &=\frac{1}{n^2 \probavailable}\sum_{i=1}^n\ExpSub{B}{\norm{k^{t+1}_{i, 2} - \left(\nabla f_i(x^{t+1}) - \nabla f_i(x^{t})\right)}^2} \nonumber\\
-    &\quad + \frac{\probavailable - \probpairaa}{n^2 \probavailable^2}\sum_{i=1}^n\norm{\nabla f_i(x^{t+1}) - \nabla f_i(x^{t})}^2 \nonumber\\
-    &\quad +\frac{\probpairaa - \probavailable^2}{\probavailable^2}\norm{\nabla f(x^{t+1}) - \nabla f(x^{t})}^2 \nonumber\\
-    &\overset{\eqref{eq:partial_participation_constraint}}{\leq} \frac{1}{n^2 \probavailable}\sum_{i=1}^n\ExpSub{B}{\norm{k^{t+1}_{i, 2} - \left(\nabla f_i(x^{t+1}) - \nabla f_i(x^{t})\right)}^2} \nonumber\\
-    &\quad + \frac{\probavailable - \probpairaa}{n^2 \probavailable^2}\sum_{i=1}^n\norm{\nabla f_i(x^{t+1}) - \nabla f_i(x^{t})}^2 \nonumber \\
-    &\leq \frac{1}{n^2 \probavailable}\sum_{i=1}^n\ExpSub{B}{\norm{k^{t+1}_{i, 2} - \left(\nabla f_i(x^{t+1}) - \nabla f_i(x^{t})\right)}^2} + \frac{\left(\probavailable - \probpairaa\right)\widehat{L}^2}{n \probavailable^2}\norm{x^{t+1} - x^{t}}^2. \label{eq:page_proof:h_2}
+    \ExpSub{B}{\ExpSub{\probavailable}{\norm{h^{t+1}_{2} - \ExpSub{B}{\ExpSub{\probavailable}{h^{t+1}_{2}}}}^2}} \leq \left(\frac{L_{\max}^2}{n \probavailable B} +\frac{\left(\probavailable - \probpairaa\right) \widehat{L}^2}{n \probavailable^2}\right)\norm{x^{t+1} - x^{t}}^2. \label{eq:page_proof:h_2}
   \end{align}
-  In the last inequality, we used Assumption~\ref{ass:nodes_lipschitz_constant}.
   Applying \eqref{eq:page_proof:h_1} and \eqref{eq:page_proof:h_2} into \eqref{eq:page_proof:orig}, we get
   \begin{align*}
     &\ExpSub{B}{\ExpSub{\probavailable}{\ExpSub{\probpage}{\norm{h^{t+1} - \nabla f(x^{t+1})}^2}}} \\
     &\leq\probpage\left(\frac{2 \left(\probavailable - \probpairaa\right) \widehat{L}^2}{n \probavailable^2} \norm{x^{t+1} - x^{t}}^2 + \frac{2\left(\probavailable - \probpairaa\right) b^2}{n^2 \probavailable^2 \probpage^2}\sum_{i=1}^n\norm{ h^t_i - \nabla f_i(x^{t})}^2\right) + \\
-    &\quad (1 - \probpage)\left(\frac{1}{n^2 \probavailable}\sum_{i=1}^n\ExpSub{B}{\norm{k^{t+1}_{i, 2} - \left(\nabla f_i(x^{t+1}) - \nabla f_i(x^{t})\right)}^2} + \frac{\left(\probavailable - \probpairaa\right)\widehat{L}^2}{n \probavailable^2}\norm{x^{t+1} - x^{t}}^2\right) \\
+    &\quad + (1 - \probpage)\left(\frac{L_{\max}^2}{n \probavailable B} +\frac{\left(\probavailable - \probpairaa\right) \widehat{L}^2}{n \probavailable^2}\right)\norm{x^{t+1} - x^{t}}^2 \\
     &\quad +\left(\probpage\left(1 - \frac{b}{\probpage}\right)^2 + (1 - \probpage)\right)\norm{h^{t} - \nabla f(x^{t})}^2\\
-    &\leq\frac{2 \left(\probavailable - \probpairaa\right) \widehat{L}^2}{n \probavailable^2} \norm{x^{t+1} - x^{t}}^2 + \frac{1 - \probpage}{n^2 \probavailable}\sum_{i=1}^n\ExpSub{B}{\norm{k^{t+1}_{i, 2} - \left(\nabla f_i(x^{t+1}) - \nabla f_i(x^{t})\right)}^2}\\
-    &\quad + \frac{2\left(\probavailable - \probpairaa\right) b^2}{n^2 \probavailable^2 \probpage}\sum_{i=1}^n\norm{ h^t_i - \nabla f_i(x^{t})}^2 + \left(\probpage\left(1 - \frac{b}{\probpage}\right)^2 + (1 - \probpage)\right)\norm{h^{t} - \nabla f(x^{t})}^2.
-  \end{align*}
-  Using the independence of elements in the mini-batches, we can continue:
-  \begin{align*}
-    &\ExpSub{B}{\ExpSub{\probavailable}{\ExpSub{\probpage}{\norm{h^{t+1} - \nabla f(x^{t+1})}^2}}} \\
-    &\leq \frac{2 \left(\probavailable - \probpairaa\right) \widehat{L}^2}{n \probavailable^2} \norm{x^{t+1} - x^{t}}^2 + \frac{1 - \probpage}{n^2 \probavailable}\sum_{i=1}^n\ExpSub{B}{\norm{\frac{1}{B}\sum_{j \in I^t_i}\left(\nabla f_{ij}(x^{t+1}) - \nabla f_{ij}(x^{t})\right) - \left(\nabla f_i(x^{t+1}) - \nabla f_i(x^{t})\right)}^2}\\
-    &\quad + \frac{2\left(\probavailable - \probpairaa\right) b^2}{n^2 \probavailable^2 \probpage}\sum_{i=1}^n\norm{ h^t_i - \nabla f_i(x^{t})}^2 + \left(\probpage\left(1 - \frac{b}{\probpage}\right)^2 + (1 - \probpage)\right)\norm{h^{t} - \nabla f(x^{t})}^2 \\
-    &= \frac{2 \left(\probavailable - \probpairaa\right) \widehat{L}^2}{n \probavailable^2} \norm{x^{t+1} - x^{t}}^2 + \frac{1 - \probpage}{n^2 \probavailable B^2}\sum_{i=1}^n\ExpSub{B}{\sum_{j \in I^t_i}\norm{\left(\nabla f_{ij}(x^{t+1}) - \nabla f_{ij}(x^{t})\right) - \left(\nabla f_i(x^{t+1}) - \nabla f_i(x^{t})\right)}^2}\\
-    &\quad + \frac{2\left(\probavailable - \probpairaa\right) b^2}{n^2 \probavailable^2 \probpage}\sum_{i=1}^n\norm{ h^t_i - \nabla f_i(x^{t})}^2 + \left(\probpage\left(1 - \frac{b}{\probpage}\right)^2 + (1 - \probpage)\right)\norm{h^{t} - \nabla f(x^{t})}^2 \\
-    &= \frac{2 \left(\probavailable - \probpairaa\right) \widehat{L}^2}{n \probavailable^2} \norm{x^{t+1} - x^{t}}^2 + \frac{1 - \probpage}{n^2 \probavailable B m}\sum_{i=1}^n \sum_{j=1}^m \norm{\left(\nabla f_{ij}(x^{t+1}) - \nabla f_{ij}(x^{t})\right) - \left(\nabla f_i(x^{t+1}) - \nabla f_i(x^{t})\right)}^2\\
-    &\quad + \frac{2\left(\probavailable - \probpairaa\right) b^2}{n^2 \probavailable^2 \probpage}\sum_{i=1}^n\norm{ h^t_i - \nabla f_i(x^{t})}^2 + \left(\probpage\left(1 - \frac{b}{\probpage}\right)^2 + (1 - \probpage)\right)\norm{h^{t} - \nabla f(x^{t})}^2 \\
-    &\leq \frac{2 \left(\probavailable - \probpairaa\right) \widehat{L}^2}{n \probavailable^2} \norm{x^{t+1} - x^{t}}^2 + \frac{1 - \probpage}{n^2 \probavailable B m}\sum_{i=1}^n \sum_{j=1}^m \norm{\nabla f_{ij}(x^{t+1}) - \nabla f_{ij}(x^{t})}^2\\
-    &\quad + \frac{2\left(\probavailable - \probpairaa\right) b^2}{n^2 \probavailable^2 \probpage}\sum_{i=1}^n\norm{ h^t_i - \nabla f_i(x^{t})}^2 + \left(\probpage\left(1 - \frac{b}{\probpage}\right)^2 + (1 - \probpage)\right)\norm{h^{t} - \nabla f(x^{t})}^2 \\
-  \end{align*}
-  We conclude the proof of the first inequality considering Assumption~\ref{ass:max_lipschitz_constant}:
-  \begin{align*}
-    &\ExpSub{B}{\ExpSub{\probavailable}{\ExpSub{\probpage}{\norm{h^{t+1} - \nabla f(x^{t+1})}^2}}} \\
-    &\leq \left(\frac{2 \left(\probavailable - \probpairaa\right) \widehat{L}^2}{n \probavailable^2} + \frac{(1 - \probpage)L_{\max}^2}{n \probavailable B}\right) \norm{x^{t+1} - x^{t}}^2\\
+    &\leq\left(\frac{2 \left(\probavailable - \probpairaa\right) \widehat{L}^2}{n \probavailable^2} + \frac{(1 - \probpage)L_{\max}^2}{n \probavailable B}\right) \norm{x^{t+1} - x^{t}}^2\\
     &\quad + \frac{2\left(\probavailable - \probpairaa\right) b^2}{n^2 \probavailable^2 \probpage}\sum_{i=1}^n\norm{ h^t_i - \nabla f_i(x^{t})}^2 + \left(\probpage\left(1 - \frac{b}{\probpage}\right)^2 + (1 - \probpage)\right)\norm{h^{t} - \nabla f(x^{t})}^2.
   \end{align*}
   The proof of the second inequality almost repeats the previous one:
