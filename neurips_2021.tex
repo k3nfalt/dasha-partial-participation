@@ -1100,13 +1100,15 @@ $h^{t+1}_{1} \eqdef \frac{1}{n}\sum_{i=1}^n h^{t+1}_{i,1},$ and $h^{t+1}_{2} \eq
 \subsection{Proof for \algname{DASHA-PP-FINITE-MVR}}
 
 \begin{lemma}
+  \label{lemma:finite_mvr}
   Suppose that Assumptions \ref{ass:nodes_lipschitz_constant}, \ref{ass:max_lipschitz_constant}, and \ref{ass:partial_participation} hold. For $h^{t+1}_i$, $h^{t+1}_{ij}$ and $k^{t+1}_i$ from Algorithm~\ref{alg:main_algorithm} (\algname{DASHA-PP-FINITE-MVR}) we have
   \begin{enumerate}
   \item
       \begin{align*}
           &\ExpSub{B}{\ExpSub{\probavailable}{\norm{h^{t+1} - \nabla f(x^{t+1})}^2}} \\
           & \leq \left(\frac{2 L_{\max}^2}{n \probavailable B} + \frac{2 \left(\probavailable - \probpairaa\right) \widehat{L}^2}{n \probavailable^2}\right)\norm{x^{t+1} - x^{t}}^2  \\
-          &\quad + \frac{2\left(\probavailable - \probpairaa\right)b^2}{n^2 \probavailable^2}\sum_{i=1}^n\norm{h^t_{i} - \nabla f_{i}(x^{t})}^2 + \frac{2b^2}{n^2 \probavailable B m}\sum_{i=1}^n\sum_{j=1}^m\norm{h^t_{ij} - \nabla f_{ij}(x^{t})}^2.
+          &\quad + \frac{2\left(\probavailable - \probpairaa\right)b^2}{n^2 \probavailable^2}\sum_{i=1}^n\norm{h^t_{i} - \nabla f_{i}(x^{t})}^2 + \frac{2b^2}{n^2 \probavailable B m}\sum_{i=1}^n\sum_{j=1}^m\norm{h^t_{ij} - \nabla f_{ij}(x^{t})}^2 \\
+          &+ (1 - b)^2\norm{h^{t} - \nabla f(x^{t})}^2.
       \end{align*}
   \item
       \begin{align*}
@@ -1129,25 +1131,6 @@ $h^{t+1}_{1} \eqdef \frac{1}{n}\sum_{i=1}^n h^{t+1}_{i,1},$ and $h^{t+1}_{2} \eq
   \end{enumerate}
 \end{lemma}
 
-% \begin{flalign*}
-%   \begin{rcases}
-%     \textnormal{Generate a random set $I^t_i$ of size $B$ from $[m]$ \textit{without replacement}}\\
-%     k^{t+1}_{ij} = \begin{cases}
-%       \frac{m}{B}\left(\nabla f_{ij}(x^{t+1}) - \nabla f_{ij}(x^{t}) - b \left(h^t_{ij} - \nabla f_{ij}(x^{t})\right)\right), & j \in I^t_i  \\
-%       0, & j \not\in I^t_i
-%     \end{cases} \\
-%     h^{t+1}_{ij} = h^t_{ij} + \frac{1}{\probavailable} k^{t+1}_{ij} \\
-%     k^{t+1}_i = \frac{1}{m}\sum_{j=1}^m k^{t+1}_{ij} \\
-%   \end{rcases} \textnormal{(\algname{DASHA-PP-FINITE-MVR})} &&
-% \end{flalign*} 
-% \begin{flalign*}
-%   \begin{rcases}
-%     k^{t+1}_i = \frac{1}{B}\sum_{j=1}^B \nabla f_i(x^{t+1};\xi^{t+1}_{ij}) - \frac{1}{B}\sum_{j=1}^B \nabla f_i(x^{t};\xi^{t+1}_{ij}) \\
-%     \qquad\qquad - b \left(h^t_i - \frac{1}{B}\sum_{j=1}^B \nabla f_i(x^{t};\xi^{t+1}_{ij})\right) \Bigg. 
-%   \end{rcases} \textnormal{(\algname{DASHA-PP-MVR})}&&
-% \end{flalign*}
-%     \STATE $h^{t+1}_i = h^t_i + \frac{1}{\probavailable}k^{t+1}_i$ 
-
 \begin{proof}
   We start by proving the first inequality. Note that
   \begin{align*}
@@ -1165,24 +1148,30 @@ $h^{t+1}_{1} \eqdef \frac{1}{n}\sum_{i=1}^n h^{t+1}_{i,1},$ and $h^{t+1}_{2} \eq
   \begin{align*}
     &\ExpSub{B}{\ExpSub{\probavailable}{\norm{h^{t+1} - \nabla f(x^{t+1})}^2}} \\
     &\leq \frac{1}{n^2 \probavailable}\sum_{i=1}^n\ExpSub{B}{\norm{k^{t+1}_i - \ExpSub{B}{k^{t+1}_i}}^2} +\frac{\probavailable - \probpairaa}{n^2 \probavailable^2}\sum_{i=1}^n\norm{\ExpSub{B}{k^{t+1}_i}}^2 \\
+    &\quad + (1 - b)^2\norm{h^{t} - \nabla f(x^{t})}^2\\
     &= \frac{1}{n^2 \probavailable}\sum_{i=1}^n\ExpSub{B}{\norm{\frac{1}{m}\sum_{j=1}^m k^{t+1}_{ij} - \left(\nabla f_{i}(x^{t+1}) - \nabla f_{i}(x^{t}) - b \left(h^t_{i} - \nabla f_{i}(x^{t})\right)\right)}^2} \\
-    &\quad +\frac{\probavailable - \probpairaa}{n^2 \probavailable^2}\sum_{i=1}^n\norm{\nabla f_{i}(x^{t+1}) - \nabla f_{i}(x^{t}) - b \left(h^t_{i} - \nabla f_{i}(x^{t})\right)}^2.
+    &\quad +\frac{\probavailable - \probpairaa}{n^2 \probavailable^2}\sum_{i=1}^n\norm{\nabla f_{i}(x^{t+1}) - \nabla f_{i}(x^{t}) - b \left(h^t_{i} - \nabla f_{i}(x^{t})\right)}^2 \\
+    &\quad + (1 - b)^2\norm{h^{t} - \nabla f(x^{t})}^2.
   \end{align*}
   Next, we again use Lemma~\ref{lemma:sampling} with $r_i = 0,$ $s_i = \nabla f_{ij}(x^{t+1}) - \nabla f_{ij}(x^{t}) - b \left(h^t_{ij} - \nabla f_{ij}(x^{t})\right), $ $\probavailable = \frac{B}{m},$ and $\probpairaa = \frac{B(B-1)}{m(m-1)}$:
   \begin{align*}
     &\ExpSub{B}{\ExpSub{\probavailable}{\norm{h^{t+1} - \nabla f(x^{t+1})}^2}} \\
     &\leq \frac{1}{n^2 \probavailable}\sum_{i=1}^n\left(\frac{m - B}{B m (m - 1)}\sum_{j=1}^m\norm{\nabla f_{ij}(x^{t+1}) - \nabla f_{ij}(x^{t}) - b \left(h^t_{ij} - \nabla f_{ij}(x^{t})\right)}^2\right) \\
     &\quad +\frac{\probavailable - \probpairaa}{n^2 \probavailable^2}\sum_{i=1}^n\norm{\nabla f_{i}(x^{t+1}) - \nabla f_{i}(x^{t}) - b \left(h^t_{i} - \nabla f_{i}(x^{t})\right)}^2 \\
+    &\quad + (1 - b)^2\norm{h^{t} - \nabla f(x^{t})}^2\\
     &\leq \frac{1}{n^2 \probavailable B m}\sum_{i=1}^n\sum_{j=1}^m\norm{\nabla f_{ij}(x^{t+1}) - \nabla f_{ij}(x^{t}) - b \left(h^t_{ij} - \nabla f_{ij}(x^{t})\right)}^2 \\
     &\quad +\frac{\probavailable - \probpairaa}{n^2 \probavailable^2}\sum_{i=1}^n\norm{\nabla f_{i}(x^{t+1}) - \nabla f_{i}(x^{t}) - b \left(h^t_{i} - \nabla f_{i}(x^{t})\right)}^2 \\
+    &\quad + (1 - b)^2\norm{h^{t} - \nabla f(x^{t})}^2\\
     &\overset{\eqref{auxiliary:jensen_inequality}}{\leq} \frac{2}{n^2 \probavailable B m}\sum_{i=1}^n\sum_{j=1}^m\norm{\nabla f_{ij}(x^{t+1}) - \nabla f_{ij}(x^{t})}^2 + \frac{2b^2}{n^2 \probavailable B m}\sum_{i=1}^n\sum_{j=1}^m\norm{h^t_{ij} - \nabla f_{ij}(x^{t})}^2 \\
-    &\quad +\frac{2 \left(\probavailable - \probpairaa\right)}{n^2 \probavailable^2}\sum_{i=1}^n\norm{\nabla f_{i}(x^{t+1}) - \nabla f_{i}(x^{t})}^2 + \frac{2\left(\probavailable - \probpairaa\right)b^2}{n^2 \probavailable^2}\sum_{i=1}^n\norm{h^t_{i} - \nabla f_{i}(x^{t})}^2.
+    &\quad +\frac{2 \left(\probavailable - \probpairaa\right)}{n^2 \probavailable^2}\sum_{i=1}^n\norm{\nabla f_{i}(x^{t+1}) - \nabla f_{i}(x^{t})}^2 + \frac{2\left(\probavailable - \probpairaa\right)b^2}{n^2 \probavailable^2}\sum_{i=1}^n\norm{h^t_{i} - \nabla f_{i}(x^{t})}^2 \\
+    &\quad + (1 - b)^2\norm{h^{t} - \nabla f(x^{t})}^2.
   \end{align*}
   Due to Assumptions \ref{ass:nodes_lipschitz_constant} and \ref{ass:max_lipschitz_constant}, we have
   \begin{align*}
     &\ExpSub{B}{\ExpSub{\probavailable}{\norm{h^{t+1} - \nabla f(x^{t+1})}^2}} \\
     &\leq \left(\frac{2 L_{\max}^2}{n \probavailable B} + \frac{2 \left(\probavailable - \probpairaa\right) \widehat{L}^2}{n \probavailable^2}\right)\norm{x^{t+1} - x^{t}}^2  \\
-    &\quad + \frac{2\left(\probavailable - \probpairaa\right)b^2}{n^2 \probavailable^2}\sum_{i=1}^n\norm{h^t_{i} - \nabla f_{i}(x^{t})}^2 + \frac{2b^2}{n^2 \probavailable B m}\sum_{i=1}^n\sum_{j=1}^m\norm{h^t_{ij} - \nabla f_{ij}(x^{t})}^2.
+    &\quad + \frac{2\left(\probavailable - \probpairaa\right)b^2}{n^2 \probavailable^2}\sum_{i=1}^n\norm{h^t_{i} - \nabla f_{i}(x^{t})}^2 + \frac{2b^2}{n^2 \probavailable B m}\sum_{i=1}^n\sum_{j=1}^m\norm{h^t_{ij} - \nabla f_{ij}(x^{t})}^2 \\
+    &\quad + (1 - b)^2\norm{h^{t} - \nabla f(x^{t})}^2.
   \end{align*}
   Let us get the bound for the second inequality:
   \begin{align*}
@@ -1249,6 +1238,135 @@ $h^{t+1}_{1} \eqdef \frac{1}{n}\sum_{i=1}^n h^{t+1}_{i,1},$ and $h^{t+1}_{2} \eq
     &\quad + \frac{2 b^2}{B m}\sum_{j=1}^m\norm{h^t_{ij} - \nabla f_{ij}(x^{t})}^2 + 2 b^2 \norm{h^t_i - \nabla f_i(x^{t})}^2,
   \end{align*}
   where we used Assumptions \ref{ass:nodes_lipschitz_constant} and \ref{ass:max_lipschitz_constant}.
+\end{proof}
+
+\begin{proof}
+  Let us fix constants $\nu, \rho, \delta \in [0,\infty)$ that we will define later. Considering Lemma~\ref{lemma:main_lemma}, Lemma~\ref{lemma:finite_mvr}, and the law of total expectation, we obtain
+    \begin{align*}
+      &\Exp{f(x^{t + 1})} + \frac{\gamma (2 \omega + 1)}{\probavailable} \Exp{\norm{g^{t+1} - h^{t+1}}^2} + \frac{\gamma (\left(2 \omega + 1\right)\probavailable - \probpairaa)}{n \probavailable^2} \Exp{\frac{1}{n}\sum_{i=1}^n\norm{g^{t+1}_i - h^{t+1}_i}^2}\\
+      &\quad  + \nu \Exp{\norm{h^{t+1} - \nabla f(x^{t+1})}^2} + \rho \Exp{\frac{1}{n}\sum_{i=1}^n\norm{h^{t+1}_i - \nabla f_i(x^{t+1})}^2}\\
+      &\quad + \delta \Exp{\frac{1}{nm}\sum_{i=1}^n\sum_{j=1}^m\norm{h^{t+1}_{ij} - \nabla f_{ij}(x^{t+1})}^2} \\
+      &\leq \Exp{f(x^t) - \frac{\gamma}{2}\norm{\nabla f(x^t)}^2 - \left(\frac{1}{2\gamma} - \frac{L}{2}\right)
+      \norm{x^{t+1} - x^t}^2 + \gamma \norm{h^{t} - \nabla f(x^t)}^2}\nonumber\\
+      &\quad + \frac{\gamma (2 \omega + 1)}{\probavailable}\Exp{\norm{g^{t} - h^t}^2}+ \frac{\gamma (\left(2 \omega + 1\right)\probavailable - \probpairaa)}{n \probavailable^2}\Exp{\frac{1}{n} \sum_{i=1}^n\norm{g^t_i - h^{t}_i}^2} \\
+      &\quad + \frac{4 \gamma \omega (2 \omega + 1)}{n \probavailable^2} \Exp{\frac{1}{n} \sum_{i=1}^n\norm{k^{t+1}_i}^2} \\
+      &\quad  + \nu \Exp{\norm{h^{t+1} - \nabla f(x^{t+1})}^2} + \rho \Exp{\frac{1}{n}\sum_{i=1}^n\norm{h^{t+1}_i - \nabla f_i(x^{t+1})}^2}\\
+      &\quad + \delta \Exp{\frac{1}{nm}\sum_{i=1}^n\sum_{j=1}^m\norm{h^{t+1}_{ij} - \nabla f_{ij}(x^{t+1})}^2} \\
+      &= \Exp{f(x^t) - \frac{\gamma}{2}\norm{\nabla f(x^t)}^2 - \left(\frac{1}{2\gamma} - \frac{L}{2}\right)
+      \norm{x^{t+1} - x^t}^2 + \gamma \norm{h^{t} - \nabla f(x^t)}^2}\nonumber\\
+      &\quad + \frac{\gamma (2 \omega + 1)}{\probavailable}\Exp{\norm{g^{t} - h^t}^2}+ \frac{\gamma (\left(2 \omega + 1\right)\probavailable - \probpairaa)}{n \probavailable^2}\Exp{\frac{1}{n} \sum_{i=1}^n\norm{g^t_i - h^{t}_i}^2} \\
+      &\quad + \frac{4 \gamma \omega (2 \omega + 1)}{n \probavailable^2} \Exp{\ExpSub{B}{\frac{1}{n} \sum_{i=1}^n\norm{k^{t+1}_i}^2}} \\
+      &\quad  + \nu \Exp{\ExpSub{B}{\ExpSub{\probavailable}{\norm{h^{t+1} - \nabla f(x^{t+1})}^2}}} \\
+      &\quad + \rho \Exp{\ExpSub{B}{\ExpSub{\probavailable}{\frac{1}{n}\sum_{i=1}^n\norm{h^{t+1}_i - \nabla f_i(x^{t+1})}^2}}}\\
+      &\quad + \delta \Exp{\ExpSub{B}{\ExpSub{\probavailable}{\frac{1}{nm}\sum_{i=1}^n\sum_{j=1}^m\norm{h^{t+1}_{ij} - \nabla f_{ij}(x^{t+1})}^2}}} \\
+      &\leq \Exp{f(x^t) - \frac{\gamma}{2}\norm{\nabla f(x^t)}^2 - \left(\frac{1}{2\gamma} - \frac{L}{2}\right)
+      \norm{x^{t+1} - x^t}^2 + \gamma \norm{h^{t} - \nabla f(x^t)}^2}\nonumber\\
+      &\quad + \frac{\gamma (2 \omega + 1)}{\probavailable}\Exp{\norm{g^{t} - h^t}^2}+ \frac{\gamma (\left(2 \omega + 1\right)\probavailable - \probpairaa)}{n \probavailable^2}\Exp{\frac{1}{n} \sum_{i=1}^n\norm{g^t_i - h^{t}_i}^2} \\
+      &\quad + \frac{4 \gamma \omega (2 \omega + 1)}{n \probavailable^2} \Exp{\left(\frac{2 L_{\max}^2}{B} + 2 \widehat{L}^2\right)\norm{x^{t+1} - x^{t}}^2 + \frac{2 b^2}{B m n}\sum_{i=1}^n \sum_{j=1}^m\norm{h^t_{ij} - \nabla f_{ij}(x^{t})}^2 + \frac{2 b^2}{n} \sum_{i=1}^n \norm{h^t_i - \nabla f_i(x^{t})}^2} \\
+      &\quad  + \nu {\rm E}\Bigg(\left(\frac{2 L_{\max}^2}{n \probavailable B} + \frac{2 \left(\probavailable - \probpairaa\right) \widehat{L}^2}{n \probavailable^2}\right)\norm{x^{t+1} - x^{t}}^2  \\
+      &\qquad\quad + \frac{2\left(\probavailable - \probpairaa\right)b^2}{n^2 \probavailable^2}\sum_{i=1}^n\norm{h^t_{i} - \nabla f_{i}(x^{t})}^2 + \frac{2b^2}{n^2 \probavailable B m}\sum_{i=1}^n\sum_{j=1}^m\norm{h^t_{ij} - \nabla f_{ij}(x^{t})}^2\\
+      &\qquad\quad + (1 - b)^2\norm{h^{t} - \nabla f(x^{t})}^2\Bigg) \\
+      &\quad + \rho {\rm E}\Bigg(\left(\frac{2 L_{\max}^2}{\probavailable B} +\frac{2(1 - \probavailable) \widehat{L}^2}{\probavailable}\right) \norm{x^{t+1} - x^{t}}^2 \\
+      &\qquad\quad + \frac{2 b^2}{\probavailable B n m} \sum_{i=1}^n \sum_{j=1}^m\norm{h^t_{ij} - \nabla f_{ij}(x^{t})}^2 +\left(\frac{2 \left(1 - \probavailable\right) b^2}{\probavailable} + (1 - b)^2\right) \frac{1}{n} \sum_{i=1}^n \norm{h^{t}_i - \nabla f_i(x^{t})}^2\Bigg)\\
+      &\quad + \delta {\rm E}\Bigg(\frac{2\left(1 - \frac{\probavailable B}{m}\right) L_{\max}^2}{\frac{\probavailable B}{m}} \norm{x^{t+1} - x^{t}}^2 \\
+      &\qquad\quad + \left(\frac{2\left(1 - \frac{\probavailable B}{m}\right) b^2}{\frac{\probavailable B}{m}} + (1 - b)^2\right) \frac{1}{nm} \sum_{i=1}^n \sum_{j=1}^m \norm{h^t_{ij} - \nabla f_{ij}(x^{t})}^2\Bigg).\\
+    \end{align*}
+    Due to $b = \frac{\frac{\probavailable B}{m}}{2 - \frac{\probavailable B}{m}} \leq \frac{\probavailable}{2 - \probavailable},$ we have 
+    $$\left(\frac{2\left(1 - \frac{\probavailable B}{m}\right) b^2}{\frac{\probavailable B}{m}} + (1 - b)^2\right) \leq 1 - b$$
+    and
+    $$\left(\frac{2 \left(1 - \probavailable\right) b^2}{\probavailable} + (1 - b)^2\right) \leq 1 - b.$$
+    Moreover, we consider $1 - \frac{\probavailable B}{m} \leq 1,$ therefore
+    \begin{align*}
+      &\Exp{f(x^{t + 1})} + \frac{\gamma (2 \omega + 1)}{\probavailable} \Exp{\norm{g^{t+1} - h^{t+1}}^2} + \frac{\gamma (\left(2 \omega + 1\right)\probavailable - \probpairaa)}{n \probavailable^2} \Exp{\frac{1}{n}\sum_{i=1}^n\norm{g^{t+1}_i - h^{t+1}_i}^2}\\
+      &\quad  + \nu \Exp{\norm{h^{t+1} - \nabla f(x^{t+1})}^2} + \rho \Exp{\frac{1}{n}\sum_{i=1}^n\norm{h^{t+1}_i - \nabla f_i(x^{t+1})}^2}\\
+      &\quad + \delta \Exp{\frac{1}{nm}\sum_{i=1}^n\sum_{j=1}^m\norm{h^{t+1}_{ij} - \nabla f_{ij}(x^{t+1})}^2} \\
+      &\leq \Exp{f(x^t) - \frac{\gamma}{2}\norm{\nabla f(x^t)}^2 - \left(\frac{1}{2\gamma} - \frac{L}{2}\right)
+      \norm{x^{t+1} - x^t}^2 + \gamma \norm{h^{t} - \nabla f(x^t)}^2}\nonumber\\
+      &\quad + \frac{\gamma (2 \omega + 1)}{\probavailable}\Exp{\norm{g^{t} - h^t}^2}+ \frac{\gamma (\left(2 \omega + 1\right)\probavailable - \probpairaa)}{n \probavailable^2}\Exp{\frac{1}{n} \sum_{i=1}^n\norm{g^t_i - h^{t}_i}^2} \\
+      &\quad + \frac{4 \gamma \omega (2 \omega + 1)}{n \probavailable^2} \Exp{\left(\frac{2 L_{\max}^2}{B} + 2 \widehat{L}^2\right)\norm{x^{t+1} - x^{t}}^2 + \frac{2 b^2}{B m n}\sum_{i=1}^n \sum_{j=1}^m\norm{h^t_{ij} - \nabla f_{ij}(x^{t})}^2 + \frac{2 b^2}{n} \sum_{i=1}^n \norm{h^t_i - \nabla f_i(x^{t})}^2} \\
+      &\quad  + \nu {\rm E}\Bigg(\left(\frac{2 L_{\max}^2}{n \probavailable B} + \frac{2 \left(\probavailable - \probpairaa\right) \widehat{L}^2}{n \probavailable^2}\right)\norm{x^{t+1} - x^{t}}^2  \\
+      &\qquad\quad + \frac{2\left(\probavailable - \probpairaa\right)b^2}{n^2 \probavailable^2}\sum_{i=1}^n\norm{h^t_{i} - \nabla f_{i}(x^{t})}^2 + \frac{2b^2}{n^2 \probavailable B m}\sum_{i=1}^n\sum_{j=1}^m\norm{h^t_{ij} - \nabla f_{ij}(x^{t})}^2 \\
+      &\qquad\quad + (1 - b)^2\norm{h^{t} - \nabla f(x^{t})}^2\Bigg) \\
+      &\quad + \rho {\rm E}\Bigg(\left(\frac{2 L_{\max}^2}{\probavailable B} +\frac{2(1 - \probavailable) \widehat{L}^2}{\probavailable}\right) \norm{x^{t+1} - x^{t}}^2 \\
+      &\qquad\quad + \frac{2 b^2}{\probavailable B n m} \sum_{i=1}^n \sum_{j=1}^m\norm{h^t_{ij} - \nabla f_{ij}(x^{t})}^2 +\left(1 - b\right) \frac{1}{n} \sum_{i=1}^n \norm{h^{t}_i - \nabla f_i(x^{t})}^2\Bigg)\\
+      &\quad + \delta {\rm E}\Bigg(\frac{2 m L_{\max}^2}{\probavailable B} \norm{x^{t+1} - x^{t}}^2 + \left(1 - b\right) \frac{1}{nm} \sum_{i=1}^n \sum_{j=1}^m \norm{h^t_{ij} - \nabla f_{ij}(x^{t})}^2\Bigg).
+    \end{align*}
+
+    After rearranging the terms, we get
+    \begin{align*}
+      &\Exp{f(x^{t + 1})} + \frac{\gamma (2 \omega + 1)}{\probavailable} \Exp{\norm{g^{t+1} - h^{t+1}}^2} + \frac{\gamma (\left(2 \omega + 1\right)\probavailable - \probpairaa)}{n \probavailable^2} \Exp{\frac{1}{n}\sum_{i=1}^n\norm{g^{t+1}_i - h^{t+1}_i}^2}\\
+      &\quad  + \nu \Exp{\norm{h^{t+1} - \nabla f(x^{t+1})}^2} + \rho \Exp{\frac{1}{n}\sum_{i=1}^n\norm{h^{t+1}_i - \nabla f_i(x^{t+1})}^2}\\
+      &\quad + \delta \Exp{\frac{1}{nm}\sum_{i=1}^n\sum_{j=1}^m\norm{h^{t+1}_{ij} - \nabla f_{ij}(x^{t+1})}^2} \\
+      &\leq \Exp{f(x^t)} - \frac{\gamma}{2}\Exp{\norm{\nabla f(x^t)}^2} \\
+      &\quad + \frac{\gamma (2 \omega + 1)}{\probavailable} \Exp{\norm{g^{t} - h^{t}}^2} + \frac{\gamma (\left(2 \omega + 1\right)\probavailable - \probpairaa)}{n \probavailable^2} \Exp{\frac{1}{n}\sum_{i=1}^n\norm{g^{t}_i - h^{t}_i}^2} \\
+      &\quad - \Bigg(\frac{1}{2\gamma} - \frac{L}{2} - \frac{4 \gamma \omega (2 \omega + 1)}{n \probavailable^2} \left(\frac{2 L_{\max}^2}{B} + 2 \widehat{L}^2\right) \\
+      &\qquad\quad - \nu\left(\frac{2 L_{\max}^2}{n \probavailable B} + \frac{2 \left(\probavailable - \probpairaa\right) \widehat{L}^2}{n \probavailable^2}\right) - \rho \left(\frac{2 L_{\max}^2}{\probavailable B} +\frac{2(1 - \probavailable) \widehat{L}^2}{\probavailable}\right) - \delta \frac{2 m L_{\max}^2}{\probavailable B} \Bigg) \Exp{\norm{x^{t+1} - x^t}^2} \\
+      &\quad + \left(\gamma + \nu \left(1 - b\right)^2\right) \Exp{\norm{h^{t} - \nabla f(x^{t})}^2} \\
+      &\quad + \Bigg(\frac{8 b^2 \gamma \omega (2 \omega + 1)}{n \probavailable^2} + \frac{2 \nu \left(\probavailable - \probpairaa\right) b^2}{n \probavailable^2} + \rho \left(1 - b\right)\Bigg)\Exp{\frac{1}{n}\sum_{i=1}^n\norm{h^{t}_i - \nabla f_i(x^{t})}^2} \\
+      &\quad + \Bigg(\frac{8 b^2 \gamma \omega (2 \omega + 1)}{n \probavailable^2 B} + \frac{2 \nu b^2}{n \probavailable B} + \frac{2 \rho b^2}{\probavailable B} + \delta \left(1 - b\right)\Bigg)\Exp{\frac{1}{nm}\sum_{i=1}^n\sum_{j=1}^m\norm{h^{t}_{ij} - \nabla f_{ij}(x^{t})}^2}.
+    \end{align*}
+    Due to $b = \frac{\probpage \probavailable}{2 - \probavailable} \leq \probpage,$ one can show that $\left(\probpage\left(1 - \frac{b}{\probpage}\right)^2 + (1 - \probpage)\right) \leq 1 - b.$ 
+    Thus, if we take $\nu = \frac{\gamma}{b},$ then
+    $$\left(\gamma + \nu \left(\probpage\left(1 - \frac{b}{\probpage}\right)^2 + (1 - \probpage)\right)\right) \leq \gamma + \nu (1 - b) = \nu,$$ therefore
+    \begin{align*}
+      &\Exp{f(x^{t + 1})} + \frac{\gamma (2 \omega + 1)}{\probavailable} \Exp{\norm{g^{t+1} - h^{t+1}}^2} + \frac{\gamma (\left(2 \omega + 1\right)\probavailable - \probpairaa)}{n \probavailable^2} \Exp{\frac{1}{n}\sum_{i=1}^n\norm{g^{t+1}_i - h^{t+1}_i}^2}\\
+      &\quad  + \frac{\gamma}{b} \Exp{\norm{h^{t+1} - \nabla f(x^{t+1})}^2} + \rho \Exp{\frac{1}{n}\sum_{i=1}^n\norm{h^{t+1}_i - \nabla f_i(x^{t+1})}^2}\\
+      &\leq \Exp{f(x^t)} - \frac{\gamma}{2}\Exp{\norm{\nabla f(x^t)}^2} \\
+      &\quad + \frac{\gamma (2 \omega + 1)}{\probavailable} \Exp{\norm{g^{t} - h^{t}}^2} + \frac{\gamma (\left(2 \omega + 1\right)\probavailable - \probpairaa)}{n \probavailable^2} \Exp{\frac{1}{n}\sum_{i=1}^n\norm{g^{t}_i - h^{t}_i}^2} \\
+      &\quad - \Bigg(\frac{1}{2\gamma} - \frac{L}{2} - \frac{4 \gamma \omega (2 \omega + 1)}{n \probavailable^2} \left(2 \widehat{L}^2 + \frac{(1 - \probpage)L_{\max}^2}{B}\right) \\
+      &\qquad\quad - \frac{\gamma}{b}\left(\frac{2 \left(\probavailable - \probpairaa\right) \widehat{L}^2}{n \probavailable^2} + \frac{(1 - \probpage)L_{\max}^2}{n \probavailable B}\right) - \rho \left(\frac{2\left(1 - \probavailable\right)\widehat{L}^2}{\probavailable} + \frac{(1 - \probpage)L_{\max}^2}{\probavailable B}\right)\Bigg) \Exp{\norm{x^{t+1} - x^t}^2} \\
+      &\quad + \frac{\gamma}{b}\Exp{\norm{h^{t} - \nabla f(x^{t})}^2} \\
+      &\quad + \Bigg(\frac{8 b^2 \gamma \omega (2 \omega + 1)}{n \probavailable^2 \probpage} + \frac{2 \gamma \left(\probavailable - \probpairaa\right) b}{n \probavailable^2 \probpage} \\
+      &\qquad\quad+ \rho \left(\frac{2\left(1 - \probavailable\right)b^2}{\probavailable \probpage} + \probpage\left(1 - \frac{b}{\probpage}\right)^2 + (1 - \probpage)\right)\Bigg)\Exp{\frac{1}{n}\sum_{i=1}^n\norm{h^{t}_i - \nabla f_i(x^{t})}^2}.
+    \end{align*}
+    Next, with the choice of $b = \frac{\probpage \probavailable}{2 - \probavailable},$ we ensure that
+    $$\left(\frac{2\left(1 - \probavailable\right)b^2}{\probavailable \probpage} + \probpage\left(1 - \frac{b}{\probpage}\right)^2 + (1 - \probpage)\right) \leq 1 - b.$$ If we take $\rho = \frac{8 b \gamma \omega (2 \omega + 1)}{n \probavailable^2 \probpage} + \frac{2 \gamma \left(\probavailable - \probpairaa\right)}{n \probavailable^2 \probpage},$ then
+    $$\Bigg(\frac{8 b^2 \gamma \omega (2 \omega + 1)}{n \probavailable^2 \probpage} + \frac{2 \gamma \left(\probavailable - \probpairaa\right) b}{n \probavailable^2 \probpage}+ \rho \left(\frac{2\left(1 - \probavailable\right)b^2}{\probavailable \probpage} + \probpage\left(1 - \frac{b}{\probpage}\right)^2 + (1 - \probpage)\right)\Bigg) \leq \rho,$$ therefore
+    \begin{align*}
+      &\Exp{f(x^{t + 1})} + \frac{\gamma (2 \omega + 1)}{\probavailable} \Exp{\norm{g^{t+1} - h^{t+1}}^2} + \frac{\gamma (\left(2 \omega + 1\right)\probavailable - \probpairaa)}{n \probavailable^2} \Exp{\frac{1}{n}\sum_{i=1}^n\norm{g^{t+1}_i - h^{t+1}_i}^2}\\
+      &\quad  + \frac{\gamma}{b} \Exp{\norm{h^{t+1} - \nabla f(x^{t+1})}^2} + \left(\frac{8 b \gamma \omega (2 \omega + 1)}{n \probavailable^2 \probpage} + \frac{2 \gamma \left(\probavailable - \probpairaa\right)}{n \probavailable^2 \probpage}\right) \Exp{\frac{1}{n}\sum_{i=1}^n\norm{h^{t+1}_i - \nabla f_i(x^{t+1})}^2}\\
+      &\leq \Exp{f(x^t)} - \frac{\gamma}{2}\Exp{\norm{\nabla f(x^t)}^2} \\
+      &\quad + \frac{\gamma (2 \omega + 1)}{\probavailable} \Exp{\norm{g^{t} - h^{t}}^2} + \frac{\gamma (\left(2 \omega + 1\right)\probavailable - \probpairaa)}{n \probavailable^2} \Exp{\frac{1}{n}\sum_{i=1}^n\norm{g^{t}_i - h^{t}_i}^2} \\
+      &\quad - \Bigg(\frac{1}{2\gamma} - \frac{L}{2} - \frac{4 \gamma \omega (2 \omega + 1)}{n \probavailable^2} \left(2 \widehat{L}^2 + \frac{(1 - \probpage)L_{\max}^2}{B}\right) \\
+      &\qquad\quad - \frac{\gamma}{b n \probavailable}\left(2 \left(1 - \frac{\probpairaa}{\probavailable}\right) \widehat{L}^2 + \frac{(1 - \probpage)L_{\max}^2}{B}\right) \\
+      &\qquad\quad- \left(\frac{8 b \gamma \omega (2 \omega + 1)}{n \probavailable^3 \probpage} + \frac{2 \gamma \left(1 - \frac{\probpairaa}{\probavailable}\right)}{n \probavailable^2 \probpage}\right) \left(2\left(1 - \probavailable\right)\widehat{L}^2 + \frac{(1 - \probpage)L_{\max}^2}{B}\right)\Bigg) \Exp{\norm{x^{t+1} - x^t}^2} \\
+      &\quad + \frac{\gamma}{b}\Exp{\norm{h^{t} - \nabla f(x^{t})}^2} + \left(\frac{8 b \gamma \omega (2 \omega + 1)}{n \probavailable^2 \probpage} + \frac{2 \gamma \left(\probavailable - \probpairaa\right)}{n \probavailable^2 \probpage}\right)\Exp{\frac{1}{n}\sum_{i=1}^n\norm{h^{t}_i - \nabla f_i(x^{t})}^2}.
+    \end{align*}
+    Let us simplify the inequality. First, due to $b \geq \frac{\probpage \probavailable}{2},$ we have
+    $$\frac{\gamma}{b n \probavailable}\left(2 \left(1 - \frac{\probpairaa}{\probavailable}\right) \widehat{L}^2 + \frac{(1 - \probpage)L_{\max}^2}{B}\right) \leq \frac{4 \gamma}{n \probavailable^2 \probpage}\left(\left(1 - \frac{\probpairaa}{\probavailable}\right) \widehat{L}^2 + \frac{(1 - \probpage)L_{\max}^2}{B}\right).$$
+    Second, due to $b \leq \probavailable \probpage$ and $\probpairaa \leq \probavailable^2$, we get
+    \begin{align*}
+      &\left(\frac{8 b \gamma \omega (2 \omega + 1)}{n \probavailable^3 \probpage} + \frac{2 \gamma \left(1 - \frac{\probpairaa}{\probavailable}\right)}{n \probavailable^2 \probpage}\right) \left(2\left(1 - \probavailable\right)\widehat{L}^2 + \frac{(1 - \probpage)L_{\max}^2}{B}\right) \\
+      &\leq \left(\frac{8 \gamma \omega (2 \omega + 1)}{n \probavailable^2} + \frac{2 \gamma \left(1 - \frac{\probpairaa}{\probavailable}\right)}{n \probavailable^2 \probpage}\right) \left(2\left(1 - \frac{\probpairaa}{\probavailable}\right)\widehat{L}^2 + \frac{(1 - \probpage)L_{\max}^2}{B}\right) \\
+      &\leq \frac{16 \gamma \omega (2 \omega + 1)}{n \probavailable^2} \left(\left(1 - \frac{\probpairaa}{\probavailable}\right)\widehat{L}^2 + \frac{(1 - \probpage)L_{\max}^2}{B}\right) \\
+      &\quad + \frac{4 \gamma \left(1 - \frac{\probpairaa}{\probavailable}\right)}{n \probavailable^2 \probpage} \left(\left(1 - \frac{\probpairaa}{\probavailable}\right)\widehat{L}^2 + \frac{(1 - \probpage)L_{\max}^2}{B}\right) \\
+      &\leq \frac{16 \gamma \omega (2 \omega + 1)}{n \probavailable^2} \left(\widehat{L}^2 + \frac{(1 - \probpage)L_{\max}^2}{B}\right) \\
+      &\quad + \frac{4 \gamma}{n \probavailable^2 \probpage} \left(\left(1 - \frac{\probpairaa}{\probavailable}\right)\widehat{L}^2 + \frac{(1 - \probpage)L_{\max}^2}{B}\right).
+    \end{align*}
+    Combining all bounds together, we obtain the following simplified inequality:
+    \begin{align*}
+      &\Exp{f(x^{t + 1})} + \frac{\gamma (2 \omega + 1)}{\probavailable} \Exp{\norm{g^{t+1} - h^{t+1}}^2} + \frac{\gamma (\left(2 \omega + 1\right)\probavailable - \probpairaa)}{n \probavailable^2} \Exp{\frac{1}{n}\sum_{i=1}^n\norm{g^{t+1}_i - h^{t+1}_i}^2}\\
+      &\quad  + \frac{\gamma}{b} \Exp{\norm{h^{t+1} - \nabla f(x^{t+1})}^2} + \left(\frac{8 b \gamma \omega (2 \omega + 1)}{n \probavailable^2 \probpage} + \frac{2 \gamma \left(\probavailable - \probpairaa\right)}{n \probavailable^2 \probpage}\right) \Exp{\frac{1}{n}\sum_{i=1}^n\norm{h^{t+1}_i - \nabla f_i(x^{t+1})}^2}\\
+      &\leq \Exp{f(x^t)} - \frac{\gamma}{2}\Exp{\norm{\nabla f(x^t)}^2} \\
+      &\quad + \frac{\gamma (2 \omega + 1)}{\probavailable} \Exp{\norm{g^{t} - h^{t}}^2} + \frac{\gamma (\left(2 \omega + 1\right)\probavailable - \probpairaa)}{n \probavailable^2} \Exp{\frac{1}{n}\sum_{i=1}^n\norm{g^{t}_i - h^{t}_i}^2} \\
+      &\quad - \Bigg(\frac{1}{2\gamma} - \frac{L}{2} - \frac{24 \gamma \omega (2 \omega + 1)}{n \probavailable^2} \left(\widehat{L}^2 + \frac{(1 - \probpage)L_{\max}^2}{B}\right) \\
+      &\qquad\quad - \frac{8 \gamma}{n \probavailable^2 \probpage} \left(\left(1 - \frac{\probpairaa}{\probavailable}\right)\widehat{L}^2 + \frac{(1 - \probpage)L_{\max}^2}{B}\right)\Bigg) \Exp{\norm{x^{t+1} - x^t}^2} \\
+      &\quad + \frac{\gamma}{b}\Exp{\norm{h^{t} - \nabla f(x^{t})}^2} + \left(\frac{8 b \gamma \omega (2 \omega + 1)}{n \probavailable^2 \probpage} + \frac{2 \gamma \left(\probavailable - \probpairaa\right)}{n \probavailable^2 \probpage}\right)\Exp{\frac{1}{n}\sum_{i=1}^n\norm{h^{t}_i - \nabla f_i(x^{t})}^2}.
+    \end{align*}
+    Using Lemma~\ref{lemma:gamma} and the assumption about $\gamma,$ we get
+    \begin{align*}
+      &\Exp{f(x^{t + 1})} + \frac{\gamma (2 \omega + 1)}{\probavailable} \Exp{\norm{g^{t+1} - h^{t+1}}^2} + \frac{\gamma (\left(2 \omega + 1\right)\probavailable - \probpairaa)}{n \probavailable^2} \Exp{\frac{1}{n}\sum_{i=1}^n\norm{g^{t+1}_i - h^{t+1}_i}^2}\\
+      &\quad  + \frac{\gamma}{b} \Exp{\norm{h^{t+1} - \nabla f(x^{t+1})}^2} + \left(\frac{8 b \gamma \omega (2 \omega + 1)}{n \probavailable^2 \probpage} + \frac{2 \gamma \left(\probavailable - \probpairaa\right)}{n \probavailable^2 \probpage}\right) \Exp{\frac{1}{n}\sum_{i=1}^n\norm{h^{t+1}_i - \nabla f_i(x^{t+1})}^2}\\
+      &\leq \Exp{f(x^t)} - \frac{\gamma}{2}\Exp{\norm{\nabla f(x^t)}^2} \\
+      &\quad + \frac{\gamma (2 \omega + 1)}{\probavailable} \Exp{\norm{g^{t} - h^{t}}^2} + \frac{\gamma (\left(2 \omega + 1\right)\probavailable - \probpairaa)}{n \probavailable^2} \Exp{\frac{1}{n}\sum_{i=1}^n\norm{g^{t}_i - h^{t}_i}^2} \\
+      &\quad + \frac{\gamma}{b}\Exp{\norm{h^{t} - \nabla f(x^{t})}^2} + \left(\frac{8 b \gamma \omega (2 \omega + 1)}{n \probavailable^2 \probpage} + \frac{2 \gamma \left(\probavailable - \probpairaa\right)}{n \probavailable^2 \probpage}\right)\Exp{\frac{1}{n}\sum_{i=1}^n\norm{h^{t}_i - \nabla f_i(x^{t})}^2}.
+    \end{align*}
+    It is left to apply Lemma~\ref{lemma:good_recursion} with 
+    \begin{eqnarray*}
+      \Psi^t &=& \frac{(2 \omega + 1)}{\probavailable} \Exp{\norm{g^{t} - h^{t}}^2} + \frac{(\left(2 \omega + 1\right)\probavailable - \probpairaa)}{n \probavailable^2} \Exp{\frac{1}{n}\sum_{i=1}^n\norm{g^{t}_i - h^{t}_i}^2} \\
+      &\quad& + \frac{1}{b}\Exp{\norm{h^{t} - \nabla f(x^{t})}^2} + \left(\frac{8 b \omega (2 \omega + 1)}{n \probavailable^2 \probpage} + \frac{2 \left(\probavailable - \probpairaa\right)}{n \probavailable^2 \probpage}\right)\Exp{\frac{1}{n}\sum_{i=1}^n\norm{h^{t}_i - \nabla f_i(x^{t})}^2}
+    \end{eqnarray*}
+    to conclude the proof.
 \end{proof}
 
 \subsection{Proof for \algname{DASHA-PP-MVR}}
