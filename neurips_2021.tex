@@ -374,16 +374,16 @@ This section provides a lemma that we regularly use in our proofs, and it is use
       \probpairaa \leq \probavailable^2,
     \end{align*}
   \end{enumerate}
-  where $\probavailable \in (0, 1]$ and $\probpairaa \in [0, 1].$ Let us take random \textit{independent} vectors $k_i \in \R^d$ for all $i \in [n]$ and random vectors
+  where $\probavailable \in (0, 1]$ and $\probpairaa \in [0, 1].$ Let us take random \textit{independent} vectors $s_i \in \R^d$ for all $i \in [n]$, nonrandom vector $r_i \in \R^d$ for all $i \in [n],$ and random vectors
   \begin{align*}
     v_i = \begin{cases}
-      \frac{1}{\probavailable} k_i, i \in S, \\
-      0, i \not\in S,
+      r_i + \frac{1}{\probavailable} s_i, i \in S, \\
+      r_i, i \not\in S,
     \end{cases}
   \end{align*}
   then
   \begin{align*}
-    \Exp{\norm{\frac{1}{n}\sum_{i=1}^n v_i - \Exp{\frac{1}{n}\sum_{i=1}^n v_i}}^2} \leq \frac{1}{n^2 \probavailable}\sum_{i=1}^n\Exp{\norm{k_i - \Exp{k_i}}^2} +\frac{\probavailable - \probpairaa}{n^2 \probavailable^2}\sum_{i=1}^n\norm{\Exp{k_i}}^2.
+    \Exp{\norm{\frac{1}{n}\sum_{i=1}^n v_i - \Exp{\frac{1}{n}\sum_{i=1}^n v_i}}^2} \leq \frac{1}{n^2 \probavailable}\sum_{i=1}^n\Exp{\norm{s_i - \Exp{s_i}}^2} +\frac{\probavailable - \probpairaa}{n^2 \probavailable^2}\sum_{i=1}^n\norm{\Exp{s_i}}^2.
   \end{align*}
 \end{lemma}
 
@@ -405,45 +405,45 @@ This section provides a lemma that we regularly use in our proofs, and it is use
   \end{align}
   Using the law of total expectation and 
   \begin{align*}
-    \Exp{v_i} = \probavailable \Exp{\frac{1}{\probavailable} k_i} + (1 - \probavailable) \cdot 0 = \Exp{k_i},
+    \Exp{v_i} = \probavailable \left(r_i + \Exp{\frac{1}{\probavailable} s_i}\right) + (1 - \probavailable) r_i = r_i + \Exp{s_i},
   \end{align*}
   we have
   \begin{align*}
     &\Exp{\norm{\frac{1}{n}\sum_{i=1}^n v_i - \Exp{\frac{1}{n}\sum_{i=1}^n v_i}}^2} \\
-    &=\frac{1}{n^2}\sum_{i=1}^n\Exp{\norm{v_i - \Exp{k_i}}^2} \\
-    &\quad +\frac{1}{n^2}\sum_{i\neq j}^n\Exp{\inp{v_i - \Exp{k_i}}{v_j - \Exp{k_j}}} \\
-    &=\frac{\probavailable}{n^2}\sum_{i=1}^n\Exp{\norm{\frac{1}{\probavailable} k_i - \Exp{k_i}}^2} \\
-    &\quad +\frac{1 - \probavailable}{n^2}\sum_{i=1}^n\norm{0 - \Exp{k_i}}^2 \\
-    &\quad +\frac{\probpairaa}{n^2}\sum_{i\neq j}^n\Exp{\inp{\frac{1}{\probavailable} k_i - \Exp{k_i}}{\frac{1}{\probavailable} k_j - \Exp{k_j}}} \\
-    &\quad +\frac{2 \probpairan}{n^2}\sum_{i\neq j}^n\Exp{\inp{\frac{1}{\probavailable} k_i - \Exp{k_i}}{0 - \Exp{k_j}}} \\
-    &\quad +\frac{\probpairnn}{n^2}\sum_{i\neq j}^n\inp{0 - \Exp{k_i}}{0 - \Exp{k_j}}.
+    &=\frac{1}{n^2}\sum_{i=1}^n\Exp{\norm{v_i - \left(r_i + \Exp{s_i}\right)}^2} \\
+    &\quad +\frac{1}{n^2}\sum_{i\neq j}^n\Exp{\inp{v_i - \left(r_i + \Exp{s_i}\right)}{v_j - \left(r_j + \Exp{s_j}\right)}} \\
+    &=\frac{\probavailable}{n^2}\sum_{i=1}^n\Exp{\norm{r_i + \frac{1}{\probavailable} s_i - \left(r_i + \Exp{s_i}\right)}^2} \\
+    &\quad +\frac{1 - \probavailable}{n^2}\sum_{i=1}^n\norm{r_i - \left(r_i + \Exp{s_i}\right)}^2 \\
+    &\quad +\frac{\probpairaa}{n^2}\sum_{i\neq j}^n\Exp{\inp{r_i + \frac{1}{\probavailable} s_i - \left(r_i + \Exp{s_i}\right)}{r_j + \frac{1}{\probavailable} s_j - \left(r_j + \Exp{s_j}\right)}} \\
+    &\quad +\frac{2 \probpairan}{n^2}\sum_{i\neq j}^n\Exp{\inp{r_i + \frac{1}{\probavailable} s_i - \left(r_i + \Exp{s_i}\right)}{r_j - \left(r_j + \Exp{s_j}\right)}} \\
+    &\quad +\frac{\probpairnn}{n^2}\sum_{i\neq j}^n\inp{r_i - \left(r_i + \Exp{s_i}\right)}{r_j - \left(r_j + \Exp{s_j}\right)}.
   \end{align*}
-  From the independence of random vectors $k_i$, we obtain
+  From the independence of random vectors $s_i$, we obtain
   \begin{align*}
     &\Exp{\norm{\frac{1}{n}\sum_{i=1}^n v_i - \Exp{\frac{1}{n}\sum_{i=1}^n v_i}}^2} \\
-    &=\frac{\probavailable}{n^2}\sum_{i=1}^n\Exp{\norm{\frac{1}{\probavailable} k_i - \Exp{k_i}}^2} \\
-    &\quad +\frac{1 - \probavailable}{n^2}\sum_{i=1}^n\norm{\Exp{k_i}}^2 \\
-    &\quad +\frac{\probpairaa (1 - \probavailable)^2}{n^2 \probavailable^2}\sum_{i\neq j}^n\inp{\Exp{k_i}}{\Exp{k_j}} \\
-    &\quad +\frac{2 \probpairan (\probavailable - 1)}{n^2 \probavailable}\sum_{i\neq j}^n\inp{\Exp{k_i}}{\Exp{k_j}} \\
-    &\quad +\frac{\probpairnn}{n^2}\sum_{i\neq j}^n\inp{\Exp{k_i}}{\Exp{k_j}}.
+    &=\frac{\probavailable}{n^2}\sum_{i=1}^n\Exp{\norm{\frac{1}{\probavailable} s_i - \Exp{s_i}}^2} \\
+    &\quad +\frac{1 - \probavailable}{n^2}\sum_{i=1}^n\norm{\Exp{s_i}}^2 \\
+    &\quad +\frac{\probpairaa (1 - \probavailable)^2}{n^2 \probavailable^2}\sum_{i\neq j}^n\inp{\Exp{s_i}}{\Exp{s_j}} \\
+    &\quad +\frac{2 \probpairan (\probavailable - 1)}{n^2 \probavailable}\sum_{i\neq j}^n\inp{\Exp{s_i}}{\Exp{s_j}} \\
+    &\quad +\frac{\probpairnn}{n^2}\sum_{i\neq j}^n\inp{\Exp{s_i}}{\Exp{s_j}}.
   \end{align*}
   Using \eqref{auxiliary_facts_partial_participation:one} and \eqref{auxiliary_facts_partial_participation:two}, we have
   \begin{align*}
     &\Exp{\norm{\frac{1}{n}\sum_{i=1}^n v_i - \Exp{\frac{1}{n}\sum_{i=1}^n v_i}}^2} \\
-    &=\frac{\probavailable}{n^2}\sum_{i=1}^n\Exp{\norm{\frac{1}{\probavailable} k_i - \Exp{k_i}}^2} \\
-    &\quad +\frac{1 - \probavailable}{n^2}\sum_{i=1}^n\norm{\Exp{k_i}}^2 \\
-    &\quad +\frac{\probpairaa - \probavailable^2}{n^2 \probavailable^2}\sum_{i\neq j}^n\inp{\Exp{k_i}}{\Exp{k_j}} \\
-    &\overset{\eqref{auxiliary:variance_decomposition}}{=}\frac{1}{n^2 \probavailable}\sum_{i=1}^n\Exp{\norm{k_i - \Exp{k_i}}^2} \\
-    &\quad +\frac{1 - \probavailable}{n^2 \probavailable}\sum_{i=1}^n\norm{\Exp{k_i}}^2 \\
-    &\quad +\frac{\probpairaa - \probavailable^2}{n^2 \probavailable^2}\sum_{i\neq j}^n\inp{\Exp{k_i}}{\Exp{k_j}} \\
-    &=\frac{1}{n^2 \probavailable}\sum_{i=1}^n\Exp{\norm{k_i - \Exp{k_i}}^2} \\
-    &\quad +\frac{\probavailable - \probpairaa}{n^2 \probavailable^2}\sum_{i=1}^n\norm{\Exp{k_i}}^2 \\
-    &\quad +\frac{\probpairaa - \probavailable^2}{\probavailable^2}\norm{\frac{1}{n}\sum_{i=1}^n\Exp{k_i}}.
+    &=\frac{\probavailable}{n^2}\sum_{i=1}^n\Exp{\norm{\frac{1}{\probavailable} s_i - \Exp{s_i}}^2} \\
+    &\quad +\frac{1 - \probavailable}{n^2}\sum_{i=1}^n\norm{\Exp{s_i}}^2 \\
+    &\quad +\frac{\probpairaa - \probavailable^2}{n^2 \probavailable^2}\sum_{i\neq j}^n\inp{\Exp{s_i}}{\Exp{s_j}} \\
+    &\overset{\eqref{auxiliary:variance_decomposition}}{=}\frac{1}{n^2 \probavailable}\sum_{i=1}^n\Exp{\norm{s_i - \Exp{s_i}}^2} \\
+    &\quad +\frac{1 - \probavailable}{n^2 \probavailable}\sum_{i=1}^n\norm{\Exp{s_i}}^2 \\
+    &\quad +\frac{\probpairaa - \probavailable^2}{n^2 \probavailable^2}\sum_{i\neq j}^n\inp{\Exp{s_i}}{\Exp{s_j}} \\
+    &=\frac{1}{n^2 \probavailable}\sum_{i=1}^n\Exp{\norm{s_i - \Exp{s_i}}^2} \\
+    &\quad +\frac{\probavailable - \probpairaa}{n^2 \probavailable^2}\sum_{i=1}^n\norm{\Exp{s_i}}^2 \\
+    &\quad +\frac{\probpairaa - \probavailable^2}{\probavailable^2}\norm{\frac{1}{n}\sum_{i=1}^n\Exp{s_i}}.
   \end{align*}
   Finally, using that $\probpairaa \leq \probavailable^2$, we have
   \begin{align*}
     &\Exp{\norm{\frac{1}{n}\sum_{i=1}^n v_i - \Exp{\frac{1}{n}\sum_{i=1}^n v_i}}^2} \\
-    &\leq\frac{1}{n^2 \probavailable}\sum_{i=1}^n\Exp{\norm{k_i - \Exp{k_i}}^2} +\frac{\probavailable - \probpairaa}{n^2 \probavailable^2}\sum_{i=1}^n\norm{\Exp{k_i}}^2.
+    &\leq\frac{1}{n^2 \probavailable}\sum_{i=1}^n\Exp{\norm{s_i - \Exp{s_i}}^2} +\frac{\probavailable - \probpairaa}{n^2 \probavailable^2}\sum_{i=1}^n\norm{\Exp{s_i}}^2.
   \end{align*}
 \end{proof}
 
@@ -539,71 +539,23 @@ The lemma can be easily checked with the direct calculation.
       &\ExpSub{\cC}{\ExpSub{\probavailable}{\norm{g^{t+1} - h^{t+1}}^2}} \\
       &=\ExpSub{\cC}{\ExpSub{\probavailable}{\norm{g^{t+1} - h^{t+1} - \ExpSub{\cC}{\ExpSub{\probavailable}{g^{t+1} - h^{t+1}}}}^2}} + (1 - a)^2\norm{g^{t} - h^{t}}^2.
   \end{align*}
-  Next, we have
+  Due to the independence of comcpressors, we can use Lemma~\ref{lemma:sampling} with $r_i = g^{t}_i - h^{t}_i$ and $s_i = \probavailable\cC_i\Bigg(\frac{1}{\probavailable}k^{t+1}_i - \frac{a}{\probavailable} \left(g^{t}_i - h^{t}_i\right)\Bigg) - k^{t+1}_i,$ and obtain
   \begin{align*}
     &\ExpSub{\cC}{\ExpSub{\probavailable}{\norm{g^{t+1} - h^{t+1}}^2}} \\
-    &=\frac{1}{n^2}\sum_{i=1}^n\ExpSub{\cC}{\ExpSub{\probavailable}{\norm{g^{t+1}_i - h^{t+1}_i - \ExpSub{\cC}{\ExpSub{\probavailable}{g^{t+1}_i - h^{t+1}_i}}}^2}} \\
-    &\quad +\frac{1}{n^2}\sum_{i \neq j}^n\ExpSub{\cC}{\ExpSub{\probavailable}{\inp{g^{t+1}_i - h^{t+1}_i - \ExpSub{\cC}{\ExpSub{\probavailable}{g^{t+1}_i - h^{t+1}_i}}}{g^{t+1}_j - h^{t+1}_j - \ExpSub{\cC}{\ExpSub{\probavailable}{g^{t+1}_j - h^{t+1}_j}}}}} \\
-    &\quad + (1 - a)^2\norm{g^{t} - h^{t}}^2\\
-    &=\frac{1}{n^2}\sum_{i=1}^n\ExpSub{\cC}{\ExpSub{\probavailable}{\norm{g^{t+1}_i - h^{t+1}_i - g^{t}_i + a \left(g^{t}_i - h^{t}_i\right) + h^{t}_i}^2}} \\
-    &\quad +\frac{1}{n^2}\sum_{i \neq j}^n\ExpSub{\cC}{\ExpSub{\probavailable}{\inp{g^{t+1}_i - h^{t+1}_i - g^{t}_i + a \left(g^{t}_i - h^{t}_i\right) + h^{t}_i}{g^{t+1}_j - h^{t+1}_j - g^{t}_j + a \left(g^{t}_j - h^{t}_j\right) + h^{t}_j}}} \\
-    &\quad + (1 - a)^2\norm{g^{t} - h^{t}}^2\\
-    &=\frac{\probavailable}{n^2}\sum_{i=1}^n\ExpSub{\cC}{\norm{g^{t}_i + \cC_i\Bigg(\frac{1}{\probavailable}k^{t+1}_i - \frac{a}{\probavailable} \left(g^{t}_i - h^{t}_i\right)\Bigg) - h^{t}_i - \frac{1}{\probavailable}k^{t+1}_i - g^{t}_i + a \left(g^{t}_i - h^{t}_i\right) + h^{t}_i}^2} \\
-    &\quad+ \frac{(1 - \probavailable)}{n^2}\sum_{i=1}^n\ExpSub{\cC}{\norm{g^{t}_i - h^{t}_i - g^{t}_i + a \left(g^{t}_i - h^{t}_i\right) + h^{t}_i}^2} \\
-    &\quad +\frac{\probpairaa}{n^2}\sum_{i \neq j}^n{\rm E}_{\cC}\Bigg[\Bigg\langle g^{t}_i + \cC_i\Bigg(\frac{1}{\probavailable}k^{t+1}_i - \frac{a}{\probavailable} \left(g^{t}_i - h^{t}_i\right)\Bigg) - h^{t}_i - \frac{1}{\probavailable}k^{t+1}_i - g^{t}_i + a \left(g^{t}_i - h^{t}_i\right) + h^{t}_i, \\
-    &\qquad\qquad\qquad\qquad g^{t}_j + \cC_j\Bigg(\frac{1}{\probavailable}k^{t+1}_j - \frac{a}{\probavailable}\left(g^{t}_j - h^{t}_j\right)\Bigg) - h^{t}_j - \frac{1}{\probavailable}k^{t+1}_j - g^{t}_j + a \left(g^{t}_j - h^{t}_j\right) + h^{t}_j\Bigg\rangle\Bigg] \\
-    &\quad +\frac{2\probpairan}{n^2}\sum_{i \neq j}^n{\rm E}_{\cC}\Bigg[\Bigg\langle g^{t}_i + \cC_i\Bigg(\frac{1}{\probavailable}k^{t+1}_i - \frac{a}{\probavailable} \left(g^{t}_i - h^{t}_i\right)\Bigg) - h^{t}_i - \frac{1}{\probavailable}k^{t+1}_i - g^{t}_i + a \left(g^{t}_i - h^{t}_i\right) + h^{t}_i,\\
-    &\qquad\qquad\qquad\qquad g^{t}_j - h^{t}_j - g^{t}_j + a \left(g^{t}_j - h^{t}_j\right) + h^{t}_j\Bigg\rangle\Bigg] \\
-    &\quad +\frac{\probpairnn}{n^2}\sum_{i \neq j}^n\ExpSub{\cC}{\inp{g^{t}_i - h^{t}_i - g^{t}_i + a \left(g^{t}_i - h^{t}_i\right) + h^{t}_i}{g^{t}_j - h^{t}_j - g^{t}_j + a \left(g^{t}_j - h^{t}_j\right) + h^{t}_j}} \\
-    &\quad + (1 - a)^2\norm{g^{t} - h^{t}}^2.\\
+    &\leq \frac{1}{n^2 \probavailable}\sum_{i=1}^n\ExpSub{\cC}{\norm{\probavailable\cC_i\Bigg(\frac{1}{\probavailable}k^{t+1}_i - \frac{a}{\probavailable} \left(g^{t}_i - h^{t}_i\right)\Bigg) - k^{t+1}_i - \ExpSub{\cC}{\probavailable\cC_i\Bigg(\frac{1}{\probavailable}k^{t+1}_i - \frac{a}{\probavailable} \left(g^{t}_i - h^{t}_i\right)\Bigg) - k^{t+1}_i}}^2} \\
+    &\quad +\frac{\probavailable - \probpairaa}{n^2 \probavailable^2}\sum_{i=1}^n\norm{\ExpSub{\cC}{\probavailable\cC_i\Bigg(\frac{1}{\probavailable}k^{t+1}_i - \frac{a}{\probavailable} \left(g^{t}_i - h^{t}_i\right)\Bigg) - k^{t+1}_i}}^2 \\
+    &\quad + (1 - a)^2\norm{g^{t} - h^{t}}^2 \\
+    &= \frac{\probavailable}{n^2}\sum_{i=1}^n\ExpSub{\cC}{\norm{\cC_i\Bigg(\frac{1}{\probavailable}k^{t+1}_i - \frac{a}{\probavailable} \left(g^{t}_i - h^{t}_i\right)\Bigg) - \Bigg(\frac{1}{\probavailable}k^{t+1}_i - \frac{a}{\probavailable} \left(g^{t}_i - h^{t}_i\right)\Bigg)}^2} \\
+    &\quad +\frac{a^2 \left(\probavailable - \probpairaa\right)}{n^2 \probavailable^2}\sum_{i=1}^n\norm{g^{t}_i - h^{t}_i}^2 + (1 - a)^2\norm{g^{t} - h^{t}}^2.
   \end{align*}
-  In the last equality, we use Assumption~\ref{ass:partial_participation}. Using the independence of compressors, we get
+  From Assumption~\ref{ass:compressors}, we have
   \begin{align*}
     &\ExpSub{\cC}{\ExpSub{\probavailable}{\norm{g^{t+1} - h^{t+1}}^2}} \\
-    &=\frac{\probavailable}{n^2}\sum_{i=1}^n\ExpSub{\cC}{\norm{\cC_i\Bigg(\frac{1}{\probavailable}k^{t+1}_i - \frac{a}{\probavailable} \left(g^{t}_i - h^{t}_i\right)\Bigg) - \frac{1}{\probavailable}k^{t+1}_i + a \left(g^{t}_i - h^{t}_i\right)}^2} \\
-    &\quad+ \frac{a^2 (1 - \probavailable)}{n^2}\sum_{i=1}^n\norm{g^{t}_i - h^{t}_i}^2 \\
-    &\quad +\frac{a^2 \probpairaa (\probavailable - 1)^2}{n^2 \probavailable^2}\sum_{i \neq j}^n\inp{g^{t}_i - h^{t}}{g^{t}_j - h^{t}_j} \\
-    &\quad +\frac{2a^2\probpairan (\probavailable - 1)}{n^2 \probavailable}\sum_{i \neq j}^n\inp{g^{t}_i - h^{t}_i}{g^{t}_j - h^{t}_j} \\
-    &\quad +\frac{a^2 \probpairnn}{n^2}\sum_{i \neq j}^n\inp{g^{t}_i - h^{t}_i}{g^{t}_j - h^{t}_j} \\
-    &\quad + (1 - a)^2\norm{g^{t} - h^{t}}^2.\\
+    &\leq \frac{\omega \probavailable}{n^2}\sum_{i=1}^n\norm{\frac{1}{\probavailable}k^{t+1}_i - \frac{a}{\probavailable} \left(g^{t}_i - h^{t}_i\right)}^2 +\frac{a^2 \left(\probavailable - \probpairaa\right)}{n^2 \probavailable^2}\sum_{i=1}^n\norm{g^{t}_i - h^{t}_i}^2 + (1 - a)^2\norm{g^{t} - h^{t}}^2 \\
+    &= \frac{\omega}{n^2 \probavailable}\sum_{i=1}^n\norm{k^{t+1}_i - a \left(g^{t}_i - h^{t}_i\right)}^2 +\frac{a^2 \left(\probavailable - \probpairaa\right)}{n^2 \probavailable^2}\sum_{i=1}^n\norm{g^{t}_i - h^{t}_i}^2 + (1 - a)^2\norm{g^{t} - h^{t}}^2 \\
+    &\overset{\eqref{auxiliary:jensen_inequality}}{\leq} \frac{2 \omega}{n^2 \probavailable}\sum_{i=1}^n\norm{k^{t+1}_i}^2 +\frac{a^2 \left((2\omega + 1)\probavailable - \probpairaa\right)}{n^2 \probavailable^2}\sum_{i=1}^n\norm{g^{t}_i - h^{t}_i}^2 + (1 - a)^2\norm{g^{t} - h^{t}}^2.
   \end{align*}
-  Using $\probpairaa + \probpairnn + 2\probpairan = 1$ and $\probavailable = \probpairaa + \probpairan$ (see Section~\ref{sec:auxiliary_facts_partial_participation}), we have
-  \begin{align*}
-    &\ExpSub{\cC}{\ExpSub{\probavailable}{\norm{g^{t+1} - h^{t+1}}^2}} \\
-    &=\frac{\probavailable}{n^2}\sum_{i=1}^n\ExpSub{\cC}{\norm{\cC_i\Bigg(\frac{1}{\probavailable}k^{t+1}_i - \frac{a}{\probavailable} \left(g^{t}_i - h^{t}_i\right)\Bigg) - \frac{1}{\probavailable}k^{t+1}_i + a \left(g^{t}_i - h^{t}_i\right)}^2} \\
-    &\quad+ \frac{a^2 (1 - \probavailable)}{n^2}\sum_{i=1}^n\norm{g^{t}_i - h^{t}_i}^2 \\
-    &\quad +\frac{a^2 (\probpairaa - \probavailable^2)}{n^2 \probavailable^2}\sum_{i \neq j}^n\inp{g^{t}_i - h^{t}}{g^{t}_j - h^{t}_j} \\
-    &\quad + (1 - a)^2\norm{g^{t} - h^{t}}^2.\\
-  \end{align*}
-  Next, we get
-  \begin{align*}
-    &\ExpSub{\cC}{\ExpSub{\probavailable}{\norm{g^{t+1} - h^{t+1}}^2}} \\
-    &\overset{\eqref{auxiliary:variance_decomposition}}{=}\frac{\probavailable}{n^2}\sum_{i=1}^n\ExpSub{\cC}{\norm{\cC_i\Bigg(\frac{1}{\probavailable}k^{t+1}_i - \frac{a}{\probavailable} \left(g^{t}_i - h^{t}_i\right)\Bigg) - \left(\frac{1}{\probavailable}k^{t+1}_i - \frac{a}{\probavailable} \left(g^{t}_i - h^{t}_i\right)\right)}^2} \\
-    &\quad +\frac{a^2 (1 - \probavailable)^2}{n^2 \probavailable}\sum_{i=1}^n\norm{g^{t}_i - h^{t}_i}^2 \\
-    &\quad+ \frac{a^2 (1 - \probavailable)}{n^2}\sum_{i=1}^n\norm{g^{t}_i - h^{t}_i}^2 \\
-    &\quad +\frac{a^2 (\probpairaa - \probavailable^2)}{n^2 \probavailable^2}\sum_{i \neq j}^n\inp{g^{t}_i - h^{t}}{g^{t}_j - h^{t}_j} \\
-    &\quad + (1 - a)^2\norm{g^{t} - h^{t}}^2.\\
-    &=\frac{\probavailable}{n^2}\sum_{i=1}^n\ExpSub{\cC}{\norm{\cC_i\Bigg(\frac{1}{\probavailable}k^{t+1}_i - \frac{a}{\probavailable} \left(g^{t}_i - h^{t}_i\right)\Bigg) - \left(\frac{1}{\probavailable}k^{t+1}_i - \frac{a}{\probavailable} \left(g^{t}_i - h^{t}_i\right)\right)}^2} \\
-    &\quad +\frac{a^2 (1 - \probavailable)}{n^2 \probavailable}\sum_{i=1}^n\norm{g^{t}_i - h^{t}_i}^2 \\
-    &\quad +\frac{a^2 (\probpairaa - \probavailable^2)}{n^2 \probavailable^2}\sum_{i \neq j}^n\inp{g^{t}_i - h^{t}}{g^{t}_j - h^{t}_j} \\
-    &\quad + (1 - a)^2\norm{g^{t} - h^{t}}^2.\\
-  \end{align*}
-  Using Assumption~\ref{ass:compressors} and \eqref{auxiliary:jensen_inequality}, we obtain
-  \begin{align*}
-    &\ExpSub{\cC}{\ExpSub{\probavailable}{\norm{g^{t+1} - h^{t+1}}^2}} \\
-    &\leq\frac{\omega}{n^2 \probavailable}\sum_{i=1}^n\norm{k^{t+1}_i - a \left(g^{t}_i - h^{t}_i\right)}^2 +\frac{a^2 (1 - \probavailable)}{n^2 \probavailable}\sum_{i=1}^n\norm{g^{t}_i - h^{t}_i}^2 \\
-    &\quad +\frac{a^2 (\probpairaa - \probavailable^2)}{n^2 \probavailable^2}\sum_{i \neq j}^n\inp{g^{t}_i - h^{t}}{g^{t}_j - h^{t}_j} + (1 - a)^2\norm{g^{t} - h^{t}}^2.\\
-    &\leq\frac{2 \omega}{n^2 \probavailable}\sum_{i=1}^n\norm{k^{t+1}_i}^2 +\frac{a^2 (2 \omega + 1 - \probavailable)}{n^2 \probavailable}\sum_{i=1}^n\norm{g^{t}_i - h^{t}_i}^2 \\
-    &\quad +\frac{a^2 (\probpairaa - \probavailable^2)}{n^2 \probavailable^2}\sum_{i \neq j}^n\inp{g^{t}_i - h^{t}}{g^{t}_j - h^{t}_j} \\
-    &\quad + (1 - a)^2\norm{g^{t} - h^{t}}^2.\\
-    &=\frac{2 \omega}{n^2 \probavailable}\sum_{i=1}^n\norm{k^{t+1}_i}^2 +\frac{a^2 (2 \omega + 1 - \probavailable)}{n^2 \probavailable}\sum_{i=1}^n\norm{g^{t}_i - h^{t}_i}^2 \\
-    &\quad -\frac{a^2 (\probpairaa - \probavailable^2)}{n^2 \probavailable^2}\sum_{i=1}^n\norm{g^{t}_i - h^{t}_i}^2 + \frac{a^2 (\probpairaa - \probavailable^2)}{\probavailable^2}\norm{g^{t} - h^{t}}^2 \\
-    &\quad + (1 - a)^2\norm{g^{t} - h^{t}}^2.\\
-    &=\frac{2 \omega}{n^2 \probavailable}\sum_{i=1}^n\norm{k^{t+1}_i}^2 +\frac{a^2 (\left(2 \omega + 1\right)\probavailable - \probpairaa)}{n^2 \probavailable^2}\sum_{i=1}^n\norm{g^{t}_i - h^{t}_i}^2 \\
-    &\quad + \frac{a^2 (\probpairaa - \probavailable^2)}{\probavailable^2}\norm{g^{t} - h^{t}}^2 \\
-    &\quad + (1 - a)^2\norm{g^{t} - h^{t}}^2.\\
-  \end{align*}
-  It is left to consider \eqref{eq:partial_participation_constraint} to prove \eqref{eq:compressor_global_error}. The second inequality can be proved almost in the same way:
+  The second inequality can be proved almost in the same way:
   \begin{align*}
     &\ExpSub{\cC}{\ExpSub{\probavailable}{\norm{g^{t+1}_i - h^{t+1}_i}^2}} \\
     &=\ExpSub{\cC}{\ExpSub{\probavailable}{\norm{g^{t+1}_i - h^{t+1}_i - \ExpSub{\cC}{\ExpSub{\probavailable}{g^{t+1}_i - h^{t+1}_i}}}^2}} + \norm{\ExpSub{\cC}{\ExpSub{\probavailable}{g^{t+1}_i - h^{t+1}_i}}}^2 \\
