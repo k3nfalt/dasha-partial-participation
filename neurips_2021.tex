@@ -294,7 +294,7 @@ Standard partial participation strategies, including $s$--nice sampling (with $\
 
 \section{Theorems}
 
-We now present the convergence rates theorems of \algname{DASHA-PP} in different settings. We will compare the theorems with the results of \algname{DASHA}. For any setting, suppose that \algname{DASHA} converges to $\varepsilon$-solution after $T$ communication rounds. Then, ideally, we would expect the convergence of the new algorithms to $\varepsilon$-solution after $\nicefrac{T}{\probavailable}$ due to the partial participation.
+We now present the convergence rates theorems of \algname{DASHA-PP} in different settings. We will compare the theorems with the results of \algname{DASHA}. For any setting, suppose that \algname{DASHA} converges to $\varepsilon$-solution after $T$ communication rounds. Then, ideally, we would expect the convergence of the new algorithms to $\varepsilon$-solution after up to $\nicefrac{T}{\probavailable}$ communication rounds due to the partial participation.
 
 \subsection{Gradient setting}
 
@@ -395,7 +395,7 @@ In the next corollary, we choose momentum $b$ and initialize vectors $h^{0}_i$ t
 The convergence rate of the \algname{DASHA-SYNC-MVR}, the state-of-the-art method without partial participation, equals $\cO\left(\frac{1}{\varepsilon}\left[L + \frac{\omega}{\sqrt{n}}\left(\widehat{L} + \frac{L_{\sigma}}{\sqrt{B}}\right) + \frac{\sigma}{\sqrt{n \varepsilon}}\frac{L_\sigma}{B}\right] + \frac{\sigma^2}{\probavailable n \varepsilon B}\right).$ Similar to Section~\ref{sec:finite_sum_setting}, we see that in the regimes when $\widehat{L} \approx L_{\max}$ the third term w.r.t. $\nicefrac{1}{\varepsilon^{3/2}}$ can degenerate up to $\nicefrac{\sqrt{B}}{\probavailable}.$ However, if we take $B = \cO\left(\nicefrac{L_{\sigma}^2}{\widehat{L}^2}\right),$ then the degeneration of the third term will be up to $\nicefrac{1}{\probavailable}.$ This effect we analyze in Section~\ref{sec:partial_participation_sampling}.
 
 Another important difference is batch size $B_{\textnormal{init}}.$ In \algname{DASHA-SYNC-MVR}, batch size $B_{\textnormal{init}} = \Theta\left(\max\left\{\frac{\sigma^2}{n \varepsilon}, B \omega\right\}\right).$ The same as \algname{DASHA-MVR}, method \algname{DASHA-PP-MVR} does not send full vectors and gets suboptimal initial batch size $B_{\textnormal{init}} = \Theta\left(\max\left\{\frac{\sigma^2}{\probavailable n \varepsilon}, \frac{B \omega}{\probavailable} \sqrt{\frac{\sigma^2}{n \varepsilon B}}\right\}\right).$ In the regimes when $\varepsilon$ is small and the first terms dominate in maximums, the degeneration of the batch size $B_{\textnormal{init}}$ is up to $\nicefrac{1}{\probavailable}.$ However, the degeneration can be higher in other regimes due to the additional multiplicative term $\sqrt{\frac{\sigma^2}{n \varepsilon B}}.$
-We believe that this is the price for not sending the full vectors and synchronization in the stochastic setting and should be investigated further.
+We believe that this is the price for not sending the full vectors and no synchronization in the stochastic setting and should be investigated further.
 
 \section{The problem of estimating the mean in partial participation}
 \label{sec:partial_participation_sampling}
