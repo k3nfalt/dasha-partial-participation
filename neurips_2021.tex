@@ -363,6 +363,8 @@ It is left to provide the convergence rate of \algname{DASHA-PP-FINITE-MVR}. The
 
 \subsection{Stochastic setting}
 
+\label{sec:stochastic_setting}
+
 We define $h^t \eqdef \frac{1}{n}\sum_{i=1}^n h^t_i$.
 
 \begin{restatable}{theorem}{CONVERGENCEMVR}
@@ -400,7 +402,19 @@ We believe that this is the price for not sending the full vectors and no synchr
 \section{The problem of estimating the mean in partial participation}
 \label{sec:partial_participation_sampling}
 
-\alexander{Give an explanation of why we get this rate.}
+% In Sections~\ref{sec:finite_sum_setting} and \ref{sec:stochastic_setting}, when we compare 
+Let us consider the task of estimating the mean of vectors in the distributed setting. Suppose that we have $n$ nodes, and each of them contains $m$ vectors $\{x_{ij}\}_{j=1}^m$, where $x_{ij} \in \R^d$ for all $i \in [n], j \in [m].$ First, let us consider that each node samples a mini-batch $I^i$ of size $B$ with replacement and sends it to the server. Then the server calculates the mean of the mini-batches from nodes. One can easily show that the variance of the estimator is
+\begin{align}
+  \label{eq:partial_participation_sampling:all_nodes}
+  \Exp{\norm{\frac{1}{n B}\sum_{i=1}^n \sum_{j \in I^i} x_{ij} - \frac{1}{n m}\sum_{i=1}^n \sum_{j=1}^m x_{ij}}^2} = \frac{1}{n B} \frac{1}{n m} \sum_{i=1}^n \sum_{j=1}^m \norm{x_{ij} - \frac{1}{m}\sum_{j=1}^m x_{ij}}^2.
+\end{align}
+Next, we consider the same task in the partial participation setting, i.e., we sample a random set $S \subset [n]$ of $s \in [n]$ nodes without replacement and receive the mini-batches only from sampled nodes. Such sampling of nodes satisfy Assumption~\ref{ass:partial_participation} with $\probavailable = \frac{s}{n}$ and $\probavailable = \frac{s (s-1)}{n (n-1)}$. In this case, the variance of the estimator is (see Lemma~\ref{lemma:sampling} with $r_i = 0$ and $s_i = \sum_{j \in I^i} x_{ij}$)
+\begin{align}
+  \Exp{\norm{\frac{1}{s B}\sum_{i \in S} \sum_{j \in I^i} x_{ij} - \frac{1}{n m}\sum_{i=1}^n \sum_{j=1}^m x_{ij}}^2} &= \frac{1}{s B}\underbrace{\frac{1}{n m} \sum_{i=1}^n \sum_{j=1}^m \norm{x_{ij} - \frac{1}{m}\sum_{j=1}^m x_{ij}}^2}_{\mathcal{L}_{\max}^2} \\
+  &+\frac{n - s}{s (n - 1)} \underbrace{\frac{1}{n} \sum_{i=1}^n \norm{\frac{1}{m}\sum_{j=1}^m x_{ij} - \frac{1}{n m}\sum_{i=1}^n \sum_{j=1}^m x_{ij}}^2}_{\widehat{\mathcal{L}}^2} \label{eq:partial_participation_sampling:s_nodes}.
+\end{align}
+Let us assume that $s \leq \nicefrac{n}{2}.$ Note that \eqref{eq:partial_participation_sampling:all_nodes} scales with any $B \geq 1,$ while \eqref{eq:partial_participation_sampling:s_nodes} only scales when $B = \cO\left(\nicefrac{\mathcal{L}_{\max}^2}{\widehat{\mathcal{L}}^2}\right).$ We provide this example to explain why the only choice of $B = \cO\left(\nicefrac{L_{\max}^2}{\widehat{L}^2}\right)$ and $B = \cO\left(\nicefrac{L_{\sigma}^2}{\widehat{L}^2}\right)$ in \algname{DASHA-PP-PAGE} and \algname{DASHA-PP-MVR}, accordingly, guarantees the degeneration up to $\nicefrac{1}{\probavailable}.$
+% And taking batch size $B$ larger than 
 
 \section{Experiments}
 
@@ -446,7 +460,9 @@ This section provides a lemma that we regularly use in our proofs, and it is use
   \end{align*}
   then
   \begin{align*}
-    \Exp{\norm{\frac{1}{n}\sum_{i=1}^n v_i - \Exp{\frac{1}{n}\sum_{i=1}^n v_i}}^2} \leq \frac{1}{n^2 \probavailable}\sum_{i=1}^n\Exp{\norm{s_i - \Exp{s_i}}^2} +\frac{\probavailable - \probpairaa}{n^2 \probavailable^2}\sum_{i=1}^n\norm{\Exp{s_i}}^2.
+    &\Exp{\norm{\frac{1}{n}\sum_{i=1}^n v_i - \Exp{\frac{1}{n}\sum_{i=1}^n v_i}}^2} \\
+    &= \frac{1}{n^2 \probavailable}\sum_{i=1}^n\Exp{\norm{s_i - \Exp{s_i}}^2} +\frac{\probavailable - \probpairaa}{n^2 \probavailable^2}\sum_{i=1}^n\norm{\Exp{s_i}}^2 + \frac{\probpairaa - \probavailable^2}{\probavailable^2}\norm{\frac{1}{n}\sum_{i=1}^n\Exp{s_i}}\\
+    &\leq \frac{1}{n^2 \probavailable}\sum_{i=1}^n\Exp{\norm{s_i - \Exp{s_i}}^2} +\frac{\probavailable - \probpairaa}{n^2 \probavailable^2}\sum_{i=1}^n\norm{\Exp{s_i}}^2.
   \end{align*}
 \end{lemma}
 
