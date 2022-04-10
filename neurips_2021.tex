@@ -83,6 +83,13 @@
 
 \section{Introduction}
 
+\begin{enumerate}
+  \item Partial Participation
+  \item Variance Reduction
+  \item No Synchronization
+  \item Compression
+\end{enumerate}
+
 % \begin{table*}
 %   \caption{\textbf{General Nonconvex Case.} The number of communication rounds (iterations) and the oracle complexity of algorithms to get an $\varepsilon$-solution ($\Exp{\norm{\nabla f(\widehat{x})}^2} \leq \varepsilon$).}
 %   \label{table:general_case}
@@ -101,8 +108,10 @@
 %     \end{tabular}
 % \end{threeparttable}
 % \end{table*}
-% \begin{table*}
-%   \caption{\textbf{General Nonconvex Case.} The number of communication rounds (iterations) and the oracle complexity of algorithms to get an $\varepsilon$-solution ($\Exp{\norm{\nabla f(\widehat{x})}^2} \leq \varepsilon$).}
+% A comparison of methods with partial participation of nodes:
+
+% \begin{table}[h]
+%   \caption{}
 %   \centering 
 %   \small
 %   \begin{threeparttable}
@@ -110,14 +119,15 @@
 %       \midrule
 %     Setting & Method & Comm. Rounds & Comm. Comp. & Oracle Comp. & Partial Participation \\
 %      \midrule\midrule
-%      \multirow{4}{*}{\tablesmall{Finite-Sum}} 
+%      \multirow{2}{*}{\tablesmall{Finite-Sum}} 
 %      & \algnamesmall{DASHA} &   $\frac{1}{\varepsilon} + \frac{(\omega + 1)\sqrt{n}}{\varepsilon s}$ & SOTA & Optimal & Yes \\
 %      & \algnamesmall{DASHA-PP} (New) &  $\frac{1}{\varepsilon} + \frac{(\omega + 1)\sqrt{n}}{\varepsilon s}$ & SOTA & Optimal & Yes \\
 %     \end{tabular}
 % \end{threeparttable}
-% \end{table*}
-% \begin{table*}
-%   \caption{\textbf{General Nonconvex Case.} The number of communication rounds (iterations) and the oracle complexity of algorithms to get an $\varepsilon$-solution ($\Exp{\norm{\nabla f(\widehat{x})}^2} \leq \varepsilon$).}
+% \end{table}
+
+% \begin{table}[h]
+%   \caption{}
 %   \centering 
 %   \small
 %   \begin{threeparttable}
@@ -125,12 +135,12 @@
 %       \midrule
 %     Setting & Method & Comm. Rounds & Comm. Comp. & Oracle Comp. & Partial Participation \\
 %      \midrule\midrule
-%      \multirow{4}{*}{\tablesmall{Stochastic}} 
+%      \multirow{2}{*}{\tablesmall{Stochastic}} 
 %      & \algnamesmall{DASHA} &   $\frac{1}{\varepsilon} + \frac{(\omega + 1)\sqrt{n}}{\varepsilon s}$ & SOTA & Optimal & Yes \\
 %      & \algnamesmall{DASHA-PP} (New) &  $\frac{1}{\varepsilon} + \frac{(\omega + 1)\sqrt{n}}{\varepsilon s}$ & SOTA & Optimal & Yes \\
 %     \end{tabular}
 % \end{threeparttable}
-% \end{table*}
+% \end{table}
 
 
 \section{Assumptions}
@@ -281,6 +291,10 @@ Standard partial participation strategies, including $s$--nice sampling (with $\
 
 \section{Theorems}
 
+We now present the convergence rates theorems of \algname{DASHA-PP} in different settings. We will compare the theorems with the results of \algname{DASHA}. For any setting, suppose that \algname{DASHA} converges to $\varepsilon$-solution after $T$ communication rounds. Then, ideally, we would expect the convergence of the new algorithms to $\varepsilon$-solution after $\nicefrac{T}{\probavailable}$ due to the partial participation.
+
+\subsection{Gradient setting}
+
 \begin{restatable}{theorem}{CONVERGENCE}
   \label{theorem:gradient_oracle}
   Suppose that Assumptions \ref{ass:lower_bound}, \ref{ass:lipschitz_constant}, \ref{ass:nodes_lipschitz_constant}, \ref{ass:compressors} and \ref{ass:partial_participation} hold. Let us take $a = \frac{\probavailable}{2 \omega + 1} ,$ $b = \frac{\probavailable}{2 - \probavailable},$ $$\gamma \leq \left(L + \sqrt{\frac{48 \omega \left(2 \omega + 1\right)}{n \probavailable^2} + \frac{16}{n \probavailable^2}\left(1 - \frac{\probpairaa}{\probavailable}\right)}\widehat{L}\right)^{-1},$$ and $g^{0}_i = h^{0}_i = \nabla f_i(x^0)$ for all $i \in [n]$
@@ -289,6 +303,11 @@ Standard partial participation strategies, including $s$--nice sampling (with $\
       &\Exp{\norm{\nabla f(\widehat{x}^T)}^2} \leq \frac{1}{T}\Bigg[2 \left(f(x^0) - f^*\right)\left(L + \sqrt{\frac{48 \omega \left(2 \omega + 1\right)}{n \probavailable^2} + \frac{16}{n \probavailable^2}\left(1 - \frac{\probpairaa}{\probavailable}\right)} \widehat{L}\right)\Bigg].
   \end{align*}
 \end{restatable}
+
+Let us recall the convergence rate of \algname{DASHA} or \algname{MARINA}, the number of communication rounds to get $\varepsilon$-solution equals
+$\cO\left(\frac{1}{\varepsilon}\left[L + \frac{\omega}{\sqrt{n}}\widehat{L}\right]\right),$ while the rate of \algname{DASHA-PP} equals $\cO\left(\frac{1}{\varepsilon}\left[L + \frac{\omega + 1}{\probavailable \sqrt{n}}\widehat{L}\right]\right)$. Up to Lipschitz constants factors, we get the degeneration up to $\nicefrac{1}{\probavailable}$ due to the  partial participation.
+
+\subsection{Finite-sum setting}
 
 \begin{restatable}{theorem}{CONVERGENCEPAGE}
   \label{theorem:page}
@@ -302,8 +321,32 @@ Standard partial participation strategies, including $s$--nice sampling (with $\
   \end{align*}
 \end{restatable}
 
+% Let us simplify the statement of Theorem~\ref{theorem:page} by choosing particular parameters.
+We now choose $\probpage$ to balance heavy full gradient and light mini-batch calculations.
+\begin{restatable}{corollary}{COROLLARYPAGE}
+    \label{cor:mini_batch_oracle}
+Let the assumptions from Theorem~\ref{theorem:page} hold and $\probpage = \nicefrac{B}{(m + B)}.$ 
+Then \algname{DASHA-PP-PAGE}
+    needs 
+    % \begin{align}
+    %   \label{eq:rate_dasha_pp_page}
+    %   \cO\left(\frac{1}{\varepsilon}\left[L + \frac{1}{\probavailable}\left(\frac{\omega}{\sqrt{n}} + \sqrt{\frac{m}{n B}}\right)\widehat{L} + \frac{1}{\probavailable}\left(\frac{\omega}{\sqrt{n}} + \sqrt{\frac{m}{n B}}\right)\frac{L_{\max}}{\sqrt{B}}\right]\right)
+    % \end{align}
+    \begin{align}
+      \label{eq:rate_dasha_pp_page}
+      \cO\left(\frac{1}{\varepsilon}\left[L + \frac{\omega}{\probavailable\sqrt{n}}\left(\widehat{L} + \frac{L_{\max}}{\sqrt{B}}\right) + \frac{1}{\probavailable}\sqrt{\frac{m}{n}}\left(\frac{\widehat{L}}{\sqrt{B}} + \frac{L_{\max}}{B}\right)\right]\right)
+    \end{align}
+    communication rounds to get an $\varepsilon$-solution and the expected \# of gradient calculations per node equals $\cO\left(m + B T\right).$
+\end{restatable}
+\alexander{TODO: Prove it!}
+
+The convergence rate the rate of the current state-of-the-art method \algname{DASHA-PAGE} without partial participation equals
+$\cO\left(\frac{1}{\varepsilon}\left[L + \frac{\omega}{\sqrt{n}}\left(\widehat{L} + \frac{L_{\max}}{\sqrt{B}}\right) + \sqrt{\frac{m}{n}}\frac{L_{\max}}{B}\right]\right).$ Let us closer compare it with \eqref{eq:rate_dasha_pp_page}. As expected, we see that the second term w.r.t. $\omega$ degenerates up to $\nicefrac{1}{\probavailable}$. Surprisingly, the third term w.r.t. $\sqrt{\nicefrac{m}{n}}$ can degenerate up to $\nicefrac{\sqrt{B}}{\probavailable}$ when $\widehat{L} \approx L_{\max}.$ Hence, in order to keep degeneration up to $\nicefrac{1}{\probavailable},$ one should take the batch size $B = \cO\left(\nicefrac{L_{\max}^2}{\widehat{L}^2}\right).$ This interesting effect we analyze separately in Section~\ref{sec:partial_participation_sampling}.
+
+It is left to provide the convergence rate of \algname{DASHA-PP-FINITE-MVR}. The conclusions would be the same.
+
 \begin{restatable}{theorem}{CONVERGENCEFINITEMVR}
-  \label{theorem:page}
+  \label{theorem:finitemvr}
   Suppose that Assumptions \ref{ass:lower_bound}, \ref{ass:lipschitz_constant}, \ref{ass:nodes_lipschitz_constant}, \ref{ass:max_lipschitz_constant}, \ref{ass:compressors}, and \ref{ass:partial_participation} hold. Let us take $a = \frac{\probavailable}{2 \omega + 1} ,$ $b = \frac{\frac{\probpage B}{m}}{2 - \frac{\probpage B}{m}},$
   $$\gamma \leq \left(L + \sqrt{\frac{148 \omega (2 \omega + 1)}{n \probavailable^2} \left(\widehat{L}^2 + \frac{L_{\max}^2}{B}\right) + \frac{72 m}{n \probavailable^2 B}\left(\left(1 - \frac{\probpairaa}{\probavailable}\right)\widehat{L}^2 + \frac{L_{\max}^2}{B}\right)}\right)^{-1},$$
   $g^{0}_i = h^{0}_i = \nabla f_i(x^0)$ for all $i \in [n]$ and $h^{0}_{ij} = \nabla f_{ij}(x^0)$ for all $i \in [n], j \in [m]$ in Algorithm~\ref{alg:main_algorithm} \algname{(DASHA-PP-FINITE-MVR)}
@@ -330,6 +373,7 @@ Standard partial participation strategies, including $s$--nice sampling (with $\
 \end{restatable}
 
 \section{The problem of estimating the mean in partial participation}
+\label{sec:partial_participation_sampling}
 
 \alexander{Give an explanation of why we get this rate.}
 
