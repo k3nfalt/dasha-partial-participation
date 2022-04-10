@@ -147,7 +147,7 @@
 
 In this section, we list the assumptions that we use in the paper.
 
-\subsection{Functions assumptions}
+\subsection{Functions assumptions\footnote{Note that $L \leq \widehat{L},$ $\widehat{L} \leq L_{\max},$ and $\widehat{L} \leq L_{\sigma}.$}}
 Now, we provide assumptions for the functions $f_i.$
 \begin{assumption}
     \label{ass:lower_bound}
@@ -176,8 +176,11 @@ The two assumptions below are provided for the stochastic setting \eqref{eq:task
 \begin{assumption}
     \label{ass:mean_square_smoothness}
     For all $i \in [n]$ and for all $x, y \in \R,$ the stochastic gradient $\nabla f_i(x;\xi)$ satisfies the mean-squared smoothness property, i.e.,
-    $$\ExpSub{\xi}{\norm{\nabla f_i(x;\xi) - \nabla f_i(y;\xi) - \left(\nabla f_i(x) - \nabla f_i(y)\right)}^2} \leq L_{\sigma}^2 \norm{x - y}^2.$$
+    % $$\ExpSub{\xi}{\norm{\nabla f_i(x;\xi) - \nabla f_i(y;\xi) - \left(\nabla f_i(x) - \nabla f_i(y)\right)}^2} \leq L_{\sigma}^2 \norm{x - y}^2.$$
+    $$\ExpSub{\xi}{\norm{\nabla f_i(x;\xi) - \nabla f_i(y;\xi)}^2} \leq L_{\sigma}^2 \norm{x - y}^2.$$
 \end{assumption}
+
+\alexander{It is better to fix proofs with a new definition}
 
 \subsection{Compressors assumptions}
 \begin{definition}
@@ -309,6 +312,8 @@ $\cO\left(\frac{1}{\varepsilon}\left[L + \frac{\omega}{\sqrt{n}}\widehat{L}\righ
 
 \subsection{Finite-sum setting}
 
+\label{sec:finite_sum_setting}
+
 \begin{restatable}{theorem}{CONVERGENCEPAGE}
   \label{theorem:page}
   Suppose that Assumptions \ref{ass:lower_bound}, \ref{ass:lipschitz_constant}, \ref{ass:nodes_lipschitz_constant}, \ref{ass:max_lipschitz_constant}, \ref{ass:compressors}, and \ref{ass:partial_participation} hold. Let us take $a = \frac{\probavailable}{2 \omega + 1} ,$ $b = \frac{\probpage \probavailable}{2 - \probavailable},$ probability $\probpage \in (0, 1]$,
@@ -344,10 +349,9 @@ The convergence rate the rate of the current state-of-the-art method \algname{DA
 $\cO\left(\frac{1}{\varepsilon}\left[L + \frac{\omega}{\sqrt{n}}\left(\widehat{L} + \frac{L_{\max}}{\sqrt{B}}\right) + \sqrt{\frac{m}{n}}\frac{L_{\max}}{B}\right]\right).$ Let us closer compare it with \eqref{eq:rate_dasha_pp_page}. As expected, we see that the second term w.r.t. $\omega$ degenerates up to $\nicefrac{1}{\probavailable}$. Surprisingly, the third term w.r.t. $\sqrt{\nicefrac{m}{n}}$ can degenerate up to $\nicefrac{\sqrt{B}}{\probavailable}$ when $\widehat{L} \approx L_{\max}.$ Hence, in order to keep degeneration up to $\nicefrac{1}{\probavailable},$ one should take the batch size $B = \cO\left(\nicefrac{L_{\max}^2}{\widehat{L}^2}\right).$ This interesting effect we analyze separately in Section~\ref{sec:partial_participation_sampling}.
 
 It is left to provide the convergence rate of \algname{DASHA-PP-FINITE-MVR}. The conclusions would be the same.
-
 \begin{restatable}{theorem}{CONVERGENCEFINITEMVR}
   \label{theorem:finitemvr}
-  Suppose that Assumptions \ref{ass:lower_bound}, \ref{ass:lipschitz_constant}, \ref{ass:nodes_lipschitz_constant}, \ref{ass:max_lipschitz_constant}, \ref{ass:compressors}, and \ref{ass:partial_participation} hold. Let us take $a = \frac{\probavailable}{2 \omega + 1} ,$ $b = \frac{\frac{\probpage B}{m}}{2 - \frac{\probpage B}{m}},$
+  Suppose that Assumptions \ref{ass:lower_bound}, \ref{ass:lipschitz_constant}, \ref{ass:nodes_lipschitz_constant}, \ref{ass:max_lipschitz_constant}, \ref{ass:compressors}, and \ref{ass:partial_participation} hold. Let us take $a = \frac{\probavailable}{2 \omega + 1} ,$ $b = \frac{\frac{\probavailable B}{m}}{2 - \frac{\probavailable B}{m}},$
   $$\gamma \leq \left(L + \sqrt{\frac{148 \omega (2 \omega + 1)}{n \probavailable^2} \left(\widehat{L}^2 + \frac{L_{\max}^2}{B}\right) + \frac{72 m}{n \probavailable^2 B}\left(\left(1 - \frac{\probpairaa}{\probavailable}\right)\widehat{L}^2 + \frac{L_{\max}^2}{B}\right)}\right)^{-1},$$
   $g^{0}_i = h^{0}_i = \nabla f_i(x^0)$ for all $i \in [n]$ and $h^{0}_{ij} = \nabla f_{ij}(x^0)$ for all $i \in [n], j \in [m]$ in Algorithm~\ref{alg:main_algorithm} \algname{(DASHA-PP-FINITE-MVR)}
   then
@@ -356,6 +360,10 @@ It is left to provide the convergence rate of \algname{DASHA-PP-FINITE-MVR}. The
     & \left(L + \sqrt{\frac{148 \omega (2 \omega + 1)}{n \probavailable^2} \left(\widehat{L}^2 + \frac{L_{\max}^2}{B}\right) + \frac{72 m}{n \probavailable^2 B}\left(\left(1 - \frac{\probpairaa}{\probavailable}\right)\widehat{L}^2 + \frac{L_{\max}^2}{B}\right)}\right)\vast].
   \end{align*}
 \end{restatable}
+
+\subsection{Stochastic setting}
+
+We define $h^t \eqdef \frac{1}{n}\sum_{i=1}^n h^t_i$.
 
 \begin{restatable}{theorem}{CONVERGENCEMVR}
   \label{theorem:stochastic}
@@ -371,6 +379,20 @@ It is left to provide the convergence rate of \algname{DASHA-PP-FINITE-MVR}. The
     &+ \left(\frac{48 b^2 \omega (2 \omega + 1)}{\probavailable^2} + \frac{12 b}{\probavailable}\right) \frac{\sigma^2}{n B}.
 \end{align*}
 \end{restatable}
+
+In the next corollary, we choose momentum $b$ and initialize vectors $h^{0}_i$ to get $\varepsilon$-solution.
+
+\begin{restatable}{corollary}{COROLLARYSTOCHASTIC}
+  \label{cor:stochastic}
+  Suppose that assumptions from Theorem~\ref{theorem:stochastic} hold, momentum $b = \Theta\left(\min \left\{\ \frac{\probavailable}{\omega}\sqrt{\frac{n \varepsilon B}{\sigma^2}}, \frac{\probavailable n \varepsilon B}{\sigma^2}\right\}\right),$ 
+  and $h^{0}_i = \frac{1}{B_{\textnormal{init}}} \sum_{k = 1}^{B_{\textnormal{init}}} \nabla f_i(x^0; \xi^0_{ik})$ for all $i \in [n],$ and batch size $B_{\textnormal{init}} = \Theta\left(\nicefrac{B}{b}\right),$ then Algorithm~\ref{alg:main_algorithm} \algname{(DASHA-PP-MVR)} needs
+  $$\cO\left(\frac{1}{\varepsilon}\left[L + \frac{\omega}{\probavailable\sqrt{n}}\left(\widehat{L} + \frac{L_{\sigma}}{\sqrt{B}}\right) + \frac{\sigma}{\probavailable \sqrt{n \varepsilon}}\left(\frac{\widehat{L}}{\sqrt{B}} + \frac{L_\sigma}{B}\right)\right] + \frac{\sigma^2}{\probavailable n \varepsilon B}\right)$$
+  communication rounds to get an $\varepsilon$-solution and the number of stochastic gradient calculations per node equals $\cO(B_{\textnormal{init}} + BT).$
+\end{restatable}
+
+\alexander{TODO: Prove it!}
+
+Similar to Section~\ref{sec:finite_sum_setting}, we see that in the regimes when $\widehat{L} \approx L_{\max}$ the third term w.r.t. $\nicefrac{1}{\varepsilon^{3/2}}$ can degenerate up to $\nicefrac{\sqrt{B}}{\probavailable}.$ However, if we take $B = \cO\left(\nicefrac{L_{\sigma}^2}{\widehat{L}^2}\right),$ then the degeneration of the third term will be up to $\nicefrac{1}{\probavailable}.$
 
 \section{The problem of estimating the mean in partial participation}
 \label{sec:partial_participation_sampling}
