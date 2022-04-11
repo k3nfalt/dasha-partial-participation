@@ -157,15 +157,11 @@ The next assumption is used in the finite-sum setting \eqref{eq:task_minibatch}.
 The two assumptions below are provided for the stochastic setting \eqref{eq:task_staochastic}.
 \begin{assumption}
     \label{ass:stochastic_unbiased_and_variance_bounded}
-    For all $i \in [n]$ and for all $x \in \R^d,$ the stochastic gradient $\nabla f_i(x;\xi)$ is unbiased and has bounded variance, i.e.,
-    $$\ExpSub{\xi}{\nabla f_i(x;\xi)} = \nabla f_i(x), \qquad \text{and} \qquad \ExpSub{\xi}{\norm{\nabla f_i(x;\xi) - \nabla f_i(x)}^2} \leq \sigma^2,$$ 
-    where $\sigma^2 \geq 0.$
+    For all $i \in [n]$ and for all $x \in \R^d,$ the stochastic gradient $\nabla f_i(x;\xi)$ is unbiased and has bounded variance, i.e., $\ExpSub{\xi}{\nabla f_i(x;\xi)} = \nabla f_i(x),$ and $\ExpSub{\xi}{\norm{\nabla f_i(x;\xi) - \nabla f_i(x)}^2} \leq \sigma^2,$ where $\sigma^2 \geq 0.$
 \end{assumption}
 \begin{assumption}
     \label{ass:mean_square_smoothness}
-    For all $i \in [n]$ and for all $x, y \in \R,$ the stochastic gradient $\nabla f_i(x;\xi)$ satisfies the mean-squared smoothness property, i.e.,
-    % $$\ExpSub{\xi}{\norm{\nabla f_i(x;\xi) - \nabla f_i(y;\xi) - \left(\nabla f_i(x) - \nabla f_i(y)\right)}^2} \leq L_{\sigma}^2 \norm{x - y}^2.$$
-    $$\ExpSub{\xi}{\norm{\nabla f_i(x;\xi) - \nabla f_i(y;\xi)}^2} \leq L_{\sigma}^2 \norm{x - y}^2.$$
+    For all $i \in [n]$ and for all $x, y \in \R,$ the stochastic gradient $\nabla f_i(x;\xi)$ satisfies the mean-squared smoothness property, i.e., $\ExpSub{\xi}{\norm{\nabla f_i(x;\xi) - \nabla f_i(y;\xi)}^2} \leq L_{\sigma}^2 \norm{x - y}^2.$
 \end{assumption}
 
 \alexander{It is better to fix proofs with a new definition}
