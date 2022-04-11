@@ -216,7 +216,9 @@ The two assumptions below are provided for the stochastic setting \eqref{eq:task
   \end{enumerate}
   and these events from different communication rounds are independent.
 \end{assumption}
-Standard partial participation strategies, including $s$--nice sampling (with $\probavailable = \nicefrac{s}{n}$ and $\probpairaa~=~\nicefrac{s(s-1)}{n(n-1)}$) and independent participation (with $\probpairaa = \probavailable^2$), satisfy the assumptions.
+
+Standard partial participation strategies, including $s$--nice sampling, where the server chooses uniformly $s$ nodes without replacement ($\probavailable = \nicefrac{s}{n}$ and $\probpairaa~=~\nicefrac{s(s-1)}{n(n-1)}$),
+and independent participation, where each node independently participates with probability $\probavailable$ (due to independence $\probpairaa = \probavailable^2$), satisfy the assumption.
 
 \section{Algorithm description}
 
