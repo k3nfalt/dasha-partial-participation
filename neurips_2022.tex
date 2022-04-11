@@ -90,6 +90,9 @@
   \item Compression
 \end{enumerate}
 
+\section{Related Work}
+
+
 % \begin{table*}
 %   \caption{\textbf{General Nonconvex Case.} The number of communication rounds (iterations) and the oracle complexity of algorithms to get an $\varepsilon$-solution ($\Exp{\norm{\nabla f(\widehat{x})}^2} \leq \varepsilon$).}
 %   \label{table:general_case}
@@ -147,7 +150,7 @@
 
 In this section, we list the assumptions that we use in the paper.
 
-\subsection{Functions assumptions\footnote{Note that $L \leq \widehat{L},$ $\widehat{L} \leq L_{\max},$ and $\widehat{L} \leq L_{\sigma}.$}}
+\subsection{Functions Assumptions\footnote{Note that $L \leq \widehat{L},$ $\widehat{L} \leq L_{\max},$ and $\widehat{L} \leq L_{\sigma}.$}}
 Now, we provide assumptions for the functions $f_i.$
 \begin{assumption}
     \label{ass:lower_bound}
@@ -182,7 +185,7 @@ The two assumptions below are provided for the stochastic setting \eqref{eq:task
 
 \alexander{It is better to fix proofs with a new definition}
 
-\subsection{Compressors assumptions}
+\subsection{Compressors Assumptions}
 \begin{definition}
     A stochastic mapping $\cC\,:\,\R^d \rightarrow \R^d$ is an \textit{unbiased compressor} if
     there exists $\omega \in \R$ such that
@@ -197,7 +200,7 @@ The two assumptions below are provided for the stochastic setting \eqref{eq:task
  $\cC_i \in \mathbb{U}(\omega)$ for all $i\in [n]$, and the compressors are  \textit{independent}.
 \end{assumption}
 
-\subsection{Nodes partial participation assumptions}
+\subsection{Nodes Partial Participation Assumptions}
 \label{sec:partial_participation}
 
 \newcommand\Item[1][]{%
@@ -220,7 +223,7 @@ The two assumptions below are provided for the stochastic setting \eqref{eq:task
 Standard partial participation strategies, including $s$--nice sampling, where the server chooses uniformly $s$ nodes without replacement ($\probavailable = \nicefrac{s}{n}$ and $\probpairaa~=~\nicefrac{s(s-1)}{n(n-1)}$),
 and independent participation, where each node independently participates with probability $\probavailable$ (due to independence, we have $\probpairaa = \probavailable^2$), satisfy the assumption.
 
-\section{Algorithm description}
+\section{Algorithm Description}
 
 \begin{minipage}{\textwidth}
 \begin{algorithm}[H]
@@ -298,7 +301,7 @@ and independent participation, where each node independently participates with p
 
 We now present the convergence rates theorems of \algname{DASHA-PP} in different settings. We will compare the theorems with the results of \algname{DASHA}. For any setting, suppose that \algname{DASHA} converges to $\varepsilon$-solution after $T$ communication rounds. Then, ideally, we would expect the convergence of the new algorithms to $\varepsilon$-solution after up to $\nicefrac{T}{\probavailable}$ communication rounds due to the partial participation.
 
-\subsection{Gradient setting}
+\subsection{Gradient Setting}
 
 \begin{restatable}{theorem}{CONVERGENCE}
   \label{theorem:gradient_oracle}
@@ -312,7 +315,7 @@ We now present the convergence rates theorems of \algname{DASHA-PP} in different
 Let us recall the convergence rate of \algname{DASHA} or \algname{MARINA}, the number of communication rounds to get $\varepsilon$-solution equals
 $\cO\left(\frac{1}{\varepsilon}\left[L + \frac{\omega}{\sqrt{n}}\widehat{L}\right]\right),$ while the rate of \algname{DASHA-PP} equals $\cO\left(\frac{1}{\varepsilon}\left[L + \frac{\omega + 1}{\probavailable \sqrt{n}}\widehat{L}\right]\right)$. Up to Lipschitz constants factors, we get the degeneration up to $\nicefrac{1}{\probavailable}$ due to the  partial participation.
 
-\subsection{Finite-sum setting}
+\subsection{Finite-Sum Setting}
 
 \label{sec:finite_sum_setting}
 
@@ -363,7 +366,7 @@ It is left to provide the convergence rate of \algname{DASHA-PP-FINITE-MVR}. The
   \end{align*}
 \end{restatable}
 
-\subsection{Stochastic setting}
+\subsection{Stochastic Setting}
 
 \label{sec:stochastic_setting}
 
@@ -401,7 +404,7 @@ The convergence rate of the \algname{DASHA-SYNC-MVR}, the state-of-the-art metho
 Another important difference is batch size $B_{\textnormal{init}}.$ In \algname{DASHA-SYNC-MVR}, batch size $B_{\textnormal{init}} = \Theta\left(\max\left\{\frac{\sigma^2}{n \varepsilon}, B \omega\right\}\right).$ The same as \algname{DASHA-MVR}, method \algname{DASHA-PP-MVR} does not send full vectors and gets suboptimal initial batch size $B_{\textnormal{init}} = \Theta\left(\max\left\{\frac{\sigma^2}{\probavailable n \varepsilon}, \frac{B \omega}{\probavailable} \sqrt{\frac{\sigma^2}{n \varepsilon B}}\right\}\right).$ In the regimes when $\varepsilon$ is small and the first terms dominate in maximums, the degeneration of the batch size $B_{\textnormal{init}}$ is up to $\nicefrac{1}{\probavailable}.$ However, the degeneration can be higher in other regimes due to the additional multiplicative term $\sqrt{\frac{\sigma^2}{n \varepsilon B}}.$
 We believe that this is the price for not sending the full vectors and no synchronization in the stochastic setting and should be investigated further.
 
-\section{The problem of estimating the mean in the partial participation setting}
+\section{The Problem of Estimating the Mean in the Partial Participation Setting}
 \label{sec:partial_participation_sampling}
 We now provide the example to explain why the only choice of $B = \cO\left(\nicefrac{L_{\max}^2}{\widehat{L}^2}\right)$ and $B = \cO\left(\nicefrac{L_{\sigma}^2}{\widehat{L}^2}\right)$ in \algname{DASHA-PP-PAGE} and \algname{DASHA-PP-MVR}, accordingly, guarantees the degeneration up to $\nicefrac{1}{\probavailable}.$
 
@@ -423,11 +426,11 @@ See Lemma~\ref{lemma:sampling} with $r_i = 0$ and $s_i = \sum_{j \in I^i} x_{ij}
 
 In experiments, our main goal is to compare \algname{DASHA-PP} with \algname{DASHA}. We verify that the convergence rates of \algname{DASHA-PP} no worse than times $\nicefrac{1}{\probavailable}$. We use the standard setting in experiments where all parameters except step sizes are taken as suggested in theory. Step sizes are finetuned from a set $\{2^{i}\,|\,i \in [-10, 10]\}.$
 
-\subsection{Gradient setting}
+\subsection{Gradient Setting}
 
-\subsection{Finite-sum setting}
+\subsection{Finite-sum Setting}
 
-\subsection{Stochastic setting}
+\subsection{Stochastic Setting}
 
 \newpage
 \appendix
@@ -450,7 +453,7 @@ We list auxiliary facts that we use in our proofs:
         \end{align}
 \end{enumerate}
 
-\subsection{Sampling lemma}
+\subsection{Sampling Lemma}
 This section provides a lemma that we regularly use in our proofs, and it is useful for samplings that satisfy Assumption~\ref{ass:partial_participation}.
 \begin{lemma}
   \label{lemma:sampling}
@@ -537,13 +540,13 @@ This section provides a lemma that we regularly use in our proofs, and it is use
   \end{align*}
 \end{proof}
 
-\section{Proofs of theorems}
+\section{Proofs of Theorems}
 
 There are three different sources of randomness in Algorithm~\ref{alg:main_algorithm}: the first one from vectors $\{k_i^{t+1}\}_{i=1}^n$, the second one from compressors $\{\cC_i\}_{i=1}^n$, and the third one from availability of nodes. We define $\ExpSub{k}{\cdot}$, $\ExpSub{\cC}{\cdot}$ and $\ExpSub{\probavailable}{\cdot}$ to be conditional expectations w.r.t.\,$\{k_i^{t+1}\}_{i=1}^n$, $\{\cC_i\}_{i=1}^n, $ and availability, accordingly, conditioned on all previous randomness. Moreover, we define $\ExpSub{t+1}{\cdot}$ to be a conditional expectation w.r.t. all randomness in iteration $t+1$ conditioned on all previous randomness. Note, that $\ExpSub{t+1}{\cdot} = \ExpSub{k}{\ExpSub{\cC}{\ExpSub{\probavailable}{\cdot}}}.$
 
 In the case of \algname{DASHA-PP-PAGE}, there are two different sources of randomness from $\{k_i^{t+1}\}_{i=1}^n$. We define $\ExpSub{\probpage}{\cdot}$ and $\ExpSub{B}{\cdot}$ to be conditional expectations w.r.t.\, the probabilistic switching and mini-batch indices $I_{i}^t$, accordingly, conditioned on all previous randomness. Note, that $\ExpSub{t+1}{\cdot} = \ExpSub{B}{\ExpSub{\cC}{\ExpSub{\probavailable}{\ExpSub{\probpage}{\cdot}}}}$ and $\ExpSub{t+1}{\cdot} = \ExpSub{B}{\ExpSub{\probpage}{\ExpSub{\cC}{\ExpSub{\probavailable}{\cdot}}}}.$
 
-\subsection{Standard lemmas in the nonconvex setting}
+\subsection{Standard Lemmas in the Nonconvex Setting}
 
 We start the proof of theorems by providing standard lemmas from the nonconvex optimization.
 
@@ -591,7 +594,7 @@ The proof of Lemma \ref{lemma:page_lemma} is provided in \cite{PAGE}.
 \end{lemma}
 The lemma can be easily checked with the direct calculation.
 
-\subsection{Generic lemmas}
+\subsection{Generic Lemmas}
 \begin{lemma}
   Suppose that Assumptions~\ref{ass:compressors} and \ref{ass:partial_participation} hold and let us consider sequences $g^{t+1}_i$, $h^{t+1}_i,$ and $k^{t+1}_i$ from Algorithm~\ref{alg:main_algorithm}, then
   \begin{align}
