@@ -81,6 +81,8 @@
 \begin{abstract}
 \end{abstract}
 
+\alexander{TODO: rewrite copy-pasting}
+
 \section{Introduction}
 
 \begin{enumerate}
@@ -90,67 +92,50 @@
   \item Compression
 \end{enumerate}
 
+\section{Optimization Problem}
+Let us consider the distributed optimization problem
+\begin{align}
+    \label{eq:main_problem} 
+    \min \limits_{x \in \R^d}\left\{f(x) \eqdef \frac{1}{n}\sum \limits_{i=1}^n f_i(x)\right\},
+\end{align}
+where $f_i\,:\,\R^d \rightarrow \R$ is a smooth nonconvex function for all $i \in [n] \eqdef \{1, \dots, n\}.$ The full information about function $f_i$ is stored on $i$\textsuperscript{th} node. The communication between nodes is maintained in the parameters server fashion \citep{kairouz2021advances}: we have a server that receives compressed information from nodes, updates a state, and broadcasts an updated model.\footnote{Note that this strategy can be used in peer-to-peer communication, assuming that the server is an abstraction and all its algorithmic steps are performed on each node.} Since we work in the nonconvex world, our goal is to find an $\varepsilon$-solution ($\varepsilon$-stationary point) of \eqref{eq:main_problem}: a (possibly random) point $\widehat{x}\in \R^d$, such that $$\Exp{\norm{\nabla f(\widehat{x})}^2} \leq \varepsilon.$$
+
+% \subsection{Gradient oracles}
+% We consider all of  the following structural assumptions about the functions $\{f_i\}_{i=1}^n$, each with its own natural gradient oracle:
+
+% \begin{enumerate}
+% \item \textbf{Gradient Setting.}
+% The $i$\textsuperscript{th} node has access to the \textit{gradient} $\nabla f_i \,:\,\R^d \rightarrow \R^d$ of function $f_i$.
+
+% \item \textbf{Finite-Sum Setting.}
+% The functions $\{f_i\}_{i=1}^n$ have the finite-sum form
+% \begin{align}
+%     \label{eq:task_minibatch} f_i(x) = \frac{1}{n}\sum \limits_{j=1}^m f_{ij}(x), \qquad \forall i \in [n],
+% \end{align}
+% where $f_{ij} :\R^d  \rightarrow \R$ is a smooth nonconvex  function for all $j \in [m].$
+% For all $i \in [n],$ the $i$\textsuperscript{th} node has access to a \textit{mini-batch of $B$ gradients}, $\frac{1}{\BZ}\sum_{j \in I_i} \nabla f_{ij}(\cdot),$ where $I_i$ is a multi-set of i.i.d.\,samples of the set $[m],$ and $|I_i| = \BZ$.
+
+
+
+% \item \textbf{Stochastic Setting.}
+% The function $f_i$ is an expectation of a stochastic function, 
+% \begin{align}
+%     \label{eq:task_staochastic}
+%     f_i(x) = \ExpSub{\xi}{f_i(x;\xi)}, \qquad \forall i \in [n],
+% \end{align}
+% where $f_i :\R^d \times \Omega_{\xi} \rightarrow \R.$ For a fixed $x \in \R,$ $f_i(x;\xi)$ is a random variable over some distribution $\mathcal{D}_i$,
+% and, for a fixed $\xi \in \Omega_{\xi},$ $f_i(x;\xi)$ is a smooth  nonconvex function.
+% The $i$\textsuperscript{th} node has access to a \textit{mini-batch of $B$ stochastic gradients} $ \frac{1}{\BZ}\sum_{j=1}^B \nabla f_i(\cdot; \xi_{ij})$ 
+% of the function $f_i$ through the distribution $\mathcal{D}_i,$ where $\{\xi_{ij}\}_{j=1}^B$ is a collection of i.i.d.\,samples from $\mathcal{D}_i.$
+
+% \end{enumerate}
+
 \section{Related Work}
 
-
-% \begin{table*}
-%   \caption{\textbf{General Nonconvex Case.} The number of communication rounds (iterations) and the oracle complexity of algorithms to get an $\varepsilon$-solution ($\Exp{\norm{\nabla f(\widehat{x})}^2} \leq \varepsilon$).}
-%   \label{table:general_case}
-%   \centering 
-%   \small
-%   \begin{threeparttable}
-%     \begin{tabular}{cccccc}
-%       \midrule
-%     Setting & Method & Comm. Rounds & Comm. Comp. & Oracle Comp. & Partial Participation \\
-%      \midrule\midrule
-%      \multirow{4}{*}{\tablesmall{Gradient}} 
-%      & \algnamesmall{PP-MARINA} &   $\frac{1}{\varepsilon} + \frac{(\omega + 1)\sqrt{n}}{\varepsilon s}$ & SOTA & Optimal & No \\
-%      & \algnamesmall{FRECON} &   $\frac{1}{\varepsilon} + \frac{(\omega + 1)\sqrt{n}}{\varepsilon s}$ & SOTA & Optimal & Yes \\
-%      & \algnamesmall{DASHA} &   $\frac{1}{\varepsilon} + \frac{(\omega + 1)\sqrt{n}}{\varepsilon s}$ & SOTA & Optimal & Yes \\
-%      & \algnamesmall{DASHA-PP} (New) &  $\frac{1}{\varepsilon} + \frac{(\omega + 1)\sqrt{n}}{\varepsilon s}$ & SOTA & Optimal & Yes \\
-%     \end{tabular}
-% \end{threeparttable}
-% \end{table*}
-% A comparison of methods with partial participation of nodes:
-
-% \begin{table}[h]
-%   \caption{}
-%   \centering 
-%   \small
-%   \begin{threeparttable}
-%     \begin{tabular}{cccccc}
-%       \midrule
-%     Setting & Method & Comm. Rounds & Comm. Comp. & Oracle Comp. & Partial Participation \\
-%      \midrule\midrule
-%      \multirow{2}{*}{\tablesmall{Finite-Sum}} 
-%      & \algnamesmall{DASHA} &   $\frac{1}{\varepsilon} + \frac{(\omega + 1)\sqrt{n}}{\varepsilon s}$ & SOTA & Optimal & Yes \\
-%      & \algnamesmall{DASHA-PP} (New) &  $\frac{1}{\varepsilon} + \frac{(\omega + 1)\sqrt{n}}{\varepsilon s}$ & SOTA & Optimal & Yes \\
-%     \end{tabular}
-% \end{threeparttable}
-% \end{table}
-
-% \begin{table}[h]
-%   \caption{}
-%   \centering 
-%   \small
-%   \begin{threeparttable}
-%     \begin{tabular}{cccccc}
-%       \midrule
-%     Setting & Method & Comm. Rounds & Comm. Comp. & Oracle Comp. & Partial Participation \\
-%      \midrule\midrule
-%      \multirow{2}{*}{\tablesmall{Stochastic}} 
-%      & \algnamesmall{DASHA} &   $\frac{1}{\varepsilon} + \frac{(\omega + 1)\sqrt{n}}{\varepsilon s}$ & SOTA & Optimal & Yes \\
-%      & \algnamesmall{DASHA-PP} (New) &  $\frac{1}{\varepsilon} + \frac{(\omega + 1)\sqrt{n}}{\varepsilon s}$ & SOTA & Optimal & Yes \\
-%     \end{tabular}
-% \end{threeparttable}
-% \end{table}
-
-
 \section{Assumptions}
-
 In this section, we list the assumptions that we use in the paper.
 
-\subsection{Functions Assumptions\footnote{Note that $L \leq \widehat{L},$ $\widehat{L} \leq L_{\max},$ and $\widehat{L} \leq L_{\sigma}.$}}
+\subsection{Functions Assumptions}
 Now, we provide assumptions for the functions $f_i.$
 \begin{assumption}
     \label{ass:lower_bound}
@@ -162,7 +147,7 @@ Now, we provide assumptions for the functions $f_i.$
 \end{assumption}
 \begin{assumption} \leavevmode
     \label{ass:nodes_lipschitz_constant}
-    The functions $f_i$ are $L_i$--smooth. We define $\widehat{L}^2 \eqdef \frac{1}{n} \sum_{i=1}^{n} L_i^2.$
+    The functions $f_i$ are $L_i$--smooth. Let us define $\widehat{L}^2 \eqdef \frac{1}{n} \sum_{i=1}^{n} L_i^2.$\footnote{Note that $L \leq \widehat{L},$ $\widehat{L} \leq L_{\max},$ and $\widehat{L} \leq L_{\sigma}.$}
 \end{assumption}
 The next assumption is used in the finite-sum setting \eqref{eq:task_minibatch}.
 \begin{assumption}
@@ -414,23 +399,26 @@ Let us consider the task of estimating the mean of vectors in the distributed se
   \label{eq:partial_participation_sampling:all_nodes}
   \Exp{\norm{\frac{1}{n B}\sum_{i=1}^n \sum_{j \in I^i} x_{ij} - \frac{1}{n m}\sum_{i=1}^n \sum_{j=1}^m x_{ij}}^2} = \frac{1}{n B} \frac{1}{n m} \sum_{i=1}^n \sum_{j=1}^m \norm{x_{ij} - \frac{1}{m}\sum_{j=1}^m x_{ij}}^2.
 \end{align}
-Next, we consider the same task in the partial participation setting with $s$--nice sampling, i.e., we sample a random set $S \subset [n]$ of $s \in [n]$ nodes without replacement and receive the mini-batches only from the sampled nodes. Such sampling of nodes satisfy Assumption~\ref{ass:partial_participation} with $\probavailable = \nicefrac{s}{n}$ and $\probavailable = \nicefrac{s (s-1)}{n (n-1)}$. In this case, the variance of the estimator is
+Next, we consider the same task in the partial participation setting with $s$--nice sampling, i.e., we sample a random set $S \subset [n]$ of $s \in [n]$ nodes without replacement and receive the mini-batches only from the sampled nodes. Such sampling of nodes satisfy Assumption~\ref{ass:partial_participation} with $\probavailable = \nicefrac{s}{n}$ and $\probavailable = \nicefrac{s (s-1)}{n (n-1)}$. In this case, the variance of the estimator (See Lemma~\ref{lemma:sampling} with $r_i = 0$ and $s_i = \sum_{j \in I^i} x_{ij}$) is
 \begin{align}
   \Exp{\norm{\frac{1}{s B}\sum_{i \in S} \sum_{j \in I^i} x_{ij} - \frac{1}{n m}\sum_{i=1}^n \sum_{j=1}^m x_{ij}}^2} &= \frac{1}{s B}\underbrace{\frac{1}{n m} \sum_{i=1}^n \sum_{j=1}^m \norm{x_{ij} - \frac{1}{m}\sum_{j=1}^m x_{ij}}^2}_{\mathcal{L}_{\max}^2} \label{eq:partial_participation_sampling:s_nodes}\\
   &+\frac{n - s}{s (n - 1)} \underbrace{\frac{1}{n} \sum_{i=1}^n \norm{\frac{1}{m}\sum_{j=1}^m x_{ij} - \frac{1}{n m}\sum_{i=1}^n \sum_{j=1}^m x_{ij}}^2}_{\widehat{\mathcal{L}}^2} \nonumber.
 \end{align}
-See Lemma~\ref{lemma:sampling} with $r_i = 0$ and $s_i = \sum_{j \in I^i} x_{ij}$. Let us assume that $s \leq \nicefrac{n}{2}.$ Note that \eqref{eq:partial_participation_sampling:all_nodes} scales with any $B \geq 1,$ while \eqref{eq:partial_participation_sampling:s_nodes} only scales when $B = \cO\left(\nicefrac{\mathcal{L}_{\max}^2}{\widehat{\mathcal{L}}^2}\right).$ In other words, for large enough $B,$ the variance in \eqref{eq:partial_participation_sampling:s_nodes} does not improve with the growth of $B$. In our proof, due to partial participation, the variance from \eqref{eq:partial_participation_sampling:s_nodes} naturally appears, and we get the same effect. As was mentioned in Sections~\ref{sec:finite_sum_setting} and \ref{sec:stochastic_setting}, it can be seen in our convergence rate bounds.
+Let us assume that $s \leq \nicefrac{n}{2}.$ Note that \eqref{eq:partial_participation_sampling:all_nodes} scales with any $B \geq 1,$ while \eqref{eq:partial_participation_sampling:s_nodes} only scales when $B = \cO\left(\nicefrac{\mathcal{L}_{\max}^2}{\widehat{\mathcal{L}}^2}\right).$ In other words, for large enough $B,$ the variance in \eqref{eq:partial_participation_sampling:s_nodes} does not improve with the growth of $B$ due to the term $\widehat{\mathcal{L}}^2$. In our proof, due to partial participation, the variance from \eqref{eq:partial_participation_sampling:s_nodes} naturally appears, and we get the same effect. As was mentioned in Sections~\ref{sec:finite_sum_setting} and \ref{sec:stochastic_setting}, it can be seen in our convergence rate bounds.
 % And taking batch size $B$ larger than 
 
 \section{Experiments}
 
-In experiments, our main goal is to compare \algname{DASHA-PP} with \algname{DASHA}. We verify that the convergence rates of \algname{DASHA-PP} no worse than times $\nicefrac{1}{\probavailable}$. We use the standard setting in experiments where all parameters except step sizes are taken as suggested in theory. Step sizes are finetuned from a set $\{2^{i}\,|\,i \in [-10, 10]\}.$
+In experiments, our main goal is to compare \algname{DASHA-PP} with \algname{DASHA}. We verify that the convergence rates of \algname{DASHA-PP} no worse than times $\nicefrac{1}{\probavailable}$. We use the standard setting in experiments where all parameters except step sizes are taken as suggested in theory. Step sizes are finetuned from a set~$\{2^{i}\,|\,i \in [-10, 10]\}.$
 
 \subsection{Gradient Setting}
 
 \subsection{Finite-sum Setting}
 
 \subsection{Stochastic Setting}
+
+\bibliographystyle{apalike}
+\bibliography{neurips_2022}
 
 \newpage
 \appendix
@@ -560,7 +548,12 @@ We start the proof of theorems by providing standard lemmas from the nonconvex o
   \end{eqnarray}
 \end{lemma}
 
-The proof of Lemma \ref{lemma:page_lemma} is provided in \cite{PAGE}.
+\alexander{Prove it!}
+
+\begin{proof}
+  
+\end{proof}
+% The proof of Lemma \ref{lemma:page_lemma} is provided in \cite{PAGE}.
 
 \begin{lemma}
   \label{lemma:good_recursion}
