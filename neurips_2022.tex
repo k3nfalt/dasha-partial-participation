@@ -156,7 +156,7 @@ We assume that Assumptions~\ref{ass:lower_bound}, \ref{ass:lipschitz_constant} a
 
 \end{enumerate}
 
-\subsection{Compressors Assumptions}
+\subsection{Unbiased Compressors}
 \alexander{Say somewhere that the compression can be done for free}
 \begin{definition}
     \label{def:unbiased_compression}
@@ -169,7 +169,7 @@ We assume that Assumptions~\ref{ass:lower_bound}, \ref{ass:lipschitz_constant} a
 \end{definition}
 We denote a set of stochastic mappings that satisfy Definition~\ref{def:unbiased_compression} as $\mathbb{U}(\omega).$
 In our methods, the nodes make use of unbiased compressors $\{\cC_i\}_{i=1}^n.$ 
-The community developed a large number of unbiassed compressors, including Rand$K$, Natural Compression..
+The community developed a large number of unbiassed compressors, including Rand$K$ \cite{beznosikov2020biased, stich2018sparsified}, Adaptive sparsification \cite{wangni2018gradient} and Natural compression and dithering \cite{horvath2019natural}.
 \alexander{Add more examples}
 We are aware of correlated compressors and quantizers that help in the homogeneous regimes, 
 but in this work, we are mainly concentrated on generic heterogeneous regimes, though, for simplicity, 
