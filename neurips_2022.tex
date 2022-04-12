@@ -199,7 +199,7 @@ We now try to formalize the notion of partial participation. Let us assume that 
   and these events from different communication rounds are independent.
 \end{assumption}
 
-We are not fighting for the full generality and believe that more complex sampling strategies can be considered in the analysis (see \ref{}). But, for simplicity, we settle upon Assumption~\ref{ass:partial_participation}. Standard partial participation strategies, including $s$--nice sampling, where the server chooses uniformly $s$ nodes without replacement ($\probavailable = \nicefrac{s}{n}$ and $\probpairaa~=~\nicefrac{s(s-1)}{n(n-1)}$),
+We are not fighting for the full generality and believe that more complex sampling strategies can be considered in the analysis (see \ref{}). For simplicity, we settle upon Assumption~\ref{ass:partial_participation}. Standard partial participation strategies, including $s$--nice sampling, where the server chooses uniformly $s$ nodes without replacement ($\probavailable = \nicefrac{s}{n}$ and $\probpairaa~=~\nicefrac{s(s-1)}{n(n-1)}$),
 and independent participation, where each node independently participates with probability $\probavailable$ (due to independence, we have $\probpairaa = \probavailable^2$), satisfy Assumption~\ref{ass:partial_participation}. In the literature, $s$--nice sampling is one of the most popular strategies of partial participation (see \ref{}).
 
 \section{Algorithm Description}
