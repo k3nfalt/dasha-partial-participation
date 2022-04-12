@@ -169,7 +169,8 @@ We assume that Assumptions~\ref{ass:lower_bound}, \ref{ass:lipschitz_constant} a
 \end{definition}
 We denote a set of stochastic mappings that satisfy Definition~\ref{def:unbiased_compression} as $\mathbb{U}(\omega).$
 In our methods, the nodes make use of unbiased compressors $\{\cC_i\}_{i=1}^n.$ 
-The community developed a large number of unbiassed compressors, including the apple.
+The community developed a large number of unbiassed compressors, including Rand$K$, Natural Compression..
+\alexander{Add more examples}
 We are aware of correlated compressors and quantizers that help in the homogeneous regimes, 
 but in this work, we are mainly concentrated on generic heterogeneous regimes, though, for simplicity, 
 assume the independence of the compressors.
@@ -406,7 +407,7 @@ Next, we consider the same task in the partial participation setting with $s$--n
   \Exp{\norm{\frac{1}{s B}\sum_{i \in S} \sum_{j \in I^i} x_{ij} - \frac{1}{n m}\sum_{i=1}^n \sum_{j=1}^m x_{ij}}^2} &= \frac{1}{s B}\underbrace{\frac{1}{n m} \sum_{i=1}^n \sum_{j=1}^m \norm{x_{ij} - \frac{1}{m}\sum_{j=1}^m x_{ij}}^2}_{\mathcal{L}_{\max}^2} \label{eq:partial_participation_sampling:s_nodes}\\
   &+\frac{n - s}{s (n - 1)} \underbrace{\frac{1}{n} \sum_{i=1}^n \norm{\frac{1}{m}\sum_{j=1}^m x_{ij} - \frac{1}{n m}\sum_{i=1}^n \sum_{j=1}^m x_{ij}}^2}_{\widehat{\mathcal{L}}^2} \nonumber.
 \end{align}
-Let us assume that $s \leq \nicefrac{n}{2}.$ Note that \eqref{eq:partial_participation_sampling:all_nodes} scales with any $B \geq 1,$ while \eqref{eq:partial_participation_sampling:s_nodes} only scales when $B = \cO\left(\nicefrac{\mathcal{L}_{\max}^2}{\widehat{\mathcal{L}}^2}\right).$ In other words, for large enough $B,$ the variance in \eqref{eq:partial_participation_sampling:s_nodes} does not improve with the growth of $B$ due to the term $\widehat{\mathcal{L}}^2$. In our proof, due to partial participation, the variance from \eqref{eq:partial_participation_sampling:s_nodes} naturally appears, and we get the same effect. As was mentioned in Sections~\ref{sec:finite_sum_setting} and \ref{sec:stochastic_setting}, it can be seen in our convergence rate bounds.
+Let us assume that $s \leq \nicefrac{n}{2}.$ Note that \eqref{eq:partial_participation_sampling:all_nodes} scales with any $B \geq 1,$ while \eqref{eq:partial_participation_sampling:s_nodes} only scales when $B = \cO\left(\nicefrac{\mathcal{L}_{\max}^2}{\widehat{\mathcal{L}}^2}\right).$ In other words, for large enough $B,$ the variance in \eqref{eq:partial_participation_sampling:s_nodes} does not significantly improves with the growth of $B$ due to the term $\widehat{\mathcal{L}}^2$. In our proof, due to partial participation, the variance from \eqref{eq:partial_participation_sampling:s_nodes} naturally appears, and we get the same effect. As was mentioned in Sections~\ref{sec:finite_sum_setting} and \ref{sec:stochastic_setting}, it can be seen in our convergence rate bounds.
 % And taking batch size $B$ larger than 
 
 \section{Experiments}
