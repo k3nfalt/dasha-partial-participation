@@ -82,18 +82,17 @@
 \begin{abstract}
 \end{abstract}
 
-\alexander{TODO: rewrite copy-pasting}
-
 \section{Introduction}
-
-\begin{enumerate}
-  \item Partial Participation
-  \item Variance Reduction
-  \item No Synchronization
-  \item Compression
-\end{enumerate}
+Federated and distributed learning have become more popular in recent years \citep{konevcny2016federated, mcmahan2017communication}. 
+The current optimization tasks require many nodes to find a solution of an optimization problem. Such requirements emerge in machine learning, where massive datasets and computations are distributed between cluster nodes \citep{lin2017deep, ramesh2021zero}. In federated learning, nodes, represented by mobile phones, laptops, and desktops, do not send their data to the server due to privacy and their huge number \citep{ramaswamy2019federated}.
 
 \section{Related Work}
+
+\begin{enumerate}
+  \item Partial Participation (No Synchronization)
+  \item Variance Reduction
+  \item Compression
+\end{enumerate}
 
 \section{Optimization Problem}
 Let us consider the distributed optimization problem
@@ -103,8 +102,7 @@ Let us consider the distributed optimization problem
 \end{align}
 where $f_i\,:\,\R^d \rightarrow \R$ is a smooth nonconvex function for all $i \in [n] \eqdef \{1, \dots, n\}.$ The full information about function $f_i$ is stored on $i$\textsuperscript{th} node. The communication between nodes is maintained in the parameters server fashion \citep{kairouz2021advances}: we have a server that receives compressed information from nodes, updates a state, and broadcasts an updated model.\footnote{Note that this strategy can be used in peer-to-peer communication, assuming that the server is an abstraction and all its algorithmic steps are performed on each node.} Since we work in the nonconvex world, our goal is to find an $\varepsilon$-solution ($\varepsilon$-stationary point) of \eqref{eq:main_problem}: a (possibly random) point $\widehat{x}\in \R^d$, such that ${\rm E}\big[\norm{\nabla f(\widehat{x})}^2\big] \leq \varepsilon.$
 
-We consider three structural assumptions about the functions $\{f_i\}_{i=1}^n$:
-
+We consider three settings:
 \begin{enumerate}[leftmargin=0.75cm]
 \item \textbf{Gradient Setting.}
 The $i$\textsuperscript{th} node has only access to the gradient $\nabla f_i \,:\,\R^d \rightarrow \R^d$ of function $f_i$. Moreover, the following assumptions for the functions $f_i$ hold.
