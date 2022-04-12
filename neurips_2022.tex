@@ -26,6 +26,7 @@
 \usepackage{nicefrac}       % compact symbols for 1/2, etc.
 \usepackage{microtype}      % microtypography
 \usepackage{xcolor}         % colors
+\usepackage{enumitem}
 
 \include{macros}
 \usepackage[textsize=tiny]{todonotes}
@@ -100,43 +101,11 @@ Let us consider the distributed optimization problem
 \end{align}
 where $f_i\,:\,\R^d \rightarrow \R$ is a smooth nonconvex function for all $i \in [n] \eqdef \{1, \dots, n\}.$ The full information about function $f_i$ is stored on $i$\textsuperscript{th} node. The communication between nodes is maintained in the parameters server fashion \citep{kairouz2021advances}: we have a server that receives compressed information from nodes, updates a state, and broadcasts an updated model.\footnote{Note that this strategy can be used in peer-to-peer communication, assuming that the server is an abstraction and all its algorithmic steps are performed on each node.} Since we work in the nonconvex world, our goal is to find an $\varepsilon$-solution ($\varepsilon$-stationary point) of \eqref{eq:main_problem}: a (possibly random) point $\widehat{x}\in \R^d$, such that ${\rm E}\big[\norm{\nabla f(\widehat{x})}^2\big] \leq \varepsilon.$
 
-% \subsection{Gradient oracles}
-% We consider all of  the following structural assumptions about the functions $\{f_i\}_{i=1}^n$, each with its own natural gradient oracle:
+We consider three structural assumptions about the functions $\{f_i\}_{i=1}^n$:
 
-% \begin{enumerate}
-% \item \textbf{Gradient Setting.}
-% The $i$\textsuperscript{th} node has access to the \textit{gradient} $\nabla f_i \,:\,\R^d \rightarrow \R^d$ of function $f_i$.
-
-% \item \textbf{Finite-Sum Setting.}
-% The functions $\{f_i\}_{i=1}^n$ have the finite-sum form
-% \begin{align}
-%     \label{eq:task_minibatch} f_i(x) = \frac{1}{n}\sum \limits_{j=1}^m f_{ij}(x), \qquad \forall i \in [n],
-% \end{align}
-% where $f_{ij} :\R^d  \rightarrow \R$ is a smooth nonconvex  function for all $j \in [m].$
-% For all $i \in [n],$ the $i$\textsuperscript{th} node has access to a \textit{mini-batch of $B$ gradients}, $\frac{1}{\BZ}\sum_{j \in I_i} \nabla f_{ij}(\cdot),$ where $I_i$ is a multi-set of i.i.d.\,samples of the set $[m],$ and $|I_i| = \BZ$.
-
-
-
-% \item \textbf{Stochastic Setting.}
-% The function $f_i$ is an expectation of a stochastic function, 
-% \begin{align}
-%     \label{eq:task_staochastic}
-%     f_i(x) = \ExpSub{\xi}{f_i(x;\xi)}, \qquad \forall i \in [n],
-% \end{align}
-% where $f_i :\R^d \times \Omega_{\xi} \rightarrow \R.$ For a fixed $x \in \R,$ $f_i(x;\xi)$ is a random variable over some distribution $\mathcal{D}_i$,
-% and, for a fixed $\xi \in \Omega_{\xi},$ $f_i(x;\xi)$ is a smooth  nonconvex function.
-% The $i$\textsuperscript{th} node has access to a \textit{mini-batch of $B$ stochastic gradients} $ \frac{1}{\BZ}\sum_{j=1}^B \nabla f_i(\cdot; \xi_{ij})$ 
-% of the function $f_i$ through the distribution $\mathcal{D}_i,$ where $\{\xi_{ij}\}_{j=1}^B$ is a collection of i.i.d.\,samples from $\mathcal{D}_i.$
-
-% \end{enumerate}
-
-\section{Related Work}
-
-\section{Assumptions}
-In this section, we list the assumptions that we use in the paper.
-
-\subsection{Functions Assumptions}
-Now, we provide assumptions for the functions $f_i.$
+\begin{enumerate}[leftmargin=0.75cm]
+\item \textbf{Gradient Setting.}
+The $i$\textsuperscript{th} node has only access to the gradient $\nabla f_i \,:\,\R^d \rightarrow \R^d$ of function $f_i$. Moreover, the following assumptions for the functions $f_i$ hold:
 \begin{assumption}
     \label{ass:lower_bound}
     There exists $f^* \in \R$ such that $f(x) \geq f^*$ for all $x \in \R$.
@@ -149,22 +118,44 @@ Now, we provide assumptions for the functions $f_i.$
     \label{ass:nodes_lipschitz_constant}
     The functions $f_i$ are $L_i$--smooth. Let us define $\widehat{L}^2 \eqdef \frac{1}{n} \sum_{i=1}^{n} L_i^2.$\footnote{Note that $L \leq \widehat{L},$ $\widehat{L} \leq L_{\max},$ and $\widehat{L} \leq L_{\sigma}.$}
 \end{assumption}
-The next assumption is used in the finite-sum setting \eqref{eq:task_minibatch}.
+
+\item \textbf{Finite-Sum Setting.}
+The functions $\{f_i\}_{i=1}^n$ have the finite-sum form
+\begin{align}
+    \label{eq:task_minibatch} f_i(x) = \frac{1}{n}\sum \limits_{j=1}^m f_{ij}(x), \qquad \forall i \in [n],
+\end{align}
+where $f_{ij} :\R^d  \rightarrow \R$ is a smooth nonconvex  function for all $j \in [m].$
+We assume that Assumptions~\ref{ass:lower_bound}, \ref{ass:lipschitz_constant} and \ref{ass:nodes_lipschitz_constant} hold and the following assumption:
 \begin{assumption}
-    \label{ass:max_lipschitz_constant}
-    The function $f_{ij}$ is $L_{ij}$-smooth for all $i \in [n], j \in [m].$ Let $L_{\max} \eqdef \max_{i \in [n], j \in [m]} L_{ij}.$
+  \label{ass:max_lipschitz_constant}
+  The function $f_{ij}$ is $L_{ij}$-smooth for all $i \in [n], j \in [m].$ Let $L_{\max} \eqdef \max_{i \in [n], j \in [m]} L_{ij}.$
 \end{assumption}
-The two assumptions below are provided for the stochastic setting \eqref{eq:task_staochastic}.
+\item \textbf{Stochastic Setting.}
+The function $f_i$ is an expectation of a stochastic function, 
+\begin{align}
+    \label{eq:task_staochastic}
+    f_i(x) = \ExpSub{\xi}{f_i(x;\xi)}, \qquad \forall i \in [n],
+\end{align}
+where $f_i :\R^d \times \Omega_{\xi} \rightarrow \R.$ For a fixed $x \in \R,$ $f_i(x;\xi)$ is a random variable over some distribution $\mathcal{D}_i$,
+and, for a fixed $\xi \in \Omega_{\xi},$ $f_i(x;\xi)$ is a smooth nonconvex function.
+The $i$\textsuperscript{th} node has only access to a stochastic gradients $\nabla f_i(\cdot; \xi_{ij})$ 
+of the function $f_i$ through the distribution $\mathcal{D}_i,$ where $\xi_{ij}$ is a sample from $\mathcal{D}_i.$
+We assume that Assumptions~\ref{ass:lower_bound}, \ref{ass:lipschitz_constant} and \ref{ass:nodes_lipschitz_constant} hold and the following assumptions:
 \begin{assumption}
-    \label{ass:stochastic_unbiased_and_variance_bounded}
-    For all $i \in [n]$ and for all $x \in \R^d,$ the stochastic gradient $\nabla f_i(x;\xi)$ is unbiased and has bounded variance, i.e., $\ExpSub{\xi}{\nabla f_i(x;\xi)} = \nabla f_i(x),$ and $\ExpSub{\xi}{\norm{\nabla f_i(x;\xi) - \nabla f_i(x)}^2} \leq \sigma^2,$ where $\sigma^2 \geq 0.$
+  \label{ass:stochastic_unbiased_and_variance_bounded}
+  For all $i \in [n]$ and for all $x \in \R^d,$ the stochastic gradient $\nabla f_i(x;\xi)$ is unbiased and has bounded variance, i.e., $\ExpSub{\xi}{\nabla f_i(x;\xi)} = \nabla f_i(x),$ and $\ExpSub{\xi}{\norm{\nabla f_i(x;\xi) - \nabla f_i(x)}^2} \leq \sigma^2,$ where $\sigma^2 \geq 0.$
 \end{assumption}
 \begin{assumption}
-    \label{ass:mean_square_smoothness}
-    For all $i \in [n]$ and for all $x, y \in \R,$ the stochastic gradient $\nabla f_i(x;\xi)$ satisfies the mean-squared smoothness property, i.e., $\ExpSub{\xi}{\norm{\nabla f_i(x;\xi) - \nabla f_i(y;\xi)}^2} \leq L_{\sigma}^2 \norm{x - y}^2.$
+  \label{ass:mean_square_smoothness}
+  For all $i \in [n]$ and for all $x, y \in \R,$ the stochastic gradient $\nabla f_i(x;\xi)$ satisfies the mean-squared smoothness property, i.e., $\ExpSub{\xi}{\norm{\nabla f_i(x;\xi) - \nabla f_i(y;\xi)}^2} \leq L_{\sigma}^2 \norm{x - y}^2.$
 \end{assumption}
 
 \alexander{It is better to fix proofs with a new definition}
+
+\end{enumerate}
+
+\section{Related Work}
+
 
 \subsection{Compressors Assumptions}
 \begin{definition}
