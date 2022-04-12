@@ -204,7 +204,7 @@ and independent participation, where each node independently participates with p
 We now present \algname{DASHA-PP} (see Algorithm~\ref{alg:main_algorithm}), a family of methods to solve the optimization problem \eqref{eq:main_problem}. \algname{DASHA-PP} is based on \algname{DASHA}. 
 Let us point out the main differences. i) if a node participates, then it does \algname{DASHA}-like steps; otherwise, it does nothing. ii) some steps are scaled by \nicefrac{1}{\probavailable} to preserve ``unbiasedness''. iii) In \algname{DASHA}, the momentum $b$ is used only to reduce the variance of stochastic gradients. In \algname{DASHA-PP}, the momentum $b$ plays the second role. It also helps to reduce the variance of ``partial participation randomness''. That is why it also appears in the gradient and finite-sum settings. iv) In the finite-sum setting, we present two methods: \algname{DASHA-PP-PAGE} and \algname{DASHA-PP-FINITE-MVR}. The former is based on \algname{PAGE} \citep{PAGE} and with small probability $\probpage$ calculates the full gradients of the functions $f_i$. The latter always calculates mini-batches, but it needs extra memory $\cO\left(d m\right)$ per node to store vectors $h^{t}_{ij}$. v) the server in \algname{DASHA-PP} broadcasts two points $x^{t+1}$ and $x^{t},$ while the server in \algname{DASHA} broadcasts one point $x^{t+1}.$ One can easily show that \algname{DASHA-PP} reduces to \algname{DASHA} when $\probavailable = 1.$
 
-\begin{algorithm}[H]
+\begin{algorithm}
   \caption{\algname{DASHA-PP}}
   \label{alg:main_algorithm}
   \begin{algorithmic}[1]
@@ -241,14 +241,14 @@ Let us point out the main differences. i) if a node participates, then it does \
   \end{algorithmic}
 \end{algorithm}
 
-\begin{algorithm}[H]
+\begin{algorithm}
   \caption{Calculate $k^{t+1}_i$ for \algname{DASHA-PP} in the gradient setting. See line~\ref{alg:calculate_k} in Alg.~\ref{alg:main_algorithm}}
   \label{alg:main_algorithm:dasha_pp}
   \begin{algorithmic}[1]
     \STATE $k^{t+1}_i = \nabla f_i(x^{t+1}) - \nabla f_i(x^{t}) - b \left(h^t_i - \nabla f_i(x^{t})\right)$ 
   \end{algorithmic}
 \end{algorithm}
-\begin{algorithm}[H]
+\begin{algorithm}
   \caption{Calculate $k^{t+1}_i$ for \algname{DASHA-PP-PAGE} in the finite-sum setting. See line~\ref{alg:calculate_k} in Alg.~\ref{alg:main_algorithm}}
   \label{alg:main_algorithm:dasha_pp_page}
   \begin{algorithmic}[1]
@@ -260,7 +260,7 @@ Let us point out the main differences. i) if a node participates, then it does \
           \qquad \textnormal{with probability $1 - \probpage$ on all \textit{participating} nodes} \end{cases}$
   \end{algorithmic}
 \end{algorithm}
-\begin{algorithm}[H]
+\begin{algorithm}
   \caption{Calculate $k^{t+1}_i$ for \algname{DASHA-PP-FINITE-MVR} in the finite-sum setting. See line~\ref{alg:calculate_k} in Alg.~\ref{alg:main_algorithm}}
   \label{alg:main_algorithm:dasha_pp_finite_mvr}
   \begin{algorithmic}[1]
@@ -274,7 +274,7 @@ Let us point out the main differences. i) if a node participates, then it does \
     \STATE $k^{t+1}_i = \frac{1}{m}\sum_{j=1}^m k^{t+1}_{ij}$
   \end{algorithmic}
 \end{algorithm}
-\begin{algorithm}[H]
+\begin{algorithm}
   \caption{Calculate $k^{t+1}_i$ for \algname{DASHA-PP-MVR} in the stochastic setting. See line~\ref{alg:calculate_k} in Alg.~\ref{alg:main_algorithm}}
   \label{alg:main_algorithm:dasha_pp_mvr}
   \begin{algorithmic}[1]
@@ -292,10 +292,10 @@ We now present the convergence rates theorems of \algname{DASHA-PP} in different
 \begin{restatable}{theorem}{CONVERGENCE}
   \label{theorem:gradient_oracle}
   Suppose that Assumptions \ref{ass:lower_bound}, \ref{ass:lipschitz_constant}, \ref{ass:nodes_lipschitz_constant}, \ref{ass:compressors} and \ref{ass:partial_participation} hold. Let us take $a = \frac{\probavailable}{2 \omega + 1} ,$ $b = \frac{\probavailable}{2 - \probavailable},$ $$\gamma \leq \left(L + \sqrt{\frac{48 \omega \left(2 \omega + 1\right)}{n \probavailable^2} + \frac{16}{n \probavailable^2}\left(1 - \frac{\probpairaa}{\probavailable}\right)}\widehat{L}\right)^{-1},$$ and $g^{0}_i = h^{0}_i = \nabla f_i(x^0)$ for all $i \in [n]$
-  in Algorithm~\ref{alg:main_algorithm} \algname{(DASHA-PP)}, then
-  \begin{align*}
-      &\Exp{\norm{\nabla f(\widehat{x}^T)}^2} \leq \frac{1}{T}\Bigg[2 \left(f(x^0) - f^*\right)\left(L + \sqrt{\frac{48 \omega \left(2 \omega + 1\right)}{n \probavailable^2} + \frac{16}{n \probavailable^2}\left(1 - \frac{\probpairaa}{\probavailable}\right)} \widehat{L}\right)\Bigg].
-  \end{align*}
+  in Algorithm~\ref{alg:main_algorithm} \algname{(DASHA-PP)}, then $\Exp{\norm{\nabla f(\widehat{x}^T)}^2} \leq \frac{2 \left(f(x^0) - f^*\right)}{\gamma T}.$
+  % \begin{align*}
+  %     &\Exp{\norm{\nabla f(\widehat{x}^T)}^2} \leq \frac{1}{T}\Bigg[2 \left(f(x^0) - f^*\right)\left(L + \sqrt{\frac{48 \omega \left(2 \omega + 1\right)}{n \probavailable^2} + \frac{16}{n \probavailable^2}\left(1 - \frac{\probpairaa}{\probavailable}\right)} \widehat{L}\right)\Bigg].
+  % \end{align*}
 \end{restatable}
 
 Let us recall the convergence rate of \algname{DASHA} or \algname{MARINA}, the number of communication rounds to get $\varepsilon$-solution equals
@@ -308,13 +308,13 @@ $\cO\left(\frac{1}{\varepsilon}\left[L + \frac{\omega}{\sqrt{n}}\widehat{L}\righ
 \begin{restatable}{theorem}{CONVERGENCEPAGE}
   \label{theorem:page}
   Suppose that Assumptions \ref{ass:lower_bound}, \ref{ass:lipschitz_constant}, \ref{ass:nodes_lipschitz_constant}, \ref{ass:max_lipschitz_constant}, \ref{ass:compressors}, and \ref{ass:partial_participation} hold. Let us take $a = \frac{\probavailable}{2 \omega + 1} ,$ $b = \frac{\probpage \probavailable}{2 - \probavailable},$ probability $\probpage \in (0, 1]$,
-  $$\gamma \leq \left(L + \sqrt{\frac{48 \omega (2 \omega + 1)}{n \probavailable^2} \left(\widehat{L}^2 + \frac{(1 - \probpage)L_{\max}^2}{B}\right) + \frac{16}{n \probavailable^2 \probpage} \left(\left(1 - \frac{\probpairaa}{\probavailable}\right)\widehat{L}^2 + \frac{(1 - \probpage)L_{\max}^2}{B}\right)}\right)^{-1}$$
+  {\scriptsize $$\gamma \leq \left(L + \sqrt{\frac{48 \omega (2 \omega + 1)}{n \probavailable^2} \left(\widehat{L}^2 + \frac{(1 - \probpage)L_{\max}^2}{B}\right) + \frac{16}{n \probavailable^2 \probpage} \left(\left(1 - \frac{\probpairaa}{\probavailable}\right)\widehat{L}^2 + \frac{(1 - \probpage)L_{\max}^2}{B}\right)}\right)^{-1}$$}
   and $g^{0}_i = h^{0}_i = \nabla f_i(x^0)$ for all $i \in [n]$ in Algorithm~\ref{alg:main_algorithm} \algname{(DASHA-PP-PAGE)}
-  then
-  \begin{align*}
-    &\Exp{\norm{\nabla f(\widehat{x}^T)}^2} \leq \frac{1}{T}\vast[2 \left(f(x^0) - f^*\right) \times \\
-    & \left(L + \sqrt{\frac{48 \omega (2 \omega + 1)}{n \probavailable^2} \left(\widehat{L}^2 + \frac{(1 - \probpage)L_{\max}^2}{B}\right) + \frac{16}{n \probavailable^2 \probpage} \left(\left(1 - \frac{\probpairaa}{\probavailable}\right)\widehat{L}^2 + \frac{(1 - \probpage)L_{\max}^2}{B}\right)}\right)\vast].
-  \end{align*}
+  then $\Exp{\norm{\nabla f(\widehat{x}^T)}^2} \leq \frac{2 \left(f(x^0) - f^*\right)}{\gamma T}.$
+  % \begin{align*}
+  %   &\Exp{\norm{\nabla f(\widehat{x}^T)}^2} \leq \frac{1}{T}\vast[2 \left(f(x^0) - f^*\right) \times \\
+  %   & \left(L + \sqrt{\frac{48 \omega (2 \omega + 1)}{n \probavailable^2} \left(\widehat{L}^2 + \frac{(1 - \probpage)L_{\max}^2}{B}\right) + \frac{16}{n \probavailable^2 \probpage} \left(\left(1 - \frac{\probpairaa}{\probavailable}\right)\widehat{L}^2 + \frac{(1 - \probpage)L_{\max}^2}{B}\right)}\right)\vast].
+  % \end{align*}
 \end{restatable}
 
 % Let us simplify the statement of Theorem~\ref{theorem:page} by choosing particular parameters.
@@ -324,10 +324,6 @@ We now choose $\probpage$ to balance heavy full gradient and light mini-batch ca
 Let the assumptions from Theorem~\ref{theorem:page} hold and $\probpage = \nicefrac{B}{(m + B)}.$ 
 Then \algname{DASHA-PP-PAGE}
     needs 
-    % \begin{align}
-    %   \label{eq:rate_dasha_pp_page}
-    %   \cO\left(\frac{1}{\varepsilon}\left[L + \frac{1}{\probavailable}\left(\frac{\omega}{\sqrt{n}} + \sqrt{\frac{m}{n B}}\right)\widehat{L} + \frac{1}{\probavailable}\left(\frac{\omega}{\sqrt{n}} + \sqrt{\frac{m}{n B}}\right)\frac{L_{\max}}{\sqrt{B}}\right]\right)
-    % \end{align}
     \begin{align}
       \label{eq:rate_dasha_pp_page}
       \cO\left(\frac{1}{\varepsilon}\left[L + \frac{\omega}{\probavailable\sqrt{n}}\left(\widehat{L} + \frac{L_{\max}}{\sqrt{B}}\right) + \frac{1}{\probavailable}\sqrt{\frac{m}{n}}\left(\frac{\widehat{L}}{\sqrt{B}} + \frac{L_{\max}}{B}\right)\right]\right)
@@ -345,11 +341,11 @@ It is left to provide the convergence rate of \algname{DASHA-PP-FINITE-MVR}. The
   Suppose that Assumptions \ref{ass:lower_bound}, \ref{ass:lipschitz_constant}, \ref{ass:nodes_lipschitz_constant}, \ref{ass:max_lipschitz_constant}, \ref{ass:compressors}, and \ref{ass:partial_participation} hold. Let us take $a = \frac{\probavailable}{2 \omega + 1} ,$ $b = \frac{\frac{\probavailable B}{m}}{2 - \frac{\probavailable B}{m}},$
   $$\gamma \leq \left(L + \sqrt{\frac{148 \omega (2 \omega + 1)}{n \probavailable^2} \left(\widehat{L}^2 + \frac{L_{\max}^2}{B}\right) + \frac{72 m}{n \probavailable^2 B}\left(\left(1 - \frac{\probpairaa}{\probavailable}\right)\widehat{L}^2 + \frac{L_{\max}^2}{B}\right)}\right)^{-1},$$
   $g^{0}_i = h^{0}_i = \nabla f_i(x^0)$ for all $i \in [n]$ and $h^{0}_{ij} = \nabla f_{ij}(x^0)$ for all $i \in [n], j \in [m]$ in Algorithm~\ref{alg:main_algorithm} \algname{(DASHA-PP-FINITE-MVR)}
-  then
-  \begin{align*}
-    &\Exp{\norm{\nabla f(\widehat{x}^T)}^2} \leq \frac{1}{T}\vast[2 \left(f(x^0) - f^*\right) \times \\
-    & \left(L + \sqrt{\frac{148 \omega (2 \omega + 1)}{n \probavailable^2} \left(\widehat{L}^2 + \frac{L_{\max}^2}{B}\right) + \frac{72 m}{n \probavailable^2 B}\left(\left(1 - \frac{\probpairaa}{\probavailable}\right)\widehat{L}^2 + \frac{L_{\max}^2}{B}\right)}\right)\vast].
-  \end{align*}
+  then $\Exp{\norm{\nabla f(\widehat{x}^T)}^2} \leq \frac{2 \left(f(x^0) - f^*\right)}{\gamma T}.$
+  % \begin{align*}
+  %   &\Exp{\norm{\nabla f(\widehat{x}^T)}^2} \leq \frac{1}{T}\vast[2 \left(f(x^0) - f^*\right) \times \\
+  %   & \left(L + \sqrt{\frac{148 \omega (2 \omega + 1)}{n \probavailable^2} \left(\widehat{L}^2 + \frac{L_{\max}^2}{B}\right) + \frac{72 m}{n \probavailable^2 B}\left(\left(1 - \frac{\probpairaa}{\probavailable}\right)\widehat{L}^2 + \frac{L_{\max}^2}{B}\right)}\right)\vast].
+  % \end{align*}
 \end{restatable}
 
 \subsection{Stochastic Setting}
@@ -365,11 +361,16 @@ We define $h^t \eqdef \frac{1}{n}\sum_{i=1}^n h^t_i$.
   and $g^{0}_i = h^{0}_i$ for all $i \in [n]$
   in Algorithm~\ref{alg:main_algorithm} \algname{(DASHA-PP-MVR)}.
   Then 
-  \begin{align*}
-    &\Exp{\norm{\nabla f(\widehat{x}^T)}^2} \leq \frac{1}{T}\vast[2 \left(f(x^0) - f^*\right) \\
-    &\times \left(L + \sqrt{\frac{48 \omega (2 \omega + 1)}{n \probavailable^2} \left(\widehat{L}^2 + \frac{(1 - b)^2 L_{\sigma}^2}{B}\right) + \frac{12}{n \probavailable b}\left(\left(1 - \frac{\probpairaa}{\probavailable}\right) \widehat{L}^2 + \frac{(1 - b)^2 L_{\sigma}^2}{B} \right)}\right)\\
-    &+ \frac{2}{b} \norm{h^{0} - \nabla f(x^{0})}^2 + \left(\frac{32 b \omega (2 \omega + 1)}{n \probavailable^2} + \frac{4 \left(1 - \frac{\probpairaa}{\probavailable}\right)}{n \probavailable}\right)\left(\frac{1}{n}\sum_{i=1}^n\norm{h^{0}_i - \nabla f_i(x^{0})}^2\right)\vast] \\
-    &+ \left(\frac{48 b^2 \omega (2 \omega + 1)}{\probavailable^2} + \frac{12 b}{\probavailable}\right) \frac{\sigma^2}{n B}.
+%   \begin{align*}
+%     &\Exp{\norm{\nabla f(\widehat{x}^T)}^2} \leq \frac{1}{T}\vast[2 \left(f(x^0) - f^*\right) \\
+%     &\times \left(L + \sqrt{\frac{48 \omega (2 \omega + 1)}{n \probavailable^2} \left(\widehat{L}^2 + \frac{(1 - b)^2 L_{\sigma}^2}{B}\right) + \frac{12}{n \probavailable b}\left(\left(1 - \frac{\probpairaa}{\probavailable}\right) \widehat{L}^2 + \frac{(1 - b)^2 L_{\sigma}^2}{B} \right)}\right)\\
+%     &+ \frac{2}{b} \norm{h^{0} - \nabla f(x^{0})}^2 + \left(\frac{32 b \omega (2 \omega + 1)}{n \probavailable^2} + \frac{4 \left(1 - \frac{\probpairaa}{\probavailable}\right)}{n \probavailable}\right)\left(\frac{1}{n}\sum_{i=1}^n\norm{h^{0}_i - \nabla f_i(x^{0})}^2\right)\vast] \\
+%     &+ \left(\frac{48 b^2 \omega (2 \omega + 1)}{\probavailable^2} + \frac{12 b}{\probavailable}\right) \frac{\sigma^2}{n B}.
+% \end{align*}
+\begin{align*}
+  &\Exp{\norm{\nabla f(\widehat{x}^T)}^2} \leq \frac{1}{T}\vast[\frac{2 \left(f(x^0) - f^*\right)}{\gamma} + \frac{2}{b} \norm{h^{0} - \nabla f(x^{0})}^2 \\
+  &+ \left(\frac{32 b \omega (2 \omega + 1)}{n \probavailable^2} + \frac{4 \left(1 - \frac{\probpairaa}{\probavailable}\right)}{n \probavailable}\right)\left(\frac{1}{n}\sum_{i=1}^n\norm{h^{0}_i - \nabla f_i(x^{0})}^2\right)\vast] \\
+  &+ \left(\frac{48 b^2 \omega (2 \omega + 1)}{\probavailable^2} + \frac{12 b}{\probavailable}\right) \frac{\sigma^2}{n B}.
 \end{align*}
 \end{restatable}
 
