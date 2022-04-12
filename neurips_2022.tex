@@ -93,6 +93,8 @@
   \item Compression
 \end{enumerate}
 
+\section{Related Work}
+
 \section{Optimization Problem}
 Let us consider the distributed optimization problem
 \begin{align}
@@ -105,7 +107,7 @@ We consider three structural assumptions about the functions $\{f_i\}_{i=1}^n$:
 
 \begin{enumerate}[leftmargin=0.75cm]
 \item \textbf{Gradient Setting.}
-The $i$\textsuperscript{th} node has only access to the gradient $\nabla f_i \,:\,\R^d \rightarrow \R^d$ of function $f_i$. Moreover, the following assumptions for the functions $f_i$ hold:
+The $i$\textsuperscript{th} node has only access to the gradient $\nabla f_i \,:\,\R^d \rightarrow \R^d$ of function $f_i$. Moreover, the following assumptions for the functions $f_i$ hold.
 \begin{assumption}
     \label{ass:lower_bound}
     There exists $f^* \in \R$ such that $f(x) \geq f^*$ for all $x \in \R$.
@@ -125,7 +127,7 @@ The functions $\{f_i\}_{i=1}^n$ have the finite-sum form
     \label{eq:task_minibatch} f_i(x) = \frac{1}{n}\sum \limits_{j=1}^m f_{ij}(x), \qquad \forall i \in [n],
 \end{align}
 where $f_{ij} :\R^d  \rightarrow \R$ is a smooth nonconvex  function for all $j \in [m].$
-We assume that Assumptions~\ref{ass:lower_bound}, \ref{ass:lipschitz_constant} and \ref{ass:nodes_lipschitz_constant} hold and the following assumption:
+We assume that Assumptions~\ref{ass:lower_bound}, \ref{ass:lipschitz_constant} and \ref{ass:nodes_lipschitz_constant} hold and the following assumption.
 \begin{assumption}
   \label{ass:max_lipschitz_constant}
   The function $f_{ij}$ is $L_{ij}$-smooth for all $i \in [n], j \in [m].$ Let $L_{\max} \eqdef \max_{i \in [n], j \in [m]} L_{ij}.$
@@ -140,7 +142,7 @@ where $f_i :\R^d \times \Omega_{\xi} \rightarrow \R.$ For a fixed $x \in \R,$ $f
 and, for a fixed $\xi \in \Omega_{\xi},$ $f_i(x;\xi)$ is a smooth nonconvex function.
 The $i$\textsuperscript{th} node has only access to a stochastic gradients $\nabla f_i(\cdot; \xi_{ij})$ 
 of the function $f_i$ through the distribution $\mathcal{D}_i,$ where $\xi_{ij}$ is a sample from $\mathcal{D}_i.$
-We assume that Assumptions~\ref{ass:lower_bound}, \ref{ass:lipschitz_constant} and \ref{ass:nodes_lipschitz_constant} hold and the following assumptions:
+We assume that Assumptions~\ref{ass:lower_bound}, \ref{ass:lipschitz_constant} and \ref{ass:nodes_lipschitz_constant} hold and the following assumptions.
 \begin{assumption}
   \label{ass:stochastic_unbiased_and_variance_bounded}
   For all $i \in [n]$ and for all $x \in \R^d,$ the stochastic gradient $\nabla f_i(x;\xi)$ is unbiased and has bounded variance, i.e., $\ExpSub{\xi}{\nabla f_i(x;\xi)} = \nabla f_i(x),$ and $\ExpSub{\xi}{\norm{\nabla f_i(x;\xi) - \nabla f_i(x)}^2} \leq \sigma^2,$ where $\sigma^2 \geq 0.$
@@ -154,19 +156,23 @@ We assume that Assumptions~\ref{ass:lower_bound}, \ref{ass:lipschitz_constant} a
 
 \end{enumerate}
 
-\section{Related Work}
-
-
 \subsection{Compressors Assumptions}
+\alexander{Say somewhere that the compression can be done for free}
 \begin{definition}
+    \label{def:unbiased_compression}
     A stochastic mapping $\cC\,:\,\R^d \rightarrow \R^d$ is an \textit{unbiased compressor} if
     there exists $\omega \in \R$ such that
     \begin{align}
         \label{eq:compressor}
         \hspace{-0.2cm}\Exp{\cC(x)} = x, \qquad \Exp{\norm{\cC(x) - x}^2} \leq \omega \norm{x}^2, \qquad \forall x \in \R^d.
     \end{align}
-    We denote this class of unbiased compressors  as $\mathbb{U}(\omega).$
 \end{definition}
+We denote a set of stochastic mappings that satisfy Definition~\ref{def:unbiased_compression} as $\mathbb{U}(\omega).$
+In our methods, the nodes make use of unbiased compressors $\{\cC_i\}_{i=1}^n.$ 
+The community developed a large number of unbiassed compressors, including the apple.
+We are aware of correlated compressors and quantizers that help in the homogeneous regimes, 
+but in this work, we are mainly concentrated on generic heterogeneous regimes, though, for simplicity, 
+assume the independence of the compressors.
 \begin{assumption}
 \label{ass:compressors}
  $\cC_i \in \mathbb{U}(\omega)$ for all $i\in [n]$, and the compressors are  \textit{independent}.
@@ -179,6 +185,7 @@ We assume that Assumptions~\ref{ass:lower_bound}, \ref{ass:lipschitz_constant} a
   \ifx\relax#1\relax  \item \else \item[#1] \fi
   \abovedisplayskip=0pt\abovedisplayshortskip=0pt~\vspace*{-\baselineskip}}
 
+We now try to formalize the notion of partial participation. Let us assume that we have $n$ events $\{i^{\textnormal{th}} \textnormal{ node is \textit{participating}}\}$ with the following properties.
 \begin{assumption}
   \label{ass:partial_participation}
   The partial participation of nodes has the following distribution: exists constants $\probavailable \in (0, 1]$ and $\probpairaa \in [0, 1],$ such that
@@ -192,82 +199,82 @@ We assume that Assumptions~\ref{ass:lower_bound}, \ref{ass:lipschitz_constant} a
   and these events from different communication rounds are independent.
 \end{assumption}
 
-Standard partial participation strategies, including $s$--nice sampling, where the server chooses uniformly $s$ nodes without replacement ($\probavailable = \nicefrac{s}{n}$ and $\probpairaa~=~\nicefrac{s(s-1)}{n(n-1)}$),
-and independent participation, where each node independently participates with probability $\probavailable$ (due to independence, we have $\probpairaa = \probavailable^2$), satisfy the assumption.
+We are not fighting for the full generality and believe that more complex sampling strategies can be considered in the analysis (see \ref{}). But, for simplicity, we settle upon Assumption~\ref{ass:partial_participation}. Standard partial participation strategies, including $s$--nice sampling, where the server chooses uniformly $s$ nodes without replacement ($\probavailable = \nicefrac{s}{n}$ and $\probpairaa~=~\nicefrac{s(s-1)}{n(n-1)}$),
+and independent participation, where each node independently participates with probability $\probavailable$ (due to independence, we have $\probpairaa = \probavailable^2$), satisfy Assumption~\ref{ass:partial_participation}. In the literature, $s$--nice sampling is one of the most popular strategies of partial participation (see \ref{}).
 
 \section{Algorithm Description}
 
-\begin{minipage}{\textwidth}
-\begin{algorithm}[H]
-  \caption{\algname{DASHA-PP}}
-  \label{alg:main_algorithm}
-  \begin{algorithmic}[1]
-  \STATE \textbf{Input:} starting point $x^0 \in \R^d$, stepsize $\gamma > 0$, momentum $a \in (0, 1]$, 
-  momentum $b \in (0, 1]$, probability $\probavailable \in (0, 1]$ that a node is \textit{participating}\textsuperscript{\red (a)},
-  batch size $B$ (only in \algname{DASHA-PP-PAGE} and \algname{DASHA-PP-MVR}), 
-  probability $\probpage \in (0, 1]$ (only in \algname{DASHA-PP-PAGE}),
-  number of iterations~$T \geq 1$
-  \STATE Initialize $g^0_i\in \R^d$, $h^0_i\in \R^d$ on the nodes and  $g^0 = \frac{1}{n}\sum_{i=1}^n g^0_i$ on the server
-  \STATE Initialize $h^0_{ij}\in \R^d$ on the nodes (only in \algname{DASHA-PP-FINITE-MVR})
-  \FOR{$t = 0, 1, \dots, T - 1$}
-  \STATE $x^{t+1} = x^t - \gamma g^t$ \alglinelabel{alg:main_algorithm:x_update} 
-  \STATE Broadcast $x^{t+1}, x^{t}$ to all \textit{participating}\textsuperscript{\red (a)} nodes
-  \FOR{$i = 1, \dots, n$ in parallel}
-  \IF{$i^{\textnormal{th}} \textnormal{ node is \textit{participating}}$\textsuperscript{\red (a)}}
-    \STATE 
+% \begin{minipage}{\textwidth}
+% \begin{algorithm}[H]
+%   \caption{\algname{DASHA-PP}}
+%   \label{alg:main_algorithm}
+%   \begin{algorithmic}[1]
+%   \STATE \textbf{Input:} starting point $x^0 \in \R^d$, stepsize $\gamma > 0$, momentum $a \in (0, 1]$, 
+%   momentum $b \in (0, 1]$, probability $\probavailable \in (0, 1]$ that a node is \textit{participating}\textsuperscript{\red (a)},
+%   batch size $B$ (only in \algname{DASHA-PP-PAGE} and \algname{DASHA-PP-MVR}), 
+%   probability $\probpage \in (0, 1]$ (only in \algname{DASHA-PP-PAGE}),
+%   number of iterations~$T \geq 1$
+%   \STATE Initialize $g^0_i\in \R^d$, $h^0_i\in \R^d$ on the nodes and  $g^0 = \frac{1}{n}\sum_{i=1}^n g^0_i$ on the server
+%   \STATE Initialize $h^0_{ij}\in \R^d$ on the nodes (only in \algname{DASHA-PP-FINITE-MVR})
+%   \FOR{$t = 0, 1, \dots, T - 1$}
+%   \STATE $x^{t+1} = x^t - \gamma g^t$ \alglinelabel{alg:main_algorithm:x_update} 
+%   \STATE Broadcast $x^{t+1}, x^{t}$ to all \textit{participating}\textsuperscript{\red (a)} nodes
+%   \FOR{$i = 1, \dots, n$ in parallel}
+%   \IF{$i^{\textnormal{th}} \textnormal{ node is \textit{participating}}$\textsuperscript{\red (a)}}
+%     \STATE 
 
-  \begin{flalign*}
-    \begin{rcases}
-      k^{t+1}_i = \nabla f_i(x^{t+1}) - \nabla f_i(x^{t}) - b \left(h^t_i - \nabla f_i(x^{t})\right) \Bigg.
-    \end{rcases} \textnormal{(\algname{DASHA-PP})} &&
-  \end{flalign*}
-  \begin{flalign*}
-    \begin{rcases}
-      \textnormal{Generate a random set $I^t_i$ of size $B$ from $[m]$ \textit{with replacement}} \\
-      k^{t+1}_i = 
-      \begin{cases}
-        \nabla f_i(x^{t+1}) - \nabla f_i(x^{t}) - \frac{b}{\probpage} \left(h^t_i - \nabla f_i(x^{t})\right),& \\ \qquad \textnormal{with probability $\probpage$ on all \textit{participating}\textsuperscript{\red (a)} nodes} \\
-        \frac{1}{B}\sum_{j \in I^t_i}\left(\nabla f_{ij}(x^{t+1}) - \nabla f_{ij}(x^{t})\right), & \\
-        \qquad \textnormal{with probability $1 - \probpage$ on all \textit{participating}\textsuperscript{\red (a)} nodes} 
-      \end{cases} \Bigg.
-    \end{rcases} \textnormal{(\algname{DASHA-PP-PAGE})} &&
-  \end{flalign*}
-  \begin{flalign*}
-    \begin{rcases}
-      \textnormal{Generate a random set $I^t_i$ of size $B$ from $[m]$ \textit{without replacement}}\\
-      k^{t+1}_{ij} = \begin{cases}
-        \frac{m}{B}\left(\nabla f_{ij}(x^{t+1}) - \nabla f_{ij}(x^{t}) - b \left(h^t_{ij} - \nabla f_{ij}(x^{t})\right)\right), & j \in I^t_i  \\
-        0, & j \not\in I^t_i
-      \end{cases} \\
-      h^{t+1}_{ij} = h^t_{ij} + \frac{1}{\probavailable} k^{t+1}_{ij} \\
-      k^{t+1}_i = \frac{1}{m}\sum_{j=1}^m k^{t+1}_{ij} \\
-    \end{rcases} \textnormal{(\algname{DASHA-PP-FINITE-MVR})} &&
-  \end{flalign*} 
-  \begin{flalign*}
-    \begin{rcases}
-      k^{t+1}_i = \frac{1}{B}\sum_{j=1}^B \nabla f_i(x^{t+1};\xi^{t+1}_{ij}) - \frac{1}{B}\sum_{j=1}^B \nabla f_i(x^{t};\xi^{t+1}_{ij}) \\
-      \qquad\qquad - b \left(h^t_i - \frac{1}{B}\sum_{j=1}^B \nabla f_i(x^{t};\xi^{t+1}_{ij})\right) \Bigg. 
-    \end{rcases} \textnormal{(\algname{DASHA-PP-MVR})}&&
-  \end{flalign*}
-      \STATE $h^{t+1}_i = h^t_i + \frac{1}{\probavailable}k^{t+1}_i$ 
-      \STATE $m^{t+1}_i = \cC_i\Bigg(\frac{1}{\probavailable}k^{t+1}_i - \frac{a}{\probavailable} \left(g^{t}_i - h^{t}_i\right)\Bigg)$
-      \STATE $g^{t+1}_i = g^{t}_i + m^{t+1}_i$
-      \STATE Send $m^{t+1}_i$ to the server
-  \ELSE
-      \STATE $h^{t+1}_{ij} = h^{t}_{ij}$ (only in \algname{DASHA-PP-FINITE-MVR})
-      \STATE $h^{t+1}_i = h^{t}_i$
-      \STATE $m^{t+1}_i = 0$
-      \STATE $g^{t+1}_i = g^{t}_i$
-  \ENDIF
-  \ENDFOR
-  \STATE $g^{t+1} = g^t + \frac{1}{n} \sum_{i=1}^n m^{t+1}_i$
-  \ENDFOR
-  \STATE \textbf{Output:} $\hat{x}^T$ chosen uniformly at random from $\{x^t\}_{k=0}^{T-1}$ (or $x^T$ under the P\L-condition)
-  \end{algorithmic}
-  % {\red (a)}: 
-\end{algorithm}
-{\red (a)}: For the formal description see Section~\ref{sec:partial_participation}.
-\end{minipage}
+%   \begin{flalign*}
+%     \begin{rcases}
+%       k^{t+1}_i = \nabla f_i(x^{t+1}) - \nabla f_i(x^{t}) - b \left(h^t_i - \nabla f_i(x^{t})\right) \Bigg.
+%     \end{rcases} \textnormal{(\algname{DASHA-PP})} &&
+%   \end{flalign*}
+%   \begin{flalign*}
+%     \begin{rcases}
+%       \textnormal{Generate a random set $I^t_i$ of size $B$ from $[m]$ \textit{with replacement}} \\
+%       k^{t+1}_i = 
+%       \begin{cases}
+%         \nabla f_i(x^{t+1}) - \nabla f_i(x^{t}) - \frac{b}{\probpage} \left(h^t_i - \nabla f_i(x^{t})\right),& \\ \qquad \textnormal{with probability $\probpage$ on all \textit{participating}\textsuperscript{\red (a)} nodes} \\
+%         \frac{1}{B}\sum_{j \in I^t_i}\left(\nabla f_{ij}(x^{t+1}) - \nabla f_{ij}(x^{t})\right), & \\
+%         \qquad \textnormal{with probability $1 - \probpage$ on all \textit{participating}\textsuperscript{\red (a)} nodes} 
+%       \end{cases} \Bigg.
+%     \end{rcases} \textnormal{(\algname{DASHA-PP-PAGE})} &&
+%   \end{flalign*}
+%   \begin{flalign*}
+%     \begin{rcases}
+%       \textnormal{Generate a random set $I^t_i$ of size $B$ from $[m]$ \textit{without replacement}}\\
+%       k^{t+1}_{ij} = \begin{cases}
+%         \frac{m}{B}\left(\nabla f_{ij}(x^{t+1}) - \nabla f_{ij}(x^{t}) - b \left(h^t_{ij} - \nabla f_{ij}(x^{t})\right)\right), & j \in I^t_i  \\
+%         0, & j \not\in I^t_i
+%       \end{cases} \\
+%       h^{t+1}_{ij} = h^t_{ij} + \frac{1}{\probavailable} k^{t+1}_{ij} \\
+%       k^{t+1}_i = \frac{1}{m}\sum_{j=1}^m k^{t+1}_{ij} \\
+%     \end{rcases} \textnormal{(\algname{DASHA-PP-FINITE-MVR})} &&
+%   \end{flalign*} 
+%   \begin{flalign*}
+%     \begin{rcases}
+%       k^{t+1}_i = \frac{1}{B}\sum_{j=1}^B \nabla f_i(x^{t+1};\xi^{t+1}_{ij}) - \frac{1}{B}\sum_{j=1}^B \nabla f_i(x^{t};\xi^{t+1}_{ij}) \\
+%       \qquad\qquad - b \left(h^t_i - \frac{1}{B}\sum_{j=1}^B \nabla f_i(x^{t};\xi^{t+1}_{ij})\right) \Bigg. 
+%     \end{rcases} \textnormal{(\algname{DASHA-PP-MVR})}&&
+%   \end{flalign*}
+%       \STATE $h^{t+1}_i = h^t_i + \frac{1}{\probavailable}k^{t+1}_i$ 
+%       \STATE $m^{t+1}_i = \cC_i\Bigg(\frac{1}{\probavailable}k^{t+1}_i - \frac{a}{\probavailable} \left(g^{t}_i - h^{t}_i\right)\Bigg)$
+%       \STATE $g^{t+1}_i = g^{t}_i + m^{t+1}_i$
+%       \STATE Send $m^{t+1}_i$ to the server
+%   \ELSE
+%       \STATE $h^{t+1}_{ij} = h^{t}_{ij}$ (only in \algname{DASHA-PP-FINITE-MVR})
+%       \STATE $h^{t+1}_i = h^{t}_i$
+%       \STATE $m^{t+1}_i = 0$
+%       \STATE $g^{t+1}_i = g^{t}_i$
+%   \ENDIF
+%   \ENDFOR
+%   \STATE $g^{t+1} = g^t + \frac{1}{n} \sum_{i=1}^n m^{t+1}_i$
+%   \ENDFOR
+%   \STATE \textbf{Output:} $\hat{x}^T$ chosen uniformly at random from $\{x^t\}_{k=0}^{T-1}$ (or $x^T$ under the P\L-condition)
+%   \end{algorithmic}
+%   % {\red (a)}: 
+% \end{algorithm}
+% {\red (a)}: For the formal description see Section~\ref{sec:partial_participation}.
+% \end{minipage}
 
 \section{Theorems}
 
