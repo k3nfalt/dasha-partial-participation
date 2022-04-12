@@ -196,12 +196,14 @@ We now try to formalize the notion of partial participation. Let us assume that 
   and these events from different communication rounds are independent.
 \end{assumption}
 
-We are not fighting for the full generality and believe that more complex sampling strategies can be considered in the analysis (see \ref{}). For simplicity, we settle upon Assumption~\ref{ass:partial_participation}. Standard partial participation strategies, including $s$--nice sampling, where the server chooses uniformly $s$ nodes without replacement ($\probavailable = \nicefrac{s}{n}$ and $\probpairaa~=~\nicefrac{s(s-1)}{n(n-1)}$),
-and independent participation, where each node independently participates with probability $\probavailable$ (due to independence, we have $\probpairaa = \probavailable^2$), satisfy Assumption~\ref{ass:partial_participation}. In the literature, $s$--nice sampling is one of the most popular strategies of partial participation (see \ref{}).
+We are not fighting for the full generality and believe that more complex sampling strategies can be considered in the analysis. For simplicity, we settle upon Assumption~\ref{ass:partial_participation}. Standard partial participation strategies, including $s$--nice sampling, where the server chooses uniformly $s$ nodes without replacement ($\probavailable = \nicefrac{s}{n}$ and $\probpairaa~=~\nicefrac{s(s-1)}{n(n-1)}$),
+and independent participation, where each node independently participates with probability $\probavailable$ (due to independence, we have $\probpairaa = \probavailable^2$), satisfy Assumption~\ref{ass:partial_participation}. In the literature, $s$--nice sampling is one of the most popular strategies \citep{zhao2021faster, fatkhullin2021ef21, reddi2020adaptive, konevcny2016federated}.
 
 \section{Algorithm Description}
 
-\begin{minipage}{\textwidth}
+We now present \algname{DASHA-PP} (see Algorithm~\ref{alg:main_algorithm}), a family of methods to solve the optimization problem \eqref{eq:main_problem}. \algname{DASHA-PP} is based on \algname{DASHA}. 
+Let us point out the main differences. i) if a node participates, then it does \algname{DASHA}-like steps; otherwise, it does nothing. ii) some steps are scaled by \nicefrac{1}{\probavailable} to preserve ``unbiasedness''. iii) In \algname{DASHA}, the momentum $b$ is used only to reduce the variance of stochastic gradients. In \algname{DASHA-PP}, the momentum $b$ plays the second role. It also helps to reduce the variance of ``partial participation randomness''. That is why it also appears in the gradient and finite-sum settings. iv) In the finite-sum setting, we present two methods: \algname{DASHA-PP-PAGE} and \algname{DASHA-PP-FINITE-MVR}. The former is based on \algname{PAGE} \citep{PAGE} and with small probability $\probpage$ calculates the full gradients of the functions $f_i$. The latter always calculates mini-batches, but it needs extra memory $\cO\left(d m\right)$ per node to store vectors $h^{t}_{ij}$. v) the server in \algname{DASHA-PP} broadcasts two points $x^{t+1}$ and $x^{t},$ while the server in \algname{DASHA} broadcasts one point $x^{t+1}.$ One can easily show that \algname{DASHA-PP} reduces to \algname{DASHA} when $\probavailable = 1.$
+
 \begin{algorithm}[H]
   \caption{\algname{DASHA-PP}}
   \label{alg:main_algorithm}
@@ -232,40 +234,40 @@ and independent participation, where each node independently participates with p
   \ENDFOR
   \STATE $g^{t+1} = g^t + \frac{1}{n} \sum_{i=1}^n m^{t+1}_i$
   \ENDFOR
-  \STATE \textbf{Output:} $\hat{x}^T$ chosen uniformly at random from $\{x^t\}_{k=0}^{T-1}$ (or $x^T$ under the P\L-condition)
+  \STATE \textbf{Output:} $\hat{x}^T$ chosen uniformly at random from $\{x^t\}_{k=0}^{T-1}$ 
+
+  {\red (a)}: For the formal description see Section~\ref{sec:partial_participation}.
+  % (or $x^T$ under the P\L-condition)
   \end{algorithmic}
 \end{algorithm}
-\vspace{-0.5cm}
-{\red (a)}: For the formal description see Section~\ref{sec:partial_participation}.
-\end{minipage}
 
 \begin{algorithm}[H]
-  \caption{Calculation of $k^{t+1}_i$ for \algname{DASHA-PP} in the gradient setting. See line~\ref{alg:calculate_k} in Alg.~\ref{alg:main_algorithm}}
+  \caption{Calculate $k^{t+1}_i$ for \algname{DASHA-PP} in the gradient setting. See line~\ref{alg:calculate_k} in Alg.~\ref{alg:main_algorithm}}
   \label{alg:main_algorithm:dasha_pp}
   \begin{algorithmic}[1]
     \STATE $k^{t+1}_i = \nabla f_i(x^{t+1}) - \nabla f_i(x^{t}) - b \left(h^t_i - \nabla f_i(x^{t})\right)$ 
   \end{algorithmic}
 \end{algorithm}
 \begin{algorithm}[H]
-  \caption{Calculation of $k^{t+1}_i$ for \algname{DASHA-PP-PAGE} in the finite-sum setting. See line~\ref{alg:calculate_k} in Alg.~\ref{alg:main_algorithm}}
+  \caption{Calculate $k^{t+1}_i$ for \algname{DASHA-PP-PAGE} in the finite-sum setting. See line~\ref{alg:calculate_k} in Alg.~\ref{alg:main_algorithm}}
   \label{alg:main_algorithm:dasha_pp_page}
   \begin{algorithmic}[1]
     \STATE Generate a random set $I^t_i$ of size $B$ from $[m]$ \textit{with replacement}
     \STATE $k^{t+1}_i = 
         \begin{cases}
-          \nabla f_i(x^{t+1}) - \nabla f_i(x^{t}) - \frac{b}{\probpage} \left(h^t_i - \nabla f_i(x^{t})\right),& \\ \qquad \textnormal{with probability $\probpage$ on all \textit{participating} nodes} \\
+          \nabla f_i(x^{t+1}) - \nabla f_i(x^{t}) - \frac{b}{\probpage} \left(h^t_i - \nabla f_i(x^{t})\right),& \\ \qquad \textnormal{with probability $\probpage$ on all \textit{participating} nodes,} \\
           \frac{1}{B}\sum_{j \in I^t_i}\left(\nabla f_{ij}(x^{t+1}) - \nabla f_{ij}(x^{t})\right), & \\
           \qquad \textnormal{with probability $1 - \probpage$ on all \textit{participating} nodes} \end{cases}$
   \end{algorithmic}
 \end{algorithm}
 \begin{algorithm}[H]
-  \caption{Calculation of $k^{t+1}_i$ for \algname{DASHA-PP-FINITE-MVR} in the finite-sum setting. See line~\ref{alg:calculate_k} in Alg.~\ref{alg:main_algorithm}}
+  \caption{Calculate $k^{t+1}_i$ for \algname{DASHA-PP-FINITE-MVR} in the finite-sum setting. See line~\ref{alg:calculate_k} in Alg.~\ref{alg:main_algorithm}}
   \label{alg:main_algorithm:dasha_pp_finite_mvr}
   \begin{algorithmic}[1]
     \STATE Generate a random set $I^t_i$ of size $B$ from $[m]$ \textit{without replacement}
     \STATE $k^{t+1}_{ij} = 
           \begin{cases}
-            \frac{m}{B}\left(\nabla f_{ij}(x^{t+1}) - \nabla f_{ij}(x^{t}) - b \left(h^t_{ij} - \nabla f_{ij}(x^{t})\right)\right), & j \in I^t_i  \\
+            \frac{m}{B}\left(\nabla f_{ij}(x^{t+1}) - \nabla f_{ij}(x^{t}) - b \left(h^t_{ij} - \nabla f_{ij}(x^{t})\right)\right), & j \in I^t_i,  \\
             0, & j \not\in I^t_i
           \end{cases}$
     \STATE $h^{t+1}_{ij} = h^t_{ij} + \frac{1}{\probavailable} k^{t+1}_{ij}$
@@ -273,7 +275,7 @@ and independent participation, where each node independently participates with p
   \end{algorithmic}
 \end{algorithm}
 \begin{algorithm}[H]
-  \caption{Calculation of $k^{t+1}_i$ for \algname{DASHA-PP-MVR} in the stochastic setting. See line~\ref{alg:calculate_k} in Alg.~\ref{alg:main_algorithm}}
+  \caption{Calculate $k^{t+1}_i$ for \algname{DASHA-PP-MVR} in the stochastic setting. See line~\ref{alg:calculate_k} in Alg.~\ref{alg:main_algorithm}}
   \label{alg:main_algorithm:dasha_pp_mvr}
   \begin{algorithmic}[1]
     \STATE Generate i.i.d.\,samples $\{\xi_{ij}\}_{j=1}^B$ of size $B$ from $\mathcal{D}_i.$
