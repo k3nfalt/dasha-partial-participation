@@ -200,8 +200,9 @@ and independent participation, where each node independently participates with p
 \section{Motivation and Related Work}
 The main goal of our paper is to develop a method for the nonconvex distributed optimization that will include three key features: computation efficiency, compression in communication, and partial participation maintenance.
 
-\textbf{1. Computation efficiency}\\
-The research community did significant work in the nonconvex nondistributed optimization. In pioneering works, 
+\textbf{1. Computation efficiency in nondistributed optimization}\\
+% The research community did significant work in the nonconvex nondistributed optimization. 
+In the gradient setting, the optimal oracle complexity is $\cO\left(\nicefrac{1}{\varepsilon}\right)$, achieved by the vanilla gradient descent (\algname{GD}) \citep{carmon2020lower, nesterov2018lectures}. In the finite-sum setting and stochastic settings, the optimal oracle complexities are $\cO\left(m + \frac{\sqrt{m}}{\varepsilon}\right)$ and $\cO\left(\frac{\sigma^2}{\varepsilon} + \frac{\sigma}{\varepsilon^{\nicefrac{3}{2}}}\right)$ \citep{SPIDER, PAGE, arjevani2019lower}, accordingly, achieved by methods from \citep{SPIDER,SARAH,PAGE}. In our distributed method, we want to maintain the optimal oracle complexities.
 \alexander{Say somewhere that the compression can be done for free}
 
 \section{Algorithm Description}
