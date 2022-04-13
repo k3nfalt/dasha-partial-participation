@@ -86,7 +86,7 @@
 Federated and distributed learning have become very popular in recent years \citep{konevcny2016federated, mcmahan2017communication}. 
 The current optimization tasks require much computational resources and machines. Such requirements emerge in machine learning, where massive datasets and computations are distributed between cluster nodes \citep{lin2017deep, ramesh2021zero}. In federated learning, nodes, represented by mobile phones, laptops, and desktops, do not send their data to a server due to privacy and their huge number \citep{ramaswamy2019federated}, and the server remotely orchestrates the nodes and communicates with them to solve an optimization problem.
 
-As in classical optimization tasks, one of the main current problems is to find \textbf{computationally efficient} optimization algorithms. However, the nature of distributed problems induces many other \citep{kairouz2021advances}, including i) \textbf{partial participation} of nodes in algorithm steps, due to stragglers \citep{li2020federated} or communication delays \citep{vogels2021relaysum}, ii) \textbf{communication bottleneck}, even if a node participates, it can be costly to transmit information to a server or other nodes \citep{alistarh2017qsgd,ramesh2021zero,kairouz2021advances}. It is necessary to develop a method that considers these problems.
+As in classical optimization tasks, one of the main current problems is to find \textbf{computationally efficient} optimization algorithms. However, the nature of distributed problems induces many other \citep{kairouz2021advances}, including i) \textbf{partial participation} of nodes in algorithm steps: due to stragglers \citep{li2020federated} or communication delays \citep{vogels2021relaysum}, ii) \textbf{communication bottleneck}: even if a node participates, it can be costly to transmit information to a server or other nodes \citep{alistarh2017qsgd,ramesh2021zero,kairouz2021advances}. It is necessary to develop a method that considers these problems.
 
 % \begin{enumerate}
 %   \item Partial Participation (No Synchronization)
@@ -197,13 +197,20 @@ We now try to formalize the notion of partial participation. Let us assume that 
 We are not fighting for the full generality and believe that more complex sampling strategies can be considered in the analysis. For simplicity, we settle upon Assumption~\ref{ass:partial_participation}. Standard partial participation strategies, including $s$--nice sampling, where the server chooses uniformly $s$ nodes without replacement ($\probavailable = \nicefrac{s}{n}$ and $\probpairaa~=~\nicefrac{s(s-1)}{n(n-1)}$),
 and independent participation, where each node independently participates with probability $\probavailable$ (due to independence, we have $\probpairaa = \probavailable^2$), satisfy Assumption~\ref{ass:partial_participation}. In the literature, $s$--nice sampling is one of the most popular strategies \citep{zhao2021faster, fatkhullin2021ef21, reddi2020adaptive, konevcny2016federated}.
 
-\section{Motivation and Related Work}
-The main goal of our paper is to develop a method for the nonconvex distributed optimization that will include three key features: computation efficiency, compression in communication, and partial participation maintenance.
+\section{Goals and Related Work}
+The main goal of our paper is to develop a method for the nonconvex distributed optimization that will include three key features: computation efficiency, compression in communication, and partial participation maintenance. It is important to consider finite-sum \eqref{eq:task_minibatch} and stochastic \eqref{eq:task_staochastic} settings because, in machine learning tasks, either the number of functions $m$ is huge or the functions $f_i$ is an expectation of a stochastic function due to the batch normalization \citep{ioffe2015batch} or random augmentation \citep{goodfellow2016deep}, and it is infeasible to calculate the full gradients analytically.
 
-\textbf{1. Computation efficiency in nondistributed optimization}\\
+\textbf{1. Computation efficiency in the nondistributed optimization}\\
 % The research community did significant work in the nonconvex nondistributed optimization. 
-In the gradient setting, the optimal oracle complexity is $\cO\left(\nicefrac{1}{\varepsilon}\right)$, achieved by the vanilla gradient descent (\algname{GD}) \citep{carmon2020lower, nesterov2018lectures}. In the finite-sum setting and stochastic settings, the optimal oracle complexities are $\cO\left(m + \frac{\sqrt{m}}{\varepsilon}\right)$ and $\cO\left(\frac{\sigma^2}{\varepsilon} + \frac{\sigma}{\varepsilon^{\nicefrac{3}{2}}}\right)$ \citep{SPIDER, PAGE, arjevani2019lower}, accordingly, achieved by methods from \citep{SPIDER,SARAH,PAGE}. In our distributed method, we want to maintain the optimal oracle complexities.
-\alexander{Say somewhere that the compression can be done for free}
+In the gradient setting, the optimal oracle complexity is $\cO\left(\nicefrac{1}{\varepsilon}\right)$, achieved by the vanilla gradient descent (\algname{GD}) \citep{carmon2020lower, nesterov2018lectures}. In the finite-sum setting and stochastic settings, the optimal oracle complexities are $\cO\left(m + \frac{\sqrt{m}}{\varepsilon}\right)$ and $\cO\left(\frac{\sigma^2}{\varepsilon} + \frac{\sigma}{\varepsilon^{\nicefrac{3}{2}}}\right)$ \citep{SPIDER, PAGE, arjevani2019lower}, accordingly, achieved by methods from \citep{SPIDER,SARAH,PAGE}. 
+% In our distributed method, we want to maintain the optimal oracle complexities.
+
+\textbf{2. Compressed communication} \\
+The optimization methods with the unbiased compressors were analyzed by \cite{alistarh2017qsgd}, \cite{DIANA}, and \cite{horvath2019stochastic}. In the gradient setting, the methods \algname{DASHA} by \cite{tyurin2022dasha} and \algname{MARINA} by \cite{MARINA} establish the current state-of-the-art (SOTA) communication complexity, each method needs $\frac{1 + \nicefrac{\omega}{n}}{\varepsilon}$ communication rounds to get an $\varepsilon$--solution. In the finite-sum and stochastic settings, the current SOTA communication complexity is attained by the methods \algname{DASHA} from \citep{tyurin2022dasha}, while maintaining the optimal oracle complexity.
+
+\textbf{3. Partial participation} \\
+
+% \alexander{Say somewhere that the compression can be done for free}
 
 \section{Algorithm Description}
 
