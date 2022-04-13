@@ -86,18 +86,16 @@
 Federated and distributed learning have become very popular in recent years \citep{konevcny2016federated, mcmahan2017communication}. 
 The current optimization tasks require much computational resources and machines. Such requirements emerge in machine learning, where massive datasets and computations are distributed between cluster nodes \citep{lin2017deep, ramesh2021zero}. In federated learning, nodes, represented by mobile phones, laptops, and desktops, do not send their data to a server due to privacy and their huge number \citep{ramaswamy2019federated}, and the server remotely orchestrates the nodes and communicates with them to solve an optimization problem.
 
-As in classical optimization tasks, one of the main current problems is to find \textbf{computationally efficient} optimization algorithms. However, the nature of distributed problems induces many other \citep{kairouz2021advances}, including i) \textbf{partial participation} of nodes in algorithm steps, due to stragglers \citep{li2020federated} or communication delays \citep{vogels2021relaysum}, ii) \textbf{communication bottleneck}, even if a node participates, it can be costly to transmit information to a server or other nodes \citep{alistarh2017qsgd,ramesh2021zero,kairouz2021advances}.
+As in classical optimization tasks, one of the main current problems is to find \textbf{computationally efficient} optimization algorithms. However, the nature of distributed problems induces many other \citep{kairouz2021advances}, including i) \textbf{partial participation} of nodes in algorithm steps, due to stragglers \citep{li2020federated} or communication delays \citep{vogels2021relaysum}, ii) \textbf{communication bottleneck}, even if a node participates, it can be costly to transmit information to a server or other nodes \citep{alistarh2017qsgd,ramesh2021zero,kairouz2021advances}. It is necessary to develop a method that considers these problems.
 
-\section{Related Work}
-
-\begin{enumerate}
-  \item Partial Participation (No Synchronization)
-  \item Variance Reduction
-  \item Compression
-\end{enumerate}
+% \begin{enumerate}
+%   \item Partial Participation (No Synchronization)
+%   \item Variance Reduction
+%   \item Compression
+% \end{enumerate}
 
 \section{Optimization Problem}
-Let us consider the distributed optimization problem
+Let us consider the nonconvex distributed optimization problem
 \begin{align}
     \label{eq:main_problem} 
     \min \limits_{x \in \R^d}\left\{f(x) \eqdef \frac{1}{n}\sum \limits_{i=1}^n f_i(x)\right\},
@@ -157,7 +155,7 @@ We assume that Assumptions~\ref{ass:lower_bound}, \ref{ass:lipschitz_constant} a
 \end{enumerate}
 
 \subsection{Unbiased Compressors}
-\alexander{Say somewhere that the compression can be done for free}
+We use the concept of unbiased compressors to alleviate the communication bottleneck. The unbiased compressors quantize and/or sparsify vectors that the nodes send to the server.
 \begin{definition}
     \label{def:unbiased_compression}
     A stochastic mapping $\cC\,:\,\R^d \rightarrow \R^d$ is an \textit{unbiased compressor} if
@@ -198,6 +196,13 @@ We now try to formalize the notion of partial participation. Let us assume that 
 
 We are not fighting for the full generality and believe that more complex sampling strategies can be considered in the analysis. For simplicity, we settle upon Assumption~\ref{ass:partial_participation}. Standard partial participation strategies, including $s$--nice sampling, where the server chooses uniformly $s$ nodes without replacement ($\probavailable = \nicefrac{s}{n}$ and $\probpairaa~=~\nicefrac{s(s-1)}{n(n-1)}$),
 and independent participation, where each node independently participates with probability $\probavailable$ (due to independence, we have $\probpairaa = \probavailable^2$), satisfy Assumption~\ref{ass:partial_participation}. In the literature, $s$--nice sampling is one of the most popular strategies \citep{zhao2021faster, fatkhullin2021ef21, reddi2020adaptive, konevcny2016federated}.
+
+\section{Motivation and Related Work}
+The main goal of our paper is to develop a method for the nonconvex distributed optimization that will include three key features: computation efficiency, compression in communication, and partial participation maintenance.
+
+\textbf{1. Computation efficiency}\\
+The research community did significant work in the nonconvex nondistributed optimization. In pioneering works, 
+\alexander{Say somewhere that the compression can be done for free}
 
 \section{Algorithm Description}
 
