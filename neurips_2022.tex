@@ -53,7 +53,7 @@
 \newcommand{\improvement}[1]{{\color{orange}#1}}
 \newcommand{\degeneration}[1]{{\color{red}#1}}
 
-\title{Formatting Instructions For NeurIPS 2021}
+\title{3-in-1: Computational Efficiency, Compressed Communication and Partial Participation in the Nonconvex Distributed Optimization}
 
 % The \author macro works with any number of authors. There are two commands
 % used to separate the names and addresses of multiple authors: \And and \AND.
@@ -85,6 +85,8 @@
 \section{Introduction}
 Federated and distributed learning have become very popular in recent years \citep{konevcny2016federated, mcmahan2017communication}. 
 The current optimization tasks require much computational resources and machines. Such requirements emerge in machine learning, where massive datasets and computations are distributed between cluster nodes \citep{lin2017deep, ramesh2021zero}. In federated learning, nodes, represented by mobile phones, laptops, and desktops, do not send their data to a server due to privacy and their huge number \citep{ramaswamy2019federated}, and the server remotely orchestrates the nodes and communicates with them to solve an optimization problem.
+
+\alexander{Rewrite textfbf}
 
 As in classical optimization tasks, one of the main current problems is to find \textbf{computationally efficient} optimization algorithms. However, the nature of distributed problems induces many other \citep{kairouz2021advances}, including i) \textbf{partial participation} of nodes in algorithm steps: due to stragglers \citep{li2020federated} or communication delays \citep{vogels2021relaysum}, ii) \textbf{communication bottleneck}: even if a node participates, it can be costly to transmit information to a server or other nodes \citep{alistarh2017qsgd,ramesh2021zero,kairouz2021advances}. It is necessary to develop a method that considers these problems.
 
@@ -197,19 +199,26 @@ We now try to formalize the notion of partial participation. Let us assume that 
 We are not fighting for the full generality and believe that more complex sampling strategies can be considered in the analysis. For simplicity, we settle upon Assumption~\ref{ass:partial_participation}. Standard partial participation strategies, including $s$--nice sampling, where the server chooses uniformly $s$ nodes without replacement ($\probavailable = \nicefrac{s}{n}$ and $\probpairaa~=~\nicefrac{s(s-1)}{n(n-1)}$),
 and independent participation, where each node independently participates with probability $\probavailable$ (due to independence, we have $\probpairaa = \probavailable^2$), satisfy Assumption~\ref{ass:partial_participation}. In the literature, $s$--nice sampling is one of the most popular strategies \citep{zhao2021faster, fatkhullin2021ef21, reddi2020adaptive, konevcny2016federated}.
 
-\section{Goals and Related Work}
-The main goal of our paper is to develop a method for the nonconvex distributed optimization that will include three key features: computation efficiency, compression in communication, and partial participation maintenance. It is important to consider finite-sum \eqref{eq:task_minibatch} and stochastic \eqref{eq:task_staochastic} settings because, in machine learning tasks, either the number of functions $m$ is huge or the functions $f_i$ is an expectation of a stochastic function due to the batch normalization \citep{ioffe2015batch} or random augmentation \citep{goodfellow2016deep}, and it is infeasible to calculate the full gradients analytically.
+\section{Motivation and Related Work}
+The main goal of our paper is to develop a method for the nonconvex distributed optimization that will include three key features: computation efficiency, compressed communication, and partial participation.
 
-\textbf{1. Computation efficiency in the nondistributed optimization}\\
-% The research community did significant work in the nonconvex nondistributed optimization. 
-In the gradient setting, the optimal oracle complexity is $\cO\left(\nicefrac{1}{\varepsilon}\right)$, achieved by the vanilla gradient descent (\algname{GD}) \citep{carmon2020lower, nesterov2018lectures}. In the finite-sum setting and stochastic settings, the optimal oracle complexities are $\cO\left(m + \frac{\sqrt{m}}{\varepsilon}\right)$ and $\cO\left(\frac{\sigma^2}{\varepsilon} + \frac{\sigma}{\varepsilon^{\nicefrac{3}{2}}}\right)$ \citep{SPIDER, PAGE, arjevani2019lower}, accordingly, achieved by methods from \citep{SPIDER,SARAH,PAGE}. 
+\textbf{1. Computation efficiency}\\
+It is important to consider finite-sum \eqref{eq:task_minibatch} and stochastic \eqref{eq:task_staochastic} settings because, in machine learning tasks, either the number of local functions $m$ is huge or the functions $f_i$ is an expectation of a stochastic function due to the batch normalization \citep{ioffe2015batch} or random augmentation \citep{goodfellow2016deep}, and it is infeasible to calculate the full gradients analytically. Let us recall the results from the nondistributed optimization. In the gradient setting, the optimal oracle complexity is $\cO\left(\nicefrac{1}{\varepsilon}\right)$, achieved by the vanilla gradient descent (\algname{GD}) \citep{carmon2020lower, nesterov2018lectures}. In the finite-sum setting and stochastic settings, the optimal oracle complexities are $\cO\left(m + \frac{\sqrt{m}}{\varepsilon}\right)$ and $\cO\left(\frac{\sigma^2}{\varepsilon} + \frac{\sigma}{\varepsilon^{\nicefrac{3}{2}}}\right)$ \citep{SPIDER, PAGE, arjevani2019lower}, accordingly, achieved by methods from \citep{SPIDER,SARAH,PAGE}. 
 % In our distributed method, we want to maintain the optimal oracle complexities.
 
 \textbf{2. Compressed communication} \\
-The optimization methods with the unbiased compressors were analyzed by \cite{alistarh2017qsgd}, \cite{DIANA}, and \cite{horvath2019stochastic}. In the gradient setting, the methods \algname{DASHA} by \cite{tyurin2022dasha} and \algname{MARINA} by \cite{MARINA} establish the current state-of-the-art (SOTA) communication complexity, each method needs $\frac{1 + \nicefrac{\omega}{n}}{\varepsilon}$ communication rounds to get an $\varepsilon$--solution. In the finite-sum and stochastic settings, the current SOTA communication complexity is attained by the methods \algname{DASHA} from \citep{tyurin2022dasha}, while maintaining the optimal oracle complexity.
+\alexander{Maybe more motivation}
+Many methods analyzed optimization methods with the unbiased compressors \citep{alistarh2017qsgd, DIANA, horvath2019stochastic, gorbunov2021marina, tyurin2022dasha}. In the gradient setting, the methods \algname{DASHA} by \cite{tyurin2022dasha} and \algname{MARINA} by \cite{MARINA} establish the current state-of-the-art (SOTA) communication complexity, each method needs $\frac{1 + \nicefrac{\omega}{n}}{\varepsilon}$ communication rounds to get an $\varepsilon$--solution. In the finite-sum and stochastic settings, the current SOTA communication complexity is attained by the methods \algname{DASHA} from \citep{tyurin2022dasha}, while maintaining the optimal oracle complexities $\cO\left(m + \frac{\sqrt{m}}{\varepsilon \sqrt{n}}\right)$ and $\cO\left(\frac{\sigma^2}{\varepsilon n} + \frac{\sigma}{\varepsilon^{\nicefrac{3}{2}} n}\right)$ per node.
 
 \textbf{3. Partial participation} \\
+From the beginning of federated learning era, the partial participation has been considered to be the essential feature of distributed optimization methods \citep{mcmahan2017communication, konevcny2016federated, kairouz2021advances}. 
+However, previously proposed methods have limitations: i) methods from \citep{gorbunov2021marina, zhao2021fedpage} still require synchronization of all nodes with a small probability, ii) in the finite-sum or stochastic settings, proposed methods with the partial participation mechanism \citep{tyurin2022dasha, zhao2021faster} provide results without variance reduction techniques from \citep{SPIDER, PAGE, cutkosky2019momentum} and, therefore, get suboptimal oracle complexities, iii) The work by \cite{li2021zerosarah} focuses on the homogeneous regime only (the functions $f_i$ are equal).
 
+\alexander{ZeroSARAH}
+% Typically, the researches provide partial participation as an ``free add-on'' to an existing method, \algname{PP-MARINA} in \citep{gorbunov2021marina}, \algname{EF21-PP} in
+
+
+\section{Contributions}
 % \alexander{Say somewhere that the compression can be done for free}
 
 \section{Algorithm Description}
@@ -229,7 +238,7 @@ One can easily show that \algname{DASHA-PP} reduces to \algname{DASHA} when $\pr
   probability $\probpage \in (0, 1]$ (only in \algname{DASHA-PP-PAGE}),
   number of iterations~$T \geq 1$
   \STATE Initialize $g^0_i\in \R^d$, $h^0_i\in \R^d$ on the nodes and  $g^0 = \frac{1}{n}\sum_{i=1}^n g^0_i$ on the server
-  \STATE Initialize $h^0_{ij}\in \R^d$ on the nodes (only in \algname{DASHA-PP-FINITE-MVR})
+  \STATE Initialize $h^0_{ij}\in \R^d$ on the nodes and take $h^0_i = \frac{1}{m}\sum_{j=1}^m h^0_{ij}$ (only in \algname{DASHA-PP-FINITE-MVR})
   \FOR{$t = 0, 1, \dots, T - 1$}
   \STATE $x^{t+1} = x^t - \gamma g^t$ \alglinelabel{alg:main_algorithm:x_update} 
   \STATE Broadcast $x^{t+1}, x^{t}$ to all \textit{participating}\textsuperscript{\red (a)} nodes
