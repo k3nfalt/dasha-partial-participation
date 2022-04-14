@@ -301,7 +301,7 @@ One can easily show that \algname{DASHA-PP} reduces to \algname{DASHA} when $\pr
   \caption{Calculate $k^{t+1}_i$ for \algname{DASHA-PP-MVR} in the stochastic setting. See line~\ref{alg:calculate_k} in Alg.~\ref{alg:main_algorithm}}
   \label{alg:main_algorithm:dasha_pp_mvr}
   \begin{algorithmic}[1]
-    \STATE Generate i.i.d.\,samples $\{\xi_{ij}\}_{j=1}^B$ of size $B$ from $\mathcal{D}_i.$
+    \STATE Generate i.i.d.\,samples $\{\xi^{t+1}_{ij}\}_{j=1}^B$ of size $B$ from $\mathcal{D}_i.$
     \STATE $k^{t+1}_i = \frac{1}{B}\sum_{j=1}^B \nabla f_i(x^{t+1};\xi^{t+1}_{ij}) - \frac{1}{B}\sum_{j=1}^B \nabla f_i(x^{t};\xi^{t+1}_{ij}) - b \left(h^t_i - \frac{1}{B}\sum_{j=1}^B \nabla f_i(x^{t};\xi^{t+1}_{ij})\right)$
   \end{algorithmic}
 \end{algorithm}
@@ -431,6 +431,8 @@ Next, we consider the same task in the partial participation setting with $s$--n
 \end{align}
 Let us assume that $s \leq \nicefrac{n}{2}.$ Note that \eqref{eq:partial_participation_sampling:all_nodes} scales with any $B \geq 1,$ while \eqref{eq:partial_participation_sampling:s_nodes} only scales when $B = \cO\left(\nicefrac{\mathcal{L}_{\max}^2}{\widehat{\mathcal{L}}^2}\right).$ In other words, for large enough $B,$ the variance in \eqref{eq:partial_participation_sampling:s_nodes} does not significantly improves with the growth of $B$ due to the term $\widehat{\mathcal{L}}^2$. In our proof, due to partial participation, the variance from \eqref{eq:partial_participation_sampling:s_nodes} naturally appears, and we get the same effect. As was mentioned in Sections~\ref{sec:finite_sum_setting} and \ref{sec:stochastic_setting}, it can be seen in our convergence rate bounds.
 % And taking batch size $B$ larger than 
+
+\section{The Problem of Compressed Vectors in the Stochastic Setting}
 
 \section{Experiments}
 
@@ -1848,6 +1850,56 @@ Let us denote $\nabla f_i(x^{t+1};\xi^{t+1}_i) \eqdef \frac{1}{B} \sum_{j=1}^B \
     and $C = \left(\frac{24 b^2 \omega (2 \omega + 1)}{\probavailable^2} + \frac{6b}{\probavailable}\right) \frac{\sigma^2}{n B}$
     to conclude the proof.
   \end{proof}
+
+  \newpage
+  \section{Description of \algname{DASHA-PP-SYNC-MVR}}
+  \label{sec:main_algorithm_mvr_sync}
+  % In this section, we provide a description of \algname{\algorithmname-SYNC-MVR} (see Algorithm~\ref{alg:main_algorithm_mvr_sync}). This algorithm is closely related to \algname{\algorithmname-MVR} (Algorithm~\ref{alg:main_algorithm}), but \algname{\algorithmname-SYNC-MVR} synchronizes all nodes with some probability $p$. This synchronization procedure enabled us to fix the convergence rate suboptimality of \algname{\algorithmname-MVR} w.r.t.\,$\omega$.
+  
+  \begin{algorithm}[h]
+      \caption{\algname{DASHA-PP-SYNC-MVR}}
+      \label{alg:main_algorithm_mvr_sync}
+      \begin{algorithmic}[1]
+      \STATE \textbf{Input:} starting point $x^0 \in R^d$, stepsize $\gamma > 0$, momentum $a \in (0, 1]$, probability $\probmega \in (0, 1]$, batch size $B'$, number of iterations $T \geq 1$.
+      \STATE Initialize $g^0_i$, $h^0_i$ on the nodes and $g^0 = \frac{1}{n}\sum_{i=1}^n g^0_i$ on the server
+      \FOR{$t = 0, 1, \dots, T - 1$}
+      \STATE $x^{t+1} = x^t - \gamma g^t$
+      \STATE $c^{t+1} = 
+      \begin{cases}
+          1, \textnormal{with probability $\probmega$}, \\
+          0, \textnormal{with probability $1 - \probmega$}
+      \end{cases}$
+      \STATE Broadcast $x^{t+1}, x^{t}$ to all \textit{participating}\textsuperscript{\red (a)} nodes
+      \FOR{$i = 1, \dots, n$ in parallel}
+          \IF{$i^{\textnormal{th}} \textnormal{ node is \textit{participating}}$\textsuperscript{\red (a)}}
+              \IF{$c^{t+1} = 1$}
+              \STATE Generate i.i.d.\,samples $\{\xi_{k}^{t+1}\}_{k=1}^{B'}$ of size $B'$ from $\mathcal{D}_i.$
+              \STATE $k^{t+1}_i = \frac{1}{B'} \sum_{k=1}^{B'} \nabla f_i(x^{t+1};\xi_{k}^{t+1}) - \frac{1}{B'} \sum_{k=1}^{B'} \nabla f_i(x^{t};\xi_{k}^{t+1})-~\frac{b}{\probmega}\left(h^t_i - \frac{1}{B'} \sum_{k=1}^{B'} \nabla f_i(x^{t};\xi_{k}^{t+1})\right)$
+              \STATE $h^{t+1}_i = h^t_i + \frac{1}{\probavailable}k^{t+1}_i$ 
+              \STATE $m^{t+1}_i = g^{t+1}_i = h^{t+1}_i$ 
+          \ELSE
+              \STATE Generate i.i.d.\,samples $\{\xi^{t+1}_{ij}\}_{j=1}^B$ of size $B$ from $\mathcal{D}_i.$
+              \STATE $k^{t+1}_i = \frac{1}{B} \sum_{j=1}^{B}\nabla f_i(x^{t+1};\xi^{t+1}_{ij}) - \frac{1}{B} \sum_{j=1}^{B}\nabla f_i(x^{t};\xi^{t+1}_{ij})$
+              \STATE $h^{t+1}_i = h^t_i + \frac{1}{\probavailable}k^{t+1}_i$ 
+              \STATE $m^{t+1}_i = \cC_i\left(h^{t+1}_i - h^{t}_i - a \left(g^t_i - h^{t}_i\right)\right)$ 
+              \STATE $g^{t+1}_i = g^t_i + m^{t+1}_i$
+          \ENDIF
+          \STATE Send $m^{t+1}_i$ to the server
+      \ELSE
+          \STATE $h^{t+1}_i = h^{t}_i$
+          \STATE $m^{t+1}_i = 0$
+          \STATE $g^{t+1}_i = g^{t}_i$
+      \ENDIF
+      \ENDFOR
+      \IF{$c^{t+1} = 1$}
+          \STATE $g^{t+1} = \frac{1}{n} \sum_{i=1}^{n} m^{t+1}_i$
+      \ELSE
+          \STATE $g^{t+1} = g^t + \frac{1}{n} \sum_{i=1}^{n} m^{t+1}_i$
+      \ENDIF
+      \ENDFOR
+      \STATE \textbf{Output:} $\hat{x}^T$ chosen uniformly at random from $\{x^t\}_{k=0}^{T-1}$
+      \end{algorithmic}
+  \end{algorithm}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \newpage
 \section*{Checklist}
