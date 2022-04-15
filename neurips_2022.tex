@@ -433,6 +433,7 @@ Let us assume that $s \leq \nicefrac{n}{2}.$ Note that \eqref{eq:partial_partici
 % And taking batch size $B$ larger than 
 
 \section{The Problem of Compressed Vectors in the Stochastic Setting}
+\alexander{Regimes when sync if better are not practical???}
 
 \section{Experiments}
 
@@ -652,7 +653,7 @@ The lemma can be easily checked with the direct calculation.
       &\ExpSub{\cC}{\ExpSub{\probavailable}{\norm{g^{t+1} - h^{t+1}}^2}} \\
       &=\ExpSub{\cC}{\ExpSub{\probavailable}{\norm{g^{t+1} - h^{t+1} - \ExpSub{\cC}{\ExpSub{\probavailable}{g^{t+1} - h^{t+1}}}}^2}} + (1 - a)^2\norm{g^{t} - h^{t}}^2.
   \end{align*}
-  Due to the independence of comcpressors, we can use Lemma~\ref{lemma:sampling} with $r_i = g^{t}_i - h^{t}_i$ and $s_i = \probavailable\cC_i\Bigg(\frac{1}{\probavailable}k^{t+1}_i - \frac{a}{\probavailable} \left(g^{t}_i - h^{t}_i\right)\Bigg) - k^{t+1}_i,$ and obtain
+  Due to the independence of compressors, we can use Lemma~\ref{lemma:sampling} with $r_i = g^{t}_i - h^{t}_i$ and $s_i = \probavailable\cC_i\Bigg(\frac{1}{\probavailable}k^{t+1}_i - \frac{a}{\probavailable} \left(g^{t}_i - h^{t}_i\right)\Bigg) - k^{t+1}_i,$ and obtain
   \begin{align*}
     &\ExpSub{\cC}{\ExpSub{\probavailable}{\norm{g^{t+1} - h^{t+1}}^2}} \\
     &\leq \frac{1}{n^2 \probavailable}\sum_{i=1}^n\ExpSub{\cC}{\norm{\probavailable\cC_i\Bigg(\frac{1}{\probavailable}k^{t+1}_i - \frac{a}{\probavailable} \left(g^{t}_i - h^{t}_i\right)\Bigg) - k^{t+1}_i - \ExpSub{\cC}{\probavailable\cC_i\Bigg(\frac{1}{\probavailable}k^{t+1}_i - \frac{a}{\probavailable} \left(g^{t}_i - h^{t}_i\right)\Bigg) - k^{t+1}_i}}^2} \\
@@ -931,12 +932,12 @@ Let us denote
     &k^{t+1}_{i, 1} \eqdef \nabla f_i(x^{t+1}) - \nabla f_i(x^{t}) - \frac{b}{\probpage} \left(h^t_i - \nabla f_i(x^{t})\right), \\
     &k^{t+1}_{i, 2} \eqdef \frac{1}{B}\sum_{j \in I^t_i}\left(\nabla f_{ij}(x^{t+1}) - \nabla f_{ij}(x^{t})\right), \\
     &h^{t+1}_{i,1} \eqdef \begin{cases}
-        h^t_i + \frac{1}{\probavailable} k^{t+1}_{i, 1},& \textnormal{with probability $\probavailable$,} \\
-        h^t_i, & \textnormal{with probability $1 - \probavailable$,} 
+        h^t_i + \frac{1}{\probavailable} k^{t+1}_{i, 1},& i^{\textnormal{th}} \textnormal{ node is \textit{participating}}, \\
+        h^t_i, & \textnormal{otherwise,} 
     \end{cases}  \\
     &h^{t+1}_{i,2} \eqdef \begin{cases}
-        h^t_i + \frac{1}{\probavailable} k^{t+1}_{i, 2},& \textnormal{with probability $\probavailable$,} \\
-        h^t_i, & \textnormal{with probability $1 - \probavailable$,}
+        h^t_i + \frac{1}{\probavailable} k^{t+1}_{i, 2},& i^{\textnormal{th}} \textnormal{ node is \textit{participating}}, \\
+        h^t_i, & \textnormal{otherwise,}
     \end{cases}  \\
 \end{align*}
 $h^{t+1}_{1} \eqdef \frac{1}{n}\sum_{i=1}^n h^{t+1}_{i,1},$ and $h^{t+1}_{2} \eqdef \frac{1}{n}\sum_{i=1}^n h^{t+1}_{i,2}.$ Note, that
@@ -1855,12 +1856,13 @@ Let us denote $\nabla f_i(x^{t+1};\xi^{t+1}_i) \eqdef \frac{1}{B} \sum_{j=1}^B \
   \section{Description of \algname{DASHA-PP-SYNC-MVR}}
   \label{sec:main_algorithm_mvr_sync}
   % In this section, we provide a description of \algname{\algorithmname-SYNC-MVR} (see Algorithm~\ref{alg:main_algorithm_mvr_sync}). This algorithm is closely related to \algname{\algorithmname-MVR} (Algorithm~\ref{alg:main_algorithm}), but \algname{\algorithmname-SYNC-MVR} synchronizes all nodes with some probability $p$. This synchronization procedure enabled us to fix the convergence rate suboptimality of \algname{\algorithmname-MVR} w.r.t.\,$\omega$.
+  \alexander{Add description}
   
   \begin{algorithm}[h]
       \caption{\algname{DASHA-PP-SYNC-MVR}}
       \label{alg:main_algorithm_mvr_sync}
       \begin{algorithmic}[1]
-      \STATE \textbf{Input:} starting point $x^0 \in R^d$, stepsize $\gamma > 0$, momentum $a \in (0, 1]$, probability $\probmega \in (0, 1]$, batch size $B'$, number of iterations $T \geq 1$.
+      \STATE \textbf{Input:} starting point $x^0 \in R^d$, stepsize $\gamma > 0$, momentum $a \in (0, 1]$, momentum $b \in (0, 1]$, probability $\probmega \in (0, 1]$, batch size $B'$, number of iterations $T \geq 1$.
       \STATE Initialize $g^0_i$, $h^0_i$ on the nodes and $g^0 = \frac{1}{n}\sum_{i=1}^n g^0_i$ on the server
       \FOR{$t = 0, 1, \dots, T - 1$}
       \STATE $x^{t+1} = x^t - \gamma g^t$
@@ -1876,12 +1878,13 @@ Let us denote $\nabla f_i(x^{t+1};\xi^{t+1}_i) \eqdef \frac{1}{B} \sum_{j=1}^B \
               \STATE Generate i.i.d.\,samples $\{\xi_{k}^{t+1}\}_{k=1}^{B'}$ of size $B'$ from $\mathcal{D}_i.$
               \STATE $k^{t+1}_i = \frac{1}{B'} \sum_{k=1}^{B'} \nabla f_i(x^{t+1};\xi_{k}^{t+1}) - \frac{1}{B'} \sum_{k=1}^{B'} \nabla f_i(x^{t};\xi_{k}^{t+1})-~\frac{b}{\probmega}\left(h^t_i - \frac{1}{B'} \sum_{k=1}^{B'} \nabla f_i(x^{t};\xi_{k}^{t+1})\right)$
               \STATE $h^{t+1}_i = h^t_i + \frac{1}{\probavailable}k^{t+1}_i$ 
-              \STATE $m^{t+1}_i = g^{t+1}_i = h^{t+1}_i$ 
+              \STATE $g^{t+1}_i = g^{t}_i + \frac{1}{\probavailable}k^{t+1}_i - \frac{1}{\probavailable} \left(g^t_i - h^t_i\right)$
+              % \STATE $m^{t+1}_i = g^{t+1}_i$ 
           \ELSE
               \STATE Generate i.i.d.\,samples $\{\xi^{t+1}_{ij}\}_{j=1}^B$ of size $B$ from $\mathcal{D}_i.$
               \STATE $k^{t+1}_i = \frac{1}{B} \sum_{j=1}^{B}\nabla f_i(x^{t+1};\xi^{t+1}_{ij}) - \frac{1}{B} \sum_{j=1}^{B}\nabla f_i(x^{t};\xi^{t+1}_{ij})$
               \STATE $h^{t+1}_i = h^t_i + \frac{1}{\probavailable}k^{t+1}_i$ 
-              \STATE $m^{t+1}_i = \cC_i\left(h^{t+1}_i - h^{t}_i - a \left(g^t_i - h^{t}_i\right)\right)$ 
+              \STATE $m^{t+1}_i = \cC_i\left(\frac{1}{\probavailable}k^{t+1}_i - \frac{a}{\probavailable} \left(g^t_i - h^{t}_i\right)\right)$ 
               \STATE $g^{t+1}_i = g^t_i + m^{t+1}_i$
           \ENDIF
           \STATE Send $m^{t+1}_i$ to the server
@@ -1900,6 +1903,138 @@ Let us denote $\nabla f_i(x^{t+1};\xi^{t+1}_i) \eqdef \frac{1}{B} \sum_{j=1}^B \
       \STATE \textbf{Output:} $\hat{x}^T$ chosen uniformly at random from $\{x^t\}_{k=0}^{T-1}$
       \end{algorithmic}
   \end{algorithm}
+
+\subsection{Proof for \algname{DASHA-PP-SYNC-MVR}}
+In this section, we provide the proof of the convergence rate for \algname{DASHA-PP-SYNC-MVR}. There are four different sources of randomness in Algorithm~\ref{alg:main_algorithm_mvr_sync}: the first one from random samples $\xi^{t+1}_{\cdot}$, the second one from compressors $\{\cC_i\}_{i=1}^n$, the third one from availability of nodes, and the fourth one from $c^{t+1}.$ We define $\ExpSub{k}{\cdot}$, $\ExpSub{\cC}{\cdot},$ $\ExpSub{\probavailable}{\cdot}$ and $\ExpSub{\probmega}{\cdot}$ to be conditional expectations w.r.t.\,$\xi^{t+1}_{\cdot}$, $\{\cC_i\}_{i=1}^n, $ availability, and $c^{t+1},$ accordingly, conditioned on all previous randomness. Moreover, we define $\ExpSub{t+1}{\cdot}$ to be a conditional expectation w.r.t. all randomness in iteration $t+1$ conditioned on all previous randomness. 
+% Note, that $\ExpSub{t+1}{\cdot} = \ExpSub{k}{\ExpSub{\cC}{\ExpSub{\probavailable}{\cdot}}}.$
+
+Let us denote
+\begin{align*}
+    &k^{t+1}_{i, 1} \eqdef \frac{1}{B'} \sum_{k=1}^{B'} \nabla f_i(x^{t+1};\xi_{k}^{t+1}) - \frac{1}{B'} \sum_{k=1}^{B'} \nabla f_i(x^{t};\xi_{k}^{t+1})-~\frac{b}{\probmega}\left(h^t_i - \frac{1}{B'} \sum_{k=1}^{B'} \nabla f_i(x^{t};\xi_{k}^{t+1})\right), \\
+    &k^{t+1}_{i, 2} \eqdef \frac{1}{B} \sum_{j=1}^{B}\nabla f_i(x^{t+1};\xi^{t+1}_{ij}) - \frac{1}{B} \sum_{j=1}^{B}\nabla f_i(x^{t};\xi^{t+1}_{ij}), \\
+    &h^{t+1}_{i,1} \eqdef \begin{cases}
+        h^t_i + \frac{1}{\probavailable} k^{t+1}_{i, 1},& i^{\textnormal{th}} \textnormal{ node is \textit{participating}}, \\
+        h^t_i, & \textnormal{otherwise},
+    \end{cases}  \\
+    &h^{t+1}_{i,2} \eqdef \begin{cases}
+        h^t_i + \frac{1}{\probavailable} k^{t+1}_{i, 2},& i^{\textnormal{th}} \textnormal{ node is \textit{participating}}, \\
+        h^t_i, & \textnormal{otherwise},
+    \end{cases}  \\
+    &g^{t+1}_{i,1} \eqdef \begin{cases}
+      g^{t}_i + \frac{1}{\probavailable}k^{t+1}_{i, 1} - \frac{1}{\probavailable} \left(g^t_i - h^t_i\right),& i^{\textnormal{th}} \textnormal{ node is \textit{participating}}, \\
+      g^t_i, & \textnormal{otherwise},
+    \end{cases}  \\
+    &g^{t+1}_{i,2} \eqdef \begin{cases}
+        g^t_i + \cC_i\left(\frac{1}{\probavailable}k^{t+1}_{i, 2} - \frac{a}{\probavailable} \left(g^t_i - h^{t}_i\right)\right),& i^{\textnormal{th}} \textnormal{ node is \textit{participating}}, \\
+        g^t_i, & \textnormal{otherwise},
+    \end{cases}  \\
+\end{align*}
+$h^{t+1}_{1} \eqdef \frac{1}{n}\sum_{i=1}^n h^{t+1}_{i,1},$ $h^{t+1}_{2} \eqdef \frac{1}{n}\sum_{i=1}^n h^{t+1}_{i,2},$ $g^{t+1}_{1} \eqdef \frac{1}{n}\sum_{i=1}^n g^{t+1}_{i,1},$ and $g^{t+1}_{2} \eqdef \frac{1}{n}\sum_{i=1}^n g^{t+1}_{i,2}.$ Note, that
+\begin{align*}
+  &h^{t+1} = \begin{cases}
+    h^{t+1}_{1},& c^{t+1} = 1, \\
+    h^{t+1}_{2},& c^{t+1} = 0,
+\end{cases}
+\end{align*}
+and
+\begin{align*}
+  &g^{t+1} = \begin{cases}
+    g^{t+1}_{1},& c^{t+1} = 1, \\
+    g^{t+1}_{2},& c^{t+1} = 0 
+\end{cases}
+\end{align*}
+
+\begin{lemma}
+  \label{lemma:sync:prob_compressor}
+  Suppose that Assumptions \ref{ass:nodes_lipschitz_constant}, \ref{ass:stochastic_unbiased_and_variance_bounded}, \ref{ass:compressors} and \ref{ass:partial_participation} hold and let us consider sequences $\{g^{t+1}_i\}_{i=1}^n$ and $\{h^{t+1}_i\}_{i=1}^n$ from Algorithm~\ref{alg:main_algorithm_mvr_sync}, then
+  \begin{align*}
+    &\ExpSub{\cC}{\ExpSub{\probavailable}{\ExpSub{\probmega}{\norm{g^{t+1} - h^{t+1}}^2}}} \\
+    &\leq \frac{2 \left(1 - \probmega\right) \omega}{n^2 \probavailable}\sum_{i=1}^n\norm{k^{t+1}_{i, 2}}^2 + \frac{\probmega \left(\probavailable - \probpairaa\right) + \left(1 - \probmega\right)a^2\left(\left(2\omega + 1\right)\probavailable - \probpairaa\right)}{n^2 \probavailable^2}\sum_{i=1}^n\norm{g^{t}_i - h^{t}_i}^2 \\
+    &\quad + \left(1 - \probmega\right) (1 - a)^2 \norm{g^{t} - h^{t}}^2,
+  \end{align*}
+  and
+  \begin{align*}
+    &\ExpSub{\cC}{\ExpSub{\probavailable}{\ExpSub{\probmega}{\norm{g^{t+1}_i - h^{t+1}_i}^2}}} \\
+    &\leq \frac{2\left(1 - \probmega\right) \omega}{\probavailable} \norm{k^{t+1}_{i, 2}}^2 + \frac{\probmega (1 - \probavailable) + \left(1 - \probmega\right) \left(2\omega + 1 - \probavailable\right) a^2}{\probavailable} \norm{g^{t}_{i} - h^{t}_{i}}^2 \\
+    &\quad + \left(1 - \probmega\right) (1 - a)^2 \norm{g^{t}_{i} - h^{t}_{i}}^2, \quad \forall i \in [n].
+  \end{align*}
+\end{lemma}
+
+\begin{proof}
+  First, we get the bound for $\ExpSub{t+1}{\norm{g^{t+1} - h^{t+1}}^2}$:
+  \begin{align*}
+    &\ExpSub{\cC}{\ExpSub{\probavailable}{\ExpSub{\probmega}{\norm{g^{t+1} - h^{t+1}}^2}}} \\
+    &= \probmega \ExpSub{\probavailable}{\norm{g^{t+1}_1 - h^{t+1}_1}^2} + \left(1 - \probmega\right) \ExpSub{\cC}{\ExpSub{\probavailable}{\norm{g^{t+1}_2 - h^{t+1}_2}^2}}.
+  \end{align*}
+  Using
+  \begin{align*}
+    \ExpSub{\probavailable}{g^{t+1}_{i,1} - h^{t+1}_{i,1}} = g^{t}_i + k^{t+1}_{i, 1} - \left(g^t_i - h^t_i\right) - h^t_i - k^{t+1}_{i, 1} = 0
+  \end{align*}
+  and 
+  \begin{align*}
+    \ExpSub{\cC}{\ExpSub{\probavailable}{g^{t+1}_{i,2} - h^{t+1}_{i,2}}} = g^t_i + k^{t+1}_{i, 2} - a \left(g^t_i - h^{t}_i\right) - h^t_i - k^{t+1}_{i, 2} = (1 - a) \left(g^t_i - h^{t}_i\right),
+  \end{align*}
+  we have
+  \begin{align*}
+    &\ExpSub{\cC}{\ExpSub{\probavailable}{\ExpSub{\probmega}{\norm{g^{t+1} - h^{t+1}}^2}}} \\
+    &\overset{\eqref{auxiliary:variance_decomposition}}{=} \probmega \ExpSub{\probavailable}{\norm{g^{t+1}_1 - h^{t+1}_1 - \ExpSub{\probavailable}{g^{t+1}_1 - h^{t+1}_1}}^2} + \left(1 - \probmega\right) \ExpSub{\cC}{\ExpSub{\probavailable}{\norm{g^{t+1}_2 - h^{t+1}_2}^2}} \\
+    &\quad + \left(1 - \probmega\right) (1 - a)^2 \norm{g^{t} - h^{t}}^2.
+  \end{align*}
+  We can use Lemma~\ref{lemma:sampling} two times with i) $r_i = g^{t}_i - h^{t}_i$ and $s_i = g^{t}_i - h^{t}_i$ and ii) $r_i = g^{t}_i - h^{t}_i$ and $s_i = \probavailable\cC_i\left(\frac{1}{\probavailable}k^{t+1}_{i, 2} - \frac{a}{\probavailable} \left(g^t_i - h^{t}_i\right)\right) - k^{t+1}_{i, 2}$, to obtain
+  \begin{align*}
+    &\ExpSub{\cC}{\ExpSub{\probavailable}{\ExpSub{\probmega}{\norm{g^{t+1} - h^{t+1}}^2}}} \\
+    &\leq \frac{\probmega\left(\probavailable - \probpairaa\right)}{n^2 \probavailable^2}\sum_{i=1}^n\norm{g^{t}_i - h^{t}_i}^2 \\
+    &\quad + \left(1 - \probmega\right) \left(\frac{1}{n^2 \probavailable}\sum_{i=1}^n\ExpSub{\cC}{\norm{\probavailable\cC_i\left(\frac{1}{\probavailable}k^{t+1}_{i, 2} - \frac{a}{\probavailable} \left(g^t_i - h^{t}_i\right)\right) - \left(k^{t+1}_{i, 2} - a\left(g^t_i - h^{t}_i\right)\right)}^2}\right)\\
+    &\quad + \left(1 - \probmega\right) \left(\frac{a^2 \left(\probavailable - \probpairaa\right)}{n^2 \probavailable^2}\sum_{i=1}^n\norm{g^t_i - h^{t}_i}^2\right) \\
+    &\quad + \left(1 - \probmega\right) (1 - a)^2 \norm{g^{t} - h^{t}}^2 \\
+    &= \frac{\left(\probmega + \left(1 - \probmega\right)a^2\right)\left(\probavailable - \probpairaa\right)}{n^2 \probavailable^2}\sum_{i=1}^n\norm{g^{t}_i - h^{t}_i}^2 \\
+    &\quad + \left(1 - \probmega\right) \left(\frac{\probavailable}{n^2}\sum_{i=1}^n\ExpSub{\cC}{\norm{\cC_i\left(\frac{1}{\probavailable}k^{t+1}_{i, 2} - \frac{a}{\probavailable} \left(g^t_i - h^{t}_i\right)\right) - \left(\frac{1}{\probavailable}k^{t+1}_{i, 2} - \frac{a}{\probavailable}\left(g^t_i - h^{t}_i\right)\right)}^2}\right)\\
+    &\quad + \left(1 - \probmega\right) (1 - a)^2 \norm{g^{t} - h^{t}}^2 \\
+    &\leq \frac{\left(\probmega + \left(1 - \probmega\right)a^2\right)\left(\probavailable - \probpairaa\right)}{n^2 \probavailable^2}\sum_{i=1}^n\norm{g^{t}_i - h^{t}_i}^2 \\
+    &\quad + \frac{\left(1 - \probmega\right) \probavailable \omega}{n^2}\sum_{i=1}^n\norm{\frac{1}{\probavailable}k^{t+1}_{i, 2} - \frac{a}{\probavailable}\left(g^t_i - h^{t}_i\right)}^2\\
+    &\quad + \left(1 - \probmega\right) (1 - a)^2 \norm{g^{t} - h^{t}}^2 \\
+    &= \frac{\left(\probmega + \left(1 - \probmega\right)a^2\right)\left(\probavailable - \probpairaa\right)}{n^2 \probavailable^2}\sum_{i=1}^n\norm{g^{t}_i - h^{t}_i}^2 \\
+    &\quad + \frac{\left(1 - \probmega\right) \omega}{n^2 \probavailable}\sum_{i=1}^n\norm{k^{t+1}_{i, 2} - a\left(g^t_i - h^{t}_i\right)}^2\\
+    &\quad + \left(1 - \probmega\right) (1 - a)^2 \norm{g^{t} - h^{t}}^2.
+  \end{align*}
+  In the last inequality, we use Assumption~\ref{ass:compressors}. Next, using \eqref{auxiliary:jensen_inequality}, we have
+  \begin{align*}
+    &\ExpSub{\cC}{\ExpSub{\probavailable}{\ExpSub{\probmega}{\norm{g^{t+1} - h^{t+1}}^2}}} \\
+    &\leq \frac{2 \left(1 - \probmega\right) \omega}{n^2 \probavailable}\sum_{i=1}^n\norm{k^{t+1}_{i, 2}}^2 + \frac{\probmega \left(\probavailable - \probpairaa\right) + \left(1 - \probmega\right)a^2\left(\left(2\omega + 1\right)\probavailable - \probpairaa\right)}{n^2 \probavailable^2}\sum_{i=1}^n\norm{g^{t}_i - h^{t}_i}^2 \\
+    &\quad + \left(1 - \probmega\right) (1 - a)^2 \norm{g^{t} - h^{t}}^2.
+  \end{align*}
+  The second inequality can be proved almost in the same way:
+  \begin{align*}
+    &\ExpSub{\cC}{\ExpSub{\probavailable}{\ExpSub{\probmega}{\norm{g^{t+1}_i - h^{t+1}_i}^2}}} \\
+    &= \probmega \ExpSub{\probavailable}{\norm{g^{t+1}_{i,1} - h^{t+1}_{i,1}}^2} + \left(1 - \probmega\right) \ExpSub{\cC}{\ExpSub{\probavailable}{\norm{g^{t+1}_{i,2} - h^{t+1}_{i,2}}^2}} \\
+    &= \probmega \left(\frac{(1 - \probavailable)^2}{\probavailable} \norm{g^{t}_{i} - h^{t}_{i}}^2 + \left(1 - \probavailable\right) \norm{g^{t}_{i} - h^{t}_{i}}^2\right) + \left(1 - \probmega\right) \ExpSub{\cC}{\ExpSub{\probavailable}{\norm{g^{t+1}_{i,2} - h^{t+1}_{i,2}}^2}}\\
+    &= \frac{\probmega (1 - \probavailable)}{\probavailable} \norm{g^{t}_{i} - h^{t}_{i}}^2 + \left(1 - \probmega\right) \ExpSub{\cC}{\ExpSub{\probavailable}{\norm{g^{t+1}_{i,2} - h^{t+1}_{i,2}}^2}}\\
+    &\overset{\eqref{auxiliary:variance_decomposition}}{=} \frac{\probmega (1 - \probavailable)}{\probavailable} \norm{g^{t}_{i} - h^{t}_{i}}^2 + \left(1 - \probmega\right) \ExpSub{\cC}{\ExpSub{\probavailable}{\norm{g^{t+1}_{i,2} - h^{t+1}_{i,2} - (1 - a)\left(g^{t}_{i} - h^{t}_{i}\right)}^2}}\\
+    &\quad + \left(1 - \probmega\right) (1 - a)^2 \norm{g^{t}_{i} - h^{t}_{i}}^2 \\
+    &= \frac{\probmega (1 - \probavailable)}{\probavailable} \norm{g^{t}_{i} - h^{t}_{i}}^2 \\
+    &\quad + \left(1 - \probmega\right) \probavailable \ExpSub{\cC}{\norm{g^t_i + \cC_i\left(\frac{1}{\probavailable}k^{t+1}_{i, 2} - \frac{a}{\probavailable} \left(g^t_i - h^{t}_i\right)\right) - \left(h^t_i + \frac{1}{\probavailable} k^{t+1}_{i, 2}\right) - (1 - a)\left(g^{t}_{i} - h^{t}_{i}\right)}^2} \\
+    &\quad + \left(1 - \probmega\right) \left(1 - \probavailable\right)\norm{g^{t}_{i} - h^{t}_{i} - (1 - a)\left(g^{t}_{i} - h^{t}_{i}\right)}^2\\
+    &\quad + \left(1 - \probmega\right) (1 - a)^2 \norm{g^{t}_{i} - h^{t}_{i}}^2 \\
+    &= \frac{\probmega (1 - \probavailable)}{\probavailable} \norm{g^{t}_{i} - h^{t}_{i}}^2 \\
+    &\quad + \left(1 - \probmega\right) \probavailable \ExpSub{\cC}{\norm{\cC_i\left(\frac{1}{\probavailable}k^{t+1}_{i, 2} - \frac{a}{\probavailable} \left(g^t_i - h^{t}_i\right)\right) - \left(\frac{1}{\probavailable} k^{t+1}_{i, 2} - a\left(g^{t}_{i} - h^{t}_{i}\right)\right)}^2} \\
+    &\quad + \left(1 - \probmega\right) \left(1 - \probavailable\right) a^2 \norm{g^{t}_{i} - h^{t}_{i}}^2\\
+    &\quad + \left(1 - \probmega\right) (1 - a)^2 \norm{g^{t}_{i} - h^{t}_{i}}^2 \\
+    &\overset{\eqref{auxiliary:variance_decomposition}}{=} \frac{\probmega (1 - \probavailable) + \left(1 - \probmega\right) \left(1 - \probavailable\right) a^2}{\probavailable} \norm{g^{t}_{i} - h^{t}_{i}}^2 \\
+    &\quad + \left(1 - \probmega\right) \probavailable \ExpSub{\cC}{\norm{\cC_i\left(\frac{1}{\probavailable}k^{t+1}_{i, 2} - \frac{a}{\probavailable} \left(g^t_i - h^{t}_i\right)\right) - \left(\frac{1}{\probavailable} k^{t+1}_{i, 2} - \frac{a}{\probavailable}\left(g^{t}_{i} - h^{t}_{i}\right)\right)}^2} \\
+    &\quad + \left(1 - \probmega\right) (1 - a)^2 \norm{g^{t}_{i} - h^{t}_{i}}^2 \\
+    &\leq \frac{\probmega (1 - \probavailable) + \left(1 - \probmega\right) \left(1 - \probavailable\right) a^2}{\probavailable} \norm{g^{t}_{i} - h^{t}_{i}}^2 \\
+    &\quad + \frac{\left(1 - \probmega\right) \omega}{\probavailable} \norm{k^{t+1}_{i, 2} - a \left(g^t_i - h^{t}_i\right)}^2 \\
+    &\quad + \left(1 - \probmega\right) (1 - a)^2 \norm{g^{t}_{i} - h^{t}_{i}}^2 \\
+    &\overset{\eqref{auxiliary:jensen_inequality}}{\leq} \frac{2\left(1 - \probmega\right) \omega}{\probavailable} \norm{k^{t+1}_{i, 2}}^2 + \frac{\probmega (1 - \probavailable) + \left(1 - \probmega\right) \left(2\omega + 1 - \probavailable\right) a^2}{\probavailable} \norm{g^{t}_{i} - h^{t}_{i}}^2 \\
+    &\quad + \left(1 - \probmega\right) (1 - a)^2 \norm{g^{t}_{i} - h^{t}_{i}}^2.
+  \end{align*}
+\end{proof}
+
+\begin{theorem}
+
+\end{theorem}
+
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \newpage
 \section*{Checklist}
