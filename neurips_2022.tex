@@ -1878,7 +1878,7 @@ Let us denote $\nabla f_i(x^{t+1};\xi^{t+1}_i) \eqdef \frac{1}{B} \sum_{j=1}^B \
               \STATE Generate i.i.d.\,samples $\{\xi_{k}^{t+1}\}_{k=1}^{B'}$ of size $B'$ from $\mathcal{D}_i.$
               \STATE $k^{t+1}_i = \frac{1}{B'} \sum_{k=1}^{B'} \nabla f_i(x^{t+1};\xi_{k}^{t+1}) - \frac{1}{B'} \sum_{k=1}^{B'} \nabla f_i(x^{t};\xi_{k}^{t+1})-~\frac{b}{\probmega}\left(h^t_i - \frac{1}{B'} \sum_{k=1}^{B'} \nabla f_i(x^{t};\xi_{k}^{t+1})\right)$
               \STATE $h^{t+1}_i = h^t_i + \frac{1}{\probavailable}k^{t+1}_i$ 
-              \STATE $g^{t+1}_i = g^{t}_i + \frac{1}{\probavailable}k^{t+1}_i - \frac{1}{\probavailable} \left(g^t_i - h^t_i\right)$
+              \STATE $g^{t+1}_i = g^{t}_i + \frac{1}{\probavailable}k^{t+1}_i - \frac{a}{\probavailable} \left(g^t_i - h^t_i\right)$
               \STATE $m^{t+1}_i = g^{t+1}_i$ 
           \ELSE
               \STATE Generate i.i.d.\,samples $\{\xi^{t+1}_{ij}\}_{j=1}^B$ of size $B$ from $\mathcal{D}_i.$
@@ -1921,7 +1921,7 @@ Let us denote
         h^t_i, & \textnormal{otherwise},
     \end{cases}  \\
     &g^{t+1}_{i,1} \eqdef \begin{cases}
-      g^{t}_i + \frac{1}{\probavailable}k^{t+1}_{i, 1} - \frac{1}{\probavailable} \left(g^t_i - h^t_i\right),& i^{\textnormal{th}} \textnormal{ node is \textit{participating}}, \\
+      g^{t}_i + \frac{1}{\probavailable}k^{t+1}_{i, 1} - \frac{a}{\probavailable} \left(g^t_i - h^t_i\right),& i^{\textnormal{th}} \textnormal{ node is \textit{participating}}, \\
       g^t_i, & \textnormal{otherwise},
     \end{cases}  \\
     &g^{t+1}_{i,2} \eqdef \begin{cases}
@@ -1970,7 +1970,7 @@ First, we will prove two lemmas.
   \end{align*}
   Using
   \begin{align*}
-    \ExpSub{\probavailable}{g^{t+1}_{i,1} - h^{t+1}_{i,1}} = g^{t}_i + k^{t+1}_{i, 1} - \left(g^t_i - h^t_i\right) - h^t_i - k^{t+1}_{i, 1} = 0
+    \ExpSub{\probavailable}{g^{t+1}_{i,1} - h^{t+1}_{i,1}} = g^{t}_i + k^{t+1}_{i, 1} - a\left(g^t_i - h^t_i\right) - h^t_i - k^{t+1}_{i, 1} = \left(1 - a\right) \left(g^t_i - h^t_i\right)
   \end{align*}
   and 
   \begin{align*}
@@ -1980,30 +1980,30 @@ First, we will prove two lemmas.
   \begin{align*}
     &\ExpSub{\cC}{\ExpSub{\probavailable}{\ExpSub{\probmega}{\norm{g^{t+1} - h^{t+1}}^2}}} \\
     &\overset{\eqref{auxiliary:variance_decomposition}}{=} \probmega \ExpSub{\probavailable}{\norm{g^{t+1}_1 - h^{t+1}_1 - \ExpSub{\probavailable}{g^{t+1}_1 - h^{t+1}_1}}^2} + \left(1 - \probmega\right) \ExpSub{\cC}{\ExpSub{\probavailable}{\norm{g^{t+1}_2 - h^{t+1}_2}^2}} \\
-    &\quad + \left(1 - \probmega\right) (1 - a)^2 \norm{g^{t} - h^{t}}^2.
+    &\quad + (1 - a)^2 \norm{g^{t} - h^{t}}^2.
   \end{align*}
-  We can use Lemma~\ref{lemma:sampling} two times with i) $r_i = g^{t}_i - h^{t}_i$ and $s_i = g^{t}_i - h^{t}_i$ and ii) $r_i = g^{t}_i - h^{t}_i$ and $s_i = \probavailable\cC_i\left(\frac{1}{\probavailable}k^{t+1}_{i, 2} - \frac{a}{\probavailable} \left(g^t_i - h^{t}_i\right)\right) - k^{t+1}_{i, 2}$, to obtain
+  We can use Lemma~\ref{lemma:sampling} two times with i) $r_i = g^{t}_i - h^{t}_i$ and $s_i = -a\left(g^{t}_i - h^{t}_i\right)$ and ii) $r_i = g^{t}_i - h^{t}_i$ and $s_i = \probavailable\cC_i\left(\frac{1}{\probavailable}k^{t+1}_{i, 2} - \frac{a}{\probavailable} \left(g^t_i - h^{t}_i\right)\right) - k^{t+1}_{i, 2}$, to obtain
   \begin{align*}
     &\ExpSub{\cC}{\ExpSub{\probavailable}{\ExpSub{\probmega}{\norm{g^{t+1} - h^{t+1}}^2}}} \\
-    &\leq \frac{\probmega\left(\probavailable - \probpairaa\right)}{n^2 \probavailable^2}\sum_{i=1}^n\norm{g^{t}_i - h^{t}_i}^2 \\
+    &\leq \frac{\probmega a^2 \left(\probavailable - \probpairaa\right)}{n^2 \probavailable^2}\sum_{i=1}^n\norm{g^{t}_i - h^{t}_i}^2 \\
     &\quad + \left(1 - \probmega\right) \left(\frac{1}{n^2 \probavailable}\sum_{i=1}^n\ExpSub{\cC}{\norm{\probavailable\cC_i\left(\frac{1}{\probavailable}k^{t+1}_{i, 2} - \frac{a}{\probavailable} \left(g^t_i - h^{t}_i\right)\right) - \left(k^{t+1}_{i, 2} - a\left(g^t_i - h^{t}_i\right)\right)}^2}\right)\\
     &\quad + \left(1 - \probmega\right) \left(\frac{a^2 \left(\probavailable - \probpairaa\right)}{n^2 \probavailable^2}\sum_{i=1}^n\norm{g^t_i - h^{t}_i}^2\right) \\
-    &\quad + \left(1 - \probmega\right) (1 - a)^2 \norm{g^{t} - h^{t}}^2 \\
-    &= \frac{\left(\probmega + \left(1 - \probmega\right)a^2\right)\left(\probavailable - \probpairaa\right)}{n^2 \probavailable^2}\sum_{i=1}^n\norm{g^{t}_i - h^{t}_i}^2 \\
+    &\quad + (1 - a)^2\norm{g^{t} - h^{t}}^2 \\
+    &= \frac{a^2\left(\probavailable - \probpairaa\right)}{n^2 \probavailable^2}\sum_{i=1}^n\norm{g^{t}_i - h^{t}_i}^2 \\
     &\quad + \left(1 - \probmega\right) \left(\frac{\probavailable}{n^2}\sum_{i=1}^n\ExpSub{\cC}{\norm{\cC_i\left(\frac{1}{\probavailable}k^{t+1}_{i, 2} - \frac{a}{\probavailable} \left(g^t_i - h^{t}_i\right)\right) - \left(\frac{1}{\probavailable}k^{t+1}_{i, 2} - \frac{a}{\probavailable}\left(g^t_i - h^{t}_i\right)\right)}^2}\right)\\
-    &\quad + \left(1 - \probmega\right) (1 - a)^2 \norm{g^{t} - h^{t}}^2 \\
-    &\leq \frac{\left(\probmega + \left(1 - \probmega\right)a^2\right)\left(\probavailable - \probpairaa\right)}{n^2 \probavailable^2}\sum_{i=1}^n\norm{g^{t}_i - h^{t}_i}^2 \\
+    &\quad + (1 - a)^2\norm{g^{t} - h^{t}}^2 \\
+    &\leq \frac{a^2\left(\probavailable - \probpairaa\right)}{n^2 \probavailable^2}\sum_{i=1}^n\norm{g^{t}_i - h^{t}_i}^2 \\
     &\quad + \frac{\left(1 - \probmega\right) \probavailable \omega}{n^2}\sum_{i=1}^n\norm{\frac{1}{\probavailable}k^{t+1}_{i, 2} - \frac{a}{\probavailable}\left(g^t_i - h^{t}_i\right)}^2\\
-    &\quad + \left(1 - \probmega\right) (1 - a)^2 \norm{g^{t} - h^{t}}^2 \\
-    &= \frac{\left(\probmega + \left(1 - \probmega\right)a^2\right)\left(\probavailable - \probpairaa\right)}{n^2 \probavailable^2}\sum_{i=1}^n\norm{g^{t}_i - h^{t}_i}^2 \\
+    &\quad + (1 - a)^2\norm{g^{t} - h^{t}}^2 \\
+    &= \frac{a^2\left(\probavailable - \probpairaa\right)}{n^2 \probavailable^2}\sum_{i=1}^n\norm{g^{t}_i - h^{t}_i}^2 \\
     &\quad + \frac{\left(1 - \probmega\right) \omega}{n^2 \probavailable}\sum_{i=1}^n\norm{k^{t+1}_{i, 2} - a\left(g^t_i - h^{t}_i\right)}^2\\
-    &\quad + \left(1 - \probmega\right) (1 - a)^2 \norm{g^{t} - h^{t}}^2.
+    &\quad + (1 - a)^2\norm{g^{t} - h^{t}}^2.
   \end{align*}
   In the last inequality, we use Assumption~\ref{ass:compressors}. Next, using \eqref{auxiliary:jensen_inequality}, we have
   \begin{align*}
     &\ExpSub{\cC}{\ExpSub{\probavailable}{\ExpSub{\probmega}{\norm{g^{t+1} - h^{t+1}}^2}}} \\
-    &\leq \frac{2 \left(1 - \probmega\right) \omega}{n^2 \probavailable}\sum_{i=1}^n\norm{k^{t+1}_{i, 2}}^2 + \frac{\probmega \left(\probavailable - \probpairaa\right) + \left(1 - \probmega\right)a^2\left(\left(2\omega + 1\right)\probavailable - \probpairaa\right)}{n^2 \probavailable^2}\sum_{i=1}^n\norm{g^{t}_i - h^{t}_i}^2 \\
-    &\quad + \left(1 - \probmega\right) (1 - a)^2 \norm{g^{t} - h^{t}}^2.
+    &\leq \frac{2 \left(1 - \probmega\right) \omega}{n^2 \probavailable}\sum_{i=1}^n\norm{k^{t+1}_{i, 2}}^2 + \left(\frac{\left(\probavailable - \probpairaa\right)a^2}{n^2 \probavailable^2} + \frac{2 \left(1 - \probmega\right) \omega a^2}{n^2 \probavailable}\right)\sum_{i=1}^n\norm{g^{t}_i - h^{t}_i}^2 \\
+    &\quad + (1 - a)^2\norm{g^{t} - h^{t}}^2.
   \end{align*}
   The second inequality can be proved almost in the same way:
   \begin{align*}
