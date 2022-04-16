@@ -1878,16 +1878,14 @@ Let us denote $\nabla f_i(x^{t+1};\xi^{t+1}_i) \eqdef \frac{1}{B} \sum_{j=1}^B \
               \IF{$c^{t+1} = 1$}
               \STATE Generate i.i.d.\,samples $\{\xi_{k}^{t+1}\}_{k=1}^{B'}$ of size $B'$ from $\mathcal{D}_i.$
               \STATE $k^{t+1}_i = \frac{1}{B'} \sum_{k=1}^{B'} \nabla f_i(x^{t+1};\xi_{k}^{t+1}) - \frac{1}{B'} \sum_{k=1}^{B'} \nabla f_i(x^{t};\xi_{k}^{t+1})-~\frac{b}{\probmega}\left(h^t_i - \frac{1}{B'} \sum_{k=1}^{B'} \nabla f_i(x^{t};\xi_{k}^{t+1})\right)$
-              \STATE $h^{t+1}_i = h^t_i + \frac{1}{\probavailable}k^{t+1}_i$ 
               \STATE $m^{t+1}_i = \frac{1}{\probavailable}k^{t+1}_i - \frac{a}{\probavailable} \left(g^t_i - h^t_i\right)$ 
-              \STATE $g^{t+1}_i = g^{t}_i + m^{t+1}_i$
           \ELSE
               \STATE Generate i.i.d.\,samples $\{\xi^{t+1}_{ij}\}_{j=1}^B$ of size $B$ from $\mathcal{D}_i.$
               \STATE $k^{t+1}_i = \frac{1}{B} \sum_{j=1}^{B}\nabla f_i(x^{t+1};\xi^{t+1}_{ij}) - \frac{1}{B} \sum_{j=1}^{B}\nabla f_i(x^{t};\xi^{t+1}_{ij})$
-              \STATE $h^{t+1}_i = h^t_i + \frac{1}{\probavailable}k^{t+1}_i$ 
               \STATE $m^{t+1}_i = \cC_i\left(\frac{1}{\probavailable}k^{t+1}_i - \frac{a}{\probavailable} \left(g^t_i - h^{t}_i\right)\right)$ 
-              \STATE $g^{t+1}_i = g^t_i + m^{t+1}_i$
           \ENDIF
+          \STATE $h^{t+1}_i = h^t_i + \frac{1}{\probavailable}k^{t+1}_i$ 
+          \STATE $g^{t+1}_i = g^t_i + m^{t+1}_i$
           \STATE Send $m^{t+1}_i$ to the server
       \ELSE
           \STATE $h^{t+1}_i = h^{t}_i$
