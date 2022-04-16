@@ -2216,18 +2216,17 @@ First, we will prove two lemmas.
     &\leq \Exp{f(x^t) - \frac{\gamma}{2}\norm{\nabla f(x^t)}^2 - \left(\frac{1}{2\gamma} - \frac{L}{2}\right)
     \norm{x^{t+1} - x^t}^2 + \gamma\left(\norm{g^{t} - h^t}^2 + \norm{h^t - \nabla f(x^t)}^2\right)}\nonumber\\
     &\quad  + \kappa {\rm E}\Bigg(\frac{2 \left(1 - \probmega\right) \omega}{n \probavailable}\left(\frac{L_{\sigma}^2}{B} + \widehat{L}^2\right) \norm{x^{t+1} - x^{t}}^2 \\
-    &\qquad\quad+ \frac{\probmega \left(\probavailable - \probpairaa\right) + \left(1 - \probmega\right)a^2\left(\left(2\omega + 1\right)\probavailable - \probpairaa\right)}{n^2 \probavailable^2}\sum_{i=1}^n\norm{g^{t}_i - h^{t}_i}^2\\
-      &\qquad\quad + \left(1 - \probmega\right) (1 - a)^2 \norm{g^{t} - h^{t}}^2\Bigg) \\
+    &\qquad\quad + \left(\frac{\left(\probavailable - \probpairaa\right)a^2}{n^2 \probavailable^2} + \frac{2 \left(1 - \probmega\right) a^2 \omega}{n^2 \probavailable}\right)\sum_{i=1}^n\norm{g^{t}_i - h^{t}_i}^2 + (1 - a)^2\norm{g^{t} - h^{t}}^2\Bigg) \\
       &\quad  + \eta {\rm E}\Bigg(\frac{2\left(1 - \probmega\right) \omega}{\probavailable} \left(\frac{L_{\sigma}^2}{B} + \widehat{L}^2\right) \norm{x^{t+1} - x^{t}}^2 \\
-      &\qquad\quad+ \frac{\probmega (1 - \probavailable) + \left(1 - \probmega\right) \left(2\omega + 1 - \probavailable\right) a^2}{n \probavailable} \sum_{i=1}^n \norm{g^{t}_{i} - h^{t}_{i}}^2\\
-      &\qquad\quad + \left(1 - \probmega\right) (1 - a)^2 \frac{1}{n} \sum_{i=1}^n \norm{g^{t}_{i} - h^{t}_{i}}^2\Bigg) \\
+      &\qquad\quad+ \left(\frac{(1 - \probavailable) a^2}{\probavailable} + \frac{2 \left(1 - \probmega\right) a^2 \omega}{\probavailable}\right)\frac{1}{n}\sum_{i=1}^n\norm{g^{t}_{i} - h^{t}_{i}}^2 + (1 - a)^2 \norm{g^{t}_{i} - h^{t}_{i}}^2\Bigg) \\
       &\quad  + \nu {\rm E}\Bigg(\frac{2 b^2 \sigma^2}{n \probmega \probavailable B'} + \left(\frac{2 \probmega L_{\sigma}^2}{n \probavailable B'}\left(1 - \frac{b}{\probmega}\right)^2 + \frac{\left(1 - \probmega\right)L_{\sigma}^2}{n \probavailable B} + \frac{2\left(\probavailable - \probpairaa\right) \widehat{L}^2}{n \probavailable^2}\right)\norm{x^{t+1} - x^{t}}^2\\
       &\qquad\quad + \frac{2\left(\probavailable - \probpairaa\right) b^2}{n^2 \probavailable^2 \probmega}\sum_{i=1}^n\norm{h^t_i -  \nabla f_i(x^{t})}^2 + \left(\probmega \left(1 - \frac{b}{\probmega}\right)^2 + (1 - \probmega)\right) \norm{h^{t} - \nabla f(x^{t})}^2\Bigg) \\
       &\quad  + \rho {\rm E}\Bigg(\frac{2 b^2 \sigma^2}{\probavailable \probmega B'} + \left(\frac{2 \probmega L_{\sigma}^2}{\probavailable B'}\left(1 - \frac{b}{\probmega}\right)^2 + \frac{(1 - \probmega) L_{\sigma}^2}{\probavailable B} + \frac{2(1 - \probavailable) \widehat{L}^2}{\probavailable}\right) \norm{x^{t+1} - x^{t}}^2\\
       &\qquad\quad + \frac{2\left(1 - \probavailable\right)b^2}{n \probmega \probavailable} \sum_{i=1}^n\norm{h^t_i - \nabla f_i(x^{t})}^2 + \left(\probmega \left(1 - \frac{b}{\probmega}\right)^2 + (1 - \probmega)\right) \frac{1}{n} \sum_{i=1}^n \norm{h^{t}_i - \nabla f_i(x^{t})}^2\Bigg).
   \end{align*}
+
   \alexander{Check 2nd inequality}
-  Let us simplify the last inequality. Since $B' \geq B$ and $b \leq \frac{\probmega \probavailable}{2 - \probavailable} \leq \probmega,$ we have $$\frac{2 \probmega L_{\sigma}^2}{\probavailable B'}\left(1 - \frac{b}{\probmega}\right)^2 \leq \frac{2 \probmega L_{\sigma}^2}{\probavailable B},$$ $$\left(\probmega \left(1 - \frac{b}{\probmega}\right)^2 + (1 - \probmega)\right) \leq 1 - b,$$ and $$\left(\frac{2\left(1 - \probavailable\right)b^2}{n \probmega \probavailable} + \probmega \left(1 - \frac{b}{\probmega}\right)^2 + (1 - \probmega)\right) \leq 1 - b.$$
+  Let us simplify the last inequality. Since $B' \geq B$ and $b \leq \frac{\probmega \probavailable}{2 - \probavailable} \leq \probmega,$ we have $1 - \probmega \leq 1,$ $$\frac{2 \probmega L_{\sigma}^2}{\probavailable B'}\left(1 - \frac{b}{\probmega}\right)^2 \leq \frac{2 \probmega L_{\sigma}^2}{\probavailable B},$$ $$\left(\probmega \left(1 - \frac{b}{\probmega}\right)^2 + (1 - \probmega)\right) \leq 1 - b,$$ and $$\left(\frac{2\left(1 - \probavailable\right)b^2}{n \probmega \probavailable} + \probmega \left(1 - \frac{b}{\probmega}\right)^2 + (1 - \probmega)\right) \leq 1 - b.$$
   % $$\probmega \left(\probavailable - \probpairaa\right) + \left(1 - \probmega\right)a^2\left(\left(2\omega + 1\right)\probavailable - \probpairaa\right) \leq a^2\left(\left(2\omega + 1\right)\probavailable - \probpairaa\right),$$ and $$\probmega (1 - \probavailable) + \left(1 - \probmega\right) \left(2\omega + 1 - \probavailable\right) a^2 \leq a^2 \left(2\omega + 1 - \probavailable\right)$$ 
   Thus
   \begin{align*}
@@ -2236,11 +2235,9 @@ First, we will prove two lemmas.
     &\leq \Exp{f(x^t) - \frac{\gamma}{2}\norm{\nabla f(x^t)}^2 - \left(\frac{1}{2\gamma} - \frac{L}{2}\right)
     \norm{x^{t+1} - x^t}^2 + \gamma\left(\norm{g^{t} - h^t}^2 + \norm{h^t - \nabla f(x^t)}^2\right)}\nonumber\\
     &\quad  + \kappa {\rm E}\Bigg(\frac{2 \left(1 - \probmega\right) \omega}{n \probavailable}\left(\frac{L_{\sigma}^2}{B} + \widehat{L}^2\right) \norm{x^{t+1} - x^{t}}^2 \\
-    &\qquad\quad+ \frac{\probmega \left(\probavailable - \probpairaa\right) + \left(1 - \probmega\right)a^2\left(\left(2\omega + 1\right)\probavailable - \probpairaa\right)}{n^2 \probavailable^2}\sum_{i=1}^n\norm{g^{t}_i - h^{t}_i}^2\\
-      &\qquad\quad + \left(1 - \probmega\right) (1 - a)^2 \norm{g^{t} - h^{t}}^2\Bigg) \\
+    &\qquad\quad + \frac{\left(\left(2 \omega + 1\right)\probavailable - \probpairaa\right)a^2}{n^2 \probavailable^2}\sum_{i=1}^n\norm{g^{t}_i - h^{t}_i}^2 + (1 - a)^2\norm{g^{t} - h^{t}}^2\Bigg) \\
       &\quad  + \eta {\rm E}\Bigg(\frac{2\left(1 - \probmega\right) \omega}{\probavailable} \left(\frac{L_{\sigma}^2}{B} + \widehat{L}^2\right) \norm{x^{t+1} - x^{t}}^2 \\
-      &\qquad\quad+ \frac{\probmega (1 - \probavailable) + \left(1 - \probmega\right) \left(2\omega + 1 - \probavailable\right) a^2}{n \probavailable} \sum_{i=1}^n \norm{g^{t}_{i} - h^{t}_{i}}^2\\
-      &\qquad\quad + \left(1 - \probmega\right) (1 - a)^2 \frac{1}{n} \sum_{i=1}^n \norm{g^{t}_{i} - h^{t}_{i}}^2\Bigg) \\
+      &\qquad\quad+ \frac{(2\omega + 1 - \probavailable) a^2}{\probavailable}\frac{1}{n}\sum_{i=1}^n\norm{g^{t}_{i} - h^{t}_{i}}^2 + (1 - a)^2 \norm{g^{t}_{i} - h^{t}_{i}}^2\Bigg) \\
       &\quad  + \nu {\rm E}\Bigg(\frac{2 b^2 \sigma^2}{n \probmega \probavailable B'} + \left(\frac{2 L_{\sigma}^2}{n \probavailable B} + \frac{2\left(\probavailable - \probpairaa\right) \widehat{L}^2}{n \probavailable^2}\right)\norm{x^{t+1} - x^{t}}^2\\
       &\qquad\quad + \frac{2\left(\probavailable - \probpairaa\right) b^2}{n^2 \probavailable^2 \probmega}\sum_{i=1}^n\norm{h^t_i -  \nabla f_i(x^{t})}^2 + \left(1 - b\right) \norm{h^{t} - \nabla f(x^{t})}^2\Bigg) \\
       &\quad  + \rho {\rm E}\Bigg(\frac{2 b^2 \sigma^2}{\probavailable \probmega B'} + \left(\frac{2 L_{\sigma}^2}{\probavailable B} + \frac{2(1 - \probavailable) \widehat{L}^2}{\probavailable}\right) \norm{x^{t+1} - x^{t}}^2\\
@@ -2253,9 +2250,8 @@ First, we will prove two lemmas.
     &\leq \Exp{f(x^t)} - \frac{\gamma}{2}\Exp{\norm{\nabla f(x^t)}^2} \\
     &\quad - \Bigg(\frac{1}{2\gamma} - \frac{L}{2} - \frac{2 \kappa \left(1 - \probmega\right) \omega}{n \probavailable}\left(\frac{L_{\sigma}^2}{B} + \widehat{L}^2\right) - \frac{2\eta \left(1 - \probmega\right) \omega}{\probavailable} \left(\frac{L_{\sigma}^2}{B} + \widehat{L}^2\right) \\
     &\qquad\quad - \nu \left(\frac{2 L_{\sigma}^2}{n \probavailable B} + \frac{2\left(\probavailable - \probpairaa\right) \widehat{L}^2}{n \probavailable^2}\right) - \rho \left(\frac{2 L_{\sigma}^2}{\probavailable B} + \frac{2(1 - \probavailable) \widehat{L}^2}{\probavailable}\right)\Bigg) \Exp{\norm{x^{t+1} - x^t}^2} \\
-    &\quad + \left(\gamma + \kappa \left(1 - \probmega\right)\left(1 - a\right)^2\right) \Exp{\norm{g^{t} - h^{t}}^2} \\
-    &\quad + \Bigg(\kappa \frac{\probmega \left(\probavailable - \probpairaa\right) + \left(1 - \probmega\right)a^2\left(\left(2\omega + 1\right)\probavailable - \probpairaa\right)}{n \probavailable^2}\\
-    &\qquad\quad + \eta \left(\frac{\probmega (1 - \probavailable) + \left(1 - \probmega\right) \left(2\omega + 1 - \probavailable\right) a^2}{n \probavailable} + \left(1 - \probmega\right) (1 - a)^2\right)\Bigg)\Exp{\frac{1}{n}\sum_{i=1}^n\norm{g^{t}_i - h^{t}_i}^2} \\
+    &\quad + \left(\gamma + \kappa \left(1 - a\right)^2\right) \Exp{\norm{g^{t} - h^{t}}^2} \\
+    &\quad + \Bigg(\kappa \frac{\left(\left(2 \omega + 1\right)\probavailable - \probpairaa\right)a^2}{n \probavailable^2} + \eta \left(\frac{(2\omega + 1 - \probavailable) a^2}{\probavailable} + (1 - a)^2\right)\Bigg)\Exp{\frac{1}{n}\sum_{i=1}^n\norm{g^{t}_i - h^{t}_i}^2} \\
     &\quad + \left(\gamma + \nu \left(1 - b\right)\right) \Exp{\norm{h^{t} - \nabla f(x^{t})}^2} \\
     &\quad + \Bigg(\nu \frac{2\left(\probavailable - \probpairaa\right) b^2}{n \probavailable^2 \probmega} + \rho (1 - b)\Bigg)\Exp{\frac{1}{n}\sum_{i=1}^n\norm{h^{t}_i - \nabla f_i(x^{t})}^2} \\
     &\quad + \left(\frac{2 \nu b^2}{n \probmega \probavailable} + \frac{2 \rho b^2}{\probavailable \probmega}\right) \frac{\sigma^2}{B'}.
