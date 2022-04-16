@@ -353,6 +353,7 @@ Then \algname{DASHA-PP-PAGE}
     \end{align}
     communication rounds to get an $\varepsilon$-solution and the expected \# of gradient calculations per node equals $\cO\left(m + B T\right).$
 \end{restatable}
+\alexander{Define $T$}
 \alexander{TODO: Prove it!}
 
 The convergence rate the rate of the current state-of-the-art method \algname{DASHA-PAGE} without partial participation equals
@@ -1878,8 +1879,8 @@ Let us denote $\nabla f_i(x^{t+1};\xi^{t+1}_i) \eqdef \frac{1}{B} \sum_{j=1}^B \
               \STATE Generate i.i.d.\,samples $\{\xi_{k}^{t+1}\}_{k=1}^{B'}$ of size $B'$ from $\mathcal{D}_i.$
               \STATE $k^{t+1}_i = \frac{1}{B'} \sum_{k=1}^{B'} \nabla f_i(x^{t+1};\xi_{k}^{t+1}) - \frac{1}{B'} \sum_{k=1}^{B'} \nabla f_i(x^{t};\xi_{k}^{t+1})-~\frac{b}{\probmega}\left(h^t_i - \frac{1}{B'} \sum_{k=1}^{B'} \nabla f_i(x^{t};\xi_{k}^{t+1})\right)$
               \STATE $h^{t+1}_i = h^t_i + \frac{1}{\probavailable}k^{t+1}_i$ 
-              \STATE $g^{t+1}_i = g^{t}_i + \frac{1}{\probavailable}k^{t+1}_i - \frac{a}{\probavailable} \left(g^t_i - h^t_i\right)$
-              \STATE $m^{t+1}_i = g^{t+1}_i$ 
+              \STATE $m^{t+1}_i = \frac{1}{\probavailable}k^{t+1}_i - \frac{a}{\probavailable} \left(g^t_i - h^t_i\right)$ 
+              \STATE $g^{t+1}_i = g^{t}_i + m^{t+1}_i$
           \ELSE
               \STATE Generate i.i.d.\,samples $\{\xi^{t+1}_{ij}\}_{j=1}^B$ of size $B$ from $\mathcal{D}_i.$
               \STATE $k^{t+1}_i = \frac{1}{B} \sum_{j=1}^{B}\nabla f_i(x^{t+1};\xi^{t+1}_{ij}) - \frac{1}{B} \sum_{j=1}^{B}\nabla f_i(x^{t};\xi^{t+1}_{ij})$
@@ -1894,11 +1895,7 @@ Let us denote $\nabla f_i(x^{t+1};\xi^{t+1}_i) \eqdef \frac{1}{B} \sum_{j=1}^B \
           \STATE $g^{t+1}_i = g^{t}_i$
       \ENDIF
       \ENDFOR
-      \IF{$c^{t+1} = 1$}
-          \STATE $g^{t+1} = \frac{1}{n} \sum_{i=1}^{n} m^{t+1}_i$
-      \ELSE
-          \STATE $g^{t+1} = g^t + \frac{1}{n} \sum_{i=1}^{n} m^{t+1}_i$
-      \ENDIF
+      \STATE $g^{t+1} = g^t + \frac{1}{n} \sum_{i=1}^{n} m^{t+1}_i$
       \ENDFOR
       \STATE \textbf{Output:} $\hat{x}^T$ chosen uniformly at random from $\{x^t\}_{k=0}^{T-1}$
       \end{algorithmic}
@@ -2188,7 +2185,7 @@ First, we will prove two lemmas.
   in Algorithm~\ref{alg:main_algorithm_mvr_sync}. Then 
   \begin{align*}
     \Exp{\norm{\nabla f(\widehat{x}^T)}^2} &\leq \frac{1}{T}\vast[\frac{2 \left(f(x^0) - f^*\right)}{\gamma} + \frac{4}{\probmega \probavailable} \norm{h^{0} - \nabla f(x^{0})}^2 + \frac{4 \left(1 - \frac{\probpairaa}{\probavailable}\right)}{n \probmega \probavailable}\frac{1}{n}\sum_{i=1}^n\norm{h^{0}_i - \nabla f_i(x^{0})}^2 \vast] \\
-    &\quad + \frac{12 \gamma \sigma^2}{n B'}.
+    &\quad + \frac{12 \sigma^2}{n B'}.
   \end{align*}
 \end{restatable}
 
