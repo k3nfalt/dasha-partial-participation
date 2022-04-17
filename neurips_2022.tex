@@ -406,19 +406,20 @@ The convergence rate of the \algname{DASHA-SYNC-MVR}, the state-of-the-art metho
 Another important difference is batch size $B_{\textnormal{init}}.$ In \algname{DASHA-SYNC-MVR}, batch size $B_{\textnormal{init}} = \Theta\left(\max\left\{\frac{\sigma^2}{n \varepsilon}, B \omega\right\}\right).$ The same as \algname{DASHA-MVR}, method \algname{DASHA-PP-MVR} does not send full vectors and gets suboptimal initial batch size $B_{\textnormal{init}} = \Theta\left(\max\left\{\frac{\sigma^2}{\sqrt{\probavailable} n \varepsilon}, \frac{B \omega}{\sqrt{\probavailable}} \sqrt{\frac{\sigma^2}{n \varepsilon B}}\right\}\right).$ In the regimes when $\varepsilon$ is small and the first terms dominate in maximums, the degeneration of the batch size $B_{\textnormal{init}}$ is up to $\nicefrac{1}{\sqrt{\probavailable}}.$ However, the degeneration can be higher in other regimes due to the additional multiplicative term $\sqrt{\frac{\sigma^2}{n \varepsilon B}}.$ In the next corollary, with Rand$K$ compressor (see Definition~\ref{}), we show that we can escape those regimes by choosing the parameter $K$ in a particular way.
 
 \begin{restatable}{corollary}{COROLLARYSTOCHASTICRANDK}
-  Suppose that assumptions of Corollary~\ref{cor:stochastic} hold, batch size $B \leq \min\left\{\frac{\sigma}{\sqrt{\varepsilon} n}, \right\},$ we take Rand$K$ with $K = \zeta_{\cC} = \Theta\left(\frac{B d \sqrt{\varepsilon n}}{\sigma}\right).$ Then
+  Suppose that assumptions of Corollary~\ref{cor:stochastic} hold, batch size $B \leq \min\left\{\frac{\sigma}{\sqrt{\varepsilon} n}, \frac{L_{\sigma}^2}{\widehat{L}^2}\right\},$ we take Rand$K$ with $K = \zeta_{\cC} = \Theta\left(\frac{B d \sqrt{\varepsilon n}}{\sigma}\right).$ Then
   the communication complexity equals 
   \begin{align}
       \label{eq:complexity:stochastic:communication}
-      \cO\left(\frac{d \sigma}{\sqrt{n \varepsilon}} + \frac{\widetilde{L} \left(f(x^0) - f^*\right) d}{\sqrt{n} \varepsilon} \right),
+      \cO\left(\frac{d \sigma}{\sqrt{\probavailable} \sqrt{n \varepsilon}} + \frac{L_{\sigma}d}{\probavailable \sqrt{n} \varepsilon}\right),
   \end{align}
   and the expected \# of stochastic gradient calculations per node equals
   \begin{align}
       \label{eq:complexity:stochastic_oracle}
-      \cO\left(\frac{\sigma^2}{n \varepsilon} + \frac{\widetilde{L} \left(f(x^0) - f^*\right) \sigma}{\varepsilon^{\nicefrac{3}{2}} n} \right).
+      \cO\left(\frac{\sigma^2}{\sqrt{\probavailable} n \varepsilon} + \frac{L_{\sigma} \sigma}{\probavailable \varepsilon^{\nicefrac{3}{2}} n}\right).
   \end{align}
 \end{restatable}
 
+\alexander{For $\probavailable = 1$ is DASHA-MVR}
 \alexander{TODO: Prove it!}
 
 % We believe that this is the price for not sending the full vectors and no synchronization in the stochastic setting and should be investigated further.
@@ -1906,6 +1907,33 @@ Let us denote $\nabla f_i(x^{t+1};\xi^{t+1}_i) \eqdef \frac{1}{B} \sum_{j=1}^B \
     \end{align*}
 
     Using the assumption $\frac{\sigma^2}{n \varepsilon B} \geq 1,$ we can conclude the proof of the inequality. The number of stochastic gradients that each node calculates equals $B_{\textnormal{init}} + 2BT = \cO(B_{\textnormal{init}} + BT).$
+\end{proof}
+
+\COROLLARYSTOCHASTICRANDK*
+
+\begin{proof}
+  \alexander{Add RandK theorem}
+  The communication complexity equals
+  \begin{eqnarray*}
+      \cO\left(d + \zeta_{\cC} T\right) &=& \cO\left(d + \frac{1}{\varepsilon}\vast[K L + K\frac{\omega}{\probavailable \sqrt{n}} \left(\widehat{L} + \frac{L_{\sigma}}{\sqrt{B}}\right) + K \sqrt{\frac{\sigma^2}{\probavailable^2 \varepsilon n^2 B}}\left(\widehat{L} + \frac{L_{\sigma}}{\sqrt{B}}\right)\vast] + K\frac{\sigma^2}{\sqrt{\probavailable} n \varepsilon B}\right).
+  \end{eqnarray*}
+  Due to $B \leq \frac{L_{\sigma}^2}{\widehat{L}^2}, $ we have $\widehat{L} + \frac{L_{\sigma}}{\sqrt{B}} \leq \frac{2L_{\sigma}}{\sqrt{B}}$ and
+  \begin{eqnarray*}
+    \cO\left(d + \zeta_{\cC} T\right) &=& \cO\left(d + \frac{1}{\varepsilon}\vast[K L + K\frac{\omega}{\probavailable \sqrt{n}} \left(\widehat{L} + \frac{L_{\sigma}}{\sqrt{B}}\right) + K \sqrt{\frac{\sigma^2}{\probavailable^2 \varepsilon n^2 B}}\frac{L_{\sigma}}{\sqrt{B}}\vast] + K\frac{\sigma^2}{\sqrt{\probavailable} n \varepsilon B}\right).
+\end{eqnarray*}
+  From Theorem~\ref{theorem:rand_k}, we have $\omega + 1 = \frac{d}{K}.$ Since $K = \Theta\left(\frac{B d \sqrt{\varepsilon n}}{\sigma}\right) = \cO\left(\frac{d}{\sqrt{n}}\right),$ the communication complexity equals
+  \begin{eqnarray*}
+      \cO\left(d + \zeta_{\cC} T\right) &=& \cO\left(d + \frac{1}{\varepsilon}\vast[\frac{d}{\sqrt{n}}L + \frac{d}{\probavailable \sqrt{n}} \left(\widehat{L} + \frac{L_{\sigma}}{\sqrt{B}}\right) + \frac{d}{\probavailable \sqrt{n}} L_{\sigma}\vast] + \frac{d \sigma}{\sqrt{\probavailable} \sqrt{n \varepsilon}}\right) \\
+      &=& \cO\left(\frac{d \sigma}{\sqrt{\probavailable} \sqrt{n \varepsilon}} + \frac{L_{\sigma}d}{\probavailable \sqrt{n} \varepsilon}\right) \\
+  \end{eqnarray*}
+  And the expected number of stochastic gradient calculations per node equals
+  \begin{align*}
+      &\cO\left(B_{\textnormal{init}} + B T\right) \\
+      &= \cO\left(\frac{\sigma^2}{\sqrt{\probavailable} n \varepsilon} +  \frac{B \omega}{\sqrt{\probavailable}} \sqrt{\frac{\sigma^2}{n \varepsilon B}} + \frac{1}{\varepsilon}\vast[B L + B\frac{\omega}{\probavailable \sqrt{n}} \left(\widehat{L} + \frac{L_{\sigma}}{\sqrt{B}}\right) + B \sqrt{\frac{\sigma^2}{\probavailable^2 \varepsilon n^2 B}}\left(\widehat{L} + \frac{L_{\sigma}}{\sqrt{B}}\right)\vast] + B\frac{\sigma^2}{\sqrt{\probavailable} n \varepsilon B}\right) \\
+      &= \cO\left(\frac{\sigma^2}{\sqrt{\probavailable} n \varepsilon} +  \frac{B d}{K \sqrt{\probavailable}} \sqrt{\frac{\sigma^2}{n \varepsilon B}} + \frac{1}{\varepsilon}\vast[B L + B\frac{d}{K \probavailable \sqrt{n}} \left(\widehat{L} + \frac{L_{\sigma}}{\sqrt{B}}\right) + B \sqrt{\frac{\sigma^2}{\probavailable^2 \varepsilon n^2 B}}\frac{L_{\sigma}}{\sqrt{B}}\vast] + \frac{\sigma^2}{\sqrt{\probavailable} n \varepsilon}\right) \\
+      &= \cO\left(\frac{\sigma^2}{\sqrt{\probavailable} n \varepsilon} + \frac{\sigma^2}{\sqrt{\probavailable} n \varepsilon \sqrt{B}} + \frac{1}{\varepsilon}\vast[\frac{\sigma}{\sqrt{\varepsilon} n} L + \frac{\sigma}{\probavailable \sqrt{\varepsilon} n} \left(\widehat{L} + \frac{L_{\sigma}}{\sqrt{B}}\right) + \frac{\sigma}{\probavailable \sqrt{\varepsilon} n}L_{\sigma}\vast]\right) \\
+      &= \cO\left(\frac{\sigma^2}{\sqrt{\probavailable} n \varepsilon} + \frac{L_{\sigma} \sigma}{\probavailable \varepsilon^{\nicefrac{3}{2}} n}\right).
+  \end{align*}
 \end{proof}
 
   \newpage
