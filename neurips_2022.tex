@@ -403,14 +403,14 @@ In the next corollary, we choose momentum $b$ and initialize vectors $h^{0}_i$ t
 \begin{restatable}{corollary}{COROLLARYSTOCHASTIC}
   \label{cor:stochastic}
   Suppose that assumptions from Theorem~\ref{theorem:stochastic} hold, momentum $b = \Theta\left(\min \left\{\ \frac{\probavailable}{\omega}\sqrt{\frac{n \varepsilon B}{\sigma^2}}, \frac{\probavailable n \varepsilon B}{\sigma^2}\right\}\right),$ 
-  and $h^{0}_i = \frac{1}{B_{\textnormal{init}}} \sum_{k = 1}^{B_{\textnormal{init}}} \nabla f_i(x^0; \xi^0_{ik})$ for all $i \in [n],$ and batch size $B_{\textnormal{init}} = \Theta\left(\nicefrac{B}{b}\right),$ then Algorithm~\ref{alg:main_algorithm} \algname{(DASHA-PP-MVR)} needs
-  $$\cO\left(\frac{1}{\varepsilon}\left[L + \frac{\omega}{\probavailable\sqrt{n}}\left(\widehat{L} + \frac{L_{\sigma}}{\sqrt{B}}\right) + \frac{\sigma}{\probavailable \sqrt{n \varepsilon}}\left(\frac{\widehat{L}}{\sqrt{B}} + \frac{L_\sigma}{B}\right)\right] + \frac{\sigma^2}{\probavailable n \varepsilon B}\right)$$
+  and $h^{0}_i = \frac{1}{B_{\textnormal{init}}} \sum_{k = 1}^{B_{\textnormal{init}}} \nabla f_i(x^0; \xi^0_{ik})$ for all $i \in [n],$ and batch size $B_{\textnormal{init}} = \Theta\left(\frac{\sqrt{\probavailable} B}{b}\right),$ then Algorithm~\ref{alg:main_algorithm} \algname{(DASHA-PP-MVR)} needs
+  $$\cO\left(\frac{1}{\varepsilon}\left[L + \frac{\omega}{\probavailable\sqrt{n}}\left(\widehat{L} + \frac{L_{\sigma}}{\sqrt{B}}\right) + \frac{\sigma}{\probavailable \sqrt{\varepsilon} n}\left(\frac{\widehat{L}}{\sqrt{B}} + \frac{L_\sigma}{B}\right)\right] + \frac{\sigma^2}{\sqrt{\probavailable} n \varepsilon B}\right)$$
   communication rounds to get an $\varepsilon$-solution and the number of stochastic gradient calculations per node equals $\cO(B_{\textnormal{init}} + BT).$
 \end{restatable}
 
 \alexander{TODO: Prove it!}
 
-The convergence rate of the \algname{DASHA-SYNC-MVR}, the state-of-the-art method without partial participation, equals $\cO\left(\frac{1}{\varepsilon}\left[L + \frac{\omega}{\sqrt{n}}\left(\widehat{L} + \frac{L_{\sigma}}{\sqrt{B}}\right) + \frac{\sigma}{\sqrt{n \varepsilon}}\frac{L_\sigma}{B}\right] + \frac{\sigma^2}{\probavailable n \varepsilon B}\right).$ Similar to Section~\ref{sec:finite_sum_setting}, we see that in the regimes when $\widehat{L} \approx L_{\sigma}$ the third term w.r.t. $\nicefrac{1}{\varepsilon^{3/2}}$ can degenerate up to $\nicefrac{\sqrt{B}}{\probavailable}.$ However, if we take $B = \cO\left(\nicefrac{L_{\sigma}^2}{\widehat{L}^2}\right),$ then the degeneration of the third term will be up to $\nicefrac{1}{\probavailable}.$ This effect we analyze in Section~\ref{sec:partial_participation_sampling}.
+The convergence rate of the \algname{DASHA-SYNC-MVR}, the state-of-the-art method without partial participation, equals $\cO\left(\frac{1}{\varepsilon}\left[L + \frac{\omega}{\sqrt{n}}\left(\widehat{L} + \frac{L_{\sigma}}{\sqrt{B}}\right) + \frac{\sigma}{\sqrt{\varepsilon} n}\frac{L_\sigma}{B}\right] + \frac{\sigma^2}{n \varepsilon B}\right).$ Similar to Section~\ref{sec:finite_sum_setting}, we see that in the regimes when $\widehat{L} \approx L_{\sigma}$ the third term w.r.t. $\nicefrac{1}{\varepsilon^{3/2}}$ can degenerate up to $\nicefrac{\sqrt{B}}{\probavailable}.$ However, if we take $B = \cO\left(\nicefrac{L_{\sigma}^2}{\widehat{L}^2}\right),$ then the degeneration of the third term will be up to $\nicefrac{1}{\probavailable}.$ This effect we analyze in Section~\ref{sec:partial_participation_sampling}.
 
 Another important difference is batch size $B_{\textnormal{init}}.$ In \algname{DASHA-SYNC-MVR}, batch size $B_{\textnormal{init}} = \Theta\left(\max\left\{\frac{\sigma^2}{n \varepsilon}, B \omega\right\}\right).$ The same as \algname{DASHA-MVR}, method \algname{DASHA-PP-MVR} does not send full vectors and gets suboptimal initial batch size $B_{\textnormal{init}} = \Theta\left(\max\left\{\frac{\sigma^2}{\probavailable n \varepsilon}, \frac{B \omega}{\probavailable} \sqrt{\frac{\sigma^2}{n \varepsilon B}}\right\}\right).$ In the regimes when $\varepsilon$ is small and the first terms dominate in maximums, the degeneration of the batch size $B_{\textnormal{init}}$ is up to $\nicefrac{1}{\probavailable}.$ However, the degeneration can be higher in other regimes due to the additional multiplicative term $\sqrt{\frac{\sigma^2}{n \varepsilon B}}.$
 We believe that this is the price for not sending the full vectors and no synchronization in the stochastic setting and should be investigated further.
@@ -2342,9 +2342,60 @@ First, we will prove two lemmas.
       \Psi^t &=& \frac{\left(2 \omega + 1\right)}{\probavailable} \Exp{\norm{g^{t} - h^{t}}^2} + \frac{\left(\left(2 \omega + 1\right)\probavailable - \probpairaa\right)}{n \probavailable^2}\Exp{\frac{1}{n}\sum_{i=1}^n\norm{g^{t}_i - h^{t}_i}^2} \\
       &+& \frac{1}{b} \Exp{\norm{h^{t} - \nabla f(x^{t})}^2} + \frac{2 \left(1 - \frac{\probpairaa}{\probavailable}\right)}{n \probavailable \probmega}\Exp{\frac{1}{n}\sum_{i=1}^n\norm{h^{t}_i - \nabla f_i(x^{t})}^2}
     \end{eqnarray*}
-    and $C = \frac{6 \gamma \sigma^2}{n B'}$
+    and $C = \frac{6 \sigma^2}{n B'}$
     to conclude the proof.
 \end{proof}
+
+\begin{restatable}{corollary}{COROLLARYSYNCSTOCHASTIC}
+  \label{cor:sync_stochastic}
+  Suppose that assumptions from Theorem~\ref{theorem:sync_stochastic} hold, probability $\probmega = \min \left\{\ \frac{\zeta_{\cC}}{d}, \frac{n \varepsilon B}{\sigma^2}\right\},$ batch size 
+  $B' = \Theta\left(\frac{\sigma^2}{n \varepsilon}\right),$
+  and $h^{0}_i = g^{0}_i = \frac{1}{B_{\textnormal{init}}} \sum_{k = 1}^{B_{\textnormal{init}}} \nabla f_i(x^0; \xi^0_{ik})$ for all $i \in [n],$ initial batch size 
+  $B_{\textnormal{init}} = \Theta\left(\frac{B}{\probmega \sqrt{\probavailable}}\right) = \Theta\left(\max \left\{\frac{B d}{ \sqrt{\probavailable} \zeta_{\cC}},  \frac{\sigma^2}{\sqrt{\probavailable} n \varepsilon} \right\}\right),$ 
+  % $B_{\textnormal{init}} = ?,$ 
+  then \algname{DASHA-PP-SYNC-MVR}
+  needs
+  $$T \eqdef \cO\left(\frac{1}{\varepsilon}\vast[L + \left(\frac{\omega}{\probavailable\sqrt{n}} + \sqrt{\frac{d}{\probavailable^2 \zeta_{\cC} n}}\right) \left(\widehat{L} + \frac{L_{\sigma}}{\sqrt{B}}\right)  + \frac{\sigma}{\probavailable \sqrt{\varepsilon} n} \left(\frac{\widehat{L}}{\sqrt{B}} + \frac{L_{\sigma}}{B}\right)\vast] + \frac{\sigma^2}{\sqrt{\probavailable} n \varepsilon B}\right).$$
+
+  communication rounds to get an $\varepsilon$-solution, the communication complexity is equal to $\cO\left(d + \zeta_{\cC} T\right),$ and the number of stochastic gradient calculations per node equals $\cO(B_{\textnormal{init}} + BT),$ where $\zeta_{\cC}$ is the expected density from Definition~\ref{def:expected_density}.
+\end{restatable}
+
+\alexander{Define $\zeta_{\cC}$}
+
+\begin{proof}
+  Due to the choice of $B',$ we have
+  \begin{align*}
+    \Exp{\norm{\nabla f(\widehat{x}^T)}^2} &\leq \frac{1}{T}\vast[2 \left(f(x^0) - f^*\right)\left(L + \sqrt{\frac{8 \left(2\omega + 1\right) \omega}{n \probavailable^2}\left(\widehat{L}^2 + \frac{L_{\sigma}^2}{B}\right) + \frac{8}{n \probmega \probavailable^2} \left(\left(1 - \frac{\probpairaa}{\probavailable}\right) \widehat{L}^2 + \frac{L_{\sigma}^2}{B}\right)}\right) \\
+    &\quad + \frac{4}{\probmega \probavailable} \norm{h^{0} - \nabla f(x^{0})}^2 + \frac{4 \left(1 - \frac{\probpairaa}{\probavailable}\right)}{n \probmega \probavailable}\frac{1}{n}\sum_{i=1}^n\norm{h^{0}_i - \nabla f_i(x^{0})}^2 \vast] \\
+    &\quad + \frac{2 \varepsilon}{3}.
+  \end{align*}
+  Using 
+  \begin{align*}
+    \Exp{\norm{h^{0} - \nabla f(x^{0})}^2} = \Exp{\norm{\frac{1}{n} \sum_{i=1}^n \frac{1}{B_{\textnormal{init}}} \sum_{k = 1}^{B_{\textnormal{init}}} \nabla f_i(x^0; \xi^0_{ik}) - \nabla f(x^{0})}^2} \leq \frac{\sigma^2}{n B_{\textnormal{init}}}
+  \end{align*}
+  and 
+  \begin{align*}
+    \frac{1}{n^2} \sum_{i=1}^n\Exp{\norm{h^{0}_i - \nabla f_i(x^{0})}^2} = \frac{1}{n^2} \sum_{i=1}^n \Exp{\norm{\frac{1}{B_{\textnormal{init}}} \sum_{k = 1}^{B_{\textnormal{init}}} \nabla f_i(x^0; \xi^0_{ik}) - \nabla f_i(x^{0})}^2} \leq \frac{\sigma^2}{n B_{\textnormal{init}}},
+  \end{align*}
+  we have
+  % Considering that $\probmega = \min \left\{\frac{\zeta_{\cC}}{d}, \frac{B}{B + B'}\right\},$ we get
+  \begin{align*}
+    \Exp{\norm{\nabla f(\widehat{x}^T)}^2} &\leq \frac{1}{T}\vast[2 \left(f(x^0) - f^*\right)\left(L + \sqrt{\frac{8 \left(2\omega + 1\right) \omega}{n \probavailable^2}\left(\widehat{L}^2 + \frac{L_{\sigma}^2}{B}\right) + \frac{8}{n \probmega \probavailable^2} \left(\left(1 - \frac{\probpairaa}{\probavailable}\right) \widehat{L}^2 + \frac{L_{\sigma}^2}{B}\right)}\right) \\
+    &\quad + \frac{8 \sigma^2}{n \probmega \probavailable B_{\textnormal{init}}} \vast] \\
+    &\quad + \frac{2 \varepsilon}{3}.
+  \end{align*}
+  Therefore, we can take the following $T$ to get $\varepsilon$--solution.
+  \begin{align*}
+    T = \cO\left(\frac{1}{\varepsilon}\vast[\left(L + \sqrt{\frac{\omega^2}{n \probavailable^2}\left(\widehat{L}^2 + \frac{L_{\sigma}^2}{B}\right) + \frac{1}{n \probmega \probavailable^2} \left(\widehat{L}^2 + \frac{L_{\sigma}^2}{B}\right)}\right) + \frac{\sigma^2}{n \probmega \probavailable B_{\textnormal{init}}} \vast]\right)
+  \end{align*}
+  Considering the choice of $\probmega$ and $B_{\textnormal{init}},$ we obtain
+  \begin{align*}
+    T &=\cO\left(\frac{1}{\varepsilon}\vast[\left(L + \left(\frac{\omega}{\probavailable\sqrt{n}} + \sqrt{\frac{d}{\probavailable^2 \zeta_{\cC} n}}\right) \left(\widehat{L} + \frac{L_{\sigma}}{\sqrt{B}}\right)  + \frac{\sigma}{\probavailable \sqrt{\varepsilon} n} \left(\frac{\widehat{L}}{\sqrt{B}} + \frac{L_{\sigma}}{B}\right)\right) + \frac{\sigma^2}{n \probmega \probavailable B_{\textnormal{init}}} \vast]\right) \\
+    &=\cO\left(\frac{1}{\varepsilon}\vast[L + \left(\frac{\omega}{\probavailable\sqrt{n}} + \sqrt{\frac{d}{\probavailable^2 \zeta_{\cC} n}}\right) \left(\widehat{L} + \frac{L_{\sigma}}{\sqrt{B}}\right)  + \frac{\sigma}{\probavailable \sqrt{\varepsilon} n} \left(\frac{\widehat{L}}{\sqrt{B}} + \frac{L_{\sigma}}{B}\right)\vast] + \frac{\sigma^2}{\sqrt{\probavailable} n \varepsilon B}\right).
+  \end{align*}
+\end{proof}
+
+% \probmega = \min \left\{\ \frac{\zeta_{\cC}}{d}, \frac{n \varepsilon B}{\sigma^2}\right\}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \newpage
