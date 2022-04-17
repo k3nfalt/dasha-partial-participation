@@ -349,11 +349,10 @@ Then \algname{DASHA-PP-PAGE}
     needs 
     \begin{align}
       \label{eq:rate_dasha_pp_page}
-      \cO\left(\frac{1}{\varepsilon}\left[L + \frac{\omega}{\probavailable\sqrt{n}}\left(\widehat{L} + \frac{L_{\max}}{\sqrt{B}}\right) + \frac{1}{\probavailable}\sqrt{\frac{m}{n}}\left(\frac{\widehat{L}}{\sqrt{B}} + \frac{L_{\max}}{B}\right)\right]\right)
+      T \eqdef \cO\left(\frac{1}{\varepsilon}\left[L + \frac{\omega}{\probavailable\sqrt{n}}\left(\widehat{L} + \frac{L_{\max}}{\sqrt{B}}\right) + \frac{1}{\probavailable}\sqrt{\frac{m}{n}}\left(\frac{\widehat{L}}{\sqrt{B}} + \frac{L_{\max}}{B}\right)\right]\right)
     \end{align}
     communication rounds to get an $\varepsilon$-solution and the expected \# of gradient calculations per node equals $\cO\left(m + B T\right).$
 \end{restatable}
-\alexander{Define $T$}
 \alexander{TODO: Prove it!}
 
 The convergence rate the rate of the current state-of-the-art method \algname{DASHA-PAGE} without partial participation equals
@@ -385,12 +384,6 @@ We define $h^t \eqdef \frac{1}{n}\sum_{i=1}^n h^t_i$.
   and $g^{0}_i = h^{0}_i$ for all $i \in [n]$
   in Algorithm~\ref{alg:main_algorithm} \algname{(DASHA-PP-MVR)}.
   Then 
-%   \begin{align*}
-%     &\Exp{\norm{\nabla f(\widehat{x}^T)}^2} \leq \frac{1}{T}\vast[2 \left(f(x^0) - f^*\right) \\
-%     &\times \left(L + \sqrt{\frac{48 \omega (2 \omega + 1)}{n \probavailable^2} \left(\widehat{L}^2 + \frac{(1 - b)^2 L_{\sigma}^2}{B}\right) + \frac{12}{n \probavailable b}\left(\left(1 - \frac{\probpairaa}{\probavailable}\right) \widehat{L}^2 + \frac{(1 - b)^2 L_{\sigma}^2}{B} \right)}\right)\\
-%     &+ \frac{2}{b} \norm{h^{0} - \nabla f(x^{0})}^2 + \left(\frac{32 b \omega (2 \omega + 1)}{n \probavailable^2} + \frac{4 \left(1 - \frac{\probpairaa}{\probavailable}\right)}{n \probavailable}\right)\left(\frac{1}{n}\sum_{i=1}^n\norm{h^{0}_i - \nabla f_i(x^{0})}^2\right)\vast] \\
-%     &+ \left(\frac{48 b^2 \omega (2 \omega + 1)}{\probavailable^2} + \frac{12 b}{\probavailable}\right) \frac{\sigma^2}{n B}.
-% \end{align*}
 \begin{align*}
   &\Exp{\norm{\nabla f(\widehat{x}^T)}^2} \leq \frac{1}{T}\vast[\frac{2 \left(f(x^0) - f^*\right)}{\gamma} + \frac{2}{b} \norm{h^{0} - \nabla f(x^{0})}^2 \\
   &+ \left(\frac{32 b \omega (2 \omega + 1)}{n \probavailable^2} + \frac{4 \left(1 - \frac{\probpairaa}{\probavailable}\right)}{n \probavailable}\right)\left(\frac{1}{n}\sum_{i=1}^n\norm{h^{0}_i - \nabla f_i(x^{0})}^2\right)\vast] \\
@@ -402,18 +395,33 @@ In the next corollary, we choose momentum $b$ and initialize vectors $h^{0}_i$ t
 
 \begin{restatable}{corollary}{COROLLARYSTOCHASTIC}
   \label{cor:stochastic}
-  Suppose that assumptions from Theorem~\ref{theorem:stochastic} hold, momentum $b = \Theta\left(\min \left\{\ \frac{\probavailable}{\omega}\sqrt{\frac{n \varepsilon B}{\sigma^2}}, \frac{\probavailable n \varepsilon B}{\sigma^2}\right\}\right),$ 
+  Suppose that assumptions from Theorem~\ref{theorem:stochastic} hold, momentum $b = \Theta\left(\min \left\{\ \frac{\probavailable}{\omega}\sqrt{\frac{n \varepsilon B}{\sigma^2}}, \frac{\probavailable n \varepsilon B}{\sigma^2}\right\}\right),$ $\frac{\sigma^2}{n \varepsilon B} \geq 1,$
   and $h^{0}_i = \frac{1}{B_{\textnormal{init}}} \sum_{k = 1}^{B_{\textnormal{init}}} \nabla f_i(x^0; \xi^0_{ik})$ for all $i \in [n],$ and batch size $B_{\textnormal{init}} = \Theta\left(\frac{\sqrt{\probavailable} B}{b}\right),$ then Algorithm~\ref{alg:main_algorithm} \algname{(DASHA-PP-MVR)} needs
-  $$\cO\left(\frac{1}{\varepsilon}\left[L + \frac{\omega}{\probavailable\sqrt{n}}\left(\widehat{L} + \frac{L_{\sigma}}{\sqrt{B}}\right) + \frac{\sigma}{\probavailable \sqrt{\varepsilon} n}\left(\frac{\widehat{L}}{\sqrt{B}} + \frac{L_\sigma}{B}\right)\right] + \frac{\sigma^2}{\sqrt{\probavailable} n \varepsilon B}\right)$$
+  $$T \eqdef \cO\left(\frac{1}{\varepsilon}\left[L + \frac{\omega}{\probavailable\sqrt{n}}\left(\widehat{L} + \frac{L_{\sigma}}{\sqrt{B}}\right) + \frac{\sigma}{\probavailable \sqrt{\varepsilon} n}\left(\frac{\widehat{L}}{\sqrt{B}} + \frac{L_\sigma}{B}\right)\right] + \frac{\sigma^2}{\sqrt{\probavailable} n \varepsilon B}\right)$$
   communication rounds to get an $\varepsilon$-solution and the number of stochastic gradient calculations per node equals $\cO(B_{\textnormal{init}} + BT).$
+\end{restatable}
+
+The convergence rate of the \algname{DASHA-SYNC-MVR}, the state-of-the-art method without partial participation, equals $\cO\left(\frac{1}{\varepsilon}\left[L + \frac{\omega}{\sqrt{n}}\left(\widehat{L} + \frac{L_{\sigma}}{\sqrt{B}}\right) + \frac{\sigma}{\sqrt{\varepsilon} n}\frac{L_\sigma}{B}\right] + \frac{\sigma^2}{n \varepsilon B}\right).$ Similar to Section~\ref{sec:finite_sum_setting}, we see that in the regimes when $\widehat{L} \approx L_{\sigma}$ the third term w.r.t. $\nicefrac{1}{\varepsilon^{3/2}}$ can degenerate up to $\nicefrac{\sqrt{B}}{\probavailable}.$ However, if we take $B = \cO\left(\nicefrac{L_{\sigma}^2}{\widehat{L}^2}\right),$ then the degeneration of the third term will be up to $\nicefrac{1}{\probavailable}.$ This effect we analyze in Section~\ref{sec:partial_participation_sampling}.
+
+Another important difference is batch size $B_{\textnormal{init}}.$ In \algname{DASHA-SYNC-MVR}, batch size $B_{\textnormal{init}} = \Theta\left(\max\left\{\frac{\sigma^2}{n \varepsilon}, B \omega\right\}\right).$ The same as \algname{DASHA-MVR}, method \algname{DASHA-PP-MVR} does not send full vectors and gets suboptimal initial batch size $B_{\textnormal{init}} = \Theta\left(\max\left\{\frac{\sigma^2}{\sqrt{\probavailable} n \varepsilon}, \frac{B \omega}{\sqrt{\probavailable}} \sqrt{\frac{\sigma^2}{n \varepsilon B}}\right\}\right).$ In the regimes when $\varepsilon$ is small and the first terms dominate in maximums, the degeneration of the batch size $B_{\textnormal{init}}$ is up to $\nicefrac{1}{\sqrt{\probavailable}}.$ However, the degeneration can be higher in other regimes due to the additional multiplicative term $\sqrt{\frac{\sigma^2}{n \varepsilon B}}.$ In the next corollary, with Rand$K$ compressor (see Definition~\ref{}), we show that we can escape those regimes by specially choosing the parameter $K$.
+
+\begin{restatable}{corollary}{COROLLARYSTOCHASTICRANDK}
+  Suppose that assumptions of Corollary~\ref{cor:stochastic} hold, batch size $B \leq \min\left\{\frac{\sigma}{\sqrt{\varepsilon} n}, \right\},$ we take Rand$K$ with $K = \zeta_{\cC} = \Theta\left(\frac{B d \sqrt{\varepsilon n}}{\sigma}\right).$ Then
+  the communication complexity equals 
+  \begin{align}
+      \label{eq:complexity:stochastic:communication}
+      \cO\left(\frac{d \sigma}{\sqrt{n \varepsilon}} + \frac{\widetilde{L} \left(f(x^0) - f^*\right) d}{\sqrt{n} \varepsilon} \right),
+  \end{align}
+  and the expected \# of stochastic gradient calculations per node equals
+  \begin{align}
+      \label{eq:complexity:stochastic_oracle}
+      \cO\left(\frac{\sigma^2}{n \varepsilon} + \frac{\widetilde{L} \left(f(x^0) - f^*\right) \sigma}{\varepsilon^{\nicefrac{3}{2}} n} \right).
+  \end{align}
 \end{restatable}
 
 \alexander{TODO: Prove it!}
 
-The convergence rate of the \algname{DASHA-SYNC-MVR}, the state-of-the-art method without partial participation, equals $\cO\left(\frac{1}{\varepsilon}\left[L + \frac{\omega}{\sqrt{n}}\left(\widehat{L} + \frac{L_{\sigma}}{\sqrt{B}}\right) + \frac{\sigma}{\sqrt{\varepsilon} n}\frac{L_\sigma}{B}\right] + \frac{\sigma^2}{n \varepsilon B}\right).$ Similar to Section~\ref{sec:finite_sum_setting}, we see that in the regimes when $\widehat{L} \approx L_{\sigma}$ the third term w.r.t. $\nicefrac{1}{\varepsilon^{3/2}}$ can degenerate up to $\nicefrac{\sqrt{B}}{\probavailable}.$ However, if we take $B = \cO\left(\nicefrac{L_{\sigma}^2}{\widehat{L}^2}\right),$ then the degeneration of the third term will be up to $\nicefrac{1}{\probavailable}.$ This effect we analyze in Section~\ref{sec:partial_participation_sampling}.
-
-Another important difference is batch size $B_{\textnormal{init}}.$ In \algname{DASHA-SYNC-MVR}, batch size $B_{\textnormal{init}} = \Theta\left(\max\left\{\frac{\sigma^2}{n \varepsilon}, B \omega\right\}\right).$ The same as \algname{DASHA-MVR}, method \algname{DASHA-PP-MVR} does not send full vectors and gets suboptimal initial batch size $B_{\textnormal{init}} = \Theta\left(\max\left\{\frac{\sigma^2}{\sqrt{\probavailable} n \varepsilon}, \frac{B \omega}{\sqrt{\probavailable}} \sqrt{\frac{\sigma^2}{n \varepsilon B}}\right\}\right).$ In the regimes when $\varepsilon$ is small and the first terms dominate in maximums, the degeneration of the batch size $B_{\textnormal{init}}$ is up to $\nicefrac{1}{\sqrt{\probavailable}}.$ However, the degeneration can be higher in other regimes due to the additional multiplicative term $\sqrt{\frac{\sigma^2}{n \varepsilon B}}.$
-We believe that this is the price for not sending the full vectors and no synchronization in the stochastic setting and should be investigated further.
+% We believe that this is the price for not sending the full vectors and no synchronization in the stochastic setting and should be investigated further.
 
 \section{The Problem of Estimating the Mean in the Partial Participation Setting}
 \label{sec:partial_participation_sampling}
@@ -434,7 +442,6 @@ Let us assume that $s \leq \nicefrac{n}{2}.$ Note that \eqref{eq:partial_partici
 % And taking batch size $B$ larger than 
 
 \section{The Problem of Compressed Vectors in the Stochastic Setting}
-\alexander{Regimes when sync if better are not practical???}
 
 \section{Experiments}
 
@@ -1852,6 +1859,54 @@ Let us denote $\nabla f_i(x^{t+1};\xi^{t+1}_i) \eqdef \frac{1}{B} \sum_{j=1}^B \
     and $C = \left(\frac{24 b^2 \omega (2 \omega + 1)}{\probavailable^2} + \frac{6b}{\probavailable}\right) \frac{\sigma^2}{n B}$
     to conclude the proof.
   \end{proof}
+
+  \COROLLARYSTOCHASTIC*
+
+  \begin{proof}
+    Using the result from Theorem~\ref{theorem:stochastic}, we have
+    \begin{align*}
+        &\Exp{\norm{\nabla f(\widehat{x}^T)}^2} \\
+        &\leq \frac{1}{T}\vast[2 \left(f(x^0) - f^*\right)\left(L + \sqrt{\frac{48 \omega (2 \omega + 1)}{n \probavailable^2} \left(\widehat{L}^2 + \frac{(1 - b)^2 L_{\sigma}^2}{B}\right) + \frac{12}{n \probavailable b}\left(\left(1 - \frac{\probpairaa}{\probavailable}\right) \widehat{L}^2 + \frac{(1 - b)^2 L_{\sigma}^2}{B}\right)}\right) \\
+        &\quad + \frac{2}{b} \norm{h^{0} - \nabla f(x^{0})}^2 + \left(\frac{32 b \omega (2 \omega + 1)}{n \probavailable^2} + \frac{4 \left(1 - \frac{\probpairaa}{\probavailable}\right)}{n \probavailable}\right)\left(\frac{1}{n}\sum_{i=1}^n\norm{h^{0}_i - \nabla f_i(x^{0})}^2\right)\vast] \\
+        &\quad+ \left(\frac{48 b^2 \omega (2 \omega + 1)}{\probavailable^2} + \frac{12 b}{\probavailable}\right) \frac{\sigma^2}{n B}
+    \end{align*}
+    We choose $b$ to ensure $\left(\frac{48 b^2 \omega (2 \omega + 1)}{\probavailable^2} + \frac{12 b}{\probavailable}\right) \frac{\sigma^2}{n B} = \Theta\left(\varepsilon\right).$ Note that $\frac{1}{b} = \Theta\left(\max\left\{\frac{\omega}{\probavailable} \sqrt{\frac{\sigma^2}{n \varepsilon B}}, \frac{\sigma^2}{\probavailable n \varepsilon B}\right\}\right) \leq \Theta\left(\max\left\{\frac{\omega^2}{\probavailable}, \frac{\sigma^2}{\probavailable n \varepsilon B}\right\}\right),$ thus
+    \begin{align*}
+        &\Exp{\norm{\nabla f(\widehat{x}^T)}^2} \\
+        &= \cO\vast(\frac{1}{T}\vast[\left(L + \frac{\omega}{\probavailable \sqrt{n}} \left(\widehat{L} + \frac{L_{\sigma}}{\sqrt{B}}\right) + \sqrt{\frac{\sigma^2}{\probavailable^2 \varepsilon n^2 B}}\left(\widehat{L} + \frac{L_{\sigma}}{\sqrt{B}}\right)\right)\\
+        &\quad + \frac{1}{b} \norm{h^{0} - \nabla f(x^{0})}^2 + \left(\frac{b \omega^2}{n \probavailable^2} + \frac{1}{n \probavailable}\right)\left(\frac{1}{n}\sum_{i=1}^n\norm{h^{0}_i - \nabla f_i(x^{0})}^2\right)\vast] + \varepsilon\vast).
+    \end{align*}
+    It enough to take the following $T$ to get $\varepsilon$-solution.
+    \begin{align*}
+        &T=\cO\vast(\frac{1}{\varepsilon}\vast[L + \frac{\omega}{\probavailable \sqrt{n}} \left(\widehat{L} + \frac{L_{\sigma}}{\sqrt{B}}\right) + \sqrt{\frac{\sigma^2}{\probavailable^2 \varepsilon n^2 B}}\left(\widehat{L} + \frac{L_{\sigma}}{\sqrt{B}}\right)\\
+        &+ \frac{1}{b} \norm{h^{0} - \nabla f(x^{0})}^2 + \left(\frac{b \omega^2}{n \probavailable^2} + \frac{1}{n \probavailable}\right)\left(\frac{1}{n}\sum_{i=1}^n\norm{h^{0}_i - \nabla f_i(x^{0})}^2\right)\vast]\vast).
+    \end{align*}
+    Let us bound the norms:
+    \begin{eqnarray*}
+        \Exp{\norm{h^{0} - \nabla f(x^{0})}^2} &=& \Exp{\norm{\frac{1}{n} \sum_{i=1}^n \frac{1}{B_{\textnormal{init}}} \sum_{k = 1}^{B_{\textnormal{init}}} \nabla f_i(x^0; \xi^0_{ik}) - \nabla f(x^{0})}^2} \\
+        &=& \frac{1}{n^2 B_{\textnormal{init}}^2}\sum_{i=1}^n \sum_{k = 1}^{B_{\textnormal{init}}} \Exp{\norm{\nabla f_i(x^0; \xi^0_{ik}) - \nabla f_i(x^{0})}^2}\\
+        &\leq& \frac{\sigma^2}{n B_{\textnormal{init}}}.
+    \end{eqnarray*}
+    Using the same reasoning, one cat get $\frac{1}{n}\sum_{i=1}^n\Exp{\norm{h^{0}_i - \nabla f_i(x^{0})}^2} \leq \frac{\sigma^2}{B_{\textnormal{init}}}.$ 
+    Combining all inequalities, we have
+
+    \begin{align*}
+      T&=\cO\vast(\frac{1}{\varepsilon}\vast[L + \frac{\omega}{\probavailable \sqrt{n}} \left(\widehat{L} + \frac{L_{\sigma}}{\sqrt{B}}\right) + \sqrt{\frac{\sigma^2}{\probavailable^2 \varepsilon n^2 B}}\left(\widehat{L} + \frac{L_{\sigma}}{\sqrt{B}}\right)\\
+      &\qquad + \frac{\sigma^2}{b n B_{\textnormal{init}}}  + \frac{b \omega^2 \sigma^2}{n \probavailable^2 B_{\textnormal{init}}} + \frac{\sigma^2}{n \probavailable B_{\textnormal{init}}}\vast]\vast).
+    \end{align*}
+
+    Using the choice of $B_{\textnormal{init}}$ and $b,$ we obtain
+
+    \begin{align*}
+      T&=\cO\vast(\frac{1}{\varepsilon}\vast[L + \frac{\omega}{\probavailable \sqrt{n}} \left(\widehat{L} + \frac{L_{\sigma}}{\sqrt{B}}\right) + \sqrt{\frac{\sigma^2}{\probavailable^2 \varepsilon n^2 B}}\left(\widehat{L} + \frac{L_{\sigma}}{\sqrt{B}}\right)\\
+      &\qquad + \frac{\sigma^2}{\sqrt{\probavailable} n B}  + \frac{b^2 \omega^2 \sigma^2}{n \probavailable^{5/2} B} + \frac{b \sigma^2}{\probavailable^{3/2} n B}\vast]\vast) \\
+      &=\cO\vast(\frac{1}{\varepsilon}\vast[L + \frac{\omega}{\probavailable \sqrt{n}} \left(\widehat{L} + \frac{L_{\sigma}}{\sqrt{B}}\right) + \sqrt{\frac{\sigma^2}{\probavailable^2 \varepsilon n^2 B}}\left(\widehat{L} + \frac{L_{\sigma}}{\sqrt{B}}\right)\\
+      &\qquad + \frac{\sigma^2}{\sqrt{\probavailable} n B}  + \frac{\varepsilon}{\sqrt{\probavailable}}\vast]\vast) \\
+      &=\cO\vast(\frac{1}{\varepsilon}\vast[L + \frac{\omega}{\probavailable \sqrt{n}} \left(\widehat{L} + \frac{L_{\sigma}}{\sqrt{B}}\right) + \sqrt{\frac{\sigma^2}{\probavailable^2 \varepsilon n^2 B}}\left(\widehat{L} + \frac{L_{\sigma}}{\sqrt{B}}\right)\vast] + \frac{\sigma^2}{\sqrt{\probavailable} n \varepsilon B}  + \frac{1}{\sqrt{\probavailable}} \vast).
+    \end{align*}
+
+    Using the assumption that $\frac{\sigma^2}{n \varepsilon B} \geq 1,$ we can conclude the proof of the inequality. The number of stochastic gradients that each node calculates equals $B_{\textnormal{init}} + 2BT = \cO(B_{\textnormal{init}} + BT).$
+\end{proof}
 
   \newpage
   \section{Description of \algname{DASHA-PP-SYNC-MVR}}
