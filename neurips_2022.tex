@@ -420,7 +420,6 @@ Another important difference is batch size $B_{\textnormal{init}}.$ In \algname{
 \end{restatable}
 
 \alexander{For $\probavailable = 1$ is DASHA-MVR}
-\alexander{TODO: Prove it!}
 
 % We believe that this is the price for not sending the full vectors and no synchronization in the stochastic setting and should be investigated further.
 
@@ -1906,7 +1905,7 @@ Let us denote $\nabla f_i(x^{t+1};\xi^{t+1}_i) \eqdef \frac{1}{B} \sum_{j=1}^B \
       &=\cO\vast(\frac{1}{\varepsilon}\vast[L + \frac{\omega}{\probavailable \sqrt{n}} \left(\widehat{L} + \frac{L_{\sigma}}{\sqrt{B}}\right) + \sqrt{\frac{\sigma^2}{\probavailable^2 \varepsilon n^2 B}}\left(\widehat{L} + \frac{L_{\sigma}}{\sqrt{B}}\right)\vast] + \frac{\sigma^2}{\sqrt{\probavailable} n \varepsilon B}  + \frac{1}{\sqrt{\probavailable}} \vast).
     \end{align*}
 
-    Using the assumption $\frac{\sigma^2}{n \varepsilon B} \geq 1,$ we can conclude the proof of the inequality. The number of stochastic gradients that each node calculates equals $B_{\textnormal{init}} + 2BT = \cO(B_{\textnormal{init}} + BT).$
+    Using $\frac{\sigma^2}{n \varepsilon B} \geq 1,$ we can conclude the proof of the inequality. The number of stochastic gradients that each node calculates equals $B_{\textnormal{init}} + 2BT = \cO(B_{\textnormal{init}} + BT).$
 \end{proof}
 
 \COROLLARYSTOCHASTICRANDK*
