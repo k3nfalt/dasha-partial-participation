@@ -308,16 +308,16 @@ One can easily show that \algname{DASHA-PP} reduces to \algname{DASHA} when $\pr
 
 \section{Theorems}
 
-We now present the convergence rates theorems of \algname{DASHA-PP} in different settings. We will compare the theorems with the results of \algname{DASHA}. For any setting, suppose that \algname{DASHA} converges to $\varepsilon$-solution after $T$ communication rounds. Then, ideally, we would expect the convergence of the new algorithms to $\varepsilon$-solution after up to $\nicefrac{T}{\probavailable}$ communication rounds due to the partial participation.
+We now present the convergence rates theorems of \algname{DASHA-PP} in different settings. We will compare the theorems with the results of \algname{DASHA}. For any setting, suppose that \algname{DASHA} converges to $\varepsilon$-solution after $T$ communication rounds. Then, ideally, we would expect the convergence of the new algorithms to $\varepsilon$-solution after up to $\nicefrac{T}{\probavailable}$ communication rounds due to the partial participation. Let us define $\Delta_0 \eqdef f(x^0) - f^*$
 
 \subsection{Gradient Setting}
 
 \begin{restatable}{theorem}{CONVERGENCE}
   \label{theorem:gradient_oracle}
   Suppose that Assumptions \ref{ass:lower_bound}, \ref{ass:lipschitz_constant}, \ref{ass:nodes_lipschitz_constant}, \ref{ass:compressors} and \ref{ass:partial_participation} hold. Let us take $a = \frac{\probavailable}{2 \omega + 1} ,$ $b = \frac{\probavailable}{2 - \probavailable},$ $$\gamma \leq \left(L + \sqrt{\frac{48 \omega \left(2 \omega + 1\right)}{n \probavailable^2} + \frac{16}{n \probavailable^2}\left(1 - \frac{\probpairaa}{\probavailable}\right)}\widehat{L}\right)^{-1},$$ and $g^{0}_i = h^{0}_i = \nabla f_i(x^0)$ for all $i \in [n]$
-  in Algorithm~\ref{alg:main_algorithm} \algname{(DASHA-PP)}, then $\Exp{\norm{\nabla f(\widehat{x}^T)}^2} \leq \frac{2 \left(f(x^0) - f^*\right)}{\gamma T}.$
+  in Algorithm~\ref{alg:main_algorithm} \algname{(DASHA-PP)}, then $\Exp{\norm{\nabla f(\widehat{x}^T)}^2} \leq \frac{2 \Delta_0}{\gamma T}.$
   % \begin{align*}
-  %     &\Exp{\norm{\nabla f(\widehat{x}^T)}^2} \leq \frac{1}{T}\Bigg[2 \left(f(x^0) - f^*\right)\left(L + \sqrt{\frac{48 \omega \left(2 \omega + 1\right)}{n \probavailable^2} + \frac{16}{n \probavailable^2}\left(1 - \frac{\probpairaa}{\probavailable}\right)} \widehat{L}\right)\Bigg].
+  %     &\Exp{\norm{\nabla f(\widehat{x}^T)}^2} \leq \frac{1}{T}\Bigg[2 \Delta_0\left(L + \sqrt{\frac{48 \omega \left(2 \omega + 1\right)}{n \probavailable^2} + \frac{16}{n \probavailable^2}\left(1 - \frac{\probpairaa}{\probavailable}\right)} \widehat{L}\right)\Bigg].
   % \end{align*}
 \end{restatable}
 
@@ -333,9 +333,9 @@ $\cO\left(\frac{1}{\varepsilon}\left[L + \frac{\omega}{\sqrt{n}}\widehat{L}\righ
   Suppose that Assumptions \ref{ass:lower_bound}, \ref{ass:lipschitz_constant}, \ref{ass:nodes_lipschitz_constant}, \ref{ass:max_lipschitz_constant}, \ref{ass:compressors}, and \ref{ass:partial_participation} hold. Let us take $a = \frac{\probavailable}{2 \omega + 1} ,$ $b = \frac{\probpage \probavailable}{2 - \probavailable},$ probability $\probpage \in (0, 1]$,
   {\scriptsize $$\gamma \leq \left(L + \sqrt{\frac{48 \omega (2 \omega + 1)}{n \probavailable^2} \left(\widehat{L}^2 + \frac{(1 - \probpage)L_{\max}^2}{B}\right) + \frac{16}{n \probavailable^2 \probpage} \left(\left(1 - \frac{\probpairaa}{\probavailable}\right)\widehat{L}^2 + \frac{(1 - \probpage)L_{\max}^2}{B}\right)}\right)^{-1}$$}
   and $g^{0}_i = h^{0}_i = \nabla f_i(x^0)$ for all $i \in [n]$ in Algorithm~\ref{alg:main_algorithm} \algname{(DASHA-PP-PAGE)}
-  then $\Exp{\norm{\nabla f(\widehat{x}^T)}^2} \leq \frac{2 \left(f(x^0) - f^*\right)}{\gamma T}.$
+  then $\Exp{\norm{\nabla f(\widehat{x}^T)}^2} \leq \frac{2 \Delta_0}{\gamma T}.$
   % \begin{align*}
-  %   &\Exp{\norm{\nabla f(\widehat{x}^T)}^2} \leq \frac{1}{T}\vast[2 \left(f(x^0) - f^*\right) \times \\
+  %   &\Exp{\norm{\nabla f(\widehat{x}^T)}^2} \leq \frac{1}{T}\vast[2 \Delta_0 \times \\
   %   & \left(L + \sqrt{\frac{48 \omega (2 \omega + 1)}{n \probavailable^2} \left(\widehat{L}^2 + \frac{(1 - \probpage)L_{\max}^2}{B}\right) + \frac{16}{n \probavailable^2 \probpage} \left(\left(1 - \frac{\probpairaa}{\probavailable}\right)\widehat{L}^2 + \frac{(1 - \probpage)L_{\max}^2}{B}\right)}\right)\vast].
   % \end{align*}
 \end{restatable}
@@ -364,9 +364,9 @@ It is left to provide the convergence rate of \algname{DASHA-PP-FINITE-MVR}. The
   Suppose that Assumptions \ref{ass:lower_bound}, \ref{ass:lipschitz_constant}, \ref{ass:nodes_lipschitz_constant}, \ref{ass:max_lipschitz_constant}, \ref{ass:compressors}, and \ref{ass:partial_participation} hold. Let us take $a = \frac{\probavailable}{2 \omega + 1} ,$ $b = \frac{\frac{\probavailable B}{m}}{2 - \frac{\probavailable B}{m}},$
   $$\gamma \leq \left(L + \sqrt{\frac{148 \omega (2 \omega + 1)}{n \probavailable^2} \left(\widehat{L}^2 + \frac{L_{\max}^2}{B}\right) + \frac{72 m}{n \probavailable^2 B}\left(\left(1 - \frac{\probpairaa}{\probavailable}\right)\widehat{L}^2 + \frac{L_{\max}^2}{B}\right)}\right)^{-1},$$
   $g^{0}_i = h^{0}_i = \nabla f_i(x^0)$ for all $i \in [n]$ and $h^{0}_{ij} = \nabla f_{ij}(x^0)$ for all $i \in [n], j \in [m]$ in Algorithm~\ref{alg:main_algorithm} \algname{(DASHA-PP-FINITE-MVR)}
-  then $\Exp{\norm{\nabla f(\widehat{x}^T)}^2} \leq \frac{2 \left(f(x^0) - f^*\right)}{\gamma T}.$
+  then $\Exp{\norm{\nabla f(\widehat{x}^T)}^2} \leq \frac{2 \Delta_0}{\gamma T}.$
   % \begin{align*}
-  %   &\Exp{\norm{\nabla f(\widehat{x}^T)}^2} \leq \frac{1}{T}\vast[2 \left(f(x^0) - f^*\right) \times \\
+  %   &\Exp{\norm{\nabla f(\widehat{x}^T)}^2} \leq \frac{1}{T}\vast[2 \Delta_0 \times \\
   %   & \left(L + \sqrt{\frac{148 \omega (2 \omega + 1)}{n \probavailable^2} \left(\widehat{L}^2 + \frac{L_{\max}^2}{B}\right) + \frac{72 m}{n \probavailable^2 B}\left(\left(1 - \frac{\probpairaa}{\probavailable}\right)\widehat{L}^2 + \frac{L_{\max}^2}{B}\right)}\right)\vast].
   % \end{align*}
 \end{restatable}
@@ -385,7 +385,7 @@ We define $h^t \eqdef \frac{1}{n}\sum_{i=1}^n h^t_i$.
   in Algorithm~\ref{alg:main_algorithm} \algname{(DASHA-PP-MVR)}.
   Then 
 \begin{align*}
-  &\Exp{\norm{\nabla f(\widehat{x}^T)}^2} \leq \frac{1}{T}\vast[\frac{2 \left(f(x^0) - f^*\right)}{\gamma} + \frac{2}{b} \norm{h^{0} - \nabla f(x^{0})}^2 \\
+  &\Exp{\norm{\nabla f(\widehat{x}^T)}^2} \leq \frac{1}{T}\vast[\frac{2 \Delta_0}{\gamma} + \frac{2}{b} \norm{h^{0} - \nabla f(x^{0})}^2 \\
   &+ \left(\frac{32 b \omega (2 \omega + 1)}{n \probavailable^2} + \frac{4 \left(1 - \frac{\probpairaa}{\probavailable}\right)}{n \probavailable}\right)\left(\frac{1}{n}\sum_{i=1}^n\norm{h^{0}_i - \nabla f_i(x^{0})}^2\right)\vast] \\
   &+ \left(\frac{48 b^2 \omega (2 \omega + 1)}{\probavailable^2} + \frac{12 b}{\probavailable}\right) \frac{\sigma^2}{n B}.
 \end{align*}
@@ -600,7 +600,7 @@ We start the proof of theorems by providing standard lemmas from the nonconvex o
   where $\Psi^{t}$ is a sequence of numbers, $\Psi^{t} \geq 0$ for all $t \in [T]$, constant $C \geq 0$, and constant $\gamma > 0.$ Then 
   \begin{align}
       \label{eq:good_recursion}
-      \Exp{\norm{\nabla f(\widehat{x}^T)}^2} \leq \frac{2 \left(f(x^0) - f^*\right)}{\gamma T} + \frac{2\Psi^{0}}{T} + 2 C,
+      \Exp{\norm{\nabla f(\widehat{x}^T)}^2} \leq \frac{2 \Delta_0}{\gamma T} + \frac{2\Psi^{0}}{T} + 2 C,
   \end{align}
   where a point $\widehat{x}^T$ is chosen uniformly from a set of points $\{x^t\}_{t=0}^{T-1}.$
 \end{lemma}
@@ -612,7 +612,7 @@ We start the proof of theorems by providing standard lemmas from the nonconvex o
   \end{align*}
   We subtract $f^*$, divide inequality by $\frac{\gamma T}{2},$ and take into account that $f(x) \geq f^*$ for all $x \in \R$, and $\Psi^{t} \geq 0$ for all $t \in [T],$ to get the following inequality:
   \begin{align*}
-      \frac{1}{T}\sum_{t = 0}^{T - 1}\Exp{\norm{\nabla f(x^t)}^2} \leq \frac{2 \left(f(x^0) - f^*\right)}{\gamma T} + \frac{2\Psi^{0}}{T} + 2 C.
+      \frac{1}{T}\sum_{t = 0}^{T - 1}\Exp{\norm{\nabla f(x^t)}^2} \leq \frac{2 \Delta_0}{\gamma T} + \frac{2\Psi^{0}}{T} + 2 C.
   \end{align*}
   It is left to consider the choice of a point $\widehat{x}^T$ to complete the proof of the lemma.
 \end{proof}
@@ -1866,7 +1866,7 @@ Let us denote $\nabla f_i(x^{t+1};\xi^{t+1}_i) \eqdef \frac{1}{B} \sum_{j=1}^B \
     Using the result from Theorem~\ref{theorem:stochastic}, we have
     \begin{align*}
         &\Exp{\norm{\nabla f(\widehat{x}^T)}^2} \\
-        &\leq \frac{1}{T}\vast[2 \left(f(x^0) - f^*\right)\left(L + \sqrt{\frac{48 \omega (2 \omega + 1)}{n \probavailable^2} \left(\widehat{L}^2 + \frac{(1 - b)^2 L_{\sigma}^2}{B}\right) + \frac{12}{n \probavailable b}\left(\left(1 - \frac{\probpairaa}{\probavailable}\right) \widehat{L}^2 + \frac{(1 - b)^2 L_{\sigma}^2}{B}\right)}\right) \\
+        &\leq \frac{1}{T}\vast[2 \Delta_0\left(L + \sqrt{\frac{48 \omega (2 \omega + 1)}{n \probavailable^2} \left(\widehat{L}^2 + \frac{(1 - b)^2 L_{\sigma}^2}{B}\right) + \frac{12}{n \probavailable b}\left(\left(1 - \frac{\probpairaa}{\probavailable}\right) \widehat{L}^2 + \frac{(1 - b)^2 L_{\sigma}^2}{B}\right)}\right) \\
         &\quad + \frac{2}{b} \norm{h^{0} - \nabla f(x^{0})}^2 + \left(\frac{32 b \omega (2 \omega + 1)}{n \probavailable^2} + \frac{4 \left(1 - \frac{\probpairaa}{\probavailable}\right)}{n \probavailable}\right)\left(\frac{1}{n}\sum_{i=1}^n\norm{h^{0}_i - \nabla f_i(x^{0})}^2\right)\vast] \\
         &\quad+ \left(\frac{48 b^2 \omega (2 \omega + 1)}{\probavailable^2} + \frac{12 b}{\probavailable}\right) \frac{\sigma^2}{n B}
     \end{align*}
@@ -1989,7 +1989,7 @@ Let us denote $\nabla f_i(x^{t+1};\xi^{t+1}_i) \eqdef \frac{1}{B} \sum_{j=1}^B \
     Suppose that Assumptions \ref{ass:lower_bound}, \ref{ass:lipschitz_constant}, \ref{ass:nodes_lipschitz_constant}, \ref{ass:stochastic_unbiased_and_variance_bounded}, \ref{ass:mean_square_smoothness}, \ref{ass:compressors} and \ref{ass:partial_participation} hold. Let us take $a = \frac{\probavailable}{2\omega + 1}$, $b = \frac{\probmega \probavailable}{2 - \probavailable},$probability $\probmega \in (0, 1],$ batch size $B' \geq B \geq 1$ $$\gamma \leq \left(L + \sqrt{\frac{8 \left(2\omega + 1\right) \omega}{n \probavailable^2}\left(\widehat{L}^2 + \frac{L_{\sigma}^2}{B}\right) + \frac{8}{n \probmega \probavailable^2} \left(\left(1 - \frac{\probpairaa}{\probavailable}\right) \widehat{L}^2 + \frac{L_{\sigma}^2}{B}\right)}\right)^{-1},$$ and $h^{0}_i = g^{0}_i$ for all $i \in [n]$
     in Algorithm~\ref{alg:main_algorithm_mvr_sync}. Then 
     \begin{align*}
-      \Exp{\norm{\nabla f(\widehat{x}^T)}^2} &\leq \frac{1}{T}\vast[\frac{2 \left(f(x^0) - f^*\right)}{\gamma} + \frac{4}{\probmega \probavailable} \norm{h^{0} - \nabla f(x^{0})}^2 + \frac{4 \left(1 - \frac{\probpairaa}{\probavailable}\right)}{n \probmega \probavailable}\frac{1}{n}\sum_{i=1}^n\norm{h^{0}_i - \nabla f_i(x^{0})}^2 \vast] \\
+      \Exp{\norm{\nabla f(\widehat{x}^T)}^2} &\leq \frac{1}{T}\vast[\frac{2 \Delta_0}{\gamma} + \frac{4}{\probmega \probavailable} \norm{h^{0} - \nabla f(x^{0})}^2 + \frac{4 \left(1 - \frac{\probpairaa}{\probavailable}\right)}{n \probmega \probavailable}\frac{1}{n}\sum_{i=1}^n\norm{h^{0}_i - \nabla f_i(x^{0})}^2 \vast] \\
       &\quad + \frac{12 \sigma^2}{n B'}.
     \end{align*}
   \end{restatable}
@@ -2451,7 +2451,7 @@ First, we will prove two lemmas.
 \begin{proof}
   Due to the choice of $B',$ we have
   \begin{align*}
-    \Exp{\norm{\nabla f(\widehat{x}^T)}^2} &\leq \frac{1}{T}\vast[2 \left(f(x^0) - f^*\right)\left(L + \sqrt{\frac{8 \left(2\omega + 1\right) \omega}{n \probavailable^2}\left(\widehat{L}^2 + \frac{L_{\sigma}^2}{B}\right) + \frac{8}{n \probmega \probavailable^2} \left(\left(1 - \frac{\probpairaa}{\probavailable}\right) \widehat{L}^2 + \frac{L_{\sigma}^2}{B}\right)}\right) \\
+    \Exp{\norm{\nabla f(\widehat{x}^T)}^2} &\leq \frac{1}{T}\vast[2 \Delta_0\left(L + \sqrt{\frac{8 \left(2\omega + 1\right) \omega}{n \probavailable^2}\left(\widehat{L}^2 + \frac{L_{\sigma}^2}{B}\right) + \frac{8}{n \probmega \probavailable^2} \left(\left(1 - \frac{\probpairaa}{\probavailable}\right) \widehat{L}^2 + \frac{L_{\sigma}^2}{B}\right)}\right) \\
     &\quad + \frac{4}{\probmega \probavailable} \norm{h^{0} - \nabla f(x^{0})}^2 + \frac{4 \left(1 - \frac{\probpairaa}{\probavailable}\right)}{n \probmega \probavailable}\frac{1}{n}\sum_{i=1}^n\norm{h^{0}_i - \nabla f_i(x^{0})}^2 \vast] \\
     &\quad + \frac{2 \varepsilon}{3}.
   \end{align*}
@@ -2466,7 +2466,7 @@ First, we will prove two lemmas.
   we have
   % Considering that $\probmega = \min \left\{\frac{\zeta_{\cC}}{d}, \frac{B}{B + B'}\right\},$ we get
   \begin{align*}
-    \Exp{\norm{\nabla f(\widehat{x}^T)}^2} &\leq \frac{1}{T}\vast[2 \left(f(x^0) - f^*\right)\left(L + \sqrt{\frac{8 \left(2\omega + 1\right) \omega}{n \probavailable^2}\left(\widehat{L}^2 + \frac{L_{\sigma}^2}{B}\right) + \frac{8}{n \probmega \probavailable^2} \left(\left(1 - \frac{\probpairaa}{\probavailable}\right) \widehat{L}^2 + \frac{L_{\sigma}^2}{B}\right)}\right) \\
+    \Exp{\norm{\nabla f(\widehat{x}^T)}^2} &\leq \frac{1}{T}\vast[2 \Delta_0\left(L + \sqrt{\frac{8 \left(2\omega + 1\right) \omega}{n \probavailable^2}\left(\widehat{L}^2 + \frac{L_{\sigma}^2}{B}\right) + \frac{8}{n \probmega \probavailable^2} \left(\left(1 - \frac{\probpairaa}{\probavailable}\right) \widehat{L}^2 + \frac{L_{\sigma}^2}{B}\right)}\right) \\
     &\quad + \frac{8 \sigma^2}{n \probmega \probavailable B_{\textnormal{init}}} \vast] \\
     &\quad + \frac{2 \varepsilon}{3}.
   \end{align*}
