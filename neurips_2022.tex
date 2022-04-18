@@ -230,14 +230,16 @@ iii) some steps are scaled by \nicefrac{1}{\probavailable} to preserve ``unbiase
 iv) In the finite-sum setting, we present two methods: \algname{DASHA-PP-PAGE} and \algname{DASHA-PP-FINITE-MVR}. The former is based on \algname{PAGE} \citep{PAGE} and with small probability $\probpage$ calculates the full gradients of the functions $f_i$. The latter always calculates mini-batches, but it needs extra memory $\cO\left(d m\right)$ per node to store vectors $h^{t}_{ij}$.
 One can easily show that \algname{DASHA-PP} reduces to \algname{DASHA} when $\probavailable = 1.$
 
+% \setlength{\floatsep}{0pt}% Remove \textfloatsep
 \begin{algorithm}
   \caption{\algname{DASHA-PP}}
   \label{alg:main_algorithm}
   \begin{algorithmic}[1]
   \STATE \textbf{Input:} starting point $x^0 \in \R^d$, stepsize $\gamma > 0$, momentum $a \in (0, 1]$, 
-  momentum $b \in (0, 1]$, probability $\probavailable \in (0, 1]$ that a node is \textit{participating}\textsuperscript{\red (a)},
-  batch size $B$ (only in \algname{DASHA-PP-PAGE}, \algname{DASHA-PP-FINITE-MVR} and \algname{DASHA-PP-MVR}),
+  momentum $b \in (0, 1]$, 
   probability $\probpage \in (0, 1]$ (only in \algname{DASHA-PP-PAGE}),
+  batch size $B$ (only in \algname{DASHA-PP-PAGE}, \algname{DASHA-PP-FINITE-MVR} and \algname{DASHA-PP-MVR}),
+  probability $\probavailable \in (0, 1]$ that a node is \textit{participating}\textsuperscript{\red (a)},
   number of iterations~$T \geq 1$
   \STATE Initialize $g^0_i\in \R^d$, $h^0_i\in \R^d$ on the nodes and  $g^0 = \frac{1}{n}\sum_{i=1}^n g^0_i$ on the server
   \STATE Initialize $h^0_{ij}\in \R^d$ on the nodes and take $h^0_i = \frac{1}{m}\sum_{j=1}^m h^0_{ij}$ (only in \algname{DASHA-PP-FINITE-MVR})
@@ -253,9 +255,9 @@ One can easily show that \algname{DASHA-PP} reduces to \algname{DASHA} when $\pr
       \STATE Send $m^{t+1}_i$ to the server
   \ELSE
       \STATE $h^{t+1}_{ij} = h^{t}_{ij}$ (only in \algname{DASHA-PP-FINITE-MVR})
-      \STATE $h^{t+1}_i = h^{t}_i$
-      \STATE $m^{t+1}_i = 0$
-      \STATE $g^{t+1}_i = g^{t}_i$
+      \STATE $h^{t+1}_i = h^{t}_i, \quad g^{t+1}_i = g^{t}_i, \quad m^{t+1}_i = 0$
+      % \STATE $$
+      % \STATE $g^{t+1}_i = g^{t}_i$
   \ENDIF
   \ENDFOR
   \STATE $g^{t+1} = g^t + \frac{1}{n} \sum_{i=1}^n m^{t+1}_i$
@@ -266,7 +268,6 @@ One can easily show that \algname{DASHA-PP} reduces to \algname{DASHA} when $\pr
   % (or $x^T$ under the P\L-condition)
   \end{algorithmic}
 \end{algorithm}
-
 \begin{algorithm}
   \caption{Calculate $k^{t+1}_i$ for \algname{DASHA-PP} in the gradient setting. See line~\ref{alg:calculate_k} in Alg.~\ref{alg:main_algorithm}}
   \label{alg:main_algorithm:dasha_pp}
