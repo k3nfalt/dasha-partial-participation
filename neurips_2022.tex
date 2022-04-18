@@ -363,7 +363,7 @@ Then \algname{DASHA-PP-PAGE}
 The convergence rate the rate of the current state-of-the-art method \algname{DASHA-PAGE} without partial participation equals
 $\cO\left(\frac{\Delta_0}{\varepsilon}\left[L + \frac{\omega}{\sqrt{n}}\left(\widehat{L} + \frac{L_{\max}}{\sqrt{B}}\right) + \sqrt{\frac{m}{n}}\frac{L_{\max}}{B}\right]\right).$ Let us closer compare it with \eqref{eq:rate_dasha_pp_page}. As expected, we see that the second term w.r.t. $\omega$ degenerates up to $\nicefrac{1}{\probavailable}$. Surprisingly, the third term w.r.t. $\sqrt{\nicefrac{m}{n}}$ can degenerate up to $\nicefrac{\sqrt{B}}{\probavailable}$ when $\widehat{L} \approx L_{\max}.$ Hence, in order to keep degeneration up to $\nicefrac{1}{\probavailable},$ one should take the batch size $B = \cO\left(\nicefrac{L_{\max}^2}{\widehat{L}^2}\right).$ This interesting effect we analyze separately in Section~\ref{sec:partial_participation_sampling}.
 
-It is left to provide the convergence rate of \algname{DASHA-PP-FINITE-MVR}. The conclusions would be the same.
+It is left to provide the convergence rate of \algname{DASHA-PP-FINITE-MVR}. The conclusions are the same for the method.
 \begin{restatable}{theorem}{CONVERGENCEFINITEMVR}
   \label{theorem:finitemvr}
   Suppose that Assumptions \ref{ass:lower_bound}, \ref{ass:lipschitz_constant}, \ref{ass:nodes_lipschitz_constant}, \ref{ass:max_lipschitz_constant}, \ref{ass:compressors}, and \ref{ass:partial_participation} hold. Let us take $a = \frac{\probavailable}{2 \omega + 1} ,$ $b = \frac{\frac{\probavailable B}{m}}{2 - \frac{\probavailable B}{m}},$
