@@ -322,7 +322,7 @@ We now present the convergence rates theorems of \algname{DASHA-PP} in different
 \end{restatable}
 
 Let us recall the convergence rate of \algname{DASHA} or \algname{MARINA}, the number of communication rounds to get $\varepsilon$-solution equals
-$\cO\left(\frac{1}{\varepsilon}\left[L + \frac{\omega}{\sqrt{n}}\widehat{L}\right]\right),$ while the rate of \algname{DASHA-PP} equals $\cO\left(\frac{1}{\varepsilon}\left[L + \frac{\omega + 1}{\probavailable \sqrt{n}}\widehat{L}\right]\right)$. Up to Lipschitz constants factors, we get the degeneration up to $\nicefrac{1}{\probavailable}$ due to the  partial participation.
+$\cO\left(\frac{\Delta_0}{\varepsilon}\left[L + \frac{\omega}{\sqrt{n}}\widehat{L}\right]\right),$ while the rate of \algname{DASHA-PP} equals $\cO\left(\frac{\Delta_0}{\varepsilon}\left[L + \frac{\omega + 1}{\probavailable \sqrt{n}}\widehat{L}\right]\right)$. Up to Lipschitz constants factors, we get the degeneration up to $\nicefrac{1}{\probavailable}$ due to the  partial participation.
 
 \subsection{Finite-Sum Setting}
 
@@ -349,14 +349,14 @@ Then \algname{DASHA-PP-PAGE}
     needs 
     \begin{align}
       \label{eq:rate_dasha_pp_page}
-      T \eqdef \cO\left(\frac{1}{\varepsilon}\left[L + \frac{\omega}{\probavailable\sqrt{n}}\left(\widehat{L} + \frac{L_{\max}}{\sqrt{B}}\right) + \frac{1}{\probavailable}\sqrt{\frac{m}{n}}\left(\frac{\widehat{L}}{\sqrt{B}} + \frac{L_{\max}}{B}\right)\right]\right)
+      T \eqdef \cO\left(\frac{\Delta_0}{\varepsilon}\left[L + \frac{\omega}{\probavailable\sqrt{n}}\left(\widehat{L} + \frac{L_{\max}}{\sqrt{B}}\right) + \frac{1}{\probavailable}\sqrt{\frac{m}{n}}\left(\frac{\widehat{L}}{\sqrt{B}} + \frac{L_{\max}}{B}\right)\right]\right)
     \end{align}
     communication rounds to get an $\varepsilon$-solution and the expected \# of gradient calculations per node equals $\cO\left(m + B T\right).$
 \end{restatable}
 \alexander{TODO: Prove it!}
 
 The convergence rate the rate of the current state-of-the-art method \algname{DASHA-PAGE} without partial participation equals
-$\cO\left(\frac{1}{\varepsilon}\left[L + \frac{\omega}{\sqrt{n}}\left(\widehat{L} + \frac{L_{\max}}{\sqrt{B}}\right) + \sqrt{\frac{m}{n}}\frac{L_{\max}}{B}\right]\right).$ Let us closer compare it with \eqref{eq:rate_dasha_pp_page}. As expected, we see that the second term w.r.t. $\omega$ degenerates up to $\nicefrac{1}{\probavailable}$. Surprisingly, the third term w.r.t. $\sqrt{\nicefrac{m}{n}}$ can degenerate up to $\nicefrac{\sqrt{B}}{\probavailable}$ when $\widehat{L} \approx L_{\max}.$ Hence, in order to keep degeneration up to $\nicefrac{1}{\probavailable},$ one should take the batch size $B = \cO\left(\nicefrac{L_{\max}^2}{\widehat{L}^2}\right).$ This interesting effect we analyze separately in Section~\ref{sec:partial_participation_sampling}.
+$\cO\left(\frac{\Delta_0}{\varepsilon}\left[L + \frac{\omega}{\sqrt{n}}\left(\widehat{L} + \frac{L_{\max}}{\sqrt{B}}\right) + \sqrt{\frac{m}{n}}\frac{L_{\max}}{B}\right]\right).$ Let us closer compare it with \eqref{eq:rate_dasha_pp_page}. As expected, we see that the second term w.r.t. $\omega$ degenerates up to $\nicefrac{1}{\probavailable}$. Surprisingly, the third term w.r.t. $\sqrt{\nicefrac{m}{n}}$ can degenerate up to $\nicefrac{\sqrt{B}}{\probavailable}$ when $\widehat{L} \approx L_{\max}.$ Hence, in order to keep degeneration up to $\nicefrac{1}{\probavailable},$ one should take the batch size $B = \cO\left(\nicefrac{L_{\max}^2}{\widehat{L}^2}\right).$ This interesting effect we analyze separately in Section~\ref{sec:partial_participation_sampling}.
 
 It is left to provide the convergence rate of \algname{DASHA-PP-FINITE-MVR}. The conclusions would be the same.
 \begin{restatable}{theorem}{CONVERGENCEFINITEMVR}
@@ -397,11 +397,11 @@ In the next corollary, we choose momentum $b$ and initialize vectors $h^{0}_i$ t
   \label{cor:stochastic}
   Suppose that assumptions from Theorem~\ref{theorem:stochastic} hold, momentum $b = \Theta\left(\min \left\{\ \frac{\probavailable}{\omega}\sqrt{\frac{n \varepsilon B}{\sigma^2}}, \frac{\probavailable n \varepsilon B}{\sigma^2}\right\}\right),$ $\frac{\sigma^2}{n \varepsilon B} \geq 1,$
   and $h^{0}_i = \frac{1}{B_{\textnormal{init}}} \sum_{k = 1}^{B_{\textnormal{init}}} \nabla f_i(x^0; \xi^0_{ik})$ for all $i \in [n],$ and batch size $B_{\textnormal{init}} = \Theta\left(\frac{\sqrt{\probavailable} B}{b}\right),$ then Algorithm~\ref{alg:main_algorithm} \algname{(DASHA-PP-MVR)} needs
-  $$T \eqdef \cO\left(\frac{1}{\varepsilon}\left[L + \frac{\omega}{\probavailable\sqrt{n}}\left(\widehat{L} + \frac{L_{\sigma}}{\sqrt{B}}\right) + \frac{\sigma}{\probavailable \sqrt{\varepsilon} n}\left(\frac{\widehat{L}}{\sqrt{B}} + \frac{L_\sigma}{B}\right)\right] + \frac{\sigma^2}{\sqrt{\probavailable} n \varepsilon B}\right)$$
+  $$T \eqdef \cO\left(\frac{\Delta_0}{\varepsilon}\left[L + \frac{\omega}{\probavailable\sqrt{n}}\left(\widehat{L} + \frac{L_{\sigma}}{\sqrt{B}}\right) + \frac{\sigma}{\probavailable \sqrt{\varepsilon} n}\left(\frac{\widehat{L}}{\sqrt{B}} + \frac{L_\sigma}{B}\right)\right] + \frac{\sigma^2}{\sqrt{\probavailable} n \varepsilon B}\right)$$
   communication rounds to get an $\varepsilon$-solution and the number of stochastic gradient calculations per node equals $\cO(B_{\textnormal{init}} + BT).$
 \end{restatable}
 
-The convergence rate of the \algname{DASHA-SYNC-MVR}, the state-of-the-art method without partial participation, equals $\cO\left(\frac{1}{\varepsilon}\left[L + \frac{\omega}{\sqrt{n}}\left(\widehat{L} + \frac{L_{\sigma}}{\sqrt{B}}\right) + \frac{\sigma}{\sqrt{\varepsilon} n}\frac{L_\sigma}{B}\right] + \frac{\sigma^2}{n \varepsilon B}\right).$ Similar to Section~\ref{sec:finite_sum_setting}, we see that in the regimes when $\widehat{L} \approx L_{\sigma}$ the third term w.r.t. $\nicefrac{1}{\varepsilon^{3/2}}$ can degenerate up to $\nicefrac{\sqrt{B}}{\probavailable}.$ However, if we take $B = \cO\left(\nicefrac{L_{\sigma}^2}{\widehat{L}^2}\right),$ then the degeneration of the third term will be up to $\nicefrac{1}{\probavailable}.$ This effect we analyze in Section~\ref{sec:partial_participation_sampling}.
+The convergence rate of the \algname{DASHA-SYNC-MVR}, the state-of-the-art method without partial participation, equals $\cO\left(\frac{\Delta_0}{\varepsilon}\left[L + \frac{\omega}{\sqrt{n}}\left(\widehat{L} + \frac{L_{\sigma}}{\sqrt{B}}\right) + \frac{\sigma}{\sqrt{\varepsilon} n}\frac{L_\sigma}{B}\right] + \frac{\sigma^2}{n \varepsilon B}\right).$ Similar to Section~\ref{sec:finite_sum_setting}, we see that in the regimes when $\widehat{L} \approx L_{\sigma}$ the third term w.r.t. $\nicefrac{1}{\varepsilon^{3/2}}$ can degenerate up to $\nicefrac{\sqrt{B}}{\probavailable}.$ However, if we take $B = \cO\left(\nicefrac{L_{\sigma}^2}{\widehat{L}^2}\right),$ then the degeneration of the third term will be up to $\nicefrac{1}{\probavailable}.$ This effect we analyze in Section~\ref{sec:partial_participation_sampling}.
 
 Another important difference is batch size $B_{\textnormal{init}}.$ In \algname{DASHA-SYNC-MVR}, batch size $B_{\textnormal{init}} = \Theta\left(\max\left\{\frac{\sigma^2}{n \varepsilon}, B \omega\right\}\right).$ The same as \algname{DASHA-MVR}, method \algname{DASHA-PP-MVR} does not send full vectors and gets suboptimal initial batch size $B_{\textnormal{init}} = \Theta\left(\max\left\{\frac{\sigma^2}{\sqrt{\probavailable} n \varepsilon}, \frac{B \omega}{\sqrt{\probavailable}} \sqrt{\frac{\sigma^2}{n \varepsilon B}}\right\}\right).$ In the regimes when $\varepsilon$ is small and the first terms dominate in maximums, the degeneration of the batch size $B_{\textnormal{init}}$ is up to $\nicefrac{1}{\sqrt{\probavailable}}.$ However, the degeneration can be higher in other regimes due to the additional multiplicative term $\sqrt{\frac{\sigma^2}{n \varepsilon B}}.$ In the next corollary, with Rand$K$ compressor (see Definition~\ref{}), we show that we can escape those regimes by choosing the parameter $K$ in a particular way.
 
@@ -410,12 +410,12 @@ Another important difference is batch size $B_{\textnormal{init}}.$ In \algname{
   the communication complexity equals 
   \begin{align}
       \label{eq:complexity:stochastic:communication}
-      \cO\left(\frac{d \sigma}{\sqrt{\probavailable} \sqrt{n \varepsilon}} + \frac{L_{\sigma}d}{\probavailable \sqrt{n} \varepsilon}\right),
+      \cO\left(\frac{d \sigma}{\sqrt{\probavailable} \sqrt{n \varepsilon}} + \frac{L_{\sigma} \Delta_0 d}{\probavailable \sqrt{n} \varepsilon}\right),
   \end{align}
   and the expected \# of stochastic gradient calculations per node equals
   \begin{align}
       \label{eq:complexity:stochastic_oracle}
-      \cO\left(\frac{\sigma^2}{\sqrt{\probavailable} n \varepsilon} + \frac{L_{\sigma} \sigma}{\probavailable \varepsilon^{\nicefrac{3}{2}} n}\right).
+      \cO\left(\frac{\sigma^2}{\sqrt{\probavailable} n \varepsilon} + \frac{L_{\sigma} \Delta_0 \sigma}{\probavailable \varepsilon^{\nicefrac{3}{2}} n}\right).
   \end{align}
 \end{restatable}
 
@@ -1873,12 +1873,12 @@ Let us denote $\nabla f_i(x^{t+1};\xi^{t+1}_i) \eqdef \frac{1}{B} \sum_{j=1}^B \
     We choose $b$ to ensure $\left(\frac{48 b^2 \omega (2 \omega + 1)}{\probavailable^2} + \frac{12 b}{\probavailable}\right) \frac{\sigma^2}{n B} = \Theta\left(\varepsilon\right).$ Note that $\frac{1}{b} = \Theta\left(\max\left\{\frac{\omega}{\probavailable} \sqrt{\frac{\sigma^2}{n \varepsilon B}}, \frac{\sigma^2}{\probavailable n \varepsilon B}\right\}\right) \leq \Theta\left(\max\left\{\frac{\omega^2}{\probavailable}, \frac{\sigma^2}{\probavailable n \varepsilon B}\right\}\right),$ thus
     \begin{align*}
         &\Exp{\norm{\nabla f(\widehat{x}^T)}^2} \\
-        &= \cO\vast(\frac{1}{T}\vast[\left(L + \frac{\omega}{\probavailable \sqrt{n}} \left(\widehat{L} + \frac{L_{\sigma}}{\sqrt{B}}\right) + \sqrt{\frac{\sigma^2}{\probavailable^2 \varepsilon n^2 B}}\left(\widehat{L} + \frac{L_{\sigma}}{\sqrt{B}}\right)\right)\\
+        &= \cO\vast(\frac{1}{T}\vast[\Delta_0\left(L + \frac{\omega}{\probavailable \sqrt{n}} \left(\widehat{L} + \frac{L_{\sigma}}{\sqrt{B}}\right) + \sqrt{\frac{\sigma^2}{\probavailable^2 \varepsilon n^2 B}}\left(\widehat{L} + \frac{L_{\sigma}}{\sqrt{B}}\right)\right)\\
         &\quad + \frac{1}{b} \norm{h^{0} - \nabla f(x^{0})}^2 + \left(\frac{b \omega^2}{n \probavailable^2} + \frac{1}{n \probavailable}\right)\left(\frac{1}{n}\sum_{i=1}^n\norm{h^{0}_i - \nabla f_i(x^{0})}^2\right)\vast] + \varepsilon\vast).
     \end{align*}
     It enough to take the following $T$ to get $\varepsilon$-solution.
     \begin{align*}
-        &T=\cO\vast(\frac{1}{\varepsilon}\vast[L + \frac{\omega}{\probavailable \sqrt{n}} \left(\widehat{L} + \frac{L_{\sigma}}{\sqrt{B}}\right) + \sqrt{\frac{\sigma^2}{\probavailable^2 \varepsilon n^2 B}}\left(\widehat{L} + \frac{L_{\sigma}}{\sqrt{B}}\right)\\
+        &T=\cO\vast(\frac{1}{\varepsilon}\vast[\Delta_0\left(L + \frac{\omega}{\probavailable \sqrt{n}} \left(\widehat{L} + \frac{L_{\sigma}}{\sqrt{B}}\right) + \sqrt{\frac{\sigma^2}{\probavailable^2 \varepsilon n^2 B}}\left(\widehat{L} + \frac{L_{\sigma}}{\sqrt{B}}\right)\right)\\
         &+ \frac{1}{b} \norm{h^{0} - \nabla f(x^{0})}^2 + \left(\frac{b \omega^2}{n \probavailable^2} + \frac{1}{n \probavailable}\right)\left(\frac{1}{n}\sum_{i=1}^n\norm{h^{0}_i - \nabla f_i(x^{0})}^2\right)\vast]\vast).
     \end{align*}
     Let us bound the norms:
@@ -1891,18 +1891,18 @@ Let us denote $\nabla f_i(x^{t+1};\xi^{t+1}_i) \eqdef \frac{1}{B} \sum_{j=1}^B \
     Combining all inequalities, we have
 
     \begin{align*}
-      T&=\cO\vast(\frac{1}{\varepsilon}\vast[L + \frac{\omega}{\probavailable \sqrt{n}} \left(\widehat{L} + \frac{L_{\sigma}}{\sqrt{B}}\right) + \sqrt{\frac{\sigma^2}{\probavailable^2 \varepsilon n^2 B}}\left(\widehat{L} + \frac{L_{\sigma}}{\sqrt{B}}\right)\\
+      T&=\cO\vast(\frac{1}{\varepsilon}\vast[\Delta_0\left(L + \frac{\omega}{\probavailable \sqrt{n}} \left(\widehat{L} + \frac{L_{\sigma}}{\sqrt{B}}\right) + \sqrt{\frac{\sigma^2}{\probavailable^2 \varepsilon n^2 B}}\left(\widehat{L} + \frac{L_{\sigma}}{\sqrt{B}}\right)\right)\\
       &\qquad + \frac{\sigma^2}{b n B_{\textnormal{init}}}  + \frac{b \omega^2 \sigma^2}{n \probavailable^2 B_{\textnormal{init}}} + \frac{\sigma^2}{n \probavailable B_{\textnormal{init}}}\vast]\vast).
     \end{align*}
 
     Using the choice of $B_{\textnormal{init}}$ and $b,$ we obtain
 
     \begin{align*}
-      T&=\cO\vast(\frac{1}{\varepsilon}\vast[L + \frac{\omega}{\probavailable \sqrt{n}} \left(\widehat{L} + \frac{L_{\sigma}}{\sqrt{B}}\right) + \sqrt{\frac{\sigma^2}{\probavailable^2 \varepsilon n^2 B}}\left(\widehat{L} + \frac{L_{\sigma}}{\sqrt{B}}\right)\\
+      T&=\cO\vast(\frac{1}{\varepsilon}\vast[\Delta_0\left(L + \frac{\omega}{\probavailable \sqrt{n}} \left(\widehat{L} + \frac{L_{\sigma}}{\sqrt{B}}\right) + \sqrt{\frac{\sigma^2}{\probavailable^2 \varepsilon n^2 B}}\left(\widehat{L} + \frac{L_{\sigma}}{\sqrt{B}}\right)\right)\\
       &\qquad + \frac{\sigma^2}{\sqrt{\probavailable} n B}  + \frac{b^2 \omega^2 \sigma^2}{n \probavailable^{5/2} B} + \frac{b \sigma^2}{\probavailable^{3/2} n B}\vast]\vast) \\
-      &=\cO\vast(\frac{1}{\varepsilon}\vast[L + \frac{\omega}{\probavailable \sqrt{n}} \left(\widehat{L} + \frac{L_{\sigma}}{\sqrt{B}}\right) + \sqrt{\frac{\sigma^2}{\probavailable^2 \varepsilon n^2 B}}\left(\widehat{L} + \frac{L_{\sigma}}{\sqrt{B}}\right)\\
+      &=\cO\vast(\frac{1}{\varepsilon}\vast[\Delta_0\left(L + \frac{\omega}{\probavailable \sqrt{n}} \left(\widehat{L} + \frac{L_{\sigma}}{\sqrt{B}}\right) + \sqrt{\frac{\sigma^2}{\probavailable^2 \varepsilon n^2 B}}\left(\widehat{L} + \frac{L_{\sigma}}{\sqrt{B}}\right)\right)\\
       &\qquad + \frac{\sigma^2}{\sqrt{\probavailable} n B}  + \frac{\varepsilon}{\sqrt{\probavailable}}\vast]\vast) \\
-      &=\cO\vast(\frac{1}{\varepsilon}\vast[L + \frac{\omega}{\probavailable \sqrt{n}} \left(\widehat{L} + \frac{L_{\sigma}}{\sqrt{B}}\right) + \sqrt{\frac{\sigma^2}{\probavailable^2 \varepsilon n^2 B}}\left(\widehat{L} + \frac{L_{\sigma}}{\sqrt{B}}\right)\vast] + \frac{\sigma^2}{\sqrt{\probavailable} n \varepsilon B}  + \frac{1}{\sqrt{\probavailable}} \vast).
+      &=\cO\vast(\frac{\Delta_0}{\varepsilon}\vast[L + \frac{\omega}{\probavailable \sqrt{n}} \left(\widehat{L} + \frac{L_{\sigma}}{\sqrt{B}}\right) + \sqrt{\frac{\sigma^2}{\probavailable^2 \varepsilon n^2 B}}\left(\widehat{L} + \frac{L_{\sigma}}{\sqrt{B}}\right)\vast] + \frac{\sigma^2}{\sqrt{\probavailable} n \varepsilon B}  + \frac{1}{\sqrt{\probavailable}} \vast).
     \end{align*}
 
     Using $\frac{\sigma^2}{n \varepsilon B} \geq 1,$ we can conclude the proof of the inequality. The number of stochastic gradients that each node calculates equals $B_{\textnormal{init}} + 2BT = \cO(B_{\textnormal{init}} + BT).$
@@ -1914,24 +1914,24 @@ Let us denote $\nabla f_i(x^{t+1};\xi^{t+1}_i) \eqdef \frac{1}{B} \sum_{j=1}^B \
   \alexander{Add RandK theorem}
   The communication complexity equals
   \begin{eqnarray*}
-      \cO\left(d + \zeta_{\cC} T\right) &=& \cO\left(d + \frac{1}{\varepsilon}\vast[K L + K\frac{\omega}{\probavailable \sqrt{n}} \left(\widehat{L} + \frac{L_{\sigma}}{\sqrt{B}}\right) + K \sqrt{\frac{\sigma^2}{\probavailable^2 \varepsilon n^2 B}}\left(\widehat{L} + \frac{L_{\sigma}}{\sqrt{B}}\right)\vast] + K\frac{\sigma^2}{\sqrt{\probavailable} n \varepsilon B}\right).
+      \cO\left(d + \zeta_{\cC} T\right) &=& \cO\left(d + \frac{\Delta_0}{\varepsilon}\vast[K L + K\frac{\omega}{\probavailable \sqrt{n}} \left(\widehat{L} + \frac{L_{\sigma}}{\sqrt{B}}\right) + K \sqrt{\frac{\sigma^2}{\probavailable^2 \varepsilon n^2 B}}\left(\widehat{L} + \frac{L_{\sigma}}{\sqrt{B}}\right)\vast] + K\frac{\sigma^2}{\sqrt{\probavailable} n \varepsilon B}\right).
   \end{eqnarray*}
   Due to $B \leq \frac{L_{\sigma}^2}{\widehat{L}^2}, $ we have $\widehat{L} + \frac{L_{\sigma}}{\sqrt{B}} \leq \frac{2L_{\sigma}}{\sqrt{B}}$ and
   \begin{eqnarray*}
-    \cO\left(d + \zeta_{\cC} T\right) &=& \cO\left(d + \frac{1}{\varepsilon}\vast[K L + K\frac{\omega}{\probavailable \sqrt{n}} \left(\widehat{L} + \frac{L_{\sigma}}{\sqrt{B}}\right) + K \sqrt{\frac{\sigma^2}{\probavailable^2 \varepsilon n^2 B}}\frac{L_{\sigma}}{\sqrt{B}}\vast] + K\frac{\sigma^2}{\sqrt{\probavailable} n \varepsilon B}\right).
+    \cO\left(d + \zeta_{\cC} T\right) &=& \cO\left(d + \frac{\Delta_0}{\varepsilon}\vast[K L + K\frac{\omega}{\probavailable \sqrt{n}} \left(\widehat{L} + \frac{L_{\sigma}}{\sqrt{B}}\right) + K \sqrt{\frac{\sigma^2}{\probavailable^2 \varepsilon n^2 B}}\frac{L_{\sigma}}{\sqrt{B}}\vast] + K\frac{\sigma^2}{\sqrt{\probavailable} n \varepsilon B}\right).
 \end{eqnarray*}
   From Theorem~\ref{theorem:rand_k}, we have $\omega + 1 = \frac{d}{K}.$ Since $K = \Theta\left(\frac{B d \sqrt{\varepsilon n}}{\sigma}\right) = \cO\left(\frac{d}{\sqrt{n}}\right),$ the communication complexity equals
   \begin{eqnarray*}
-      \cO\left(d + \zeta_{\cC} T\right) &=& \cO\left(d + \frac{1}{\varepsilon}\vast[\frac{d}{\sqrt{n}}L + \frac{d}{\probavailable \sqrt{n}} \left(\widehat{L} + \frac{L_{\sigma}}{\sqrt{B}}\right) + \frac{d}{\probavailable \sqrt{n}} L_{\sigma}\vast] + \frac{d \sigma}{\sqrt{\probavailable} \sqrt{n \varepsilon}}\right) \\
-      &=& \cO\left(\frac{d \sigma}{\sqrt{\probavailable} \sqrt{n \varepsilon}} + \frac{L_{\sigma}d}{\probavailable \sqrt{n} \varepsilon}\right) \\
+      \cO\left(d + \zeta_{\cC} T\right) &=& \cO\left(d + \frac{\Delta_0}{\varepsilon}\vast[\frac{d}{\sqrt{n}}L + \frac{d}{\probavailable \sqrt{n}} \left(\widehat{L} + \frac{L_{\sigma}}{\sqrt{B}}\right) + \frac{d}{\probavailable \sqrt{n}} L_{\sigma}\vast] + \frac{d \sigma}{\sqrt{\probavailable} \sqrt{n \varepsilon}}\right) \\
+      &=& \cO\left(\frac{d \sigma}{\sqrt{\probavailable} \sqrt{n \varepsilon}} + \frac{L_{\sigma} \Delta_0 d}{\probavailable \sqrt{n} \varepsilon}\right) \\
   \end{eqnarray*}
   And the expected number of stochastic gradient calculations per node equals
   \begin{align*}
       &\cO\left(B_{\textnormal{init}} + B T\right) \\
-      &= \cO\left(\frac{\sigma^2}{\sqrt{\probavailable} n \varepsilon} +  \frac{B \omega}{\sqrt{\probavailable}} \sqrt{\frac{\sigma^2}{n \varepsilon B}} + \frac{1}{\varepsilon}\vast[B L + B\frac{\omega}{\probavailable \sqrt{n}} \left(\widehat{L} + \frac{L_{\sigma}}{\sqrt{B}}\right) + B \sqrt{\frac{\sigma^2}{\probavailable^2 \varepsilon n^2 B}}\left(\widehat{L} + \frac{L_{\sigma}}{\sqrt{B}}\right)\vast] + B\frac{\sigma^2}{\sqrt{\probavailable} n \varepsilon B}\right) \\
-      &= \cO\left(\frac{\sigma^2}{\sqrt{\probavailable} n \varepsilon} +  \frac{B d}{K \sqrt{\probavailable}} \sqrt{\frac{\sigma^2}{n \varepsilon B}} + \frac{1}{\varepsilon}\vast[B L + B\frac{d}{K \probavailable \sqrt{n}} \left(\widehat{L} + \frac{L_{\sigma}}{\sqrt{B}}\right) + B \sqrt{\frac{\sigma^2}{\probavailable^2 \varepsilon n^2 B}}\frac{L_{\sigma}}{\sqrt{B}}\vast] + \frac{\sigma^2}{\sqrt{\probavailable} n \varepsilon}\right) \\
-      &= \cO\left(\frac{\sigma^2}{\sqrt{\probavailable} n \varepsilon} + \frac{\sigma^2}{\sqrt{\probavailable} n \varepsilon \sqrt{B}} + \frac{1}{\varepsilon}\vast[\frac{\sigma}{\sqrt{\varepsilon} n} L + \frac{\sigma}{\probavailable \sqrt{\varepsilon} n} \left(\widehat{L} + \frac{L_{\sigma}}{\sqrt{B}}\right) + \frac{\sigma}{\probavailable \sqrt{\varepsilon} n}L_{\sigma}\vast]\right) \\
-      &= \cO\left(\frac{\sigma^2}{\sqrt{\probavailable} n \varepsilon} + \frac{L_{\sigma} \sigma}{\probavailable \varepsilon^{\nicefrac{3}{2}} n}\right).
+      &= \cO\left(\frac{\sigma^2}{\sqrt{\probavailable} n \varepsilon} +  \frac{B \omega}{\sqrt{\probavailable}} \sqrt{\frac{\sigma^2}{n \varepsilon B}} + \frac{\Delta_0}{\varepsilon}\vast[B L + B\frac{\omega}{\probavailable \sqrt{n}} \left(\widehat{L} + \frac{L_{\sigma}}{\sqrt{B}}\right) + B \sqrt{\frac{\sigma^2}{\probavailable^2 \varepsilon n^2 B}}\left(\widehat{L} + \frac{L_{\sigma}}{\sqrt{B}}\right)\vast] + B\frac{\sigma^2}{\sqrt{\probavailable} n \varepsilon B}\right) \\
+      &= \cO\left(\frac{\sigma^2}{\sqrt{\probavailable} n \varepsilon} +  \frac{B d}{K \sqrt{\probavailable}} \sqrt{\frac{\sigma^2}{n \varepsilon B}} + \frac{\Delta_0}{\varepsilon}\vast[B L + B\frac{d}{K \probavailable \sqrt{n}} \left(\widehat{L} + \frac{L_{\sigma}}{\sqrt{B}}\right) + B \sqrt{\frac{\sigma^2}{\probavailable^2 \varepsilon n^2 B}}\frac{L_{\sigma}}{\sqrt{B}}\vast] + \frac{\sigma^2}{\sqrt{\probavailable} n \varepsilon}\right) \\
+      &= \cO\left(\frac{\sigma^2}{\sqrt{\probavailable} n \varepsilon} + \frac{\sigma^2}{\sqrt{\probavailable} n \varepsilon \sqrt{B}} + \frac{\Delta_0}{\varepsilon}\vast[\frac{\sigma}{\sqrt{\varepsilon} n} L + \frac{\sigma}{\probavailable \sqrt{\varepsilon} n} \left(\widehat{L} + \frac{L_{\sigma}}{\sqrt{B}}\right) + \frac{\sigma}{\probavailable \sqrt{\varepsilon} n}L_{\sigma}\vast]\right) \\
+      &= \cO\left(\frac{\sigma^2}{\sqrt{\probavailable} n \varepsilon} + \frac{L_{\sigma} \Delta_0 \sigma}{\probavailable \varepsilon^{\nicefrac{3}{2}} n}\right).
   \end{align*}
 \end{proof}
 
@@ -2006,7 +2006,7 @@ Let us denote $\nabla f_i(x^{t+1};\xi^{t+1}_i) \eqdef \frac{1}{B} \sum_{j=1}^B \
     % $B_{\textnormal{init}} = ?,$ 
     then \algname{DASHA-PP-SYNC-MVR}
     needs
-    $$T \eqdef \cO\left(\frac{1}{\varepsilon}\vast[L + \left(\frac{\omega}{\probavailable\sqrt{n}} + \sqrt{\frac{d}{\probavailable^2 \zeta_{\cC} n}}\right) \left(\widehat{L} + \frac{L_{\sigma}}{\sqrt{B}}\right)  + \frac{\sigma}{\probavailable \sqrt{\varepsilon} n} \left(\frac{\widehat{L}}{\sqrt{B}} + \frac{L_{\sigma}}{B}\right)\vast] + \frac{\sigma^2}{\sqrt{\probavailable} n \varepsilon B}\right).$$
+    $$T \eqdef \cO\left(\frac{\Delta_0}{\varepsilon}\vast[L + \left(\frac{\omega}{\probavailable\sqrt{n}} + \sqrt{\frac{d}{\probavailable^2 \zeta_{\cC} n}}\right) \left(\widehat{L} + \frac{L_{\sigma}}{\sqrt{B}}\right)  + \frac{\sigma}{\probavailable \sqrt{\varepsilon} n} \left(\frac{\widehat{L}}{\sqrt{B}} + \frac{L_{\sigma}}{B}\right)\vast] + \frac{\sigma^2}{\sqrt{\probavailable} n \varepsilon B}\right).$$
   
     communication rounds to get an $\varepsilon$-solution, the communication complexity is equal to $\cO\left(d + \zeta_{\cC} T\right),$ and the number of stochastic gradient calculations per node equals $\cO(B_{\textnormal{init}} + BT),$ where $\zeta_{\cC}$ is the expected density from Definition~\ref{def:expected_density}.
   \end{restatable}
@@ -2472,12 +2472,12 @@ First, we will prove two lemmas.
   \end{align*}
   Therefore, we can take the following $T$ to get $\varepsilon$--solution.
   \begin{align*}
-    T = \cO\left(\frac{1}{\varepsilon}\vast[\left(L + \sqrt{\frac{\omega^2}{n \probavailable^2}\left(\widehat{L}^2 + \frac{L_{\sigma}^2}{B}\right) + \frac{1}{n \probmega \probavailable^2} \left(\widehat{L}^2 + \frac{L_{\sigma}^2}{B}\right)}\right) + \frac{\sigma^2}{n \probmega \probavailable B_{\textnormal{init}}} \vast]\right)
+    T = \cO\left(\frac{1}{\varepsilon}\vast[\Delta_0\left(L + \sqrt{\frac{\omega^2}{n \probavailable^2}\left(\widehat{L}^2 + \frac{L_{\sigma}^2}{B}\right) + \frac{1}{n \probmega \probavailable^2} \left(\widehat{L}^2 + \frac{L_{\sigma}^2}{B}\right)}\right) + \frac{\sigma^2}{n \probmega \probavailable B_{\textnormal{init}}} \vast]\right)
   \end{align*}
   Considering the choice of $\probmega$ and $B_{\textnormal{init}},$ we obtain
   \begin{align*}
-    T &=\cO\left(\frac{1}{\varepsilon}\vast[\left(L + \left(\frac{\omega}{\probavailable\sqrt{n}} + \sqrt{\frac{d}{\probavailable^2 \zeta_{\cC} n}}\right) \left(\widehat{L} + \frac{L_{\sigma}}{\sqrt{B}}\right)  + \frac{\sigma}{\probavailable \sqrt{\varepsilon} n} \left(\frac{\widehat{L}}{\sqrt{B}} + \frac{L_{\sigma}}{B}\right)\right) + \frac{\sigma^2}{n \probmega \probavailable B_{\textnormal{init}}} \vast]\right) \\
-    &=\cO\left(\frac{1}{\varepsilon}\vast[L + \left(\frac{\omega}{\probavailable\sqrt{n}} + \sqrt{\frac{d}{\probavailable^2 \zeta_{\cC} n}}\right) \left(\widehat{L} + \frac{L_{\sigma}}{\sqrt{B}}\right)  + \frac{\sigma}{\probavailable \sqrt{\varepsilon} n} \left(\frac{\widehat{L}}{\sqrt{B}} + \frac{L_{\sigma}}{B}\right)\vast] + \frac{\sigma^2}{\sqrt{\probavailable} n \varepsilon B}\right).
+    T &=\cO\left(\frac{1}{\varepsilon}\vast[\Delta_0\left(L + \left(\frac{\omega}{\probavailable\sqrt{n}} + \sqrt{\frac{d}{\probavailable^2 \zeta_{\cC} n}}\right) \left(\widehat{L} + \frac{L_{\sigma}}{\sqrt{B}}\right)  + \frac{\sigma}{\probavailable \sqrt{\varepsilon} n} \left(\frac{\widehat{L}}{\sqrt{B}} + \frac{L_{\sigma}}{B}\right)\right) + \frac{\sigma^2}{n \probmega \probavailable B_{\textnormal{init}}} \vast]\right) \\
+    &=\cO\left(\frac{\Delta_0}{\varepsilon}\vast[L + \left(\frac{\omega}{\probavailable\sqrt{n}} + \sqrt{\frac{d}{\probavailable^2 \zeta_{\cC} n}}\right) \left(\widehat{L} + \frac{L_{\sigma}}{\sqrt{B}}\right)  + \frac{\sigma}{\probavailable \sqrt{\varepsilon} n} \left(\frac{\widehat{L}}{\sqrt{B}} + \frac{L_{\sigma}}{B}\right)\vast] + \frac{\sigma^2}{\sqrt{\probavailable} n \varepsilon B}\right).
   \end{align*}
 \end{proof}
 
