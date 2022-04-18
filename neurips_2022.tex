@@ -53,7 +53,7 @@
 \newcommand{\improvement}[1]{{\color{orange}#1}}
 \newcommand{\degeneration}[1]{{\color{red}#1}}
 
-\title{3-in-1: Computational Efficiency, Compressed Communication and Partial Participation in the Nonconvex Distributed Optimization}
+\title{}
 
 % The \author macro works with any number of authors. There are two commands
 % used to separate the names and addresses of multiple authors: \And and \AND.
@@ -216,12 +216,11 @@ However, previously proposed methods have limitations: i) methods from \citep{go
 
 
 \section{Contributions}
-% \alexander{Say somewhere that the compression can be done for free}
 We propose a new family of methods \algname{DASHA-PP} for the nonconvex distributed optimization. As far as we know, this is the first method that includes three key ingredients of federated learning methods: variance reduction of stochastic gradients, compressed communication, and partial participation. We prove convergence rates and show that these methods have the optimal oracle complexity and the state-of-the-art communication complexity in the partial participation setting. Moreover, in our work, we observe a nontrivial side-effect from mixing the variance reduction of stochastic gradients and partial participation. It is a general problem not related to our methods or analysis that we discuss in Section~\ref{sec:partial_participation_sampling}.
 
 \section{Algorithm Description}
 
-We now present \algname{DASHA-PP} (see Algorithm~\ref{alg:main_algorithm}), a family of methods to solve the optimization problem \eqref{eq:main_problem}. \algname{DASHA-PP} is based on \algname{DASHA}. 
+We now present \algname{DASHA-PP} (see Algorithm~\ref{alg:main_algorithm}), a family of methods to solve the optimization problem \eqref{eq:main_problem}. \algname{DASHA-PP} is based on \algname{DASHA} by \cite{tyurin2022dasha}. 
 The refinement of \algname{DASHA} is not an exercise, let us point out the main differences: 
 i) The theoretical analysis of \algname{DASHA-PP} is more complicated: while in \algname{DASHA}, the randomness from compressors is independent of the randomness from stochastic gradients, in \algname{DASHA-PP}, these two randomnesses are coupled by the randomness from the partial participation. Moreover, the new methods have to reduce the variance from partial participation. 
 % The theoretical analysis of \algname{DASHA-PP} is more complicated: while in \algname{DASHA}, the randomness from compressors is conditionally independent from the randomness from stochastic gradients 
@@ -363,7 +362,7 @@ $\cO\left(\frac{\Delta_0}{\varepsilon}\left[L + \frac{\omega}{\sqrt{n}}\left(\wi
 In the following corollary, we consider Rand$K$ compressors (see Definition~\ref{def:rand_k}) and show that with the particular choice of parameters, up to the Lipschitz constants and probability $\probavailable$ factor, \algname{DASHA-PP-PAGE} gets the optimal oracle complexity and SOTA communication complexity.
 
 \begin{restatable}{corollary}{COROLLARYPAGERANDK}
-  Suppose that assumptions of Corollary~\ref{cor:mini_batch_oracle} hold, $B \leq \min\left\{\sqrt{\frac{m}{n}},\frac{L_{\max}^2}{\mathbbm{1}_{\probavailable}^2 \widehat{L}^2}\right\},$ and we use the unbiased compressor Rand$K$ with $K = \Theta\left(\nicefrac{B d}{\sqrt{m}}\right).$ Then
+  Suppose that assumptions of Corollary~\ref{cor:mini_batch_oracle} hold, $B \leq \min\left\{\sqrt{\frac{m}{n}},\frac{L_{\max}^2}{\mathbbm{1}_{\probavailable}^2 \widehat{L}^2}\right\}$\footnote{If $\mathbbm{1}_{\probavailable} = 0,$ then $\frac{L_{\sigma}^2}{\mathbbm{1}_{\probavailable}^2 \widehat{L}^2} = +\infty$}, and we use the unbiased compressor Rand$K$ with $K = \Theta\left(\nicefrac{B d}{\sqrt{m}}\right).$ Then
   the communication complexity of Algorithm~\ref{alg:main_algorithm} is
   \begin{align}
       \label{eq:complexity:mini_batch_oracle:communication}
@@ -421,14 +420,14 @@ In the next corollary, we choose momentum $b$ and initialize vectors $h^{0}_i$ t
 
 The convergence rate of the \algname{DASHA-SYNC-MVR}, the state-of-the-art method without partial participation, equals $\cO\left(\frac{\Delta_0}{\varepsilon}\left[L + \frac{\omega}{\sqrt{n}}\left(\widehat{L} + \frac{L_{\sigma}}{\sqrt{B}}\right) + \frac{\sigma}{\sqrt{\varepsilon} n}\frac{L_\sigma}{B}\right] + \frac{\sigma^2}{n \varepsilon B}\right).$ Similar to Section~\ref{sec:finite_sum_setting}, we see that in the regimes when $\widehat{L} \approx L_{\sigma}$ the third term w.r.t. $\nicefrac{1}{\varepsilon^{3/2}}$ can degenerate up to $\nicefrac{\sqrt{B}}{\probavailable}.$ However, if we take $B = \cO\left(\nicefrac{L_{\sigma}^2}{\widehat{L}^2}\right),$ then the degeneration of the third term will be up to $\nicefrac{1}{\probavailable}.$ This effect we analyze in Section~\ref{sec:partial_participation_sampling}.
 
-\alexander{Better to delete the next claim.}
-Another important difference is batch size $B_{\textnormal{init}}.$ In \algname{DASHA-SYNC-MVR}, batch size $B_{\textnormal{init}} = \Theta\left(\max\left\{\frac{\sigma^2}{n \varepsilon}, B \omega\right\}\right).$ The same as \algname{DASHA-MVR}, method \algname{DASHA-PP-MVR} does not send full vectors and gets suboptimal initial batch size $B_{\textnormal{init}} = \Theta\left(\max\left\{\frac{\sigma^2}{\sqrt{\probavailable} n \varepsilon}, \frac{B \omega}{\sqrt{\probavailable}} \sqrt{\frac{\sigma^2}{n \varepsilon B}}\right\}\right).$ In the regimes when $\varepsilon$ is small and the first terms dominate in maximums, the degeneration of the batch size $B_{\textnormal{init}}$ is up to $\nicefrac{1}{\sqrt{\probavailable}}.$ However, the degeneration can be higher in other regimes due to the additional multiplicative term $\sqrt{\frac{\sigma^2}{n \varepsilon B}}.$ In the next corollary, with Rand$K$ compressor (see Definition~\ref{}), we show that we can escape those regimes by choosing the parameter $K$ in a particular way.
+% \alexander{Better to delete the next claim.}
+% Another important difference is batch size $B_{\textnormal{init}}.$ In \algname{DASHA-SYNC-MVR}, batch size $B_{\textnormal{init}} = \Theta\left(\max\left\{\frac{\sigma^2}{n \varepsilon}, B \omega\right\}\right).$ The same as \algname{DASHA-MVR}, method \algname{DASHA-PP-MVR} does not send full vectors and gets suboptimal initial batch size $B_{\textnormal{init}} = \Theta\left(\max\left\{\frac{\sigma^2}{\sqrt{\probavailable} n \varepsilon}, \frac{B \omega}{\sqrt{\probavailable}} \sqrt{\frac{\sigma^2}{n \varepsilon B}}\right\}\right).$ In the regimes when $\varepsilon$ is small and the first terms dominate in maximums, the degeneration of the batch size $B_{\textnormal{init}}$ is up to $\nicefrac{1}{\sqrt{\probavailable}}.$ However, the degeneration can be higher in other regimes due to the additional multiplicative term $\sqrt{\frac{\sigma^2}{n \varepsilon B}}.$ In the next corollary, with Rand$K$ compressor (see Definition~\ref{}), we show that we can escape those regimes by choosing the parameter $K$ in a particular way.
 
 % In the following corollary, we consider Rand$K$ compressors and show that with the particular choice of parameters $$
 In the following corollary, we consider Rand$K$ compressors (see Definition~\ref{def:rand_k}) and show that with the particular choice of parameters, up to the Lipschitz constants and probability $\probavailable$ factor, \algname{DASHA-PP-MVR} gets the optimal oracle complexity and SOTA communication complexity.
 
 \begin{restatable}{corollary}{COROLLARYSTOCHASTICRANDK}
-  Suppose that assumptions of Corollary~\ref{cor:stochastic} hold, batch size $B \leq \min\left\{\frac{\sigma}{\sqrt{\varepsilon} n}, \frac{L_{\sigma}^2}{\mathbbm{1}_{\probavailable}^2 \widehat{L}^2}\right\},$\footnote{If $\mathbbm{1}_{\probavailable} = 0,$ then $\frac{L_{\sigma}^2}{\mathbbm{1}_{\probavailable}^2 \widehat{L}^2} = +\infty$} we take Rand$K$ with $K = \Theta\left(\frac{B d \sqrt{\varepsilon n}}{\sigma}\right).$ Then
+  Suppose that assumptions of Corollary~\ref{cor:stochastic} hold, batch size $B \leq \min\left\{\frac{\sigma}{\sqrt{\varepsilon} n}, \frac{L_{\sigma}^2}{\mathbbm{1}_{\probavailable}^2 \widehat{L}^2}\right\},$ we take Rand$K$ with $K = \Theta\left(\frac{B d \sqrt{\varepsilon n}}{\sigma}\right).$ Then
   the communication complexity equals 
   \begin{align}
       \label{eq:complexity:stochastic:communication}
