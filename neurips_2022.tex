@@ -312,7 +312,7 @@ One can easily show that \algname{DASHA-PP} reduces to \algname{DASHA} when $\pr
 
 \section{Theorems}
 
-We now present the convergence rates theorems of \algname{DASHA-PP} in different settings. We will compare the theorems with the results of \algname{DASHA}. For any setting, suppose that \algname{DASHA} converges to $\varepsilon$-solution after $T$ communication rounds. Then, ideally, we would expect the convergence of the new algorithms to $\varepsilon$-solution after up to $\nicefrac{T}{\probavailable}$ communication rounds due to the partial participation. Let us define $\Delta_0 \eqdef f(x^0) - f^*.$
+We now present the convergence rates theorems of \algname{DASHA-PP} in different settings. We will compare the theorems with the results of \algname{DASHA}. For any setting, suppose that \algname{DASHA} converges to $\varepsilon$-solution after $T$ communication rounds. Then, ideally, we would expect the convergence of the new algorithms to $\varepsilon$-solution after up to $\nicefrac{T}{\probavailable}$ communication rounds due to the partial participation. The analysis of the algorithms under Polyak-\L ojasiewicz condition we provide in Section~\ref{sec:pl_condition}. Let us define $\Delta_0 \eqdef f(x^0) - f^*.$
 
 \subsection{Gradient Setting}
 
@@ -2019,7 +2019,29 @@ Let us denote $\nabla f_i(x^{t+1};\xi^{t+1}_i) \eqdef \frac{1}{B} \sum_{j=1}^B \
   \end{align*}
 \end{proof}
 
-  \newpage
+\newpage
+\section{Analysis of \algname{DASHA-PP} under Polyak-\L ojasiewicz Condition}
+\label{sec:pl_condition}
+
+In this section, we provide the theoretical convergence rates of \algname{DASHA-PP} under Polyak-\L ojasiewiczc Condition.
+
+\begin{assumption}
+  \label{ass:pl_condition}
+  A functions $f$ satisfy (Polyak-\L ojasiewicz) P\L-condition:
+  \begin{align}
+      \label{eq:pl_condition}
+      \norm{\nabla f(x)}^2 \geq 2\mu(f(x) - f^*), \quad \forall x \in \R,
+  \end{align}
+  where $f^* = \inf_{x \in \R^d} f(x) > -\infty.$
+\end{assumption}
+
+Under Polyak-\L ojasiewicz condition, a (random) point $\widehat{x}$ is $\varepsilon$-solution, if $\Exp{f(\widehat{x})} - f^* \leq \varepsilon.$
+
+
+\subsection{Generic Lemmas}
+
+
+\newpage
   \section{Description of \algname{DASHA-PP-SYNC-MVR}}
   \label{sec:main_algorithm_mvr_sync}
   % In this section, we provide a description of \algname{\algorithmname-SYNC-MVR} (see Algorithm~\ref{alg:main_algorithm_mvr_sync}). This algorithm is closely related to \algname{\algorithmname-MVR} (Algorithm~\ref{alg:main_algorithm}), but \algname{\algorithmname-SYNC-MVR} synchronizes all nodes with some probability $p$. This synchronization procedure enabled us to fix the convergence rate suboptimality of \algname{\algorithmname-MVR} w.r.t.\,$\omega$.
