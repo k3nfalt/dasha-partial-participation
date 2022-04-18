@@ -36,6 +36,8 @@
 
 \newcommand{\alexander}[1]{\todo[inline]{\textbf{Alexander: }#1}}
 
+\newcommand{\algorithmname}{DARIA}
+
 \newcommand*{\probavailable}{\ensuremath{p_{\textnormal{a}}}}
 \newcommand*{\probpairaa}{\ensuremath{p_{\textnormal{aa}}}}
 \newcommand*{\probpairan}{\ensuremath{p_{\textnormal{an}}}}
@@ -213,36 +215,33 @@ Many methods analyzed optimization methods with the unbiased compressors \citep{
 From the beginning of federated learning era, the partial participation has been considered to be the essential feature of distributed optimization methods \citep{mcmahan2017communication, konevcny2016federated, kairouz2021advances}. 
 However, previously proposed methods have limitations: i) methods from \citep{gorbunov2021marina, zhao2021fedpage} still require synchronization of all nodes with a small probability, ii) in the stochastic settings, proposed methods with the partial participation mechanism \citep{tyurin2022dasha, zhao2021faster} provide results without variance reduction techniques from \citep{SPIDER, PAGE, cutkosky2019momentum} and, therefore, get suboptimal oracle complexities, iii) in the finite-sum setting, the work by \cite{li2021zerosarah} focuses on the homogeneous regime only (the functions $f_i$ are equal).
 
-% Typically, the researches provide partial participation as an ``free add-on'' to an existing method, \algname{PP-MARINA} in \citep{gorbunov2021marina}, \algname{EF21-PP} in
-
-
 \section{Contributions}
-We propose a new family of methods \algname{DASHA-PP} for the nonconvex distributed optimization. As far as we know, this is the first method that includes three key ingredients of federated learning methods: variance reduction of stochastic gradients, compressed communication, and partial participation. We prove convergence rates and show that these methods have the optimal oracle complexity and the state-of-the-art communication complexity in the partial participation setting. Moreover, in our work, we observe a nontrivial side-effect from mixing the variance reduction of stochastic gradients and partial participation. It is a general problem not related to our methods or analysis that we discuss in Section~\ref{sec:partial_participation_sampling}.
+We propose a new family of methods \algname{\algorithmname} for the nonconvex distributed optimization. As far as we know, this is the first method that includes three key ingredients of federated learning methods: variance reduction of stochastic gradients, compressed communication, and partial participation. We prove convergence rates and show that these methods have the optimal oracle complexity and the state-of-the-art communication complexity in the partial participation setting. Moreover, in our work, we observe a nontrivial side-effect from mixing the variance reduction of stochastic gradients and partial participation. It is a general problem not related to our methods or analysis that we discuss in Section~\ref{sec:partial_participation_sampling}.
 
 \section{Algorithm Description}
 
-We now present \algname{DASHA-PP} (see Algorithm~\ref{alg:main_algorithm}), a family of methods to solve the optimization problem \eqref{eq:main_problem}. \algname{DASHA-PP} is based on \algname{DASHA} by \cite{tyurin2022dasha}. 
+We now present \algname{\algorithmname} (see Algorithm~\ref{alg:main_algorithm}), a family of methods to solve the optimization problem \eqref{eq:main_problem}. \algname{\algorithmname} is based on \algname{DASHA} by \cite{tyurin2022dasha}. 
 The refinement of \algname{DASHA} is not an exercise, let us point out the main differences: 
-i) The theoretical analysis of \algname{DASHA-PP} is more complicated: while in \algname{DASHA}, the randomness from compressors is independent of the randomness from stochastic gradients, in \algname{DASHA-PP}, these two randomnesses are coupled by the randomness from the partial participation. Moreover, the new methods have to reduce the variance from partial participation. 
-% The theoretical analysis of \algname{DASHA-PP} is more complicated: while in \algname{DASHA}, the randomness from compressors is conditionally independent from the randomness from stochastic gradients 
+i) The theoretical analysis of \algname{\algorithmname} is more complicated: while in \algname{DASHA}, the randomness from compressors is independent of the randomness from stochastic gradients, in \algname{\algorithmname}, these two randomnesses are coupled by the randomness from the partial participation. Moreover, the new methods have to reduce the variance from partial participation. 
+% The theoretical analysis of \algname{\algorithmname} is more complicated: while in \algname{DASHA}, the randomness from compressors is conditionally independent from the randomness from stochastic gradients 
 ii) if some node participates, then it does \algname{DASHA}-like steps; otherwise, it does nothing. 
-iii) some steps are scaled by \nicefrac{1}{\probavailable} to preserve ``unbiasedness''. iv) In \algname{DASHA}, the momentum $b$ is used only to reduce the variance of stochastic gradients. In \algname{DASHA-PP}, the momentum $b$ plays the second role. It also helps to reduce the variance of partial participation randomness. That is why it also appears in the gradient and finite-sum settings. 
-iv) In the finite-sum setting, we present two methods: \algname{DASHA-PP-PAGE} and \algname{DASHA-PP-FINITE-MVR}. The former is based on \algname{PAGE} \citep{PAGE} and with small probability $\probpage$ calculates the full gradients of the functions $f_i$. The latter always calculates mini-batches, but it needs extra memory $\cO\left(d m\right)$ per node to store vectors $h^{t}_{ij}$.
-One can easily show that \algname{DASHA-PP} reduces to \algname{DASHA} when $\probavailable = 1.$
+iii) some steps are scaled by \nicefrac{1}{\probavailable} to preserve ``unbiasedness''. iv) In \algname{DASHA}, the momentum $b$ is used only to reduce the variance of stochastic gradients. In \algname{\algorithmname}, the momentum $b$ plays the second role. It also helps to reduce the variance of partial participation randomness. That is why it also appears in the gradient and finite-sum settings. 
+iv) In the finite-sum setting, we present two methods: \algname{\algorithmname-PAGE} and \algname{\algorithmname-FINITE-MVR}. The former is based on \algname{PAGE} \citep{PAGE} and with small probability $\probpage$ calculates the full gradients of the functions $f_i$. The latter always calculates mini-batches, but it needs extra memory $\cO\left(d m\right)$ per node to store vectors $h^{t}_{ij}$.
+One can easily show that \algname{\algorithmname} reduces to \algname{DASHA} when $\probavailable = 1.$
 
 % \setlength{\floatsep}{0pt}% Remove \textfloatsep
 \begin{algorithm}
-  \caption{\algname{DASHA-PP}}
+  \caption{\algname{\algorithmname}}
   \label{alg:main_algorithm}
   \begin{algorithmic}[1]
   \STATE \textbf{Input:} starting point $x^0 \in \R^d$, stepsize $\gamma > 0$, momentum $a \in (0, 1]$, 
   momentum $b \in (0, 1]$, 
-  probability $\probpage \in (0, 1]$ (only in \algname{DASHA-PP-PAGE}),
-  batch size $B$ (only in \algname{DASHA-PP-PAGE}, \algname{DASHA-PP-FINITE-MVR} and \algname{DASHA-PP-MVR}),
+  probability $\probpage \in (0, 1]$ (only in \algname{\algorithmname-PAGE}),
+  batch size $B$ (only in \algname{\algorithmname-PAGE}, \algname{\algorithmname-FINITE-MVR} and \algname{\algorithmname-MVR}),
   probability $\probavailable \in (0, 1]$ that a node is \textit{participating}\textsuperscript{\red (a)},
   number of iterations~$T \geq 1$
   \STATE Initialize $g^0_i\in \R^d$, $h^0_i\in \R^d$ on the nodes and  $g^0 = \frac{1}{n}\sum_{i=1}^n g^0_i$ on the server
-  \STATE Initialize $h^0_{ij}\in \R^d$ on the nodes and take $h^0_i = \frac{1}{m}\sum_{j=1}^m h^0_{ij}$ (only in \algname{DASHA-PP-FINITE-MVR})
+  \STATE Initialize $h^0_{ij}\in \R^d$ on the nodes and take $h^0_i = \frac{1}{m}\sum_{j=1}^m h^0_{ij}$ (only in \algname{\algorithmname-FINITE-MVR})
   \FOR{$t = 0, 1, \dots, T - 1$}
   \STATE $x^{t+1} = x^t - \gamma g^t$ \alglinelabel{alg:main_algorithm:x_update} 
   \STATE Broadcast $x^{t+1}, x^{t}$ to all \textit{participating}\textsuperscript{\red (a)} nodes
@@ -254,7 +253,7 @@ One can easily show that \algname{DASHA-PP} reduces to \algname{DASHA} when $\pr
       \STATE $g^{t+1}_i = g^{t}_i + m^{t+1}_i$
       \STATE Send $m^{t+1}_i$ to the server
   \ELSE
-      \STATE $h^{t+1}_{ij} = h^{t}_{ij}$ (only in \algname{DASHA-PP-FINITE-MVR})
+      \STATE $h^{t+1}_{ij} = h^{t}_{ij}$ (only in \algname{\algorithmname-FINITE-MVR})
       \STATE $h^{t+1}_i = h^{t}_i, \quad g^{t+1}_i = g^{t}_i, \quad m^{t+1}_i = 0$
       % \STATE $$
       % \STATE $g^{t+1}_i = g^{t}_i$
@@ -269,14 +268,14 @@ One can easily show that \algname{DASHA-PP} reduces to \algname{DASHA} when $\pr
   \end{algorithmic}
 \end{algorithm}
 \begin{algorithm}
-  \caption{Calculate $k^{t+1}_i$ for \algname{DASHA-PP} in the gradient setting. See line~\ref{alg:calculate_k} in Alg.~\ref{alg:main_algorithm}}
+  \caption{Calculate $k^{t+1}_i$ for \algname{\algorithmname} in the gradient setting. See line~\ref{alg:calculate_k} in Alg.~\ref{alg:main_algorithm}}
   \label{alg:main_algorithm:dasha_pp}
   \begin{algorithmic}[1]
     \STATE $k^{t+1}_i = \nabla f_i(x^{t+1}) - \nabla f_i(x^{t}) - b \left(h^t_i - \nabla f_i(x^{t})\right)$ 
   \end{algorithmic}
 \end{algorithm}
 \begin{algorithm}
-  \caption{Calculate $k^{t+1}_i$ for \algname{DASHA-PP-PAGE} in the finite-sum setting. See line~\ref{alg:calculate_k} in Alg.~\ref{alg:main_algorithm}}
+  \caption{Calculate $k^{t+1}_i$ for \algname{\algorithmname-PAGE} in the finite-sum setting. See line~\ref{alg:calculate_k} in Alg.~\ref{alg:main_algorithm}}
   \label{alg:main_algorithm:dasha_pp_page}
   \begin{algorithmic}[1]
     \STATE Generate a random set $I^t_i$ of size $B$ from $[m]$ \textit{with replacement}
@@ -288,7 +287,7 @@ One can easily show that \algname{DASHA-PP} reduces to \algname{DASHA} when $\pr
   \end{algorithmic}
 \end{algorithm}
 \begin{algorithm}
-  \caption{Calculate $k^{t+1}_i$ for \algname{DASHA-PP-FINITE-MVR} in the finite-sum setting. See line~\ref{alg:calculate_k} in Alg.~\ref{alg:main_algorithm}}
+  \caption{Calculate $k^{t+1}_i$ for \algname{\algorithmname-FINITE-MVR} in the finite-sum setting. See line~\ref{alg:calculate_k} in Alg.~\ref{alg:main_algorithm}}
   \label{alg:main_algorithm:dasha_pp_finite_mvr}
   \begin{algorithmic}[1]
     \STATE Generate a random set $I^t_i$ of size $B$ from $[m]$ \textit{without replacement}
@@ -302,7 +301,7 @@ One can easily show that \algname{DASHA-PP} reduces to \algname{DASHA} when $\pr
   \end{algorithmic}
 \end{algorithm}
 \begin{algorithm}
-  \caption{Calculate $k^{t+1}_i$ for \algname{DASHA-PP-MVR} in the stochastic setting. See line~\ref{alg:calculate_k} in Alg.~\ref{alg:main_algorithm}}
+  \caption{Calculate $k^{t+1}_i$ for \algname{\algorithmname-MVR} in the stochastic setting. See line~\ref{alg:calculate_k} in Alg.~\ref{alg:main_algorithm}}
   \label{alg:main_algorithm:dasha_pp_mvr}
   \begin{algorithmic}[1]
     \STATE Generate i.i.d.\,samples $\{\xi^{t+1}_{ij}\}_{j=1}^B$ of size $B$ from $\mathcal{D}_i.$
@@ -312,21 +311,21 @@ One can easily show that \algname{DASHA-PP} reduces to \algname{DASHA} when $\pr
 
 \section{Theorems}
 
-We now present the convergence rates theorems of \algname{DASHA-PP} in different settings. We will compare the theorems with the results of \algname{DASHA}. For any setting, suppose that \algname{DASHA} converges to $\varepsilon$-solution after $T$ communication rounds. Then, ideally, we would expect the convergence of the new algorithms to $\varepsilon$-solution after up to $\nicefrac{T}{\probavailable}$ communication rounds due to the partial participation. The analysis of the algorithms under Polyak-\L ojasiewicz condition we provide in Section~\ref{sec:pl_condition}. Let us define $\Delta_0 \eqdef f(x^0) - f^*.$
+We now present the convergence rates theorems of \algname{\algorithmname} in different settings. We will compare the theorems with the results of \algname{DASHA}. For any setting, suppose that \algname{DASHA} converges to $\varepsilon$-solution after $T$ communication rounds. Then, ideally, we would expect the convergence of the new algorithms to $\varepsilon$-solution after up to $\nicefrac{T}{\probavailable}$ communication rounds due to the partial participation. The analysis of the algorithms under Polyak-\L ojasiewicz condition we provide in Section~\ref{sec:pl_condition}. Let us define $\Delta_0 \eqdef f(x^0) - f^*.$
 
 \subsection{Gradient Setting}
 
 \begin{restatable}{theorem}{CONVERGENCE}
   \label{theorem:gradient_oracle}
   Suppose that Assumptions \ref{ass:lower_bound}, \ref{ass:lipschitz_constant}, \ref{ass:nodes_lipschitz_constant}, \ref{ass:compressors} and \ref{ass:partial_participation} hold. Let us take $a = \frac{\probavailable}{2 \omega + 1} ,$ $b = \frac{\probavailable}{2 - \probavailable},$ $$\gamma \leq \left(L + \sqrt{\frac{48 \omega \left(2 \omega + 1\right)}{n \probavailable^2} + \frac{16}{n \probavailable^2}\left(1 - \frac{\probpairaa}{\probavailable}\right)}\widehat{L}\right)^{-1},$$ and $g^{0}_i = h^{0}_i = \nabla f_i(x^0)$ for all $i \in [n]$
-  in Algorithm~\ref{alg:main_algorithm} \algname{(DASHA-PP)}, then $\Exp{\norm{\nabla f(\widehat{x}^T)}^2} \leq \frac{2 \Delta_0}{\gamma T}.$
+  in Algorithm~\ref{alg:main_algorithm} \algname{(\algorithmname)}, then $\Exp{\norm{\nabla f(\widehat{x}^T)}^2} \leq \frac{2 \Delta_0}{\gamma T}.$
   % \begin{align*}
   %     &\Exp{\norm{\nabla f(\widehat{x}^T)}^2} \leq \frac{1}{T}\Bigg[2 \Delta_0\left(L + \sqrt{\frac{48 \omega \left(2 \omega + 1\right)}{n \probavailable^2} + \frac{16}{n \probavailable^2}\left(1 - \frac{\probpairaa}{\probavailable}\right)} \widehat{L}\right)\Bigg].
   % \end{align*}
 \end{restatable}
 
 Let us recall the convergence rate of \algname{DASHA} or \algname{MARINA}, the number of communication rounds to get $\varepsilon$-solution equals
-$\cO\left(\frac{\Delta_0}{\varepsilon}\left[L + \frac{\omega}{\sqrt{n}}\widehat{L}\right]\right),$ while the rate of \algname{DASHA-PP} equals $\cO\left(\frac{\Delta_0}{\varepsilon}\left[L + \frac{\omega + 1}{\probavailable \sqrt{n}}\widehat{L}\right]\right)$. Up to Lipschitz constants factors, we get the degeneration up to $\nicefrac{1}{\probavailable}$ due to the  partial participation.
+$\cO\left(\frac{\Delta_0}{\varepsilon}\left[L + \frac{\omega}{\sqrt{n}}\widehat{L}\right]\right),$ while the rate of \algname{\algorithmname} equals $\cO\left(\frac{\Delta_0}{\varepsilon}\left[L + \frac{\omega + 1}{\probavailable \sqrt{n}}\widehat{L}\right]\right)$. Up to Lipschitz constants factors, we get the degeneration up to $\nicefrac{1}{\probavailable}$ due to the  partial participation.
 
 \subsection{Finite-Sum Setting}
 
@@ -336,7 +335,7 @@ $\cO\left(\frac{\Delta_0}{\varepsilon}\left[L + \frac{\omega}{\sqrt{n}}\widehat{
   \label{theorem:page}
   Suppose that Assumptions \ref{ass:lower_bound}, \ref{ass:lipschitz_constant}, \ref{ass:nodes_lipschitz_constant}, \ref{ass:max_lipschitz_constant}, \ref{ass:compressors}, and \ref{ass:partial_participation} hold. Let us take $a = \frac{\probavailable}{2 \omega + 1} ,$ $b = \frac{\probpage \probavailable}{2 - \probavailable},$ probability $\probpage \in (0, 1]$,
   {\scriptsize $$\gamma \leq \left(L + \sqrt{\frac{48 \omega (2 \omega + 1)}{n \probavailable^2} \left(\widehat{L}^2 + \frac{(1 - \probpage)L_{\max}^2}{B}\right) + \frac{16}{n \probavailable^2 \probpage} \left(\left(1 - \frac{\probpairaa}{\probavailable}\right)\widehat{L}^2 + \frac{(1 - \probpage)L_{\max}^2}{B}\right)}\right)^{-1}$$}
-  and $g^{0}_i = h^{0}_i = \nabla f_i(x^0)$ for all $i \in [n]$ in Algorithm~\ref{alg:main_algorithm} \algname{(DASHA-PP-PAGE)}
+  and $g^{0}_i = h^{0}_i = \nabla f_i(x^0)$ for all $i \in [n]$ in Algorithm~\ref{alg:main_algorithm} \algname{(\algorithmname-PAGE)}
   then $\Exp{\norm{\nabla f(\widehat{x}^T)}^2} \leq \frac{2 \Delta_0}{\gamma T}.$
   % \begin{align*}
   %   &\Exp{\norm{\nabla f(\widehat{x}^T)}^2} \leq \frac{1}{T}\vast[2 \Delta_0 \times \\
@@ -349,7 +348,7 @@ We now choose $\probpage$ to balance heavy full gradient and light mini-batch ca
 \begin{restatable}{corollary}{COROLLARYPAGE}
     \label{cor:mini_batch_oracle}
 Let the assumptions from Theorem~\ref{theorem:page} hold and $\probpage = \nicefrac{B}{(m + B)}.$ 
-Then \algname{DASHA-PP-PAGE}
+Then \algname{\algorithmname-PAGE}
     needs 
     \begin{align}
       \label{eq:rate_dasha_pp_page}
@@ -361,7 +360,7 @@ Then \algname{DASHA-PP-PAGE}
 The convergence rate the rate of the current state-of-the-art method \algname{DASHA-PAGE} without partial participation equals
 $\cO\left(\frac{\Delta_0}{\varepsilon}\left[L + \frac{\omega}{\sqrt{n}}\left(\widehat{L} + \frac{L_{\max}}{\sqrt{B}}\right) + \sqrt{\frac{m}{n}}\frac{L_{\max}}{B}\right]\right).$ Let us closer compare it with \eqref{eq:rate_dasha_pp_page}. As expected, we see that the second term w.r.t. $\omega$ degenerates up to $\nicefrac{1}{\probavailable}$. Surprisingly, the third term w.r.t. $\sqrt{\nicefrac{m}{n}}$ can degenerate up to $\nicefrac{\sqrt{B}}{\probavailable}$ when $\widehat{L} \approx L_{\max}.$ Hence, in order to keep degeneration up to $\nicefrac{1}{\probavailable},$ one should take the batch size $B = \cO\left(\nicefrac{L_{\max}^2}{\widehat{L}^2}\right).$ This interesting effect we analyze separately in Section~\ref{sec:partial_participation_sampling}.
 
-In the following corollary, we consider Rand$K$ compressors (see Definition~\ref{def:rand_k}) and show that with the particular choice of parameters, up to the Lipschitz constants and probability $\probavailable$ factor, \algname{DASHA-PP-PAGE} gets the optimal oracle complexity and SOTA communication complexity.
+In the following corollary, we consider Rand$K$ compressors (see Definition~\ref{def:rand_k}) and show that with the particular choice of parameters, up to the Lipschitz constants and probability $\probavailable$ factor, \algname{\algorithmname-PAGE} gets the optimal oracle complexity and SOTA communication complexity.
 
 \begin{restatable}{corollary}{COROLLARYPAGERANDK}
   Suppose that assumptions of Corollary~\ref{cor:mini_batch_oracle} hold, $B \leq \min\left\{\sqrt{\frac{m}{n}},\frac{L_{\max}^2}{\mathbbm{1}_{\probavailable}^2 \widehat{L}^2}\right\}$\footnote{If $\mathbbm{1}_{\probavailable} = 0,$ then $\frac{L_{\sigma}^2}{\mathbbm{1}_{\probavailable}^2 \widehat{L}^2} = +\infty$}, and we use the unbiased compressor Rand$K$ with $K = \Theta\left(\nicefrac{B d}{\sqrt{m}}\right).$ Then
@@ -377,12 +376,12 @@ and the expected \# of gradient calculations per node equals
   \end{align}
 \end{restatable}
 
-It is left to provide the convergence rate of \algname{DASHA-PP-FINITE-MVR}. The conclusions are the same for the method.
+It is left to provide the convergence rate of \algname{\algorithmname-FINITE-MVR}. The conclusions are the same for the method.
 \begin{restatable}{theorem}{CONVERGENCEFINITEMVR}
   \label{theorem:finitemvr}
   Suppose that Assumptions \ref{ass:lower_bound}, \ref{ass:lipschitz_constant}, \ref{ass:nodes_lipschitz_constant}, \ref{ass:max_lipschitz_constant}, \ref{ass:compressors}, and \ref{ass:partial_participation} hold. Let us take $a = \frac{\probavailable}{2 \omega + 1} ,$ $b = \frac{\frac{\probavailable B}{m}}{2 - \frac{\probavailable B}{m}},$
   $$\gamma \leq \left(L + \sqrt{\frac{148 \omega (2 \omega + 1)}{n \probavailable^2} \left(\widehat{L}^2 + \frac{L_{\max}^2}{B}\right) + \frac{72 m}{n \probavailable^2 B}\left(\left(1 - \frac{\probpairaa}{\probavailable}\right)\widehat{L}^2 + \frac{L_{\max}^2}{B}\right)}\right)^{-1},$$
-  $g^{0}_i = h^{0}_i = \nabla f_i(x^0)$ for all $i \in [n]$ and $h^{0}_{ij} = \nabla f_{ij}(x^0)$ for all $i \in [n], j \in [m]$ in Algorithm~\ref{alg:main_algorithm} \algname{(DASHA-PP-FINITE-MVR)}
+  $g^{0}_i = h^{0}_i = \nabla f_i(x^0)$ for all $i \in [n]$ and $h^{0}_{ij} = \nabla f_{ij}(x^0)$ for all $i \in [n], j \in [m]$ in Algorithm~\ref{alg:main_algorithm} \algname{(\algorithmname-FINITE-MVR)}
   then $\Exp{\norm{\nabla f(\widehat{x}^T)}^2} \leq \frac{2 \Delta_0}{\gamma T}.$
   % \begin{align*}
   %   &\Exp{\norm{\nabla f(\widehat{x}^T)}^2} \leq \frac{1}{T}\vast[2 \Delta_0 \times \\
@@ -401,7 +400,7 @@ We define $h^t \eqdef \frac{1}{n}\sum_{i=1}^n h^t_i$.
   Suppose that Assumptions \ref{ass:lower_bound}, \ref{ass:lipschitz_constant}, \ref{ass:nodes_lipschitz_constant}, \ref{ass:stochastic_unbiased_and_variance_bounded}, \ref{ass:mean_square_smoothness}, \ref{ass:compressors} and \ref{ass:partial_participation} hold. Let us take $a = \frac{\probavailable}{2\omega + 1}$, $b~\in~\left(0, \frac{\probavailable}{2 - \probavailable}\right]$, 
   $$\gamma \leq \left(L + \sqrt{\frac{48 \omega (2 \omega + 1)}{n \probavailable^2} \left(\widehat{L}^2 + \frac{(1 - b)^2 L_{\sigma}^2}{B}\right) + \frac{12}{n \probavailable b}\left(\left(1 - \frac{\probpairaa}{\probavailable}\right) \widehat{L}^2 + \frac{(1 - b)^2 L_{\sigma}^2}{B}\right)}\right)^{-1},$$
   and $g^{0}_i = h^{0}_i$ for all $i \in [n]$
-  in Algorithm~\ref{alg:main_algorithm} \algname{(DASHA-PP-MVR)}.
+  in Algorithm~\ref{alg:main_algorithm} \algname{(\algorithmname-MVR)}.
   Then 
 \begin{align*}
   &\Exp{\norm{\nabla f(\widehat{x}^T)}^2} \leq \frac{1}{T}\vast[\frac{2 \Delta_0}{\gamma} + \frac{2}{b} \norm{h^{0} - \nabla f(x^{0})}^2 \\
@@ -415,7 +414,7 @@ In the next corollary, we choose momentum $b$ and initialize vectors $h^{0}_i$ t
 \begin{restatable}{corollary}{COROLLARYSTOCHASTIC}
   \label{cor:stochastic}
   Suppose that assumptions from Theorem~\ref{theorem:stochastic} hold, momentum $b = \Theta\left(\min \left\{\ \frac{\probavailable}{\omega}\sqrt{\frac{n \varepsilon B}{\sigma^2}}, \frac{\probavailable n \varepsilon B}{\sigma^2}\right\}\right),$ $\frac{\sigma^2}{n \varepsilon B} \geq 1,$
-  and $h^{0}_i = \frac{1}{B_{\textnormal{init}}} \sum_{k = 1}^{B_{\textnormal{init}}} \nabla f_i(x^0; \xi^0_{ik})$ for all $i \in [n],$ and batch size $B_{\textnormal{init}} = \Theta\left(\frac{\sqrt{\probavailable} B}{b}\right),$ then Algorithm~\ref{alg:main_algorithm} \algname{(DASHA-PP-MVR)} needs
+  and $h^{0}_i = \frac{1}{B_{\textnormal{init}}} \sum_{k = 1}^{B_{\textnormal{init}}} \nabla f_i(x^0; \xi^0_{ik})$ for all $i \in [n],$ and batch size $B_{\textnormal{init}} = \Theta\left(\frac{\sqrt{\probavailable} B}{b}\right),$ then Algorithm~\ref{alg:main_algorithm} \algname{(\algorithmname-MVR)} needs
   $$T \eqdef \cO\left(\frac{\Delta_0}{\varepsilon}\left[L + \frac{\omega}{\probavailable\sqrt{n}}\left(\widehat{L} + \frac{L_{\sigma}}{\sqrt{B}}\right) + \frac{\sigma}{\probavailable \sqrt{\varepsilon} n}\left(\frac{\mathbbm{1}_{\probavailable}\widehat{L}}{\sqrt{B}} + \frac{L_\sigma}{B}\right)\right] + \frac{\sigma^2}{\sqrt{\probavailable} n \varepsilon B}\right)$$
   communication rounds to get an $\varepsilon$-solution and the number of stochastic gradient calculations per node equals $\cO(B_{\textnormal{init}} + BT).$
 \end{restatable}
@@ -423,10 +422,10 @@ In the next corollary, we choose momentum $b$ and initialize vectors $h^{0}_i$ t
 The convergence rate of the \algname{DASHA-SYNC-MVR}, the state-of-the-art method without partial participation, equals $\cO\left(\frac{\Delta_0}{\varepsilon}\left[L + \frac{\omega}{\sqrt{n}}\left(\widehat{L} + \frac{L_{\sigma}}{\sqrt{B}}\right) + \frac{\sigma}{\sqrt{\varepsilon} n}\frac{L_\sigma}{B}\right] + \frac{\sigma^2}{n \varepsilon B}\right).$ Similar to Section~\ref{sec:finite_sum_setting}, we see that in the regimes when $\widehat{L} \approx L_{\sigma}$ the third term w.r.t. $\nicefrac{1}{\varepsilon^{3/2}}$ can degenerate up to $\nicefrac{\sqrt{B}}{\probavailable}.$ However, if we take $B = \cO\left(\nicefrac{L_{\sigma}^2}{\widehat{L}^2}\right),$ then the degeneration of the third term will be up to $\nicefrac{1}{\probavailable}.$ This effect we analyze in Section~\ref{sec:partial_participation_sampling}.
 
 % \alexander{Better to delete the next claim.}
-% Another important difference is batch size $B_{\textnormal{init}}.$ In \algname{DASHA-SYNC-MVR}, batch size $B_{\textnormal{init}} = \Theta\left(\max\left\{\frac{\sigma^2}{n \varepsilon}, B \omega\right\}\right).$ The same as \algname{DASHA-MVR}, method \algname{DASHA-PP-MVR} does not send full vectors and gets suboptimal initial batch size $B_{\textnormal{init}} = \Theta\left(\max\left\{\frac{\sigma^2}{\sqrt{\probavailable} n \varepsilon}, \frac{B \omega}{\sqrt{\probavailable}} \sqrt{\frac{\sigma^2}{n \varepsilon B}}\right\}\right).$ In the regimes when $\varepsilon$ is small and the first terms dominate in maximums, the degeneration of the batch size $B_{\textnormal{init}}$ is up to $\nicefrac{1}{\sqrt{\probavailable}}.$ However, the degeneration can be higher in other regimes due to the additional multiplicative term $\sqrt{\frac{\sigma^2}{n \varepsilon B}}.$ In the next corollary, with Rand$K$ compressor (see Definition~\ref{}), we show that we can escape those regimes by choosing the parameter $K$ in a particular way.
+% Another important difference is batch size $B_{\textnormal{init}}.$ In \algname{DASHA-SYNC-MVR}, batch size $B_{\textnormal{init}} = \Theta\left(\max\left\{\frac{\sigma^2}{n \varepsilon}, B \omega\right\}\right).$ The same as \algname{DASHA-MVR}, method \algname{\algorithmname-MVR} does not send full vectors and gets suboptimal initial batch size $B_{\textnormal{init}} = \Theta\left(\max\left\{\frac{\sigma^2}{\sqrt{\probavailable} n \varepsilon}, \frac{B \omega}{\sqrt{\probavailable}} \sqrt{\frac{\sigma^2}{n \varepsilon B}}\right\}\right).$ In the regimes when $\varepsilon$ is small and the first terms dominate in maximums, the degeneration of the batch size $B_{\textnormal{init}}$ is up to $\nicefrac{1}{\sqrt{\probavailable}}.$ However, the degeneration can be higher in other regimes due to the additional multiplicative term $\sqrt{\frac{\sigma^2}{n \varepsilon B}}.$ In the next corollary, with Rand$K$ compressor (see Definition~\ref{}), we show that we can escape those regimes by choosing the parameter $K$ in a particular way.
 
 % In the following corollary, we consider Rand$K$ compressors and show that with the particular choice of parameters $$
-In the following corollary, we consider Rand$K$ compressors (see Definition~\ref{def:rand_k}) and show that with the particular choice of parameters, up to the Lipschitz constants and probability $\probavailable$ factor, \algname{DASHA-PP-MVR} gets the optimal oracle complexity and SOTA communication complexity.
+In the following corollary, we consider Rand$K$ compressors (see Definition~\ref{def:rand_k}) and show that with the particular choice of parameters, up to the Lipschitz constants and probability $\probavailable$ factor, \algname{\algorithmname-MVR} gets the optimal oracle complexity and SOTA communication complexity.
 
 \begin{restatable}{corollary}{COROLLARYSTOCHASTICRANDK}
   \label{cor:stochastic:randk}
@@ -443,13 +442,13 @@ In the following corollary, we consider Rand$K$ compressors (see Definition~\ref
   \end{align}
 \end{restatable}
 
-We are aware that the initial batch size $B_{\textnormal{init}}$ can be suboptimal w.r.t.\,$\omega$ in \algname{DASHA-PP-MVR} in some regimes (see also \citep{tyurin2022dasha}). However, Corollary~\ref{cor:stochastic:randk} reveals that we can escape these regimes by choosing the parameter $K$ of Rand$K$ in a particular way. To get the complete picture, we provide \algname{DASHA-PP-SYNC-MVR} in the appendix.
+We are aware that the initial batch size $B_{\textnormal{init}}$ can be suboptimal w.r.t.\,$\omega$ in \algname{\algorithmname-MVR} in some regimes (see also \citep{tyurin2022dasha}). However, Corollary~\ref{cor:stochastic:randk} reveals that we can escape these regimes by choosing the parameter $K$ of Rand$K$ in a particular way. To get the complete picture, we provide \algname{\algorithmname-SYNC-MVR} in the appendix.
 
 % We believe that this is the price for not sending the full vectors and no synchronization in the stochastic setting and should be investigated further.
 
 \section{The Problem of Estimating the Mean in the Partial Participation Setting}
 \label{sec:partial_participation_sampling}
-We now provide the example to explain why the only choice of $B = \cO\left(\nicefrac{L_{\max}^2}{\widehat{L}^2}\right)$ and $B = \cO\left(\nicefrac{L_{\sigma}^2}{\widehat{L}^2}\right)$ in \algname{DASHA-PP-PAGE} and \algname{DASHA-PP-MVR}, accordingly, guarantees the degeneration up to $\nicefrac{1}{\probavailable}.$
+We now provide the example to explain why the only choice of $B = \cO\left(\nicefrac{L_{\max}^2}{\widehat{L}^2}\right)$ and $B = \cO\left(\nicefrac{L_{\sigma}^2}{\widehat{L}^2}\right)$ in \algname{\algorithmname-PAGE} and \algname{\algorithmname-MVR}, accordingly, guarantees the degeneration up to $\nicefrac{1}{\probavailable}.$
 
 % In Sections~\ref{sec:finite_sum_setting} and \ref{sec:stochastic_setting}, when we compare 
 Let us consider the task of estimating the mean of vectors in the distributed setting. Suppose that we have $n$ nodes, and each of them contains $m$ vectors $\{x_{ij}\}_{j=1}^m$, where $x_{ij} \in \R^d$ for all $i \in [n], j \in [m].$ First, let us consider that each node samples a mini-batch $I^i$ of size $B$ with replacement and sends it to the server. Then the server calculates the mean of the mini-batches from nodes. One can easily show that the variance of the estimator is
@@ -467,9 +466,9 @@ Let us assume that $s \leq \nicefrac{n}{2}.$ Note that \eqref{eq:partial_partici
 
 \section{Experiments}
 
-In experiments, our main goal is to compare \algname{DASHA-PP} with \algname{DASHA}. 
-We verify that the bigger $\probavailable$, the closer \algname{DASHA-PP} is to \algname{DASHA}.
-% We verify that the convergence rates of \algname{DASHA-PP} no worse than times $\nicefrac{1}{\probavailable}$. 
+In experiments, our main goal is to compare \algname{\algorithmname} with \algname{DASHA}. 
+We verify that the bigger $\probavailable$, the closer \algname{\algorithmname} is to \algname{DASHA}.
+% We verify that the convergence rates of \algname{\algorithmname} no worse than times $\nicefrac{1}{\probavailable}$. 
 We use the standard setting in experiments where all parameters except step sizes are taken as suggested in theory. Step sizes are finetuned from a set~$\{2^{i}\,|\,i \in [-10, 10]\}.$
 
 \subsection{Gradient Setting}
@@ -608,7 +607,7 @@ See the proof in \cite{beznosikov2020biased}.
 
 There are three different sources of randomness in Algorithm~\ref{alg:main_algorithm}: the first one from vectors $\{k_i^{t+1}\}_{i=1}^n$, the second one from compressors $\{\cC_i\}_{i=1}^n$, and the third one from availability of nodes. We define $\ExpSub{k}{\cdot}$, $\ExpSub{\cC}{\cdot}$ and $\ExpSub{\probavailable}{\cdot}$ to be conditional expectations w.r.t.\,$\{k_i^{t+1}\}_{i=1}^n$, $\{\cC_i\}_{i=1}^n, $ and availability, accordingly, conditioned on all previous randomness. Moreover, we define $\ExpSub{t+1}{\cdot}$ to be a conditional expectation w.r.t. all randomness in iteration $t+1$ conditioned on all previous randomness. Note, that $\ExpSub{t+1}{\cdot} = \ExpSub{k}{\ExpSub{\cC}{\ExpSub{\probavailable}{\cdot}}}.$
 
-In the case of \algname{DASHA-PP-PAGE}, there are two different sources of randomness from $\{k_i^{t+1}\}_{i=1}^n$. We define $\ExpSub{\probpage}{\cdot}$ and $\ExpSub{B}{\cdot}$ to be conditional expectations w.r.t.\, the probabilistic switching and mini-batch indices $I_{i}^t$, accordingly, conditioned on all previous randomness. Note, that $\ExpSub{t+1}{\cdot} = \ExpSub{B}{\ExpSub{\cC}{\ExpSub{\probavailable}{\ExpSub{\probpage}{\cdot}}}}$ and $\ExpSub{t+1}{\cdot} = \ExpSub{B}{\ExpSub{\probpage}{\ExpSub{\cC}{\ExpSub{\probavailable}{\cdot}}}}.$
+In the case of \algname{\algorithmname-PAGE}, there are two different sources of randomness from $\{k_i^{t+1}\}_{i=1}^n$. We define $\ExpSub{\probpage}{\cdot}$ and $\ExpSub{B}{\cdot}$ to be conditional expectations w.r.t.\, the probabilistic switching and mini-batch indices $I_{i}^t$, accordingly, conditioned on all previous randomness. Note, that $\ExpSub{t+1}{\cdot} = \ExpSub{B}{\ExpSub{\cC}{\ExpSub{\probavailable}{\ExpSub{\probpage}{\cdot}}}}$ and $\ExpSub{t+1}{\cdot} = \ExpSub{B}{\ExpSub{\probpage}{\ExpSub{\cC}{\ExpSub{\probavailable}{\cdot}}}}.$
 
 \subsection{Standard Lemmas in the Nonconvex Setting}
 
@@ -819,7 +818,7 @@ The lemma can be easily checked with the direct calculation.
 % \end{lemma}
 
 % \begin{proof}
-%   Clearly, the equality holds for \algname{DASHA-PP}. Next, we show it for \algname{DASHA-PP-PAGE}:
+%   Clearly, the equality holds for \algname{\algorithmname}. Next, we show it for \algname{\algorithmname-PAGE}:
 %   \begin{align*}
 %     &\ExpSub{k}{k^{t+1}_i} \\
 %     &= \probpage \left(\nabla f_i(x^{t+1}) - \nabla f_i(x^{t}) - \frac{b}{\probpage} \left(h^t_i - \nabla f_i(x^{t})\right)\right) \\
@@ -828,14 +827,14 @@ The lemma can be easily checked with the direct calculation.
 %     &\quad + (1 - \probpage) \left(\nabla f_i(x^{t+1}) - \nabla f_i(x^{t})\right) \\
 %     &= \nabla f_i(x^{t+1}) - \nabla f_i(x^{t}) - b \left(h^t_i - \nabla f_i(x^{t})\right).
 % \end{align*}
-% Finally, from the unbiasedness of stochastic gradients, the equality holds for \algname{DASHA-PP-MVR}.
+% Finally, from the unbiasedness of stochastic gradients, the equality holds for \algname{\algorithmname-MVR}.
 % \end{proof}
 
-\subsection{Proof for \algname{DASHA-PP}}
+\subsection{Proof for \algname{\algorithmname}}
 
 \begin{lemma}
   \label{lemma:gradient}
-  Suppose that Assumptions~\ref{ass:nodes_lipschitz_constant} and \ref{ass:partial_participation} hold. For $h^{t+1}_i$ and $k^{t+1}_i$ from Algorithm~\ref{alg:main_algorithm} (\algname{DASHA-PP}) we have
+  Suppose that Assumptions~\ref{ass:nodes_lipschitz_constant} and \ref{ass:partial_participation} hold. For $h^{t+1}_i$ and $k^{t+1}_i$ from Algorithm~\ref{alg:main_algorithm} (\algname{\algorithmname}) we have
   \begin{enumerate}
   \item
       \begin{align*}
@@ -978,7 +977,7 @@ The lemma can be easily checked with the direct calculation.
     to conclude the proof.
 \end{proof}
 
-\subsection{Proof for \algname{DASHA-PP-PAGE}}
+\subsection{Proof for \algname{\algorithmname-PAGE}}
 
 Let us denote
 \begin{align*}
@@ -1003,7 +1002,7 @@ $h^{t+1}_{1} \eqdef \frac{1}{n}\sum_{i=1}^n h^{t+1}_{i,1},$ and $h^{t+1}_{2} \eq
 
 \begin{lemma}
   \label{lemma:gradient_page}
-  Suppose that Assumptions \ref{ass:nodes_lipschitz_constant}, \ref{ass:max_lipschitz_constant}, and \ref{ass:partial_participation} hold. For $h^{t+1}_i$ and $k^{t+1}_i$ from Algorithm~\ref{alg:main_algorithm} (\algname{DASHA-PP-PAGE}) we have
+  Suppose that Assumptions \ref{ass:nodes_lipschitz_constant}, \ref{ass:max_lipschitz_constant}, and \ref{ass:partial_participation} hold. For $h^{t+1}_i$ and $k^{t+1}_i$ from Algorithm~\ref{alg:main_algorithm} (\algname{\algorithmname-PAGE}) we have
   \begin{enumerate}
   \item
       \begin{align*}
@@ -1321,11 +1320,11 @@ $h^{t+1}_{1} \eqdef \frac{1}{n}\sum_{i=1}^n h^{t+1}_{i,1},$ and $h^{t+1}_{2} \eq
     \end{eqnarray*}
   \end{proof}
 
-\subsection{Proof for \algname{DASHA-PP-FINITE-MVR}}
+\subsection{Proof for \algname{\algorithmname-FINITE-MVR}}
 
 \begin{lemma}
   \label{lemma:finite_mvr}
-  Suppose that Assumptions \ref{ass:nodes_lipschitz_constant}, \ref{ass:max_lipschitz_constant}, and \ref{ass:partial_participation} hold. For $h^{t+1}_i$, $h^{t+1}_{ij}$ and $k^{t+1}_i$ from Algorithm~\ref{alg:main_algorithm} (\algname{DASHA-PP-FINITE-MVR}) we have
+  Suppose that Assumptions \ref{ass:nodes_lipschitz_constant}, \ref{ass:max_lipschitz_constant}, and \ref{ass:partial_participation} hold. For $h^{t+1}_i$, $h^{t+1}_{ij}$ and $k^{t+1}_i$ from Algorithm~\ref{alg:main_algorithm} (\algname{\algorithmname-FINITE-MVR}) we have
   \begin{enumerate}
   \item
       \begin{align*}
@@ -1635,12 +1634,12 @@ $h^{t+1}_{1} \eqdef \frac{1}{n}\sum_{i=1}^n h^{t+1}_{i,1},$ and $h^{t+1}_{2} \eq
     to conclude the proof.
 \end{proof}
 
-\subsection{Proof for \algname{DASHA-PP-MVR}}
+\subsection{Proof for \algname{\algorithmname-MVR}}
 
 Let us denote $\nabla f_i(x^{t+1};\xi^{t+1}_i) \eqdef \frac{1}{B} \sum_{j=1}^B \nabla f_i(x^{t+1};\xi^{t+1}_{ij}).$
 
 \begin{lemma}
-  Suppose that Assumptions \ref{ass:nodes_lipschitz_constant}, \ref{ass:stochastic_unbiased_and_variance_bounded}, \ref{ass:mean_square_smoothness} and \ref{ass:partial_participation} hold. For $h^{t+1}_i$ and $k^{t+1}_i$ from Algorithm~\ref{alg:main_algorithm} (\algname{DASHA-PP-MVR}) we have
+  Suppose that Assumptions \ref{ass:nodes_lipschitz_constant}, \ref{ass:stochastic_unbiased_and_variance_bounded}, \ref{ass:mean_square_smoothness} and \ref{ass:partial_participation} hold. For $h^{t+1}_i$ and $k^{t+1}_i$ from Algorithm~\ref{alg:main_algorithm} (\algname{\algorithmname-MVR}) we have
   \begin{enumerate}
   \item
       \begin{align*}
@@ -2020,10 +2019,10 @@ Let us denote $\nabla f_i(x^{t+1};\xi^{t+1}_i) \eqdef \frac{1}{B} \sum_{j=1}^B \
 \end{proof}
 
 \newpage
-\section{Analysis of \algname{DASHA-PP} under Polyak-\L ojasiewicz Condition}
+\section{Analysis of \algname{\algorithmname} under Polyak-\L ojasiewicz Condition}
 \label{sec:pl_condition}
 
-In this section, we provide the theoretical convergence rates of \algname{DASHA-PP} under Polyak-\L ojasiewiczc Condition.
+In this section, we provide the theoretical convergence rates of \algname{\algorithmname} under Polyak-\L ojasiewiczc Condition.
 
 \begin{assumption}
   \label{ass:pl_condition}
@@ -2071,16 +2070,16 @@ Under Polyak-\L ojasiewicz condition, a (random) point $\widehat{x}$ is $\vareps
 
 
 \newpage
-  \section{Description of \algname{DASHA-PP-SYNC-MVR}}
+  \section{Description of \algname{\algorithmname-SYNC-MVR}}
   \label{sec:main_algorithm_mvr_sync}
   % In this section, we provide a description of \algname{\algorithmname-SYNC-MVR} (see Algorithm~\ref{alg:main_algorithm_mvr_sync}). This algorithm is closely related to \algname{\algorithmname-MVR} (Algorithm~\ref{alg:main_algorithm}), but \algname{\algorithmname-SYNC-MVR} synchronizes all nodes with some probability $p$. This synchronization procedure enabled us to fix the convergence rate suboptimality of \algname{\algorithmname-MVR} w.r.t.\,$\omega$.
 
-   By analogy to \citep{tyurin2022dasha}, we provide a ``synchronized'' version of the algorithm. With a small probability, participating nodes calculate and send a mega batch without compression. This helps us to resolve the suboptimality of \algname{DASHA-PP-MVR} w.r.t.\,$\omega.$ Note that this suboptimality is not a problem. 
-   We show in Corollary~\ref{cor:stochastic:randk} that \algname{DASHA-PP-MVR} can have the optimal oracle complexity and SOTA communication complexity with the particular choices of parameters.
+   By analogy to \citep{tyurin2022dasha}, we provide a ``synchronized'' version of the algorithm. With a small probability, participating nodes calculate and send a mega batch without compression. This helps us to resolve the suboptimality of \algname{\algorithmname-MVR} w.r.t.\,$\omega.$ Note that this suboptimality is not a problem. 
+   We show in Corollary~\ref{cor:stochastic:randk} that \algname{\algorithmname-MVR} can have the optimal oracle complexity and SOTA communication complexity with the particular choices of parameters.
   %  We show in Corollary~\ref{cor:stochastic:randk} that with the particular choices of parameters can have the optimal oracle and SOTA communication complexity.
   
   \begin{algorithm}[h]
-      \caption{\algname{DASHA-PP-SYNC-MVR}}
+      \caption{\algname{\algorithmname-SYNC-MVR}}
       \label{alg:main_algorithm_mvr_sync}
       \begin{algorithmic}[1]
       \STATE \textbf{Input:} starting point $x^0 \in R^d$, stepsize $\gamma > 0$, momentum $a \in (0, 1]$, momentum $b \in (0, 1]$, probability $\probmega \in (0, 1]$, batch size $B'$, number of iterations $T \geq 1$.
@@ -2119,7 +2118,7 @@ Under Polyak-\L ojasiewicz condition, a (random) point $\widehat{x}$ is $\vareps
       \end{algorithmic}
   \end{algorithm}
 
-  In the following theorem, we provide the convergence rate of \algname{DASHA-PP-SYNC-MVR}.
+  In the following theorem, we provide the convergence rate of \algname{\algorithmname-SYNC-MVR}.
 
   \begin{restatable}{theorem}{CONVERGENCESYNCMVR}
     \label{theorem:sync_stochastic}
@@ -2149,17 +2148,17 @@ Under Polyak-\L ojasiewicz condition, a (random) point $\widehat{x}$ is $\vareps
     and $h^{0}_i = g^{0}_i = \frac{1}{B_{\textnormal{init}}} \sum_{k = 1}^{B_{\textnormal{init}}} \nabla f_i(x^0; \xi^0_{ik})$ for all $i \in [n],$ initial batch size 
     $B_{\textnormal{init}} = \Theta\left(\frac{B}{\probmega \sqrt{\probavailable}}\right) = \Theta\left(\max \left\{\frac{B d}{ \sqrt{\probavailable} \zeta_{\cC}},  \frac{\sigma^2}{\sqrt{\probavailable} n \varepsilon} \right\}\right),$ 
     % $B_{\textnormal{init}} = ?,$ 
-    then \algname{DASHA-PP-SYNC-MVR}
+    then \algname{\algorithmname-SYNC-MVR}
     needs
     $$T \eqdef \cO\left(\frac{\Delta_0}{\varepsilon}\vast[L + \left(\frac{\omega}{\probavailable\sqrt{n}} + \sqrt{\frac{d}{\probavailable^2 \zeta_{\cC} n}}\right) \left(\widehat{L} + \frac{L_{\sigma}}{\sqrt{B}}\right)  + \frac{\sigma}{\probavailable \sqrt{\varepsilon} n} \left(\frac{\widehat{L}}{\sqrt{B}} + \frac{L_{\sigma}}{B}\right)\vast] + \frac{\sigma^2}{\sqrt{\probavailable} n \varepsilon B}\right).$$
   
     communication rounds to get an $\varepsilon$-solution, the communication complexity is equal to $\cO\left(d + \zeta_{\cC} T\right),$ and the number of stochastic gradient calculations per node equals $\cO(B_{\textnormal{init}} + BT),$ where $\zeta_{\cC}$ is the expected density from Definition~\ref{def:expected_density}.
   \end{restatable}
 
-  The main improvement of Corollary~\ref{cor:sync_stochastic} over Corollary~\ref{cor:stochastic} is the size of the initial batch size $B_{\textnormal{init}}$. However, Corollary~\ref{cor:stochastic:randk} reveals that we can avoid regimes when \algname{DASHA-PP-MVR} is suboptimal.
+  The main improvement of Corollary~\ref{cor:sync_stochastic} over Corollary~\ref{cor:stochastic} is the size of the initial batch size $B_{\textnormal{init}}$. However, Corollary~\ref{cor:stochastic:randk} reveals that we can avoid regimes when \algname{\algorithmname-MVR} is suboptimal.
 
-\subsection{Proof for \algname{DASHA-PP-SYNC-MVR}}
-In this section, we provide the proof of the convergence rate for \algname{DASHA-PP-SYNC-MVR}. There are four different sources of randomness in Algorithm~\ref{alg:main_algorithm_mvr_sync}: the first one from random samples $\xi^{t+1}_{\cdot}$, the second one from compressors $\{\cC_i\}_{i=1}^n$, the third one from availability of nodes, and the fourth one from $c^{t+1}.$ We define $\ExpSub{k}{\cdot}$, $\ExpSub{\cC}{\cdot},$ $\ExpSub{\probavailable}{\cdot}$ and $\ExpSub{\probmega}{\cdot}$ to be conditional expectations w.r.t.\,$\xi^{t+1}_{\cdot}$, $\{\cC_i\}_{i=1}^n, $ availability, and $c^{t+1},$ accordingly, conditioned on all previous randomness. Moreover, we define $\ExpSub{t+1}{\cdot}$ to be a conditional expectation w.r.t. all randomness in iteration $t+1$ conditioned on all previous randomness. 
+\subsection{Proof for \algname{\algorithmname-SYNC-MVR}}
+In this section, we provide the proof of the convergence rate for \algname{\algorithmname-SYNC-MVR}. There are four different sources of randomness in Algorithm~\ref{alg:main_algorithm_mvr_sync}: the first one from random samples $\xi^{t+1}_{\cdot}$, the second one from compressors $\{\cC_i\}_{i=1}^n$, the third one from availability of nodes, and the fourth one from $c^{t+1}.$ We define $\ExpSub{k}{\cdot}$, $\ExpSub{\cC}{\cdot},$ $\ExpSub{\probavailable}{\cdot}$ and $\ExpSub{\probmega}{\cdot}$ to be conditional expectations w.r.t.\,$\xi^{t+1}_{\cdot}$, $\{\cC_i\}_{i=1}^n, $ availability, and $c^{t+1},$ accordingly, conditioned on all previous randomness. Moreover, we define $\ExpSub{t+1}{\cdot}$ to be a conditional expectation w.r.t. all randomness in iteration $t+1$ conditioned on all previous randomness. 
 % Note, that $\ExpSub{t+1}{\cdot} = \ExpSub{k}{\ExpSub{\cC}{\ExpSub{\probavailable}{\cdot}}}.$
 
 Let us denote
