@@ -219,6 +219,7 @@ However, previously proposed methods have limitations: i) methods from \citep{go
 
 \section{Contributions}
 % \alexander{Say somewhere that the compression can be done for free}
+We propose a new family of methods \algname{DASHA-PP} for the nonconvex distributed optimization. As far as we know, this is the first method that includes three key ingredients of federated learning methods: variance reduction of stochastic gradients, compressed communication, and partial participation. We prove convergence rates and show that these methods have the optimal oracle complexity and the state-of-the-art communication complexity in the partial participation setting. Moreover, in our work, we observe a nontrivial side-effect from mixing the variance reduction of stochastic gradients and partial participation. It is a general problem not related to our methods or analysis that we discuss in Section~\ref{sec:partial_participation_sampling}.
 
 \section{Algorithm Description}
 
