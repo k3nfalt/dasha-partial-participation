@@ -429,6 +429,7 @@ The convergence rate of the \algname{DASHA-SYNC-MVR}, the state-of-the-art metho
 In the following corollary, we consider Rand$K$ compressors (see Definition~\ref{def:rand_k}) and show that with the particular choice of parameters, up to the Lipschitz constants and probability $\probavailable$ factor, \algname{DASHA-PP-MVR} gets the optimal oracle complexity and SOTA communication complexity.
 
 \begin{restatable}{corollary}{COROLLARYSTOCHASTICRANDK}
+  \label{cor:stochastic:randk}
   Suppose that assumptions of Corollary~\ref{cor:stochastic} hold, batch size $B \leq \min\left\{\frac{\sigma}{\sqrt{\varepsilon} n}, \frac{L_{\sigma}^2}{\mathbbm{1}_{\probavailable}^2 \widehat{L}^2}\right\},$ we take Rand$K$ with $K = \Theta\left(\frac{B d \sqrt{\varepsilon n}}{\sigma}\right).$ Then
   the communication complexity equals 
   \begin{align}
@@ -2018,7 +2019,9 @@ Let us denote $\nabla f_i(x^{t+1};\xi^{t+1}_i) \eqdef \frac{1}{B} \sum_{j=1}^B \
   \label{sec:main_algorithm_mvr_sync}
   % In this section, we provide a description of \algname{\algorithmname-SYNC-MVR} (see Algorithm~\ref{alg:main_algorithm_mvr_sync}). This algorithm is closely related to \algname{\algorithmname-MVR} (Algorithm~\ref{alg:main_algorithm}), but \algname{\algorithmname-SYNC-MVR} synchronizes all nodes with some probability $p$. This synchronization procedure enabled us to fix the convergence rate suboptimality of \algname{\algorithmname-MVR} w.r.t.\,$\omega$.
 
-   By analogy to \citep{tyurin2022dasha}, we provide a ``synchronized'' version of the algorithm. With a small probability, participating nodes calculate and send a mega batch without compression. This helps us to resolve the suboptimality of \algname{DASHA-PP-MVR} w.r.t.\,$\omega.$
+   By analogy to \citep{tyurin2022dasha}, we provide a ``synchronized'' version of the algorithm. With a small probability, participating nodes calculate and send a mega batch without compression. This helps us to resolve the suboptimality of \algname{DASHA-PP-MVR} w.r.t.\,$\omega.$ Note that this suboptimality is not a problem. 
+   We show in Corollary~\ref{cor:stochastic:randk} that \algname{DASHA-PP-MVR} can have the optimal oracle complexity and SOTA communication complexity with the particular choices of parameters.
+  %  We show in Corollary~\ref{cor:stochastic:randk} that with the particular choices of parameters can have the optimal oracle and SOTA communication complexity.
   
   \begin{algorithm}[h]
       \caption{\algname{DASHA-PP-SYNC-MVR}}
