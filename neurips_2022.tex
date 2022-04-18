@@ -2037,6 +2037,35 @@ In this section, we provide the theoretical convergence rates of \algname{DASHA-
 
 Under Polyak-\L ojasiewicz condition, a (random) point $\widehat{x}$ is $\varepsilon$-solution, if $\Exp{f(\widehat{x})} - f^* \leq \varepsilon.$
 
+\subsection{Standard Lemma under Polyak-\L ojasiewicz Condition}
+
+\begin{lemma}
+  \label{lemma:good_recursion_pl}
+  Suppose that Assumptions \ref{ass:lower_bound} and \ref{ass:pl_condition} hold and
+  \begin{align*}
+      \Exp{f(x^{t+1})} + \gamma \Psi^{t+1} \leq \Exp{f(x^t)} - \frac{\gamma}{2}\Exp{\norm{\nabla f(x^t)}^2} + (1 - \gamma \mu)\gamma \Psi^{t} + \gamma C,
+  \end{align*}
+  where $\Psi^{t}$ is a sequence of numbers, $\Psi^{t} \geq 0$ for all $t \in [T]$, constant $C \geq 0,$ constant $\mu > 0,$ and constant $\gamma \in (0, 1 / \mu).$ Then 
+  \begin{align}
+      \label{eq:good_recursion_pl}
+      \Exp{f(x^{T}) - f^*} \leq (1 - \gamma \mu)^{T}\left(\left(f(x^0) - f^*\right) + \gamma \Psi^{0}\right) + \frac{C}{\mu}.
+  \end{align}
+\end{lemma}
+
+\begin{proof}
+  We subtract $f^*$ and use P\L-condition \eqref{eq:pl_condition} to get
+  \begin{eqnarray*}
+      \Exp{f(x^{t+1}) - f^*} + \gamma \Psi^{t+1} &\leq& \Exp{f(x^t) - f^*} - \frac{\gamma}{2}\Exp{\norm{\nabla f(x^t)}^2} + \gamma \Psi^{t} + \gamma C \\
+      &\leq& (1 - \gamma \mu)\Exp{f(x^t) - f^*} + (1 - \gamma \mu)\gamma \Psi^{t} + \gamma C \\
+      &=& (1 - \gamma \mu)\left(\Exp{f(x^t) - f^*} + \gamma \Psi^{t}\right) + \gamma C.
+  \end{eqnarray*}
+  Unrolling the inequality, we have
+  \begin{eqnarray*}
+      \Exp{f(x^{t+1}) - f^*} + \gamma \Psi^{t+1} &\leq& (1 - \gamma \mu)^{t+1}\left(\left(f(x^0) - f^*\right) + \gamma \Psi^{0}\right) + \gamma C \sum_{i = 0}^{t} (1 - \gamma \mu)^i \\
+      &\leq& (1 - \gamma \mu)^{t+1}\left(\left(f(x^0) - f^*\right) + \gamma \Psi^{0}\right) + \frac{C}{\mu}.
+  \end{eqnarray*}
+  It is left to note that $\Psi^{t} \geq 0$ for all $t \in [T]$.
+\end{proof}
 
 \subsection{Generic Lemmas}
 
