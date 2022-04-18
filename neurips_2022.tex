@@ -86,8 +86,6 @@
 Federated and distributed learning have become very popular in recent years \citep{konevcny2016federated, mcmahan2017communication}. 
 The current optimization tasks require much computational resources and machines. Such requirements emerge in machine learning, where massive datasets and computations are distributed between cluster nodes \citep{lin2017deep, ramesh2021zero}. In federated learning, nodes, represented by mobile phones, laptops, and desktops, do not send their data to a server due to privacy and their huge number \citep{ramaswamy2019federated}, and the server remotely orchestrates the nodes and communicates with them to solve an optimization problem.
 
-\alexander{Rewrite textfbf}
-
 As in classical optimization tasks, one of the main current problems is to find \textbf{computationally efficient} optimization algorithms. However, the nature of distributed problems induces many other \citep{kairouz2021advances}, including i) \textbf{partial participation} of nodes in algorithm steps: due to stragglers \citep{li2020federated} or communication delays \citep{vogels2021relaysum}, ii) \textbf{communication bottleneck}: even if a node participates, it can be costly to transmit information to a server or other nodes \citep{alistarh2017qsgd,ramesh2021zero,kairouz2021advances}. It is necessary to develop a method that considers these problems.
 
 % \begin{enumerate}
@@ -169,7 +167,7 @@ We use the concept of unbiased compressors to alleviate the communication bottle
 \end{definition}
 We denote a set of stochastic mappings that satisfy Definition~\ref{def:unbiased_compression} as $\mathbb{U}(\omega).$
 In our methods, the nodes make use of unbiased compressors $\{\cC_i\}_{i=1}^n.$ 
-The community developed a large number of unbiassed compressors, including Rand$K$ \citep{beznosikov2020biased, stich2018sparsified}, Adaptive sparsification \citep{wangni2018gradient} and Natural compression and dithering \citep{horvath2019natural}. We are aware of correlated compressors by \cite{szlendak2021permutation} and quantizers by \cite{suresh2022correlated} that help in the homogeneous regimes, but in this work, we are mainly concentrated on generic heterogeneous regimes, though, for simplicity, assume the independence of the compressors.
+The community developed a large number of unbiassed compressors, including Rand$K$ (see Definition~\ref{def:rand_k}) \citep{beznosikov2020biased, stich2018sparsified}, Adaptive sparsification \citep{wangni2018gradient} and Natural compression and dithering \citep{horvath2019natural}. We are aware of correlated compressors by \cite{szlendak2021permutation} and quantizers by \cite{suresh2022correlated} that help in the homogeneous regimes, but in this work, we are mainly concentrated on generic heterogeneous regimes, though, for simplicity, assume the independence of the compressors.
 \begin{assumption}
 \label{ass:compressors}
  $\cC_i \in \mathbb{U}(\omega)$ for all $i\in [n]$, and the compressors are  \textit{independent}.
@@ -224,8 +222,8 @@ We propose a new family of methods \algname{DASHA-PP} for the nonconvex distribu
 \section{Algorithm Description}
 
 We now present \algname{DASHA-PP} (see Algorithm~\ref{alg:main_algorithm}), a family of methods to solve the optimization problem \eqref{eq:main_problem}. \algname{DASHA-PP} is based on \algname{DASHA}. 
-Upgrading \algname{DASHA} is not an exercise, let us point out the main differences: 
-i) The theoretical analysis of \algname{DASHA-PP} is more complicated: while in \algname{DASHA}, the randomness from compressors is independent of the randomness from stochastic gradients, in \algname{DASHA-PP}, these two randomnesses are coupled by the randomness from the partial participation. Moreover, the new method reduces the variance from partial participation. 
+The refinement of \algname{DASHA} is not an exercise, let us point out the main differences: 
+i) The theoretical analysis of \algname{DASHA-PP} is more complicated: while in \algname{DASHA}, the randomness from compressors is independent of the randomness from stochastic gradients, in \algname{DASHA-PP}, these two randomnesses are coupled by the randomness from the partial participation. Moreover, the new methods have to reduce the variance from partial participation. 
 % The theoretical analysis of \algname{DASHA-PP} is more complicated: while in \algname{DASHA}, the randomness from compressors is conditionally independent from the randomness from stochastic gradients 
 ii) if some node participates, then it does \algname{DASHA}-like steps; otherwise, it does nothing. 
 iii) some steps are scaled by \nicefrac{1}{\probavailable} to preserve ``unbiasedness''. iv) In \algname{DASHA}, the momentum $b$ is used only to reduce the variance of stochastic gradients. In \algname{DASHA-PP}, the momentum $b$ plays the second role. It also helps to reduce the variance of partial participation randomness. That is why it also appears in the gradient and finite-sum settings. 
@@ -313,7 +311,7 @@ One can easily show that \algname{DASHA-PP} reduces to \algname{DASHA} when $\pr
 
 \section{Theorems}
 
-We now present the convergence rates theorems of \algname{DASHA-PP} in different settings. We will compare the theorems with the results of \algname{DASHA}. For any setting, suppose that \algname{DASHA} converges to $\varepsilon$-solution after $T$ communication rounds. Then, ideally, we would expect the convergence of the new algorithms to $\varepsilon$-solution after up to $\nicefrac{T}{\probavailable}$ communication rounds due to the partial participation. Let us define $\Delta_0 \eqdef f(x^0) - f^*$
+We now present the convergence rates theorems of \algname{DASHA-PP} in different settings. We will compare the theorems with the results of \algname{DASHA}. For any setting, suppose that \algname{DASHA} converges to $\varepsilon$-solution after $T$ communication rounds. Then, ideally, we would expect the convergence of the new algorithms to $\varepsilon$-solution after up to $\nicefrac{T}{\probavailable}$ communication rounds due to the partial participation. Let us define $\Delta_0 \eqdef f(x^0) - f^*.$
 
 \subsection{Gradient Setting}
 
@@ -358,10 +356,25 @@ Then \algname{DASHA-PP-PAGE}
     \end{align}
     communication rounds to get an $\varepsilon$-solution and the expected \# of gradient calculations per node equals $\cO\left(m + B T\right).$
 \end{restatable}
-\alexander{TODO: Prove it!}
 
 The convergence rate the rate of the current state-of-the-art method \algname{DASHA-PAGE} without partial participation equals
 $\cO\left(\frac{\Delta_0}{\varepsilon}\left[L + \frac{\omega}{\sqrt{n}}\left(\widehat{L} + \frac{L_{\max}}{\sqrt{B}}\right) + \sqrt{\frac{m}{n}}\frac{L_{\max}}{B}\right]\right).$ Let us closer compare it with \eqref{eq:rate_dasha_pp_page}. As expected, we see that the second term w.r.t. $\omega$ degenerates up to $\nicefrac{1}{\probavailable}$. Surprisingly, the third term w.r.t. $\sqrt{\nicefrac{m}{n}}$ can degenerate up to $\nicefrac{\sqrt{B}}{\probavailable}$ when $\widehat{L} \approx L_{\max}.$ Hence, in order to keep degeneration up to $\nicefrac{1}{\probavailable},$ one should take the batch size $B = \cO\left(\nicefrac{L_{\max}^2}{\widehat{L}^2}\right).$ This interesting effect we analyze separately in Section~\ref{sec:partial_participation_sampling}.
+
+In the following corollary, we consider Rand$K$ compressors (see Definition~\ref{def:rand_k}) and show that with the particular choice of parameters, up to the Lipschitz constants and probability $\probavailable$ factor, \algname{DASHA-PP-PAGE} gets the optimal oracle complexity and SOTA communication complexity.
+
+\begin{restatable}{corollary}{COROLLARYPAGERANDK}
+  Suppose that assumptions of Corollary~\ref{cor:mini_batch_oracle} hold, $B \leq \min\{\sqrt{\nicefrac{m}{n}},\},$ and we use the unbiased compressor Rand$K$ with $K = \zeta_{\cC} = \Theta\left(\nicefrac{B d}{\sqrt{m}}\right).$ Then
+  the communication complexity of Algorithm~\ref{alg:main_algorithm} is
+  \begin{align}
+      \label{eq:complexity:mini_batch_oracle:communication}
+      \cO\left(d + \frac{L_{\max} \Delta_0 d}{\probavailable \varepsilon \sqrt{n}}\right),
+  \end{align}
+and the expected \# of gradient calculations per node equals
+  \begin{align}
+      \label{eq:complexity:mini_batch_oracle}
+      \cO\left(m + \frac{L_{\max} \Delta_0 \sqrt{m}}{\probavailable \varepsilon \sqrt{n}} \right).
+  \end{align}
+\end{restatable}
 
 It is left to provide the convergence rate of \algname{DASHA-PP-FINITE-MVR}. The conclusions are the same for the method.
 \begin{restatable}{theorem}{CONVERGENCEFINITEMVR}
@@ -412,7 +425,7 @@ The convergence rate of the \algname{DASHA-SYNC-MVR}, the state-of-the-art metho
 Another important difference is batch size $B_{\textnormal{init}}.$ In \algname{DASHA-SYNC-MVR}, batch size $B_{\textnormal{init}} = \Theta\left(\max\left\{\frac{\sigma^2}{n \varepsilon}, B \omega\right\}\right).$ The same as \algname{DASHA-MVR}, method \algname{DASHA-PP-MVR} does not send full vectors and gets suboptimal initial batch size $B_{\textnormal{init}} = \Theta\left(\max\left\{\frac{\sigma^2}{\sqrt{\probavailable} n \varepsilon}, \frac{B \omega}{\sqrt{\probavailable}} \sqrt{\frac{\sigma^2}{n \varepsilon B}}\right\}\right).$ In the regimes when $\varepsilon$ is small and the first terms dominate in maximums, the degeneration of the batch size $B_{\textnormal{init}}$ is up to $\nicefrac{1}{\sqrt{\probavailable}}.$ However, the degeneration can be higher in other regimes due to the additional multiplicative term $\sqrt{\frac{\sigma^2}{n \varepsilon B}}.$ In the next corollary, with Rand$K$ compressor (see Definition~\ref{}), we show that we can escape those regimes by choosing the parameter $K$ in a particular way.
 
 % In the following corollary, we consider Rand$K$ compressors and show that with the particular choice of parameters $$
-In the following corollary, we consider Rand$K$ compressors and show that with the particular choice of parameters, up to the Lipschitz constants and probability $\probavailable$ factor, \algname{DASHA-PP-MVR} gets the optimal oracle complexity and SOTA communication complexity.
+In the following corollary, we consider Rand$K$ compressors (see Definition~\ref{def:rand_k}) and show that with the particular choice of parameters, up to the Lipschitz constants and probability $\probavailable$ factor, \algname{DASHA-PP-MVR} gets the optimal oracle complexity and SOTA communication complexity.
 
 \begin{restatable}{corollary}{COROLLARYSTOCHASTICRANDK}
   Suppose that assumptions of Corollary~\ref{cor:stochastic} hold, batch size $B \leq \min\left\{\frac{\sigma}{\sqrt{\varepsilon} n}, \frac{L_{\sigma}^2}{\mathbbm{1}_{\probavailable}^2 \widehat{L}^2}\right\},$\footnote{If $\mathbbm{1}_{\probavailable} = 0,$ then $\frac{L_{\sigma}^2}{\mathbbm{1}_{\probavailable}^2 \widehat{L}^2} = +\infty$} we take Rand$K$ with $K = \zeta_{\cC} = \Theta\left(\frac{B d \sqrt{\varepsilon n}}{\sigma}\right).$ Then
@@ -568,6 +581,21 @@ This section provides a lemma that we regularly use in our proofs, and it is use
     &\leq\frac{1}{n^2 \probavailable}\sum_{i=1}^n\Exp{\norm{s_i - \Exp{s_i}}^2} +\frac{\probavailable - \probpairaa}{n^2 \probavailable^2}\sum_{i=1}^n\norm{\Exp{s_i}}^2.
   \end{align*}
 \end{proof}
+
+\subsection{Compressors Facts}
+
+We define the Rand$K$ compressor that chooses without replacement $K$ coordinates, scales them by a constant factor to preserve unbiasedness and zero-out other coordinates.
+\begin{definition}
+    \label{def:rand_k}
+    Let us take a random subset $S$ from $[d],$ $|S| = K,$ $K \in [d].$ We say that a stochastic mapping $\cC\,:\, \R^d \rightarrow \R^d$ is Rand$K$ if
+    $$\cC(x) = \frac{d}{K} \sum_{j \in S} x_j e_j,$$ where $\{e_i\}_{i=1}^d$ is the standard unit basis.
+\end{definition}
+
+\begin{theorem}
+    \label{theorem:rand_k}
+    If $\cC$ is Rand$K$, then $\cC \in \mathbb{U}\left(\frac{d}{k} - 1\right).$
+\end{theorem}
+See the proof in \cite{beznosikov2020biased}.
 
 \section{Proofs of Theorems}
 
@@ -1259,8 +1287,7 @@ $h^{t+1}_{1} \eqdef \frac{1}{n}\sum_{i=1}^n h^{t+1}_{i,1},$ and $h^{t+1}_{2} \eq
     Note that the expected \# of gradients calculations at each communication round equals $\probmega m + (1 - \probmega) B = \frac{2 m B}{m + B} \leq 2 B.$
   \end{proof}
 
-  % One only should note that the expected number of gradients calculations at each communication round equals $p m + (1 - p) B = \frac{2 m B}{m + B} \leq 2 B.$
-  \alexander{Add lemma for RandK}
+  \COROLLARYPAGERANDK*
 
 \subsection{Proof for \algname{DASHA-PP-FINITE-MVR}}
 
@@ -1937,7 +1964,6 @@ Let us denote $\nabla f_i(x^{t+1};\xi^{t+1}_i) \eqdef \frac{1}{B} \sum_{j=1}^B \
 \COROLLARYSTOCHASTICRANDK*
 
 \begin{proof}
-  \alexander{Add RandK theorem}
   The communication complexity equals
   \begin{eqnarray*}
       \cO\left(d + \zeta_{\cC} T\right) &=& \cO\left(d + \frac{\Delta_0}{\varepsilon}\vast[K L + K\frac{\omega}{\probavailable \sqrt{n}} \left(\widehat{L} + \frac{L_{\sigma}}{\sqrt{B}}\right) + K \sqrt{\frac{\sigma^2}{\probavailable^2 \varepsilon n^2 B}}\left(\mathbbm{1}_{\probavailable}\widehat{L} + \frac{L_{\sigma}}{\sqrt{B}}\right)\vast] + K\frac{\sigma^2}{\sqrt{\probavailable} n \varepsilon B}\right).
@@ -2020,7 +2046,6 @@ Let us denote $\nabla f_i(x^{t+1};\xi^{t+1}_i) \eqdef \frac{1}{B} \sum_{j=1}^B \
     \end{align*}
   \end{restatable}
 
-  \alexander{Oracle complexity?}
   In the next corollary, we choose particular algorithm parameters to reveal the communication and oracle complexity.
 
   \begin{restatable}{corollary}{COROLLARYSYNCSTOCHASTIC}
