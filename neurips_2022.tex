@@ -467,7 +467,10 @@ Let us assume that $s \leq \nicefrac{n}{2}.$ Note that \eqref{eq:partial_partici
 
 \section{Experiments}
 
-In experiments, our main goal is to compare \algname{DASHA-PP} with \algname{DASHA}. We verify that the convergence rates of \algname{DASHA-PP} no worse than times $\nicefrac{1}{\probavailable}$. We use the standard setting in experiments where all parameters except step sizes are taken as suggested in theory. Step sizes are finetuned from a set~$\{2^{i}\,|\,i \in [-10, 10]\}.$
+In experiments, our main goal is to compare \algname{DASHA-PP} with \algname{DASHA}. 
+We verify that the bigger $\probavailable$, the closer \algname{DASHA-PP} is to \algname{DASHA}.
+% We verify that the convergence rates of \algname{DASHA-PP} no worse than times $\nicefrac{1}{\probavailable}$. 
+We use the standard setting in experiments where all parameters except step sizes are taken as suggested in theory. Step sizes are finetuned from a set~$\{2^{i}\,|\,i \in [-10, 10]\}.$
 
 \subsection{Gradient Setting}
 
