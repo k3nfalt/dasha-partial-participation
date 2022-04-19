@@ -315,7 +315,9 @@ iii) In the finite-sum setting, we present two methods: \algname{\algorithmname-
 
 \section{Theorems}
 
-We now present the convergence rates theorems of \algname{\algorithmname} in different settings. We will compare the theorems with the results of \algname{DASHA}. For any setting, suppose that \algname{DASHA} converges to $\varepsilon$-solution after $T$ communication rounds. Then, ideally, we would expect the convergence of the new algorithms to $\varepsilon$-solution after up to $\nicefrac{T}{\probavailable}$ communication rounds due to the partial participation. The analysis of the algorithms under Polyak-\L ojasiewicz condition we provide in Section~\ref{sec:pl_condition}. Let us define $\Delta_0 \eqdef f(x^0) - f^*.$
+\label{sec:theorems}
+
+We now present the convergence rates theorems of \algname{\algorithmname} in different settings. We will compare the theorems with the results of \algname{DASHA}. For any setting, suppose that \algname{DASHA} converges to $\varepsilon$-solution after $T$ communication rounds. Then, ideally, we would expect the convergence of the new algorithms to $\varepsilon$-solution after up to $\nicefrac{T}{\probavailable}$ communication rounds due to the partial participation. The detailed analysis of the algorithms under Polyak-\L ojasiewicz condition we provide in Section~\ref{sec:pl_condition}. Let us define $\Delta_0 \eqdef f(x^0) - f^*.$
 
 \subsection{Gradient Setting}
 
@@ -329,7 +331,7 @@ We now present the convergence rates theorems of \algname{\algorithmname} in dif
 \end{restatable}
 
 Let us recall the convergence rate of \algname{DASHA} or \algname{MARINA}, the number of communication rounds to get $\varepsilon$-solution equals
-$\cO\left(\frac{\Delta_0}{\varepsilon}\left[L + \frac{\omega}{\sqrt{n}}\widehat{L}\right]\right),$ while the rate of \algname{\algorithmname} equals $\cO\left(\frac{\Delta_0}{\varepsilon}\left[L + \frac{\omega + 1}{\probavailable \sqrt{n}}\widehat{L}\right]\right)$. Up to Lipschitz constants factors, we get the degeneration up to $\nicefrac{1}{\probavailable}$ due to the  partial participation.
+$\cO\left(\frac{\Delta_0}{\varepsilon}\left[L + \frac{\omega}{\sqrt{n}}\widehat{L}\right]\right),$ while the rate of \algname{\algorithmname} equals $\cO\left(\frac{\Delta_0}{\varepsilon}\left[L + \frac{\omega + 1}{\probavailable \sqrt{n}}\widehat{L}\right]\right)$. Up to Lipschitz constants factors, we get the degeneration up to $\nicefrac{1}{\probavailable}$ factor due to the partial participation.
 
 \subsection{Finite-Sum Setting}
 
@@ -2042,7 +2044,7 @@ In this section, we provide the theoretical convergence rates of \algname{\algor
 
 Under Polyak-\L ojasiewicz condition, a (random) point $\widehat{x}$ is $\varepsilon$-solution, if $\Exp{f(\widehat{x})} - f^* \leq \varepsilon.$
 
-We now provide the convergence rates of \algname{\algorithmname} un P\L-condition.
+We now provide the convergence rates of \algname{\algorithmname} under P\L-condition.
 
 \begin{restatable}{theorem}{CONVERGENCEPL}
   \label{theorem:gradient_oracle_pl}
@@ -2074,17 +2076,70 @@ We now provide the convergence rates of \algname{\algorithmname} un P\L-conditio
 \end{restatable}
 
 Now, we discuss the obtained bounds. Let us provide bounds up to logarithmic factors and use $\widetilde{\cO}\left(\cdot\right)$ notation. The provided theorems states that to get $\varepsilon$-solution \algname{\algorithmname} have to run
-\begin{align*}
+\begin{align}
+  \label{eq:pl_compare:new:gradient}
   \widetilde{\cO}\left(\frac{\omega}{\probavailable} + \frac{L}{\mu} + \frac{\omega \widehat{L}}{\probavailable \mu \sqrt{n}} + \frac{\widehat{L}}{\probavailable \mu \sqrt{n}}\right),
-\end{align*}
-\begin{align*}
+\end{align}
+\begin{align}
+  \label{eq:pl_compare:new:page}
   \widetilde{\cO}\left(\frac{\omega}{\probavailable} + \frac{m}{\probavailable B} + \frac{L}{\mu} + \frac{\omega}{\probavailable \mu \sqrt{n}} \left(\widehat{L} + \frac{L_{\max}}{\sqrt{B}}\right) + \frac{\sqrt{m}}{\probavailable \mu \sqrt{n B}} \left(\widehat{L} + \frac{L_{\max}}{\sqrt{B}}\right)\right),
-\end{align*}
+\end{align}
 and
-\begin{align*}
+\begin{align}
+  \label{eq:pl_compare:new:mvr}
   \widetilde{\cO}\left(\frac{\omega}{\probavailable} + \frac{\omega}{\probavailable}\sqrt{\frac{\sigma^2}{\mu n \varepsilon B}} + \frac{\sigma^2}{\probavailable \mu n \varepsilon B} + \frac{L}{\mu} + \frac{\omega}{\probavailable \mu \sqrt{n}} \left(\widehat{L} + \frac{L_{\sigma}}{\sqrt{B}}\right) + \frac{\sigma}{\probavailable n \mu^{\nicefrac{3}{2}} \sqrt{\varepsilon B}}\left(\widehat{L} + \frac{L_{\sigma}}{\sqrt{B}}\right)\right)
-\end{align*}
+\end{align}
 communication rounds in gradient, finite-sum and stochastic settings, accordingly. In the stochastic setting, we take $b = \Theta\left(\min \left\{\ \frac{\probavailable}{\omega} \sqrt{\frac{\mu n \varepsilon B}{\sigma^2}}, \frac{\probavailable \mu n \varepsilon B}{\sigma^2}\right\}\right) \geq \Theta\left(\min \left\{\ \frac{\probavailable}{\omega^2}, \frac{\probavailable \mu n \varepsilon B}{\sigma^2}\right\}\right).$
+
+The methods \algname{DASHA}, \algname{DASHA-PAGE}, \algname{DASHA-SYNC-MVR} from \algname{DASHA} \citep{tyurin2022dasha}, have to run
+\begin{align}
+  \label{eq:pl_compare:old:gradient}
+  \widetilde{\cO}\left(\omega + \frac{L}{\mu} + \frac{\omega \widehat{L}}{\mu \sqrt{n}}\right),
+\end{align}
+\begin{align}
+  \label{eq:pl_compare:old:page}
+  \widetilde{\cO}\left(\omega + \frac{m}{B} + \frac{L}{\mu} + \frac{\omega}{\mu \sqrt{n}} \left(\widehat{L} + \frac{L_{\max}}{\sqrt{B}}\right) + \frac{\sqrt{m}}{\mu \sqrt{n B}} \left(\frac{L_{\max}}{\sqrt{B}}\right)\right),
+\end{align}
+and
+\begin{align}
+  \label{eq:pl_compare:old:mvr}
+  \widetilde{\cO}\left(\omega + \frac{\sigma^2}{\mu n \varepsilon B} + \frac{L}{\mu} + \frac{\omega}{\mu \sqrt{n}} \left(\widehat{L} + \frac{L_{\sigma}}{\sqrt{B}}\right) + \frac{\sigma}{n \mu^{\nicefrac{3}{2}} \sqrt{\varepsilon B}}\left(\frac{L_{\sigma}}{\sqrt{B}}\right)\right)
+\end{align}
+communication rounds in gradient, finite-sum and stochastic settings\footnote{For simplicity, we omitted $\frac{d}{\zeta_{\cC}}$ term from the complexity in the stochastic setting, where $\zeta_{\cC}$ is defined in Definition~\ref{def:expected_density}. For instance, for the Rand$K$ compressor (see Definition~\ref{def:rand_k} and Theorem~\ref{theorem:rand_k}), $\zeta_{\cC} = K$ and $\frac{d}{\zeta_{\cC}} = \Theta\left(\omega\right).$}, accordingly, to get $\varepsilon$-solution.
+
+The conclusions are the same as in the general nonconvex case (see Section~\ref{sec:theorems}). 
+
+In the gradient seeting, comparing \eqref{eq:pl_compare:new:gradient} and \eqref{eq:pl_compare:old:gradient}, up to Lipschitz constants factors, we get the degeneration up to $\nicefrac{1}{\probavailable}$ factor due to the partial participation.
+
+In the finite-sum setting, comparing \eqref{eq:pl_compare:new:page} and \eqref{eq:pl_compare:old:page}, we can guarantee the degeneration up to $\nicefrac{1}{\probavailable}$ factor due to the partial participation only if $B = \cO\left(\frac{L_{\max}^2}{\widehat{L}^2}\right)$.
+
+In the stochastic setting, the comparison is a little bit more complicated. As in the finite-sum setting, we have to take 
+$B = \cO\left(\frac{L_{\sigma}^2}{\widehat{L}^2}\right)$ to guarantee the degeneration up to $\nicefrac{1}{\probavailable}$ of the term $\frac{\sigma}{\probavailable n \mu^{\nicefrac{3}{2}} \sqrt{\varepsilon B}}\left(\widehat{L} + \frac{L_{\sigma}}{\sqrt{B}}\right)$ from \eqref{eq:pl_compare:old:mvr}. However, \algname{\algorithmname-MVR} has also suboptimal term $\frac{\omega}{\probavailable}\sqrt{\frac{\sigma^2}{\mu n \varepsilon B}}$. This suboptimality is tightly connected with the suboptimality of $B_{\textnormal{init}}$ in the general nonconvex case, which we discuss in Section~\ref{sec:stochastic_setting}, and it also appears in the analysis of \algname{DASHA-MVR} \citep{tyurin2022dasha}.
+
+\alexander{Finish explaining}
+% In the following corollary, we consider Rand$K$ compressors (see Definition~\ref{def:rand_k}) and show that with the particular choice of parameters, up to the Lipschitz constants and probability $\probavailable$ factor, \algname{\algorithmname-MVR} gets the optimal oracle complexity and SOTA communication complexity.
+Let us provide the analog of Corollary~\ref{cor:stochastic:randk}.
+
+\begin{restatable}{corollary}{CONVERGENCEPLSTOCHASTICRANDK}
+% \begin{corollary}
+  Suppose that assumptions of Theorem~\ref{theorem:stochastic_pl} hold, 
+  % batch size $B \leq \min\left\{\frac{\sigma}{\sqrt{\varepsilon} n}, \frac{L_{\sigma}^2}{\mathbbm{1}_{\probavailable}^2 \widehat{L}^2}\right\},$ 
+  we take Rand$K$ with $K = \Theta\left(\frac{B d \sqrt{\mu \varepsilon n}}{\sigma}\right).$ Then
+  the communication complexity equals 
+  % \begin{align}
+  %     \cO\left(\frac{d \sigma}{\sqrt{\probavailable} \sqrt{n \varepsilon}} + \frac{L_{\sigma} \Delta_0 d}{\probavailable \sqrt{n} \varepsilon}\right),
+  % \end{align}
+  and the expected \# of stochastic gradient calculations per node equals
+  % \begin{align}
+  %     \cO\left(\frac{\sigma^2}{\sqrt{\probavailable} n \varepsilon} + \frac{L_{\sigma} \Delta_0 \sigma}{\probavailable \varepsilon^{\nicefrac{3}{2}} n}\right).
+  % \end{align}
+\end{restatable}
+
+Let us consider the Rand$K$ compressor. In the gradient setting, the communication complexity of \algname{DASHA} equals 
+\begin{align*}
+  \widetilde{\cO}\left(K \omega + K\frac{L}{\mu} + K \frac{\omega \widehat{L}}{\mu \sqrt{n}}\right) = \widetilde{\cO}\left(d + K\frac{L}{\mu} + \frac{d \widehat{L}}{\mu \sqrt{n}}\right) = \widetilde{\cO}\left(d + \frac{d L}{\mu \sqrt{n}} + \frac{d \widehat{L}}{\mu \sqrt{n}}\right) = \widetilde{\cO}\left(d + \frac{d \widehat{L}}{\mu \sqrt{n}}\right),
+\end{align*}
+if $K \leq \frac{d}{\sqrt{n}}.$
 
 \subsection{Proofs of Theorems}
 The following proofs almost repeat the proofs from Section~\ref{sec:proof_of_theorems}. And one of the main changes is that instead of Lemma~\ref{lemma:good_recursion}, we use the following lemma.
