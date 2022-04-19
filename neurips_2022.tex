@@ -36,7 +36,7 @@
 
 \newcommand{\alexander}[1]{\todo[inline]{\textbf{Alexander: }#1}}
 
-\newcommand{\algorithmname}{DASHA-PP}
+\newcommand{\algorithmname}{DARIA}
 
 \newcommand*{\probavailable}{\ensuremath{p_{\textnormal{a}}}}
 \newcommand*{\probpairaa}{\ensuremath{p_{\textnormal{aa}}}}
@@ -2073,12 +2073,18 @@ We now provide the convergence rates of \algname{\algorithmname} un P\L-conditio
   \end{align*}
 \end{restatable}
 
-% \begin{eqnarray*}
-  %   \Psi^t &=& \frac{2 (2 \omega + 1)}{\probavailable} \Exp{\norm{g^{t} - h^{t}}^2} + \frac{4 (\left(2 \omega + 1\right)\probavailable - \probpairaa)}{n \probavailable^2} \Exp{\frac{1}{n}\sum_{i=1}^n\norm{g^{t}_i - h^{t}_i}^2} \\
-  %   &\quad +& \frac{2}{b} \Exp{\norm{h^{t} - \nabla f(x^{t})}^2} + \left(\frac{40 b \omega (2 \omega + 1)}{n \probavailable^2} + \frac{8 \gamma \left(\probavailable - \probpairaa\right)}{n \probavailable^2}\right)\Exp{\frac{1}{n}\sum_{i=1}^n\norm{h^{t}_i - \nabla f_i(x^{t})}^2}
-  % \end{eqnarray*}
-
-\alexander{Simplify rates}
+Now, we discuss the obtained bounds. Let us provide bounds up to logarithmic factors and use $\widetilde{\cO}\left(\cdot\right)$ notation. The provided theorems states that to get $\varepsilon$-solution \algname{\algorithmname} have to run
+\begin{align*}
+  \widetilde{\cO}\left(\frac{\omega}{\probavailable} + \frac{L}{\mu} + \frac{\omega \widehat{L}}{\probavailable \mu \sqrt{n}} + \frac{\widehat{L}}{\probavailable \mu \sqrt{n}}\right),
+\end{align*}
+\begin{align*}
+  \widetilde{\cO}\left(\frac{\omega}{\probavailable} + \frac{m}{\probavailable B} + \frac{L}{\mu} + \frac{\omega}{\probavailable \mu \sqrt{n}} \left(\widehat{L} + \frac{L_{\max}}{\sqrt{B}}\right) + \frac{\sqrt{m}}{\probavailable \mu \sqrt{n B}} \left(\widehat{L} + \frac{L_{\max}}{\sqrt{B}}\right)\right),
+\end{align*}
+and
+\begin{align*}
+  \widetilde{\cO}\left(\frac{\omega}{\probavailable} + \frac{\omega}{\probavailable}\sqrt{\frac{\sigma^2}{\mu n \varepsilon B}} + \frac{\sigma^2}{\probavailable \mu n \varepsilon B} + \frac{L}{\mu} + \frac{\omega}{\probavailable \mu \sqrt{n}} \left(\widehat{L} + \frac{L_{\sigma}}{\sqrt{B}}\right) + \frac{\sigma}{\probavailable n \mu^{\nicefrac{3}{2}} \sqrt{\varepsilon B}}\left(\widehat{L} + \frac{L_{\sigma}}{\sqrt{B}}\right)\right)
+\end{align*}
+communication rounds in gradient, finite-sum and stochastic settings, accordingly. In the stochastic setting, we take $b = \Theta\left(\min \left\{\ \frac{\probavailable}{\omega} \sqrt{\frac{\mu n \varepsilon B}{\sigma^2}}, \frac{\probavailable \mu n \varepsilon B}{\sigma^2}\right\}\right) \geq \Theta\left(\min \left\{\ \frac{\probavailable}{\omega^2}, \frac{\probavailable \mu n \varepsilon B}{\sigma^2}\right\}\right).$
 
 \subsection{Proofs of Theorems}
 The following proofs almost repeat the proofs from Section~\ref{sec:proof_of_theorems}. And one of the main changes is that instead of Lemma~\ref{lemma:good_recursion}, we use the following lemma.
