@@ -2114,11 +2114,9 @@ In the gradient seeting, comparing \eqref{eq:pl_compare:new:gradient} and \eqref
 In the finite-sum setting, comparing \eqref{eq:pl_compare:new:page} and \eqref{eq:pl_compare:old:page}, we can guarantee the degeneration up to $\nicefrac{1}{\probavailable}$ factor due to the partial participation only if $B = \cO\left(\frac{L_{\max}^2}{\widehat{L}^2}\right)$.
 
 In the stochastic setting, the comparison is a little bit more complicated. As in the finite-sum setting, we have to take 
-$B = \cO\left(\frac{L_{\sigma}^2}{\widehat{L}^2}\right)$ to guarantee the degeneration up to $\nicefrac{1}{\probavailable}$ of the term $\frac{\sigma}{\probavailable n \mu^{\nicefrac{3}{2}} \sqrt{\varepsilon B}}\left(\widehat{L} + \frac{L_{\sigma}}{\sqrt{B}}\right)$ from \eqref{eq:pl_compare:old:mvr}. However, \algname{\algorithmname-MVR} has also suboptimal term $\frac{\omega}{\probavailable}\sqrt{\frac{\sigma^2}{\mu n \varepsilon B}}$. This suboptimality is tightly connected with the suboptimality of $B_{\textnormal{init}}$ in the general nonconvex case, which we discuss in Section~\ref{sec:stochastic_setting}, and it also appears in the analysis of \algname{DASHA-MVR} \citep{tyurin2022dasha}.
-
-\alexander{Finish explaining}
+$B = \cO\left(\frac{L_{\sigma}^2}{\widehat{L}^2}\right)$ to guarantee the degeneration up to $\nicefrac{1}{\probavailable}$ of the term $\frac{\sigma}{\probavailable n \mu^{\nicefrac{3}{2}} \sqrt{\varepsilon B}}\left(\widehat{L} + \frac{L_{\sigma}}{\sqrt{B}}\right)$ from \eqref{eq:pl_compare:old:mvr}. However, \algname{\algorithmname-MVR} has also suboptimal term $\frac{\omega}{\probavailable}\sqrt{\frac{\sigma^2}{\mu n \varepsilon B}}$. This suboptimality is tightly connected with the suboptimality of $B_{\textnormal{init}}$ in the general nonconvex case, which we discuss in Section~\ref{sec:stochastic_setting}, and it also appears in the analysis of \algname{DASHA-MVR} \citep{tyurin2022dasha}. Let us provide the counterpart of Corollary~\ref{cor:stochastic:randk}.
 % In the following corollary, we consider Rand$K$ compressors (see Definition~\ref{def:rand_k}) and show that with the particular choice of parameters, up to the Lipschitz constants and probability $\probavailable$ factor, \algname{\algorithmname-MVR} gets the optimal oracle complexity and SOTA communication complexity.
-Let us provide the analog of Corollary~\ref{cor:stochastic:randk}.
+
 
 \begin{restatable}{corollary}{CONVERGENCEPLSTOCHASTICRANDK}
 % \begin{corollary}
@@ -2135,12 +2133,12 @@ Let us provide the analog of Corollary~\ref{cor:stochastic:randk}.
   \end{align*}
 \end{restatable}
 
+\alexander{Finish explaining}
 \alexander{Provide comm complexity of DASHA-SYNC-MVR.}
-Let us consider the Rand$K$ compressor. In the gradient setting, the communication complexity of \algname{DASHA} equals 
+Note that the communication complexity of \algname{DASHA-SYNC-MVR} with the Rand$K$ compressor is at least
 \begin{align*}
-  \widetilde{\cO}\left(K \omega + K\frac{L}{\mu} + K \frac{\omega \widehat{L}}{\mu \sqrt{n}}\right) = \widetilde{\cO}\left(d + K\frac{L}{\mu} + \frac{d \widehat{L}}{\mu \sqrt{n}}\right) = \widetilde{\cO}\left(d + \frac{d L}{\mu \sqrt{n}} + \frac{d \widehat{L}}{\mu \sqrt{n}}\right) = \widetilde{\cO}\left(d + \frac{d \widehat{L}}{\mu \sqrt{n}}\right),
+  \widetilde{\Omega}\left(K \omega + K \frac{\sigma^2}{\mu n \varepsilon B} + K \frac{L}{\mu} + K\frac{\omega}{\mu \sqrt{n}} \left(\widehat{L} + K\frac{L_{\sigma}}{\sqrt{B}}\right) + K \frac{\sigma}{n \mu^{\nicefrac{3}{2}} \sqrt{\varepsilon B}}\left(\frac{L_{\sigma}}{\sqrt{B}}\right)\right).
 \end{align*}
-if $K \leq \frac{d}{\sqrt{n}}.$
 
 \subsection{Proofs of Theorems}
 The following proofs almost repeat the proofs from Section~\ref{sec:proof_of_theorems}. And one of the main changes is that instead of Lemma~\ref{lemma:good_recursion}, we use the following lemma.
@@ -2176,7 +2174,7 @@ The following proofs almost repeat the proofs from Section~\ref{sec:proof_of_the
 \end{proof}
 
 \subsubsection{Generic Lemma}
-We now provide the analog of Lemma~\ref{lemma:main_lemma}.
+We now provide the counterpart of Lemma~\ref{lemma:main_lemma}.
 
 \begin{lemma}
   \label{lemma:main_lemma_pl}
