@@ -608,6 +608,7 @@ We define the Rand$K$ compressor that chooses without replacement $K$ coordinate
 See the proof in \cite{beznosikov2020biased}.
 
 \section{Proofs of Theorems}
+\label{sec:proof_of_theorems}
 
 There are three different sources of randomness in Algorithm~\ref{alg:main_algorithm}: the first one from vectors $\{k_i^{t+1}\}_{i=1}^n$, the second one from compressors $\{\cC_i\}_{i=1}^n$, and the third one from availability of nodes. We define $\ExpSub{k}{\cdot}$, $\ExpSub{\cC}{\cdot}$ and $\ExpSub{\probavailable}{\cdot}$ to be conditional expectations w.r.t.\,$\{k_i^{t+1}\}_{i=1}^n$, $\{\cC_i\}_{i=1}^n, $ and availability, accordingly, conditioned on all previous randomness. Moreover, we define $\ExpSub{t+1}{\cdot}$ to be a conditional expectation w.r.t. all randomness in iteration $t+1$ conditioned on all previous randomness. Note, that $\ExpSub{t+1}{\cdot} = \ExpSub{k}{\ExpSub{\cC}{\ExpSub{\probavailable}{\cdot}}}.$
 
@@ -2040,7 +2041,19 @@ In this section, we provide the theoretical convergence rates of \algname{\algor
 
 Under Polyak-\L ojasiewicz condition, a (random) point $\widehat{x}$ is $\varepsilon$-solution, if $\Exp{f(\widehat{x})} - f^* \leq \varepsilon.$
 
-\subsection{Standard Lemma under Polyak-\L ojasiewicz Condition}
+We now provide the convergence rated of \algname{\algorithmname} un P\L-condition.
+
+\begin{restatable}{theorem}{CONVERGENCEPL}
+  \label{theorem:gradient_oracle_pl}
+  Suppose that Assumption \ref{ass:lower_bound}, \ref{ass:lipschitz_constant}, \ref{ass:nodes_lipschitz_constant}, \ref{ass:compressors}, \ref{ass:partial_participation} and \ref{ass:pl_condition} hold. Let us take $a = ,$ 
+  $\gamma \leq \min\left\{\left(L + \sqrt{\frac{40 \omega (2 \omega + 1)}{n}} \widehat{L}\right)^{-1}, \frac{a}{2\mu}\right\}, $ and $h^{0}_i = g^{0}_i = \nabla f_i(x^0)$ for all $i \in [n]$ in Algorithm~\ref{alg:main_algorithm} \algname{(\algorithmname)},
+  then $\Exp{f(x^{T})} - f^* \leq (1 - \gamma \mu)^{T} \Delta_0.$
+\end{restatable}
+
+\subsection{Proofs of Theorems}
+The following proofs almost repeat the proofs from Section~\ref{sec:proof_of_theorems}. And one of the main changes is that instead of Lemma~\ref{lemma:good_recursion}, we use the following lemma.
+
+\subsubsection{Standard Lemma under Polyak-\L ojasiewicz Condition}
 
 \begin{lemma}
   \label{lemma:good_recursion_pl}
@@ -2070,8 +2083,83 @@ Under Polyak-\L ojasiewicz condition, a (random) point $\widehat{x}$ is $\vareps
   It is left to note that $\Psi^{t} \geq 0$ for all $t \in [T]$.
 \end{proof}
 
-\subsection{Generic Lemmas}
+\subsubsection{Generic Lemma}
+We now provide the analog of Lemma~\ref{lemma:main_lemma}.
 
+\begin{lemma}
+  \label{lemma:main_lemma_pl}
+  Suppose that Assumptions \ref{ass:lipschitz_constant}, \ref{ass:compressors}, \ref{ass:partial_participation} and \ref{ass:pl_condition} hold and let us take $a = \frac{\probavailable}{2 \omega + 1},$ then
+  \begin{align*}
+    &\Exp{f(x^{t + 1})} \\
+    &\quad  + \frac{2\gamma}{a} \Exp{\norm{g^{t+1} - h^{t+1}}^2} + \frac{4 \gamma (\left(2 \omega + 1\right)\probavailable - \probpairaa)}{n \probavailable^2} \Exp{\frac{1}{n}\sum_{i=1}^n\norm{g^{t+1}_i - h^{t+1}_i}^2}\\
+    &\leq \Exp{f(x^t) - \frac{\gamma}{2}\norm{\nabla f(x^t)}^2 - \left(\frac{1}{2\gamma} - \frac{L}{2}\right)
+    \norm{x^{t+1} - x^t}^2 + \gamma \norm{h^{t} - \nabla f(x^t)}^2}\nonumber\\
+    &\quad + \left(1 - \gamma \mu\right)\frac{2\gamma}{a}\Exp{\norm{g^{t} - h^t}^2} + \left(1 - \gamma \mu\right)\frac{4 \gamma (\left(2 \omega + 1\right)\probavailable - \probpairaa)}{n \probavailable^2}\Exp{\frac{1}{n} \sum_{i=1}^n\norm{g^t_i - h^{t}_i}^2}\nonumber\\
+    &\quad + \frac{10 \gamma (2 \omega + 1)\omega}{n \probavailable^2}\Exp{\frac{1}{n} \sum_{i=1}^n\norm{k^{t+1}_i}^2}.
+  \end{align*}
+\end{lemma}
+
+\begin{proof}
+  Let us fix some constants $\kappa, \eta \in [0,\infty)$ that we will define later. Using the same reasoning as in Lemma~\ref{lemma:main_lemma}, we can get
+  \begin{align*}
+      &\Exp{f(x^{t + 1})} \nonumber \\
+      &\quad  + \kappa \Exp{\norm{g^{t+1} - h^{t+1}}^2} + \eta \Exp{\frac{1}{n}\sum_{i=1}^n\norm{g^{t+1}_i - h^{t+1}_i}^2} \nonumber\\
+      &\leq \Exp{f(x^t) - \frac{\gamma}{2}\norm{\nabla f(x^t)}^2 - \left(\frac{1}{2\gamma} - \frac{L}{2}\right)
+      \norm{x^{t+1} - x^t}^2 + \gamma \norm{h^{t} - \nabla f(x^t)}^2}\nonumber\\
+      &\quad + \left(\gamma + \kappa \left(1 - a\right)^2\right)\Exp{\norm{g^{t} - h^t}^2}\nonumber\\
+      &\quad + \left(\frac{\kappa a^2 (\left(2 \omega + 1\right)\probavailable - \probpairaa)}{n \probavailable^2} + \eta\left(\frac{a^2(2\omega + 1 - \probavailable)}{\probavailable} + (1 - a)^2\right)\right)\Exp{\frac{1}{n} \sum_{i=1}^n\norm{g^t_i - h^{t}_i}^2}\nonumber\\
+      &\quad + \left(\frac{2 \kappa \omega}{n \probavailable} + \frac{2 \eta \omega}{\probavailable}\right)\Exp{\frac{1}{n} \sum_{i=1}^n\norm{k^{t+1}_i}^2}.
+  \end{align*}
+  Let us take $\kappa = \frac{2\gamma}{a}.$ One can show that $\gamma + \kappa \left(1 - a\right)^2 \leq \left(1 - \frac{a}{2}\right)\kappa, $ and thus
+  \begin{align*}
+      &\Exp{f(x^{t + 1})} \\
+      &\quad  + \frac{2\gamma}{a} \Exp{\norm{g^{t+1} - h^{t+1}}^2} + \eta \Exp{\frac{1}{n}\sum_{i=1}^n\norm{g^{t+1}_i - h^{t+1}_i}^2}\\
+      &\leq \Exp{f(x^t) - \frac{\gamma}{2}\norm{\nabla f(x^t)}^2 - \left(\frac{1}{2\gamma} - \frac{L}{2}\right)
+      \norm{x^{t+1} - x^t}^2 + \gamma \norm{h^{t} - \nabla f(x^t)}^2}\nonumber\\
+      &\quad + \left(1 - \frac{a}{2}\right)\frac{2\gamma}{a}\Exp{\norm{g^{t} - h^t}^2}\nonumber\\
+      &\quad + \left(\frac{2\gamma a (\left(2 \omega + 1\right)\probavailable - \probpairaa)}{n \probavailable^2} + \eta\left(\frac{a^2(2\omega + 1 - \probavailable)}{\probavailable} + (1 - a)^2\right)\right)\Exp{\frac{1}{n} \sum_{i=1}^n\norm{g^t_i - h^{t}_i}^2}\nonumber\\
+      &\quad + \left(\frac{4 \gamma \omega}{a n \probavailable} + \frac{2 \eta \omega}{\probavailable}\right)\Exp{\frac{1}{n} \sum_{i=1}^n\norm{k^{t+1}_i}^2}.
+  \end{align*}
+  Considering the choice of $a$, one can show that $\left(\frac{a^2(2\omega + 1 - \probavailable)}{\probavailable} + (1 - a)^2\right) \leq 1 - a.$ If we take $\eta = \frac{4 \gamma (\left(2 \omega + 1\right)\probavailable - \probpairaa)}{n \probavailable^2},$ then $\left(\frac{2\gamma a (\left(2 \omega + 1\right)\probavailable - \probpairaa)}{n \probavailable^2} + \eta\left(\frac{a^2(2\omega + 1 - \probavailable)}{\probavailable} + (1 - a)^2\right)\right) \leq \left(1 - \frac{a}{2}\right)\eta$ and
+
+  \begin{align*}
+    &\Exp{f(x^{t + 1})} \\
+    &\quad  + \frac{2\gamma}{a} \Exp{\norm{g^{t+1} - h^{t+1}}^2} + \frac{4 \gamma (\left(2 \omega + 1\right)\probavailable - \probpairaa)}{n \probavailable^2} \Exp{\frac{1}{n}\sum_{i=1}^n\norm{g^{t+1}_i - h^{t+1}_i}^2}\\
+    &\leq \Exp{f(x^t) - \frac{\gamma}{2}\norm{\nabla f(x^t)}^2 - \left(\frac{1}{2\gamma} - \frac{L}{2}\right)
+    \norm{x^{t+1} - x^t}^2 + \gamma \norm{h^{t} - \nabla f(x^t)}^2}\nonumber\\
+    &\quad + \left(1 - \frac{a}{2}\right)\frac{2\gamma}{a}\Exp{\norm{g^{t} - h^t}^2} + \left(1 - \frac{a}{2}\right)\frac{4 \gamma (\left(2 \omega + 1\right)\probavailable - \probpairaa)}{n \probavailable^2}\Exp{\frac{1}{n} \sum_{i=1}^n\norm{g^t_i - h^{t}_i}^2}\nonumber\\
+    &\quad + \left(\frac{2 \gamma (2 \omega + 1)\omega}{n \probavailable^2} + \frac{8 \gamma (\left(2 \omega + 1\right)\probavailable - \probpairaa) \omega}{n \probavailable^3}\right)\Exp{\frac{1}{n} \sum_{i=1}^n\norm{k^{t+1}_i}^2} \\
+    &\leq \Exp{f(x^t) - \frac{\gamma}{2}\norm{\nabla f(x^t)}^2 - \left(\frac{1}{2\gamma} - \frac{L}{2}\right)
+    \norm{x^{t+1} - x^t}^2 + \gamma \norm{h^{t} - \nabla f(x^t)}^2}\nonumber\\
+    &\quad + \left(1 - \frac{a}{2}\right)\frac{2\gamma}{a}\Exp{\norm{g^{t} - h^t}^2} + \left(1 - \frac{a}{2}\right)\frac{4 \gamma (\left(2 \omega + 1\right)\probavailable - \probpairaa)}{n \probavailable^2}\Exp{\frac{1}{n} \sum_{i=1}^n\norm{g^t_i - h^{t}_i}^2}\nonumber\\
+    &\quad + \frac{10 \gamma (2 \omega + 1)\omega}{n \probavailable^2}\Exp{\frac{1}{n} \sum_{i=1}^n\norm{k^{t+1}_i}^2}.
+  \end{align*}
+  It it left to consider that $\gamma \leq \frac{a}{2\mu},$ and therefore $1 - \frac{a}{2} \leq 1 - \gamma \mu.$
+\end{proof}
+
+\subsubsection{Proof for \algname{\algorithmname} under P\L-condition}
+
+\CONVERGENCEPL*
+
+\begin{proof}
+  % Using Lemma~\ref{lemma:main_lemma_pl}, Lemma~\ref{lemma:gradient}, and the law of total expectation, we obtain
+  % \begin{align*}
+  %     &\Exp{f(x^{t + 1})} + 2\gamma(2\omega + 1) \Exp{\norm{g^{t+1} - h^{t+1}}^2} + \frac{8 \gamma \omega}{n} \Exp{\frac{1}{n}\sum_{i=1}^n\norm{g^{t+1}_i - h^{t+1}_i}^2}\\
+  %     &\leq \Exp{f(x^t) - \frac{\gamma}{2}\norm{\nabla f(x^t)}^2 - \left(\frac{1}{2\gamma} - \frac{L}{2}\right) \norm{x^{t+1} - x^t}^2}\\
+  %     &\quad + \left(1 - \gamma \mu\right)2\gamma(2\omega + 1) \Exp{\norm{g^{t} - h^t}^2} + \left(1 - \gamma \mu\right) \frac{8 \gamma \omega}{n} \Exp{\frac{1}{n} \sum_{i=1}^n\norm{g^t_i - h^{t}_i}^2}\\
+  %     &\quad + \frac{20 \gamma \omega (2 \omega + 1)}{n} \widehat{L}^2 \norm{x^{t+1} - x^t}^2 \\
+  %     &= \Exp{f(x^t)} - \frac{\gamma}{2}\Exp{\norm{\nabla f(x^t)}^2} \\
+  %     &\quad + \left(1 - \gamma \mu\right)2\gamma(2\omega + 1) \Exp{\norm{g^{t} - h^t}^2} + \left(1 - \gamma \mu\right) \frac{8 \gamma \omega}{n} \Exp{\frac{1}{n} \sum_{i=1}^n\norm{g^t_i - h^{t}_i}^2}\\
+  %     &\quad -\left(\frac{1}{2\gamma} - \frac{L}{2} - \frac{20 \gamma \omega (2 \omega + 1)}{n} \widehat{L}^2\right) \norm{x^{t+1} - x^t}^2.
+  % \end{align*}
+  % Using the assumption about $\gamma,$ we can show that $\frac{1}{2\gamma} - \frac{L}{2} - \frac{20 \gamma \omega (2 \omega + 1)}{n} \widehat{L}^2 \geq 0$ (see Lemma~\ref{lemma:gamma}), thus
+  % \begin{align*}
+  %     &\Exp{f(x^{t + 1})} + 2\gamma(2\omega + 1) \Exp{\norm{g^{t+1} - h^{t+1}}^2} + \frac{8 \gamma \omega}{n} \Exp{\frac{1}{n}\sum_{i=1}^n\norm{g^{t+1}_i - h^{t+1}_i}^2}\\
+  %     &\leq \Exp{f(x^t)} - \frac{\gamma}{2}\Exp{\norm{\nabla f(x^t)}^2} \\
+  %     &\quad + \left(1 - \gamma \mu\right)2\gamma(2\omega + 1) \Exp{\norm{g^{t} - h^t}^2} + \left(1 - \gamma \mu\right) \frac{8 \gamma \omega}{n} \Exp{\frac{1}{n} \sum_{i=1}^n\norm{g^t_i - h^{t}_i}^2}.
+  % \end{align*}
+  % In the view of Lemma~\ref{lemma:good_recursion_pl} with $\Psi^t = 2(2\omega + 1) \Exp{\norm{g^{t} - h^t}^2} + \frac{8 \omega}{n} \Exp{\frac{1}{n} \sum_{i=1}^n\norm{g^t_i - h^{t}_i}^2}$ we can conclude the proof.
+\end{proof}
 
 \newpage
   \section{Description of \algname{\algorithmname-SYNC-MVR}}
