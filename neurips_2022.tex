@@ -209,7 +209,7 @@ It is important to consider finite-sum \eqref{eq:task_minibatch} and stochastic 
 \textbf{2. Compressed communication} \\
 In distributed optimization \citep{ramesh2021zero, xu2021grace}, lossy communication compression can be a powerful tool to increase the communication speed between the nodes and the server. Different types of compressors are considered in the literature, including unbiased compressors \citep{alistarh2017qsgd,beznosikov2020biased,szlendak2021permutation}, contractive (biased) compressors \citep{EF21}, 3PC compressors \citep{richtarik20223pc}. We will focus on unbiased compressors because methods \citep{tyurin2022dasha, szlendak2021permutation, MARINA} that employ unbiased compressors provide the current theoretical state-of-the-art (SOTA) communication complexities.
 
-Many methods analyzed optimization methods with the unbiased compressors \citep{alistarh2017qsgd, DIANA, horvath2019stochastic, gorbunov2021marina, tyurin2022dasha}. In the gradient setting, the methods  by \cite{tyurin2022dasha, MARINA} establish the current SOTA communication complexity, each method needs $\frac{1 + \nicefrac{\omega}{n}}{\varepsilon}$ communication rounds to get an $\varepsilon$--solution. In the finite-sum and stochastic settings, the current SOTA communication complexity is attained by methods from \citep{tyurin2022dasha}, while maintaining the optimal oracle complexities $\cO\left(m + \frac{\sqrt{m}}{\varepsilon \sqrt{n}}\right)$ and $\cO\left(\frac{\sigma^2}{\varepsilon n} + \frac{\sigma}{\varepsilon^{\nicefrac{3}{2}} n}\right)$ per node.
+Many methods analyzed optimization methods with the unbiased compressors \citep{alistarh2017qsgd, DIANA, horvath2019stochastic, gorbunov2021marina, tyurin2022dasha}. In the gradient setting, the methods by \cite{tyurin2022dasha} and \cite{MARINA} establish the current SOTA communication complexity, each method needs $\frac{1 + \nicefrac{\omega}{n}}{\varepsilon}$ communication rounds to get an $\varepsilon$--solution. In the finite-sum and stochastic settings, the current SOTA communication complexity is attained by methods from \citep{tyurin2022dasha}, while maintaining the optimal oracle complexities $\cO\left(m + \frac{\sqrt{m}}{\varepsilon \sqrt{n}}\right)$ and $\cO\left(\frac{\sigma^2}{\varepsilon n} + \frac{\sigma}{\varepsilon^{\nicefrac{3}{2}} n}\right)$ per node.
 
 \textbf{3. Partial participation} \\
 From the beginning of federated learning era, the partial participation has been considered to be the essential feature of distributed optimization methods \citep{mcmahan2017communication, konevcny2016federated, kairouz2021advances}. 
@@ -466,8 +466,8 @@ Let us assume that $s \leq \nicefrac{n}{2}.$ Note that \eqref{eq:partial_partici
 
 \section{Experiments}
 
-In experiments, our main goal is to compare \algname{\algorithmname} with \algname{DASHA}. 
-We verify that the bigger $\probavailable$, the closer \algname{\algorithmname} is to \algname{DASHA}.
+In experiments, our main goal is to compare \algname{\algorithmname} with \algname{DASHA}. Clearly, \algname{\algorithmname} can not generally perform better than \algname{DASHA}.
+In different settings, we verify that the bigger $\probavailable$, the closer \algname{\algorithmname} is to \algname{DASHA}.
 % We verify that the convergence rates of \algname{\algorithmname} no worse than times $\nicefrac{1}{\probavailable}$. 
 We use the standard setting in experiments where all parameters except step sizes are taken as suggested in theory. Step sizes are finetuned from a set~$\{2^{i}\,|\,i \in [-10, 10]\}.$
 
@@ -2075,7 +2075,7 @@ Under Polyak-\L ojasiewicz condition, a (random) point $\widehat{x}$ is $\vareps
   % In this section, we provide a description of \algname{\algorithmname-SYNC-MVR} (see Algorithm~\ref{alg:main_algorithm_mvr_sync}). This algorithm is closely related to \algname{\algorithmname-MVR} (Algorithm~\ref{alg:main_algorithm}), but \algname{\algorithmname-SYNC-MVR} synchronizes all nodes with some probability $p$. This synchronization procedure enabled us to fix the convergence rate suboptimality of \algname{\algorithmname-MVR} w.r.t.\,$\omega$.
 
    By analogy to \citep{tyurin2022dasha}, we provide a ``synchronized'' version of the algorithm. With a small probability, participating nodes calculate and send a mega batch without compression. This helps us to resolve the suboptimality of \algname{\algorithmname-MVR} w.r.t.\,$\omega.$ Note that this suboptimality is not a problem. 
-   We show in Corollary~\ref{cor:stochastic:randk} that \algname{\algorithmname-MVR} can have the optimal oracle complexity and SOTA communication complexity with the particular choices of parameters.
+   We show in Corollary~\ref{cor:stochastic:randk} that \algname{\algorithmname-MVR} can have the optimal oracle complexity and SOTA communication complexity with the particular choices of parameters of the compressors.
   %  We show in Corollary~\ref{cor:stochastic:randk} that with the particular choices of parameters can have the optimal oracle and SOTA communication complexity.
   
   \begin{algorithm}[h]
@@ -2533,7 +2533,7 @@ First, we will prove two lemmas.
     &\quad + \Bigg(\nu \frac{2\left(\probavailable - \probpairaa\right) b^2}{n \probavailable^2 \probmega} + \rho (1 - b)\Bigg)\Exp{\frac{1}{n}\sum_{i=1}^n\norm{h^{t}_i - \nabla f_i(x^{t})}^2} \\
     &\quad + \left(\frac{2 \nu b^2}{n \probmega \probavailable} + \frac{2 \rho b^2}{\probavailable \probmega}\right) \frac{\sigma^2}{B'},
   \end{align*}
-  where simplified a term using $\probpairaa \geq 0.$ Let us take $\nu = \frac{\gamma}{b}$ to obtain
+  where simplified the term using $\probpairaa \geq 0.$ Let us take $\nu = \frac{\gamma}{b}$ to obtain
   \begin{align*}
     &\Exp{f(x^{t + 1})} + \frac{\gamma \left(2 \omega + 1\right)}{\probavailable} \Exp{\norm{g^{t+1} - h^{t+1}}^2} + \frac{\gamma\left(\left(2 \omega + 1\right)\probavailable - \probpairaa\right)}{n \probavailable^2} \Exp{\frac{1}{n}\sum_{i=1}^n\norm{g^{t+1}_i - h^{t+1}_i}^2}\\
     &\quad  + \frac{\gamma}{b} \Exp{\norm{h^{t+1} - \nabla f(x^{t+1})}^2} + \rho \Exp{\frac{1}{n}\sum_{i=1}^n\norm{h^{t+1}_i - \nabla f_i(x^{t+1})}^2}\\
