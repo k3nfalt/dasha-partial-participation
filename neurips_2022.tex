@@ -220,14 +220,18 @@ We propose a new family of methods \algname{\algorithmname} for the nonconvex di
 
 \section{Algorithm Description}
 
-We now present \algname{\algorithmname} (see Algorithm~\ref{alg:main_algorithm}), a family of methods to solve the optimization problem \eqref{eq:main_problem}. \algname{\algorithmname} is based on \algname{DASHA} by \cite{tyurin2022dasha}. 
+We now present \algname{\algorithmname} (see Algorithm~\ref{alg:main_algorithm}), a family of methods to solve the optimization problem \eqref{eq:main_problem}. \algname{\algorithmname} is based on \algname{DASHA} by \cite{tyurin2022dasha}. One can easily show that \algname{\algorithmname} reduces to \algname{DASHA} when $\probavailable = 1.$
 The refinement of \algname{DASHA} is not an exercise, let us point out the main differences: 
+
 i) The theoretical analysis of \algname{\algorithmname} is more complicated: while in \algname{DASHA}, the randomness from compressors is independent of the randomness from stochastic gradients, in \algname{\algorithmname}, these two randomnesses are coupled by the randomness from the partial participation. Moreover, the new methods have to reduce the variance from partial participation. 
 % The theoretical analysis of \algname{\algorithmname} is more complicated: while in \algname{DASHA}, the randomness from compressors is conditionally independent from the randomness from stochastic gradients 
-ii) if some node participates, then it does \algname{DASHA}-like steps; otherwise, it does nothing. 
-iii) some steps are scaled by \nicefrac{1}{\probavailable} to preserve ``unbiasedness''. iv) In \algname{DASHA}, the momentum $b$ is used only to reduce the variance of stochastic gradients. In \algname{\algorithmname}, the momentum $b$ plays the second role. It also helps to reduce the variance of partial participation randomness. That is why it also appears in the gradient and finite-sum settings. 
-iv) In the finite-sum setting, we present two methods: \algname{\algorithmname-PAGE} and \algname{\algorithmname-FINITE-MVR}. The former is based on \algname{PAGE} \citep{PAGE} and with small probability $\probpage$ calculates the full gradients of the functions $f_i$. The latter always calculates mini-batches, but it needs extra memory $\cO\left(d m\right)$ per node to store vectors $h^{t}_{ij}$.
-One can easily show that \algname{\algorithmname} reduces to \algname{DASHA} when $\probavailable = 1.$
+% ii) if some node participates, then it does \algname{DASHA}-like steps; otherwise, it does nothing. 
+% iii) some steps are scaled by \nicefrac{1}{\probavailable} to preserve ``unbiasedness''. 
+
+ii) In the gradient setting, comparing the structure of algorithms \algname{\algorithmname} and \algname{DASHA}, one can see that in \algname{\algorithmname} we added at least two crucial things: the momentum $b$, which helps to reduce the variance of partial participation randomness, and the proper scaling by $\nicefrac{1}{\probavailable}$. Note that in finite-sum and stochastic settings, for \algname{\algorithmname-FINITE-MVR} and \algname{\algorithmname-MVR}, accordingly, the momentum $b$ plays the dual role; it also helps to reduce the variance of stochastic gradients.
+% ii) In \algname{DASHA}, the momentum $b$ is used only to reduce the variance of stochastic gradients. In \algname{\algorithmname}, the momentum $b$ plays the second role. It also helps to reduce the variance of partial participation randomness. That is why it also appears in the gradient and finite-sum settings. 
+
+iii) In the finite-sum setting, we present two methods: \algname{\algorithmname-PAGE} and \algname{\algorithmname-FINITE-MVR}. The former is based on \algname{PAGE} \citep{PAGE} and with small probability $\probpage$ calculates the full gradients of the functions $f_i$. The latter always calculates mini-batches, but it needs extra memory $\cO\left(d m\right)$ per node to store vectors $h^{t}_{ij}$.
 
 % \setlength{\floatsep}{0pt}% Remove \textfloatsep
 \begin{algorithm}
