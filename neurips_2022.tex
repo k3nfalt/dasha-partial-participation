@@ -479,11 +479,12 @@ In different settings, we verify that the bigger $\probavailable$, the closer \a
 % We verify that the convergence rates of \algname{\algorithmname} no worse than times $\nicefrac{1}{\probavailable}$. 
 We use the standard setting in experiments where all parameters except step sizes are taken as suggested in theory. Step sizes are finetuned from a set~$\{2^{i}\,|\,i \in [-10, 10]\}.$ We emulate the partial participation setting using $s$-nice sampling of nodes.
 
-\subsection{Gradient Setting}
-
-\subsection{Finite-Sum Setting}
-
-\subsection{Stochastic Setting}
+\begin{figure}[h]
+  \centering
+  \includegraphics[width=0.75\linewidth]{experiments/neurips_2022_stochastic_real-sim_nof_200_numnodes_10_probs_mega_batch_100000_fix_nm_bug_longer.pdf}
+  \caption{Classification task with the real-sim dataset, $\nicefrac{\sigma^2}{n \varepsilon B} = 10^5,$ and $K = 200$ in Rand$K$ in the stochastic setting.}
+  \label{fig:real_sim_stochastic}
+\end{figure}
 
 \bibliographystyle{apalike}
 \bibliography{neurips_2022}
