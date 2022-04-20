@@ -477,7 +477,11 @@ Let us assume that $s \leq \nicefrac{n}{2}.$ Note that \eqref{eq:partial_partici
 In experiments, our main goal is to compare \algname{\algorithmname} with \algname{DASHA}. Clearly, \algname{\algorithmname} can not generally perform better than \algname{DASHA}.
 In different settings, we verify that the bigger $\probavailable$, the closer \algname{\algorithmname} is to \algname{DASHA}, i.e. \algname{\algorithmname} converges no slower than $\nicefrac{1}{\probavailable}$ times.
 % We verify that the convergence rates of \algname{\algorithmname} no worse than times $\nicefrac{1}{\probavailable}$. 
-We use the standard setting in experiments where all parameters except step sizes are taken as suggested in theory. Step sizes are finetuned from a set~$\{2^{i}\,|\,i \in [-10, 10]\}.$ We emulate the partial participation setting using $s$-nice sampling of nodes.
+We use the standard setting in experiments where all parameters except step sizes are taken as suggested in theory. Step sizes are finetuned from a set~$\{2^{i}\,|\,i \in [-10, 10]\}.$ We emulate the partial participation setting using $s$-nice sampling of nodes. We consider the Rand$K$ compressors.
+
+In the finite-sum setting, 
+
+In the stochastic setting, we take the number of nodes $n = 10$, $K = 200$ in Rand$K,$ accuracy $\varepsilon$ such that $\nicefrac{\sigma^2}{n \varepsilon B} = 10^5.$ In Figure~\ref{fig:real_sim_stochastic}, we see that the bigger probability $\probavailable = \nicefrac{s}{n}$ to $1$, the closer \algname{\algorithmname-MVR} to \algname{DASHA-SYNC-MVR}. Moreover, \algname{\algorithmname-MVR} with $s = 1$ ($\probavailable = 0.1$) converges no slower than $10$ times to the neighborhood of a solution.
 
 \begin{figure}[h]
   \centering
