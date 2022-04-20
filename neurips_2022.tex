@@ -481,14 +481,29 @@ We use the standard setting in experiments where all parameters except step size
 
 In the finite-sum setting, 
 
-In the stochastic setting, we take the number of nodes $n = 10$, $K = 200$ in Rand$K,$ accuracy $\varepsilon$ such that $\nicefrac{\sigma^2}{n \varepsilon B} = 10^5.$ In Figure~\ref{fig:real_sim_stochastic}, we see that the bigger probability $\probavailable = \nicefrac{s}{n}$ to $1$, the closer \algname{\algorithmname-MVR} to \algname{DASHA-SYNC-MVR}. Moreover, \algname{\algorithmname-MVR} with $s = 1$ ($\probavailable = 0.1$) converges approximately $10$ ($= \nicefrac{1}{\probavailable}$) times slower to the neighborhood of a solution.
+In the stochastic setting, we take the number of nodes $n = 10$, $K = 200$ in Rand$K,$ accuracy $\varepsilon$ such that $\nicefrac{\sigma^2}{n \varepsilon B} = 10^5.$ In Figure~\ref{fig:real_sim_stochastic}, we see that the bigger probability $\probavailable = \nicefrac{s}{n}$ to $1$, the closer \algname{\algorithmname-MVR} to \algname{DASHA-SYNC-MVR}. Moreover, \algname{\algorithmname-MVR} with $s = 1$ ($\probavailable = 0.1$) converges approximately $\times 10$ ($= \nicefrac{1}{\probavailable}$) times slower to the neighborhood of a solution.
 
+\usetikzlibrary{decorations.pathreplacing}
 \begin{figure}[h]
   \centering
-  \includegraphics[width=0.75\linewidth]{experiments/neurips_2022_stochastic_real-sim_nof_200_numnodes_10_probs_mega_batch_100000_fix_nm_bug_longer.pdf}
+  % \includegraphics[width=0.75\linewidth]{experiments/neurips_2022_stochastic_real-sim_nof_200_numnodes_10_probs_mega_batch_100000_fix_nm_bug_longer.pdf}
+  \begin{tikzpicture}
+    \node[anchor=south west,inner sep=0] at (0,0) {\includegraphics[width=\textwidth]{experiments/neurips_2022_stochastic_real-sim_nof_200_numnodes_10_probs_mega_batch_100000_fix_nm_bug_longer.pdf}};
+    % \draw[red,ultra thick,rounded corners] (7.5,5.3) rectangle (9.4,6.2);
+    \draw [red,ultra thick,decorate,decoration={brace,amplitude=20pt,raise=4ex}]
+      (3.0,2.0) -- (13.0,2.0) node[midway,yshift=+5em]{$\times 10$};
+  \end{tikzpicture}
   \caption{Classification task with the real-sim dataset, $\nicefrac{\sigma^2}{n \varepsilon B} = 10^5,$ and $K = 200$ in Rand$K$ in the stochastic setting.}
   \label{fig:real_sim_stochastic}
 \end{figure}
+
+\begin{tikzpicture}
+  % \draw[very thick,-{latex}] (0,0) -- (6,0) node[below]{$x$};
+  % \foreach \x/\l in {1/-r,3/{},5/+r}
+  %   \draw (\x,3pt) -- (\x,-3pt) node[below]{$x_0\l$};
+  \draw [decorate,decoration={brace,amplitude=5pt,mirror,raise=4ex}]
+    (1,0) -- (5,0) node[midway,yshift=-3em]{Konvergenzbereich};
+\end{tikzpicture}
 
 \bibliographystyle{apalike}
 \bibliography{neurips_2022}
