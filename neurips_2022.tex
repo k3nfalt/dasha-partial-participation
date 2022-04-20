@@ -437,7 +437,7 @@ In the following corollary, we consider Rand$K$ compressors (see Definition~\ref
 
 \begin{restatable}{corollary}{COROLLARYSTOCHASTICRANDK}
   \label{cor:stochastic:randk}
-  Suppose that assumptions of Corollary~\ref{cor:stochastic} hold, batch size $B \leq \min\left\{\frac{\sigma}{\sqrt{\varepsilon} n}, \frac{L_{\sigma}^2}{\mathbbm{1}_{\probavailable}^2 \widehat{L}^2}\right\},$ we take Rand$K$ with $K = \Theta\left(\frac{B d \sqrt{\varepsilon n}}{\sigma}\right).$ Then
+  Suppose that assumptions of Corollary~\ref{cor:stochastic} hold, batch size $B \leq \min\left\{\frac{\sigma}{\sqrt{\varepsilon} n}, \frac{L_{\sigma}^2}{\mathbbm{1}_{\probavailable}^2 \widehat{L}^2}\right\},$ we take Rand$K$ compressors with $K = \Theta\left(\frac{B d \sqrt{\varepsilon n}}{\sigma}\right).$ Then
   the communication complexity equals 
   \begin{align}
       \label{eq:complexity:stochastic:communication}
@@ -450,7 +450,7 @@ In the following corollary, we consider Rand$K$ compressors (see Definition~\ref
   \end{align}
 \end{restatable}
 
-We are aware that the initial batch size $B_{\textnormal{init}}$ can be suboptimal w.r.t.\,$\omega$ in \algname{\algorithmname-MVR} in some regimes (see also \citep{tyurin2022dasha}). However, Corollary~\ref{cor:stochastic:randk} reveals that we can escape these regimes by choosing the parameter $K$ of Rand$K$ in a particular way. To get the complete picture, we provide \algname{\algorithmname-SYNC-MVR} in the appendix.
+We are aware that the initial batch size $B_{\textnormal{init}}$ can be suboptimal w.r.t.\,$\omega$ in \algname{\algorithmname-MVR} in some regimes (see also \citep{tyurin2022dasha}). However, Corollary~\ref{cor:stochastic:randk} reveals that we can escape these regimes by choosing the parameter $K$ of Rand$K$ compressors in a particular way. To get the complete picture, we provide \algname{\algorithmname-SYNC-MVR} in the appendix.
 
 % We believe that this is the price for not sending the full vectors and no synchronization in the stochastic setting and should be investigated further.
 
@@ -2126,7 +2126,7 @@ $B = \cO\left(\frac{L_{\sigma}^2}{\widehat{L}^2}\right)$ to guarantee the degene
 % \begin{corollary}
   Suppose that assumptions of Theorem~\ref{theorem:stochastic_pl} hold, 
   batch size $B \leq \min\left\{\frac{\sigma}{\sqrt{\mu \varepsilon} n}, \frac{L_{\sigma}^2}{\widehat{L}^2}\right\},$ 
-  we take Rand$K$ with $K = \Theta\left(\frac{B d \sqrt{\mu \varepsilon n}}{\sigma}\right).$ Then
+  we take Rand$K$ compressors with $K = \Theta\left(\frac{B d \sqrt{\mu \varepsilon n}}{\sigma}\right).$ Then
   the communication complexity equals 
   \begin{align*}
     \widetilde{\cO}\left(\frac{d \sigma}{\probavailable \sqrt{\mu \varepsilon n}} + \frac{d L_{\sigma}}{\probavailable \mu \sqrt{n}}\right),
