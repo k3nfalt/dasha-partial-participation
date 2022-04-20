@@ -450,7 +450,7 @@ In the following corollary, we consider Rand$K$ compressors (see Definition~\ref
   \end{align}
 \end{restatable}
 
-We are aware that the initial batch size $B_{\textnormal{init}}$ can be suboptimal w.r.t.\,$\omega$ in \algname{\algorithmname-MVR} in some regimes (see also \citep{tyurin2022dasha}). However, Corollary~\ref{cor:stochastic:randk} reveals that we can escape these regimes by choosing the parameter $K$ of Rand$K$ compressors in a particular way. To get the complete picture, we provide \algname{\algorithmname-SYNC-MVR} in the appendix (Section~\ref{sec:main_algorithm_mvr_sync}).
+We are aware that the initial batch size $B_{\textnormal{init}}$ can be suboptimal w.r.t.\,$\omega$ in \algname{\algorithmname-MVR} in some regimes (see also \citep{tyurin2022dasha}). However, Corollary~\ref{cor:stochastic:randk} reveals that we can escape these regimes by choosing the parameter $K$ of Rand$K$ compressors in a particular way. To get the complete picture, we analyze the same phenomenon under P\L\, condition (see Section~\ref{sec:pl_condition}) and provide a new method \algname{\algorithmname-SYNC-MVR} (see Section~\ref{sec:main_algorithm_mvr_sync}).
 
 % We believe that this is the price for not sending the full vectors and no synchronization in the stochastic setting and should be investigated further.
 
@@ -481,7 +481,7 @@ We use the standard setting in experiments where all parameters except step size
 
 In the finite-sum setting, 
 
-In the stochastic setting, we take the number of nodes $n = 10$, $K = 200$ in Rand$K,$ accuracy $\varepsilon$ such that $\nicefrac{\sigma^2}{n \varepsilon B} = 10^5.$ In Figure~\ref{fig:real_sim_stochastic}, we see that the bigger probability $\probavailable = \nicefrac{s}{n}$ to $1$, the closer \algname{\algorithmname-MVR} to \algname{DASHA-SYNC-MVR}. Moreover, \algname{\algorithmname-MVR} with $s = 1$ ($\probavailable = 0.1$) converges no slower than $10$ times to the neighborhood of a solution.
+In the stochastic setting, we take the number of nodes $n = 10$, $K = 200$ in Rand$K,$ accuracy $\varepsilon$ such that $\nicefrac{\sigma^2}{n \varepsilon B} = 10^5.$ In Figure~\ref{fig:real_sim_stochastic}, we see that the bigger probability $\probavailable = \nicefrac{s}{n}$ to $1$, the closer \algname{\algorithmname-MVR} to \algname{DASHA-SYNC-MVR}. Moreover, \algname{\algorithmname-MVR} with $s = 1$ ($\probavailable = 0.1$) converges approximately $10$ ($= \nicefrac{1}{\probavailable}$) times slower to the neighborhood of a solution.
 
 \begin{figure}[h]
   \centering
