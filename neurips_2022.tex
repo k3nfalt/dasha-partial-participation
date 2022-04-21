@@ -478,11 +478,11 @@ Let us assume that $s \leq \nicefrac{n}{2}.$ Note that \eqref{eq:partial_partici
 In experiments, our main goal is to compare \algname{\algorithmname} with \algname{DASHA}. Clearly, \algname{\algorithmname} can not generally perform better than \algname{DASHA}.
 In different settings, we verify that the bigger $\probavailable$, the closer \algname{\algorithmname} is to \algname{DASHA}, i.e. \algname{\algorithmname} converges no slower than $\nicefrac{1}{\probavailable}$ times.
 % We verify that the convergence rates of \algname{\algorithmname} no worse than times $\nicefrac{1}{\probavailable}$. 
-We use the standard setting in experiments where all parameters except step sizes are taken as suggested in theory. Step sizes are finetuned from a set~$\{2^{i}\,|\,i \in [-10, 10]\}.$ We emulate the partial participation setting using $s$-nice sampling of nodes. We consider the Rand$K$ compressors.
+We use the standard setting in experiments where all parameters except step sizes are taken as suggested in theory. Step sizes are finetuned from a set~$\{2^{i}\,|\,i \in [-10, 10]\}.$ We emulate the partial participation setting using $s$-nice sampling of nodes. We consider the Rand$K$ compressor. All algorithms are tested on machine learning classification tasks with nonconvex loss functions (see details in Section~\ref{sec:experiments_details}).
 
-In the finite-sum setting, 
-
-In the stochastic setting, we take the number of nodes $n = 10$, $K = 200$ in Rand$K,$ accuracy $\varepsilon$ such that $\nicefrac{\sigma^2}{n \varepsilon B} = 10^5.$ In Figure~\ref{fig:real_sim_stochastic}, we see that the bigger probability $\probavailable = \nicefrac{s}{n}$ to $1$, the closer \algname{\algorithmname-MVR} to \algname{DASHA-SYNC-MVR}. Moreover, \algname{\algorithmname-MVR} with $s = 1$ ($\probavailable = 0.1$) converges approximately $\times 10$ ($= \nicefrac{1}{\probavailable}$) times slower to the neighborhood of a solution.
+In the finite-sum (Figure~\ref{fig:real_sim_finite_sum}) and in the stochastic setting (Figure~\ref{fig:real_sim_stochastic}), 
+% we take the number of nodes $n = ?$, $K = ?$ in Rand$K,$ accuracy $\varepsilon$ such that $\nicefrac{\sigma^2}{n \varepsilon B} = ?.$ 
+we see that the bigger probability $\probavailable = \nicefrac{s}{n}$ to $1$, the closer \algname{\algorithmname} to \algname{DASHA}. Moreover, \algname{\algorithmname} with $s = 10$ and $s = 1$ converges approximately $\times 10$ ($= \nicefrac{1}{\probavailable}$) and $\times 100$ ($= \nicefrac{1}{\probavailable}$) times slower, accordingly. Our theory predicts such behavior.
 
 \usetikzlibrary{decorations.pathreplacing}
 \begin{figure}[h]
@@ -496,7 +496,7 @@ In the stochastic setting, we take the number of nodes $n = 10$, $K = 200$ in Ra
       (9.8,1.5) -- (13.3,1.5) node[midway,yshift=+4.5em,xshift=+1em]{$\approx \times 10 \textnormal{ slower with } \probavailable = 0.1$};
   \end{tikzpicture}
   \caption{Classification task with the real-sim dataset, $\nicefrac{\sigma^2}{n \varepsilon B} = 10^5,$ and $K = 200$ in Rand$K$ in the stochastic setting.}
-  \label{fig:real_sim_stochastic}
+  \label{fig:real_sim_finite_sum}
 \end{figure}
 
 \begin{figure}[h]
@@ -508,7 +508,7 @@ In the stochastic setting, we take the number of nodes $n = 10$, $K = 200$ in Ra
     \draw [red,ultra thick,decorate,decoration={brace,amplitude=20pt,raise=4ex}]
       (3.0,2.0) -- (13.0,2.0) node[midway,yshift=+5em]{$\times 10 \textnormal{ slower with } \probavailable = 0.1$};
   \end{tikzpicture}
-  \caption{Classification task with the real-sim dataset, $\nicefrac{\sigma^2}{n \varepsilon B} = 10^5,$ and $K = 200$ in Rand$K$ in the stochastic setting.}
+  \caption{Classification task with the real-sim dataset, $\nicefrac{\sigma^2}{n \varepsilon B} = ?,$ and $K = ?$ in Rand$K$ in the stochastic setting.}
   \label{fig:real_sim_stochastic}
 \end{figure}
 
@@ -3324,8 +3324,18 @@ First, we will prove two lemmas.
     to conclude the proof.
 \end{proof}
 
-% \probmega = \min \left\{\ \frac{\zeta_{\cC}}{d}, \frac{n \varepsilon B}{\sigma^2}\right\}
+\section{Experiments Details}
+\label{sec:experiments_details}
+In all experiments, we take the \textit{real-sim} dataset with dimension $d = \num[group-separator={,}]{20958}$ and the number of samples equals $\num[group-separator={,}]{72309}$ from LIBSVM datasets \cite{chang2011libsvm}, and randomly split the dataset between $n = 100$ nodes equally, ignoring residual samples.
 
+In the finite-sum setting, we solve a classification problem with functions
+$$f_i(x) \eqdef \frac{1}{m}\sum_{j=1}^m \left(1 - \frac{1}{1 + \exp(y_{ij} a_{ij}^\top x)}\right)^2,$$
+where $a_{ij} \in \R^{d}$ is the feature vector of a sample on the $i$\textsuperscript{th} node, $y_{ij} \in \{-1, 1\}$ is the corresponding label,  and $m$ is the number of samples on the $i$\textsuperscript{th} node for all $i \in [n].$
+
+In the stochastic setting, we consider functions
+$$f_i(x_1, x_2) \eqdef {\rm E}_{j \sim [m]}\vast[-\log\left(\frac{\exp\left(a_{ij}^\top x_{y_{ij}}\right)}{\sum_{y \in \{1, 2\}} \exp\left(a_{ij}^\top x_{y}\right)}\right) + \lambda \sum_{y \in \{1, 2\}} \sum_{k = 1}^d \frac{\{x_{y}\}_k^2}{1 + \{x_{y}\}_k^2}\vast],$$
+where $x_1, x_2 \in \R^{d}$, $\{\cdot\}_k$ is an indexing operation,
+$a_{ij} \in \R^{d}$ is a feature of a sample on the $i$\textsuperscript{th} node, $y_{ij} \in \{1, 2\}$ is a corresponding label, $m$ is the number of samples located on the $i$\textsuperscript{th} node, constant $\lambda = 0.001$ for all $i \in [n].$
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \newpage
 \section*{Checklist}
