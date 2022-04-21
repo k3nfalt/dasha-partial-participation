@@ -457,6 +457,7 @@ We are aware that the initial batch size $B_{\textnormal{init}}$ can be suboptim
 \section{The Problem of Estimating the Mean in the Partial Participation Setting}
 \label{sec:partial_participation_sampling}
 We now provide the example to explain why the only choice of $B = \cO\left(\nicefrac{L_{\max}^2}{\widehat{L}^2}\right)$ and $B = \cO\left(\nicefrac{L_{\sigma}^2}{\widehat{L}^2}\right)$ in \algname{\algorithmname-PAGE} and \algname{\algorithmname-MVR}, accordingly, guarantees the degeneration up to $\nicefrac{1}{\probavailable}.$
+\alexander{Explain that usually it is enough to consider $B \leq \sqrt{m / n}.$}
 
 % In Sections~\ref{sec:finite_sum_setting} and \ref{sec:stochastic_setting}, when we compare 
 Let us consider the task of estimating the mean of vectors in the distributed setting. Suppose that we have $n$ nodes, and each of them contains $m$ vectors $\{x_{ij}\}_{j=1}^m$, where $x_{ij} \in \R^d$ for all $i \in [n], j \in [m].$ First, let us consider that each node samples a mini-batch $I^i$ of size $B$ with replacement and sends it to the server. Then the server calculates the mean of the mini-batches from nodes. One can easily show that the variance of the estimator is
@@ -488,22 +489,28 @@ In the stochastic setting, we take the number of nodes $n = 10$, $K = 200$ in Ra
   \centering
   % \includegraphics[width=0.75\linewidth]{experiments/neurips_2022_stochastic_real-sim_nof_200_numnodes_10_probs_mega_batch_100000_fix_nm_bug_longer.pdf}
   \begin{tikzpicture}
-    \node[anchor=south west,inner sep=0] at (0,0) {\includegraphics[width=\textwidth]{experiments/neurips_2022_stochastic_real-sim_nof_200_numnodes_10_probs_mega_batch_100000_fix_nm_bug_longer.pdf}};
-    % \draw[red,ultra thick,rounded corners] (7.5,5.3) rectangle (9.4,6.2);
-    \draw [red,ultra thick,decorate,decoration={brace,amplitude=20pt,raise=4ex}]
-      (3.0,2.0) -- (13.0,2.0) node[midway,yshift=+5em]{$\times 10$};
+    \node[anchor=south west,inner sep=0] at (0,0) {\includegraphics[width=\textwidth]{experiments/neurips_2022_finite_sum_real-sim_nof_500_numnodes_100_more_probs_batch_size_1_longer.pdf}};
+    \draw [black,ultra thick,decorate,decoration={brace,amplitude=20pt,raise=4ex}]
+      (7.0,3.0) -- (13.3,3.0) node[midway,yshift=+4.5em,xshift=+2em]{$\approx \times 100 \textnormal{ slower with } \probavailable = 0.01$};
+    \draw [black,ultra thick,decorate,decoration={brace,amplitude=20pt,raise=4ex}]
+      (9.8,1.5) -- (13.3,1.5) node[midway,yshift=+4.5em,xshift=+1em]{$\approx \times 10 \textnormal{ slower with } \probavailable = 0.1$};
   \end{tikzpicture}
   \caption{Classification task with the real-sim dataset, $\nicefrac{\sigma^2}{n \varepsilon B} = 10^5,$ and $K = 200$ in Rand$K$ in the stochastic setting.}
   \label{fig:real_sim_stochastic}
 \end{figure}
 
-\begin{tikzpicture}
-  % \draw[very thick,-{latex}] (0,0) -- (6,0) node[below]{$x$};
-  % \foreach \x/\l in {1/-r,3/{},5/+r}
-  %   \draw (\x,3pt) -- (\x,-3pt) node[below]{$x_0\l$};
-  \draw [decorate,decoration={brace,amplitude=5pt,mirror,raise=4ex}]
-    (1,0) -- (5,0) node[midway,yshift=-3em]{Konvergenzbereich};
-\end{tikzpicture}
+\begin{figure}[h]
+  \centering
+  % \includegraphics[width=0.75\linewidth]{experiments/neurips_2022_stochastic_real-sim_nof_200_numnodes_10_probs_mega_batch_100000_fix_nm_bug_longer.pdf}
+  \begin{tikzpicture}
+    \node[anchor=south west,inner sep=0] at (0,0) {\includegraphics[width=\textwidth]{experiments/neurips_2022_stochastic_real-sim_nof_200_numnodes_10_probs_mega_batch_100000_fix_nm_bug_longer.pdf}};
+    % \draw[red,ultra thick,rounded corners] (7.5,5.3) rectangle (9.4,6.2);
+    \draw [red,ultra thick,decorate,decoration={brace,amplitude=20pt,raise=4ex}]
+      (3.0,2.0) -- (13.0,2.0) node[midway,yshift=+5em]{$\times 10 \textnormal{ slower with } \probavailable = 0.1$};
+  \end{tikzpicture}
+  \caption{Classification task with the real-sim dataset, $\nicefrac{\sigma^2}{n \varepsilon B} = 10^5,$ and $K = 200$ in Rand$K$ in the stochastic setting.}
+  \label{fig:real_sim_stochastic}
+\end{figure}
 
 \bibliographystyle{apalike}
 \bibliography{neurips_2022}
