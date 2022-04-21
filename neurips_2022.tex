@@ -152,8 +152,6 @@ We assume that Assumptions~\ref{ass:lower_bound}, \ref{ass:lipschitz_constant} a
   For all $i \in [n]$ and for all $x, y \in \R,$ the stochastic gradient $\nabla f_i(x;\xi)$ satisfies the mean-squared smoothness property, i.e., $\ExpSub{\xi}{\norm{\nabla f_i(x;\xi) - \nabla f_i(y;\xi)}^2} \leq L_{\sigma}^2 \norm{x - y}^2.$
 \end{assumption}
 
-% \alexander{It is better to fix proofs with a new definition}
-
 \end{enumerate}
 
 \subsection{Unbiased Compressors}
@@ -429,7 +427,6 @@ In the next corollary, we choose momentum $b$ and initialize vectors $h^{0}_i$ t
 
 The convergence rate of the \algname{DASHA-SYNC-MVR}, the state-of-the-art method without partial participation, equals $\cO\left(\frac{\Delta_0}{\varepsilon}\left[L + \frac{\omega}{\sqrt{n}}\left(\widehat{L} + \frac{L_{\sigma}}{\sqrt{B}}\right) + \frac{\sigma}{\sqrt{\varepsilon} n}\frac{L_\sigma}{B}\right] + \frac{\sigma^2}{n \varepsilon B}\right).$ Similar to Section~\ref{sec:finite_sum_setting}, we see that in the regimes when $\widehat{L} \approx L_{\sigma}$ the third term w.r.t. $\nicefrac{1}{\varepsilon^{3/2}}$ can degenerate up to $\nicefrac{\sqrt{B}}{\probavailable}.$ However, if we take $B = \cO\left(\nicefrac{L_{\sigma}^2}{\widehat{L}^2}\right),$ then the degeneration of the third term will be up to $\nicefrac{1}{\probavailable}.$ This effect we analyze in Section~\ref{sec:partial_participation_sampling}.
 
-% \alexander{Better to delete the next claim.}
 % Another important difference is batch size $B_{\textnormal{init}}.$ In \algname{DASHA-SYNC-MVR}, batch size $B_{\textnormal{init}} = \Theta\left(\max\left\{\frac{\sigma^2}{n \varepsilon}, B \omega\right\}\right).$ The same as \algname{DASHA-MVR}, method \algname{\algorithmname-MVR} does not send full vectors and gets suboptimal initial batch size $B_{\textnormal{init}} = \Theta\left(\max\left\{\frac{\sigma^2}{\sqrt{\probavailable} n \varepsilon}, \frac{B \omega}{\sqrt{\probavailable}} \sqrt{\frac{\sigma^2}{n \varepsilon B}}\right\}\right).$ In the regimes when $\varepsilon$ is small and the first terms dominate in maximums, the degeneration of the batch size $B_{\textnormal{init}}$ is up to $\nicefrac{1}{\sqrt{\probavailable}}.$ However, the degeneration can be higher in other regimes due to the additional multiplicative term $\sqrt{\frac{\sigma^2}{n \varepsilon B}}.$ In the next corollary, with Rand$K$ compressor (see Definition~\ref{}), we show that we can escape those regimes by choosing the parameter $K$ in a particular way.
 
 % In the following corollary, we consider Rand$K$ compressors and show that with the particular choice of parameters $$
@@ -457,7 +454,6 @@ We are aware that the initial batch size $B_{\textnormal{init}}$ can be suboptim
 \section{The Problem of Estimating the Mean in the Partial Participation Setting}
 \label{sec:partial_participation_sampling}
 We now provide the example to explain why the only choice of $B = \cO\left(\min\left\{\sqrt{\frac{m}{n}},\frac{L_{\max}^2}{\widehat{L}^2}\right\}\right)$ and $B = \cO\left(\min\left\{\frac{\sigma}{\sqrt{\varepsilon} n}, \frac{L_{\sigma}^2}{\widehat{L}^2}\right\}\right)$ in \algname{\algorithmname-PAGE} and \algname{\algorithmname-MVR}, accordingly, guarantees the degeneration up to $\nicefrac{1}{\probavailable}.$ This is surprising, because in methods with the variance reduction of stochastic gradients \citep{PAGE,tyurin2022dasha} we can take the size of batch size $B = \cO\left(\sqrt{\frac{m}{n}}\right)$ and $B = \cO\left(\frac{\sigma}{\sqrt{\varepsilon} n}\right)$ and guarantee the optimality.
-% \alexander{Explain that usually it is enough to consider $B \leq \sqrt{m / n}.$}
 
 % In Sections~\ref{sec:finite_sum_setting} and \ref{sec:stochastic_setting}, when we compare 
 Let us consider the task of estimating the mean of vectors in the distributed setting. Suppose that we have $n$ nodes, and each of them contains $m$ vectors $\{x_{ij}\}_{j=1}^m$, where $x_{ij} \in \R^d$ for all $i \in [n], j \in [m].$ First, let us consider that each node samples a mini-batch $I^i$ of size $B$ with replacement and sends it to the server. Then the server calculates the mean of the mini-batches from nodes. One can easily show that the variance of the estimator is
@@ -1757,7 +1753,6 @@ Let us denote $\nabla f_i(x^{t+1};\xi^{t+1}_i) \eqdef \frac{1}{B} \sum_{j=1}^B \
     &\quad + \frac{2 \left(\probavailable - \probpairaa\right) b^2}{n^2 \probavailable^2} \sum_{i=1}^n \norm{h^t_i - \nabla f_i(x^{t})}^2 + \left(1 - b\right)^2 \norm{h^{t} - \nabla f(x^{t})}^2.
   \end{align*}
   Now, we prove the second inequality:
-  % \alexander{Alternative approach:}
   % \begin{align*}
   %   &\ExpSub{k}{\ExpSub{\probavailable}{\norm{h^{t+1}_i - \nabla f_i(x^{t+1})}^2}} \\
   %   &=\probavailable \ExpSub{k}{\norm{h^t_i + \frac{1}{\probavailable}k^{t+1}_i - \nabla f_i(x^{t+1})}^2} \\
@@ -1782,7 +1777,6 @@ Let us denote $\nabla f_i(x^{t+1};\xi^{t+1}_i) \eqdef \frac{1}{B} \sum_{j=1}^B \
   %   &\quad + \probavailable \norm{\left(\frac{1}{\probavailable} - 1\right)\left( \nabla f_i(x^{t+1}) - \nabla f_i(x^{t})\right) + \left(1 - \frac{b}{\probavailable}\right) \left(h^t_i - f_i(x^{t})\right)}^2 \\
   %   &\quad +(1 - \probavailable) \ExpSub{k}{\norm{h^t_i - \nabla f_i(x^{t+1})}^2} \\
   % \end{align*}
-  % \alexander{Normal approach (It is better to understand the difference):}
   \begin{align*}
     &\ExpSub{k}{\ExpSub{\probavailable}{\norm{h^{t+1}_i - \nabla f_i(x^{t+1})}^2}} \\
     &=\ExpSub{k}{\ExpSub{\probavailable}{\norm{h^{t+1}_i - \ExpSub{k}{\ExpSub{\probavailable}{h^{t+1}_i}}}^2}} \\
@@ -2166,8 +2160,6 @@ $B = \cO\left(\frac{L_{\sigma}^2}{\widehat{L}^2}\right)$ to guarantee the degene
 \end{restatable}
 Up to Lipschitz constants and probability $\probavailable$ factor, \algname{\algorithmname-MVR} has the state-of-the-art oracle complexity under P\L-condition (see \citep{PAGE}). Moreover, \algname{\algorithmname-MVR} has the state-of-the-art communication complexity of \algname{DASHA} for a small enough $\mu$.
 
-% \alexander{Finish explaining}
-% \alexander{Provide comm complexity of DASHA-SYNC-MVR.}
 % Note that the communication complexity of \algname{DASHA-SYNC-MVR} with the Rand$K$ compressor is at least
 % \begin{align*}
 %   \widetilde{\Omega}\left(K \omega + K \frac{\sigma^2}{\mu n \varepsilon B} + K \frac{L}{\mu} + K\frac{\omega}{\mu \sqrt{n}} \left(\widehat{L} + K\frac{L_{\sigma}}{\sqrt{B}}\right) + K \frac{\sigma}{n \mu^{\nicefrac{3}{2}} \sqrt{\varepsilon B}}\left(\frac{L_{\sigma}}{\sqrt{B}}\right)\right).
