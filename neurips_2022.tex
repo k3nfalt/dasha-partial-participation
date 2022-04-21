@@ -82,6 +82,7 @@
 \maketitle
 
 \begin{abstract}
+  We present a new method that includes three key components of distributed optimization and federated learning: the variance reduction of stochastic gradients, compressed communication, and partial participation. We prove that the new methods have the optimal oracle complexity and the state-of-the-art communication complexity in the partial participation setting. Moreover, we observe that "1 + 1 + 1 is not 3": by mixing the variance reduction of stochastic gradients with compressed communication and partial participation, we catch side effects in theory. We explain their nature and possible workarounds.
 \end{abstract}
 
 \section{Introduction}
@@ -447,7 +448,7 @@ In the following corollary, we consider Rand$K$ compressors (see Definition~\ref
   \end{align}
 \end{restatable}
 
-We are aware that the initial batch size $B_{\textnormal{init}}$ can be suboptimal w.r.t.\,$\omega$ in \algname{\algorithmname-MVR} in some regimes (see also \citep{tyurin2022dasha}). However, Corollary~\ref{cor:stochastic:randk} reveals that we can escape these regimes by choosing the parameter $K$ of Rand$K$ compressors in a particular way. To get the complete picture, we analyze the same phenomenon under P\L\, condition (see Section~\ref{sec:pl_condition}) and provide a new method \algname{\algorithmname-SYNC-MVR} (see Section~\ref{sec:main_algorithm_mvr_sync}).
+We are aware that the initial batch size $B_{\textnormal{init}}$ can be suboptimal w.r.t.\,$\omega$ in \algname{\algorithmname-MVR} in some regimes (see also \citep{tyurin2022dasha}). This is a side effect of mixing the variance reduction of stochastic gradients and compression. However, Corollary~\ref{cor:stochastic:randk} reveals that we can escape these regimes by choosing the parameter $K$ of Rand$K$ compressors in a particular way. To get the complete picture, we analyze the same phenomenon under P\L\, condition (see Section~\ref{sec:pl_condition}) and provide a new method \algname{\algorithmname-SYNC-MVR} (see Section~\ref{sec:main_algorithm_mvr_sync}).
 
 % We believe that this is the price for not sending the full vectors and no synchronization in the stochastic setting and should be investigated further.
 
