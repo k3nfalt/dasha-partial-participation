@@ -3365,6 +3365,8 @@ In the stochastic setting, we consider functions
 $$f_i(x_1, x_2) \eqdef {\rm E}_{j \sim [m]}\vast[-\log\left(\frac{\exp\left(a_{ij}^\top x_{y_{ij}}\right)}{\sum_{y \in \{1, 2\}} \exp\left(a_{ij}^\top x_{y}\right)}\right) + \lambda \sum_{y \in \{1, 2\}} \sum_{k = 1}^d \frac{\{x_{y}\}_k^2}{1 + \{x_{y}\}_k^2}\vast],$$
 where $x_1, x_2 \in \R^{d}$, $\{\cdot\}_k$ is an indexing operation,
 $a_{ij} \in \R^{d}$ is a feature of a sample on the $i$\textsuperscript{th} node, $y_{ij} \in \{1, 2\}$ is a corresponding label, $m$ is the number of samples located on the $i$\textsuperscript{th} node, constant $\lambda = 0.001$ for all $i \in [n].$
+
+The code was written in Python 3.6.8 using PyTorch 1.9 \cite{paszke2019pytorch}. A distributed environment was emulated on a machine with Intel(R) Xeon(R) Gold 6226R CPU @ 2.90GHz and 64 cores.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \newpage
 \section*{Checklist}
@@ -3418,7 +3420,7 @@ Checklist section heading above along with the questions/answers below.
 	\item Did you report error bars (e.g., with respect to the random seed after running experiments multiple times)?
     \answerYes{}
 	\item Did you include the total amount of compute and the type of resources used (e.g., type of GPUs, internal cluster, or cloud provider)?
-    \answerTODO{}
+    \answerYes{}
 \end{enumerate}
 
 \item If you are using existing assets (e.g., code, data, models) or curating/releasing new assets...
