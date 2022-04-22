@@ -463,7 +463,7 @@ Let us assume that $s \leq \nicefrac{n}{2}.$ Note that \eqref{eq:partial_partici
 
 \section{Experiments}
 
-In experiments, our main goal is to compare \algname{\algorithmname} with \algname{DASHA}. Clearly, \algname{\algorithmname} can not generally perform better than \algname{DASHA}.
+In experiments\footnote{Code: \url{https://github.com/mysteryresearcher/dasha-partial-participation}}, our main goal is to compare \algname{\algorithmname} with \algname{DASHA}. Clearly, \algname{\algorithmname} can not generally perform better than \algname{DASHA}.
 In different settings, we verify that the bigger $\probavailable$, the closer \algname{\algorithmname} is to \algname{DASHA}, i.e., \algname{\algorithmname} converges no slower than $\nicefrac{1}{\probavailable}$ times.
 % We verify that the convergence rates of \algname{\algorithmname} no worse than times $\nicefrac{1}{\probavailable}$. 
 We use the standard setting in experiments where all parameters except step sizes are taken as suggested in theory. Step sizes are finetuned from a set~$\{2^{i}\,|\,i \in [-10, 10]\}.$ We emulate the partial participation setting using $s$-nice sampling with the number of nodes $n = 100$. We consider the Rand$K$ compressor and take the batch size $B = 1$. All algorithms are tested on machine learning classification tasks with nonconvex loss functions (see details in Section~\ref{sec:experiments_details}). We plot the relation between communication rounds and values of the norm of gradients at each communication round.
