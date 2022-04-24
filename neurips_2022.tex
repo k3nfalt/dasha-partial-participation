@@ -2713,7 +2713,7 @@ We now provide the counterpart of Lemma~\ref{lemma:main_lemma}.
 
   \begin{restatable}{theorem}{CONVERGENCESYNCMVR}
     \label{theorem:sync_stochastic}
-    Suppose that Assumptions \ref{ass:lower_bound}, \ref{ass:lipschitz_constant}, \ref{ass:nodes_lipschitz_constant}, \ref{ass:stochastic_unbiased_and_variance_bounded}, \ref{ass:mean_square_smoothness}, \ref{ass:compressors} and \ref{ass:partial_participation} hold. Let us take $a = \frac{\probavailable}{2\omega + 1}$, $b = \frac{\probmega \probavailable}{2 - \probavailable},$probability $\probmega \in (0, 1],$ batch size $B' \geq B \geq 1$ $$\gamma \leq \left(L + \sqrt{\frac{8 \left(2\omega + 1\right) \omega}{n \probavailable^2}\left(\widehat{L}^2 + \frac{L_{\sigma}^2}{B}\right) + \frac{8}{n \probmega \probavailable^2} \left(\left(1 - \frac{\probpairaa}{\probavailable}\right) \widehat{L}^2 + \frac{L_{\sigma}^2}{B}\right)}\right)^{-1},$$ and $h^{0}_i = g^{0}_i$ for all $i \in [n]$
+    Suppose that Assumptions \ref{ass:lower_bound}, \ref{ass:lipschitz_constant}, \ref{ass:nodes_lipschitz_constant}, \ref{ass:stochastic_unbiased_and_variance_bounded}, \ref{ass:mean_square_smoothness}, \ref{ass:compressors} and \ref{ass:partial_participation} hold. Let us take $a = \frac{\probavailable}{2\omega + 1}$, $b = \frac{\probmega \probavailable}{2 - \probavailable},$probability $\probmega \in (0, 1],$ batch size $B' \geq B \geq 1$ $$\gamma \leq \left(L + \sqrt{\frac{8 \left(2\omega + 1\right) \omega}{n \probavailable^2}\left(\widehat{L}^2 + \frac{L_{\sigma}^2}{B}\right) + \frac{16}{n \probmega \probavailable^2} \left(\left(1 - \frac{\probpairaa}{\probavailable}\right) \widehat{L}^2 + \frac{L_{\sigma}^2}{B}\right)}\right)^{-1},$$ and $h^{0}_i = g^{0}_i$ for all $i \in [n]$
     in Algorithm~\ref{alg:main_algorithm_mvr_sync}. Then 
     \begin{align*}
       \Exp{\norm{\nabla f(\widehat{x}^T)}^2} &\leq \frac{1}{T}\vast[\frac{2 \Delta_0}{\gamma} + \frac{4}{\probmega \probavailable} \norm{h^{0} - \nabla f(x^{0})}^2 + \frac{4 \left(1 - \frac{\probpairaa}{\probavailable}\right)}{n \probmega \probavailable}\frac{1}{n}\sum_{i=1}^n\norm{h^{0}_i - \nabla f_i(x^{0})}^2 \vast] \\
@@ -2762,8 +2762,7 @@ We now provide the counterpart of Lemma~\ref{lemma:main_lemma}.
 
   Let us provide bounds up to logarithmic factors and use $\widetilde{\cO}\left(\cdot\right)$ notation.
 
-  \begin{restatable}{corollary}{COROLLARYSYNCSTOCHASTIC}
-    \label{cor:sync_stochastic}
+  \begin{restatable}{corollary}{COROLLARYSYNCPLSTOCHASTIC}
     Suppose that assumptions from Theorem~\ref{theorem:sync_stochastic_pl} hold, probability $\probmega = \min \left\{\ \frac{\zeta_{\cC}}{d}, \frac{\mu n \varepsilon B}{\sigma^2}\right\},$ batch size 
     $B' = \Theta\left(\frac{\sigma^2}{\mu n \varepsilon}\right)$ 
     % $B_{\textnormal{init}} = ?,$ 
@@ -2772,6 +2771,7 @@ We now provide the counterpart of Lemma~\ref{lemma:main_lemma}.
     $$T \eqdef \widetilde{\cO}\left(\frac{\omega + 1}{\probavailable} + \frac{d}{\probavailable\zeta_{\cC}} + \frac{\sigma^2}{\probavailable \mu n \varepsilon B} + \frac{L}{\mu} + \frac{\omega}{\probavailable \mu \sqrt{n}} \left(\frac{L_{\sigma}}{\sqrt{B}} + \widehat{L}\right) + \left(\frac{\sqrt{d}}{\probavailable \mu \sqrt{\zeta_{\cC} n}} + \frac{\sigma}{\probavailable n \mu^{\nicefrac{3}{2}} \sqrt{\varepsilon B}}\right)\left(\frac{L_{\sigma}}{\sqrt{B}} + \widehat{L}\right) \right).$$
     communication rounds to get an $\varepsilon$-solution, the communication complexity is equal to $\widetilde{\cO}\left(\zeta_{\cC} T\right),$ and the number of stochastic gradient calculations per node equals $\widetilde{\cO}(BT),$ where $\zeta_{\cC}$ is the expected density from Definition~\ref{def:expected_density}.
   \end{restatable}
+  The proof of this corollary almost repeats the proof of Corollary~\ref{cor:sync_stochastic}.
 
   Let us assume that $\frac{d}{\zeta_{\cC}} = \Theta\left(\omega\right)$ (holds for the Rand$K$ compressor), then the convergence rate of \algname{\algorithmname-SYNC-MVR} is 
   \begin{align}
@@ -3190,7 +3190,7 @@ First, we will prove two lemmas.
     &\quad + \frac{\gamma}{b} \Exp{\norm{h^{t} - \nabla f(x^{t})}^2} + \frac{2 \gamma \left(\probavailable - \probpairaa\right)}{n \probavailable^2 \probmega}\Exp{\frac{1}{n}\sum_{i=1}^n\norm{h^{t}_i - \nabla f_i(x^{t})}^2} \\
     &\quad + \frac{6 \gamma \sigma^2}{n B'} \\
     &\leq \Exp{f(x^t)} - \frac{\gamma}{2}\Exp{\norm{\nabla f(x^t)}^2} \\
-    &\quad - \Bigg(\frac{1}{2\gamma} - \frac{L}{2} - \frac{4 \gamma \left(2\omega + 1\right) \omega}{n \probavailable^2}\left(\frac{L_{\sigma}^2}{B} + \widehat{L}^2\right) - \left(\frac{4 \gamma L_{\sigma}^2}{n \probmega \probavailable^2 B} + \frac{4\gamma\left(1 - \frac{\probpairaa}{\probavailable}\right) \widehat{L}^2}{n \probmega \probavailable^2}\right)\Bigg) \Exp{\norm{x^{t+1} - x^t}^2} \\
+    &\quad - \Bigg(\frac{1}{2\gamma} - \frac{L}{2} - \frac{4 \gamma \left(2\omega + 1\right) \omega}{n \probavailable^2}\left(\frac{L_{\sigma}^2}{B} + \widehat{L}^2\right) - \left(\frac{8 \gamma L_{\sigma}^2}{n \probmega \probavailable^2 B} + \frac{8\gamma\left(1 - \frac{\probpairaa}{\probavailable}\right) \widehat{L}^2}{n \probmega \probavailable^2}\right)\Bigg) \Exp{\norm{x^{t+1} - x^t}^2} \\
     &\quad + \frac{\gamma \left(2 \omega + 1\right)}{\probavailable} \Exp{\norm{g^{t} - h^{t}}^2} + \frac{\gamma\left(\left(2 \omega + 1\right)\probavailable - \probpairaa\right)}{n \probavailable^2}\Exp{\frac{1}{n}\sum_{i=1}^n\norm{g^{t}_i - h^{t}_i}^2} \\
     &\quad + \frac{\gamma}{b} \Exp{\norm{h^{t} - \nabla f(x^{t})}^2} + \frac{2 \gamma \left(\probavailable - \probpairaa\right)}{n \probavailable^2 \probmega}\Exp{\frac{1}{n}\sum_{i=1}^n\norm{h^{t}_i - \nabla f_i(x^{t})}^2} \\
     &\quad + \frac{6 \gamma \sigma^2}{n B'}.
@@ -3218,7 +3218,7 @@ First, we will prove two lemmas.
 \begin{proof}
   Due to the choice of $B',$ we have
   \begin{align*}
-    \Exp{\norm{\nabla f(\widehat{x}^T)}^2} &\leq \frac{1}{T}\vast[2 \Delta_0\left(L + \sqrt{\frac{8 \left(2\omega + 1\right) \omega}{n \probavailable^2}\left(\widehat{L}^2 + \frac{L_{\sigma}^2}{B}\right) + \frac{8}{n \probmega \probavailable^2} \left(\left(1 - \frac{\probpairaa}{\probavailable}\right) \widehat{L}^2 + \frac{L_{\sigma}^2}{B}\right)}\right) \\
+    \Exp{\norm{\nabla f(\widehat{x}^T)}^2} &\leq \frac{1}{T}\vast[2 \Delta_0\left(L + \sqrt{\frac{8 \left(2\omega + 1\right) \omega}{n \probavailable^2}\left(\widehat{L}^2 + \frac{L_{\sigma}^2}{B}\right) + \frac{16}{n \probmega \probavailable^2} \left(\left(1 - \frac{\probpairaa}{\probavailable}\right) \widehat{L}^2 + \frac{L_{\sigma}^2}{B}\right)}\right) \\
     &\quad + \frac{4}{\probmega \probavailable} \norm{h^{0} - \nabla f(x^{0})}^2 + \frac{4 \left(1 - \frac{\probpairaa}{\probavailable}\right)}{n \probmega \probavailable}\frac{1}{n}\sum_{i=1}^n\norm{h^{0}_i - \nabla f_i(x^{0})}^2 \vast] \\
     &\quad + \frac{2 \varepsilon}{3}.
   \end{align*}
@@ -3233,7 +3233,7 @@ First, we will prove two lemmas.
   we have
   % Considering that $\probmega = \min \left\{\frac{\zeta_{\cC}}{d}, \frac{B}{B + B'}\right\},$ we get
   \begin{align*}
-    \Exp{\norm{\nabla f(\widehat{x}^T)}^2} &\leq \frac{1}{T}\vast[2 \Delta_0\left(L + \sqrt{\frac{8 \left(2\omega + 1\right) \omega}{n \probavailable^2}\left(\widehat{L}^2 + \frac{L_{\sigma}^2}{B}\right) + \frac{8}{n \probmega \probavailable^2} \left(\left(1 - \frac{\probpairaa}{\probavailable}\right) \widehat{L}^2 + \frac{L_{\sigma}^2}{B}\right)}\right) \\
+    \Exp{\norm{\nabla f(\widehat{x}^T)}^2} &\leq \frac{1}{T}\vast[2 \Delta_0\left(L + \sqrt{\frac{8 \left(2\omega + 1\right) \omega}{n \probavailable^2}\left(\widehat{L}^2 + \frac{L_{\sigma}^2}{B}\right) + \frac{16}{n \probmega \probavailable^2} \left(\left(1 - \frac{\probpairaa}{\probavailable}\right) \widehat{L}^2 + \frac{L_{\sigma}^2}{B}\right)}\right) \\
     &\quad + \frac{8 \sigma^2}{n \probmega \probavailable B_{\textnormal{init}}} \vast] \\
     &\quad + \frac{2 \varepsilon}{3}.
   \end{align*}
