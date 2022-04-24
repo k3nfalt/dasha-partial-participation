@@ -426,7 +426,7 @@ In the following corollary, we consider Rand$K$ compressors (see Definition~\ref
 
 \begin{restatable}{corollary}{COROLLARYSTOCHASTICRANDK}
   \label{cor:stochastic:randk}
-  Suppose that assumptions of Corollary~\ref{cor:stochastic} hold, batch size $B \leq \min\left\{\frac{\sigma}{\sqrt{\varepsilon} n}, \frac{L_{\sigma}^2}{\mathbbm{1}_{\probavailable}^2 \widehat{L}^2}\right\},$ we take Rand$K$ compressors with $K = \Theta\left(\frac{B d \sqrt{\varepsilon n}}{\sigma}\right).$ Then
+  Suppose that assumptions of Corollary~\ref{cor:stochastic} hold, batch size $B \leq \min\left\{\frac{\sigma}{\probavailable\sqrt{\varepsilon} n}, \frac{L_{\sigma}^2}{\mathbbm{1}_{\probavailable}^2 \widehat{L}^2}\right\},$ we take Rand$K$ compressors with $K = \Theta\left(\frac{B d \sqrt{\varepsilon n}}{\sigma}\right).$ Then
   the communication complexity equals 
   \begin{align}
       \label{eq:complexity:stochastic:communication}
@@ -445,7 +445,7 @@ We are aware that the initial batch size $B_{\textnormal{init}}$ can be suboptim
 
 \section{The Problem of Estimating the Mean in the Partial Participation Setting}
 \label{sec:partial_participation_sampling}
-We now provide the example to explain why the only choice of $B = \cO\left(\min\left\{\sqrt{\frac{m}{n}},\frac{L_{\max}^2}{\widehat{L}^2}\right\}\right)$ and $B = \cO\left(\min\left\{\frac{\sigma}{\sqrt{\varepsilon} n}, \frac{L_{\sigma}^2}{\widehat{L}^2}\right\}\right)$ in \algname{\algorithmname-PAGE} and \algname{\algorithmname-MVR}, accordingly, guarantees the degeneration up to $\nicefrac{1}{\probavailable}.$ This is surprising, because in methods with the variance reduction of stochastic gradients \citep{tyurin2022dasha,PAGE} we can take the size of batch size $B = \cO\left(\sqrt{\frac{m}{n}}\right)$ and $B = \cO\left(\frac{\sigma}{\sqrt{\varepsilon} n}\right)$ and guarantee the optimality.
+We now provide the example to explain why the only choice of $B = \cO\left(\min\left\{\frac{1}{\probavailable}\sqrt{\frac{m}{n}},\frac{L_{\max}^2}{\widehat{L}^2}\right\}\right)$ and $B = \cO\left(\min\left\{\frac{\sigma}{\probavailable \sqrt{\varepsilon} n}, \frac{L_{\sigma}^2}{\widehat{L}^2}\right\}\right)$ in \algname{\algorithmname-PAGE} and \algname{\algorithmname-MVR}, accordingly, guarantees the degeneration up to $\nicefrac{1}{\probavailable}.$ This is surprising, because in methods with the variance reduction of stochastic gradients \citep{tyurin2022dasha,PAGE} we can take the size of batch size $B = \cO\left(\sqrt{\frac{m}{n}}\right)$ and $B = \cO\left(\frac{\sigma}{\sqrt{\varepsilon} n}\right)$ and guarantee the optimality.
 
 % In Sections~\ref{sec:finite_sum_setting} and \ref{sec:stochastic_setting}, when we compare 
 Let us consider the task of estimating the mean of vectors in the distributed setting. Suppose that we have $n$ nodes, and each of them contains $m$ vectors $\{x_{ij}\}_{j=1}^m$, where $x_{ij} \in \R^d$ for all $i \in [n], j \in [m].$ First, let us consider that each node samples a mini-batch $I^i$ of size $B$ with replacement and sends it to the server. Then the server calculates the mean of the mini-batches from nodes. One can easily show that the variance of the estimator is
@@ -2072,9 +2072,9 @@ Let us denote $\nabla f_i(x^{t+1};\xi^{t+1}_i) \eqdef \frac{1}{B} \sum_{j=1}^B \
   \begin{eqnarray*}
     \cO\left(d + K T\right) &=& \cO\left(d + \frac{\Delta_0}{\varepsilon}\vast[K L + K\frac{\omega}{\probavailable \sqrt{n}} \left(\widehat{L} + \frac{L_{\sigma}}{\sqrt{B}}\right) + K \sqrt{\frac{\sigma^2}{\probavailable^2 \varepsilon n^2 B}}\frac{L_{\sigma}}{\sqrt{B}}\vast] + K\frac{\sigma^2}{\sqrt{\probavailable} n \varepsilon B}\right).
 \end{eqnarray*}
-  From Theorem~\ref{theorem:rand_k}, we have $\omega + 1 = \frac{d}{K}.$ Since $K = \Theta\left(\frac{B d \sqrt{\varepsilon n}}{\sigma}\right) = \cO\left(\frac{d}{\sqrt{n}}\right),$ the communication complexity equals
+  From Theorem~\ref{theorem:rand_k}, we have $\omega + 1 = \frac{d}{K}.$ Since $K = \Theta\left(\frac{B d \sqrt{\varepsilon n}}{\sigma}\right) = \cO\left(\frac{d}{\probavailable\sqrt{n}}\right),$ the communication complexity equals
   \begin{eqnarray*}
-      \cO\left(d + K T\right) &=& \cO\left(d + \frac{\Delta_0}{\varepsilon}\vast[\frac{d}{\sqrt{n}}L + \frac{d}{\probavailable \sqrt{n}} \left(\widehat{L} + \frac{L_{\sigma}}{\sqrt{B}}\right) + \frac{d}{\probavailable \sqrt{n}} L_{\sigma}\vast] + \frac{d \sigma}{\sqrt{\probavailable} \sqrt{n \varepsilon}}\right) \\
+      \cO\left(d + K T\right) &=& \cO\left(d + \frac{\Delta_0}{\varepsilon}\vast[\frac{d}{\probavailable\sqrt{n}}L + \frac{d}{\probavailable \sqrt{n}} \left(\widehat{L} + \frac{L_{\sigma}}{\sqrt{B}}\right) + \frac{d}{\probavailable \sqrt{n}} L_{\sigma}\vast] + \frac{d \sigma}{\sqrt{\probavailable} \sqrt{n \varepsilon}}\right) \\
       &=& \cO\left(\frac{d \sigma}{\sqrt{\probavailable} \sqrt{n \varepsilon}} + \frac{L_{\sigma} \Delta_0 d}{\probavailable \sqrt{n} \varepsilon}\right) \\
   \end{eqnarray*}
   And the expected number of stochastic gradient calculations per node equals
@@ -2082,7 +2082,7 @@ Let us denote $\nabla f_i(x^{t+1};\xi^{t+1}_i) \eqdef \frac{1}{B} \sum_{j=1}^B \
       &\cO\left(B_{\textnormal{init}} + B T\right) \\
       &= \cO\left(\frac{\sigma^2}{\sqrt{\probavailable} n \varepsilon} +  \frac{B \omega}{\sqrt{\probavailable}} \sqrt{\frac{\sigma^2}{n \varepsilon B}} + \frac{\Delta_0}{\varepsilon}\vast[B L + B\frac{\omega}{\probavailable \sqrt{n}} \left(\widehat{L} + \frac{L_{\sigma}}{\sqrt{B}}\right) + B \sqrt{\frac{\sigma^2}{\probavailable^2 \varepsilon n^2 B}}\left(\mathbbm{1}_{\probavailable}\widehat{L} + \frac{L_{\sigma}}{\sqrt{B}}\right)\vast] + B\frac{\sigma^2}{\sqrt{\probavailable} n \varepsilon B}\right) \\
       &= \cO\left(\frac{\sigma^2}{\sqrt{\probavailable} n \varepsilon} +  \frac{B d}{K \sqrt{\probavailable}} \sqrt{\frac{\sigma^2}{n \varepsilon B}} + \frac{\Delta_0}{\varepsilon}\vast[B L + B\frac{d}{K \probavailable \sqrt{n}} \left(\widehat{L} + \frac{L_{\sigma}}{\sqrt{B}}\right) + B \sqrt{\frac{\sigma^2}{\probavailable^2 \varepsilon n^2 B}}\frac{L_{\sigma}}{\sqrt{B}}\vast] + \frac{\sigma^2}{\sqrt{\probavailable} n \varepsilon}\right) \\
-      &= \cO\left(\frac{\sigma^2}{\sqrt{\probavailable} n \varepsilon} + \frac{\sigma^2}{\sqrt{\probavailable} n \varepsilon \sqrt{B}} + \frac{\Delta_0}{\varepsilon}\vast[\frac{\sigma}{\sqrt{\varepsilon} n} L + \frac{\sigma}{\probavailable \sqrt{\varepsilon} n} \left(\widehat{L} + \frac{L_{\sigma}}{\sqrt{B}}\right) + \frac{\sigma}{\probavailable \sqrt{\varepsilon} n}L_{\sigma}\vast]\right) \\
+      &= \cO\left(\frac{\sigma^2}{\sqrt{\probavailable} n \varepsilon} + \frac{\sigma^2}{\sqrt{\probavailable} n \varepsilon \sqrt{B}} + \frac{\Delta_0}{\varepsilon}\vast[\frac{\sigma}{\probavailable\sqrt{\varepsilon} n} L + \frac{\sigma}{\probavailable \sqrt{\varepsilon} n} \left(\widehat{L} + \frac{L_{\sigma}}{\sqrt{B}}\right) + \frac{\sigma}{\probavailable \sqrt{\varepsilon} n}L_{\sigma}\vast]\right) \\
       &= \cO\left(\frac{\sigma^2}{\sqrt{\probavailable} n \varepsilon} + \frac{L_{\sigma} \Delta_0 \sigma}{\probavailable \varepsilon^{\nicefrac{3}{2}} n}\right).
   \end{align*}
 \end{proof}
@@ -2185,7 +2185,7 @@ $B = \cO\left(\frac{L_{\sigma}^2}{\widehat{L}^2}\right)$ to guarantee the degene
   \label{cor:stochastic:pl:randk}
 % \begin{corollary}
   Suppose that assumptions of Theorem~\ref{theorem:stochastic_pl} hold, 
-  batch size $B \leq \min\left\{\frac{\sigma}{\sqrt{\mu \varepsilon} n}, \frac{L_{\sigma}^2}{\widehat{L}^2}\right\},$ 
+  batch size $B \leq \min\left\{\frac{\sigma}{\probavailable\sqrt{\mu \varepsilon} n}, \frac{L_{\sigma}^2}{\widehat{L}^2}\right\},$ 
   we take Rand$K$ compressors with $K = \Theta\left(\frac{B d \sqrt{\mu \varepsilon n}}{\sigma}\right).$ Then
   the communication complexity equals 
   \begin{align*}
@@ -2640,12 +2640,12 @@ We now provide the counterpart of Lemma~\ref{lemma:main_lemma}.
       \begin{align*}
         \widetilde{\cO}\left(\frac{\omega}{\probavailable} + \frac{\omega}{\probavailable}\sqrt{\frac{\sigma^2}{\mu n \varepsilon B}} + \frac{\sigma^2}{\probavailable \mu n \varepsilon B} + \frac{L}{\mu} + \frac{\omega}{\probavailable \mu \sqrt{n}} \left(\widehat{L} + \frac{L_{\sigma}}{\sqrt{B}}\right) + \frac{\sigma}{\probavailable n \mu^{\nicefrac{3}{2}} \sqrt{\varepsilon B}}\left(\widehat{L} + \frac{L_{\sigma}}{\sqrt{B}}\right)\right)
       \end{align*}
-    communication rounds in the stochastic settings to get $\varepsilon$-solution. Note that $K = \cO\left(\frac{d}{\sqrt{n}}\right).$ Considering Theorem~\ref{theorem:rand_k}, the communication complexity equals 
+    communication rounds in the stochastic settings to get $\varepsilon$-solution. Note that $K = \cO\left(\frac{d}{\probavailable\sqrt{n}}\right).$ Considering Theorem~\ref{theorem:rand_k}, the communication complexity equals 
     \begin{align*}
       &\widetilde{\cO}\left(K\frac{\omega}{\probavailable} + K\frac{\omega}{\probavailable}\sqrt{\frac{\sigma^2}{\mu n \varepsilon B}} + K\frac{\sigma^2}{\probavailable \mu n \varepsilon B} + K\frac{L}{\mu} + K\frac{\omega}{\probavailable \mu \sqrt{n}} \left(\widehat{L} + \frac{L_{\sigma}}{\sqrt{B}}\right) + K\frac{\sigma}{\probavailable n \mu^{\nicefrac{3}{2}} \sqrt{\varepsilon B}}\left(\widehat{L} + \frac{L_{\sigma}}{\sqrt{B}}\right)\right) \\
       &=\widetilde{\cO}\left(K\frac{\omega}{\probavailable} + K\frac{\omega}{\probavailable}\sqrt{\frac{\sigma^2}{\mu n \varepsilon B}} + K\frac{\sigma^2}{\probavailable \mu n \varepsilon B} + K\frac{L}{\mu} + K\frac{\omega}{\probavailable \mu \sqrt{n}} \left(\widehat{L} + \frac{L_{\sigma}}{\sqrt{B}}\right) + K\frac{\sigma L_{\sigma}}{\probavailable n \mu^{\nicefrac{3}{2}} \sqrt{\varepsilon} B}\right) \\
-      &= \widetilde{\cO}\left(\frac{d}{\probavailable} + \frac{d}{\probavailable}\sqrt{\frac{\sigma^2}{\mu n \varepsilon B}} + \frac{K \sigma^2}{\probavailable \mu n \varepsilon B} + \frac{d L}{\mu \sqrt{n}} + \frac{d}{\probavailable \mu \sqrt{n}} \left(\widehat{L} + \frac{L_{\sigma}}{\sqrt{B}}\right) + \frac{K\sigma L_{\sigma}}{\probavailable n \mu^{\nicefrac{3}{2}} \sqrt{\varepsilon} B}\right) \\
-      &= \widetilde{\cO}\left(\frac{d}{\probavailable} + \frac{d \sigma}{\probavailable \sqrt{\mu n \varepsilon B}} + \frac{d \sigma}{\probavailable \sqrt{\mu \varepsilon n}} + \frac{d L}{\mu \sqrt{n}} + \frac{d}{\probavailable \mu \sqrt{n}} \left(\widehat{L} + \frac{L_{\sigma}}{\sqrt{B}}\right) + \frac{d L_{\sigma}}{\probavailable \mu \sqrt{n}}\right) \\
+      &= \widetilde{\cO}\left(\frac{d}{\probavailable} + \frac{d}{\probavailable}\sqrt{\frac{\sigma^2}{\mu n \varepsilon B}} + \frac{K \sigma^2}{\probavailable \mu n \varepsilon B} + \frac{d L}{\probavailable \mu \sqrt{n}} + \frac{d}{\probavailable \mu \sqrt{n}} \left(\widehat{L} + \frac{L_{\sigma}}{\sqrt{B}}\right) + \frac{K\sigma L_{\sigma}}{\probavailable n \mu^{\nicefrac{3}{2}} \sqrt{\varepsilon} B}\right) \\
+      &= \widetilde{\cO}\left(\frac{d}{\probavailable} + \frac{d \sigma}{\probavailable \sqrt{\mu n \varepsilon B}} + \frac{d \sigma}{\probavailable \sqrt{\mu \varepsilon n}} + \frac{d L}{\probavailable \mu \sqrt{n}} + \frac{d}{\probavailable \mu \sqrt{n}} \left(\widehat{L} + \frac{L_{\sigma}}{\sqrt{B}}\right) + \frac{d L_{\sigma}}{\probavailable \mu \sqrt{n}}\right) \\
       &= \widetilde{\cO}\left(\frac{d \sigma}{\probavailable \sqrt{\mu \varepsilon n}} + \frac{d L_{\sigma}}{\probavailable \mu \sqrt{n}}\right).
     \end{align*}
     The expected \# of stochastic gradient calculations per node equals
@@ -2653,7 +2653,7 @@ We now provide the counterpart of Lemma~\ref{lemma:main_lemma}.
       &\widetilde{\cO}\left(B\frac{\omega}{\probavailable} + B\frac{\omega}{\probavailable}\sqrt{\frac{\sigma^2}{\mu n \varepsilon B}} + B\frac{\sigma^2}{\probavailable \mu n \varepsilon B} + B\frac{L}{\mu} + B\frac{\omega}{\probavailable \mu \sqrt{n}} \left(\widehat{L} + \frac{L_{\sigma}}{\sqrt{B}}\right) + B\frac{\sigma}{\probavailable n \mu^{\nicefrac{3}{2}} \sqrt{\varepsilon B}}\left(\widehat{L} + \frac{L_{\sigma}}{\sqrt{B}}\right)\right) \\
       &=\widetilde{\cO}\left(B\frac{\omega}{\probavailable} + B\frac{\omega}{\probavailable}\sqrt{\frac{\sigma^2}{\mu n \varepsilon B}} + B\frac{\sigma^2}{\probavailable \mu n \varepsilon B} + B\frac{L}{\mu} + B\frac{\omega}{\probavailable \mu \sqrt{n}} \left(\widehat{L} + \frac{L_{\sigma}}{\sqrt{B}}\right) + B\frac{\sigma}{\probavailable n \mu^{\nicefrac{3}{2}} \sqrt{\varepsilon B}}\left(\frac{L_{\sigma}}{\sqrt{B}}\right)\right) \\
       &=\widetilde{\cO}\left(\frac{Bd}{K\probavailable} + \frac{B d}{K \probavailable}\sqrt{\frac{\sigma^2}{\mu n \varepsilon B}} + \frac{\sigma^2}{\probavailable \mu n \varepsilon} + B\frac{L}{\mu} + \frac{B d}{K \probavailable \mu \sqrt{n}} \left(\widehat{L} + \frac{L_{\sigma}}{\sqrt{B}}\right) + \frac{\sigma L_{\sigma}}{\probavailable n \mu^{\nicefrac{3}{2}} \sqrt{\varepsilon}}\right) \\
-      &=\widetilde{\cO}\left(\frac{\sigma}{\probavailable \sqrt{\mu \varepsilon n}} + \frac{\sigma^2}{\probavailable \mu \varepsilon n \sqrt{B}} + \frac{\sigma^2}{\probavailable \mu n \varepsilon} + \frac{\sigma L}{\mu^{\nicefrac{3}{2}}\sqrt{\varepsilon} n} + \frac{\sigma}{K \probavailable \mu^{\nicefrac{3}{2}} \sqrt{\varepsilon} n} \left(\widehat{L} + \frac{L_{\sigma}}{\sqrt{B}}\right) + \frac{\sigma L_{\sigma}}{\probavailable n \mu^{\nicefrac{3}{2}} \sqrt{\varepsilon}}\right) \\
+      &=\widetilde{\cO}\left(\frac{\sigma}{\probavailable \sqrt{\mu \varepsilon n}} + \frac{\sigma^2}{\probavailable \mu \varepsilon n \sqrt{B}} + \frac{\sigma^2}{\probavailable \mu n \varepsilon} + \frac{\sigma L}{\probavailable \mu^{\nicefrac{3}{2}}\sqrt{\varepsilon} n} + \frac{\sigma}{K \probavailable \mu^{\nicefrac{3}{2}} \sqrt{\varepsilon} n} \left(\widehat{L} + \frac{L_{\sigma}}{\sqrt{B}}\right) + \frac{\sigma L_{\sigma}}{\probavailable n \mu^{\nicefrac{3}{2}} \sqrt{\varepsilon}}\right) \\
       &=\widetilde{\cO}\left(\frac{\sigma^2}{\probavailable \mu n \varepsilon} + \frac{\sigma L_{\sigma}}{\probavailable n \mu^{\nicefrac{3}{2}} \sqrt{\varepsilon}}\right).
     \end{align*}
     \end{proof}
