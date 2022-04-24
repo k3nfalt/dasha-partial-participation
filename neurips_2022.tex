@@ -1161,7 +1161,7 @@ $h^{t+1}_{1} \eqdef \frac{1}{n}\sum_{i=1}^n h^{t+1}_{i,1},$ and $h^{t+1}_{2} \eq
     &=\ExpSub{\probavailable}{\norm{h^{t+1}_{i,1} - \ExpSub{B}{\ExpSub{\probavailable}{h^{t+1}_{i,1}}}}^2} \\
     &=\probavailable \norm{h^t_i + \frac{1}{\probavailable} k^{t+1}_{i, 1} - \left(h^t_i + \nabla f_i(x^{t+1}) - \nabla f_i(x^{t}) - \frac{b}{\probpage} \left(h^t_i - \nabla f_i(x^{t})\right)\right)}^2 \\
     &\quad + (1 - \probavailable) \norm{h^t_i - \left(h^t_i + \nabla f_i(x^{t+1}) - \nabla f_i(x^{t}) - \frac{b}{\probpage} \left(h^t_i - \nabla f_i(x^{t})\right)\right)}^2 \\
-    &=\frac{(1 - \probavailable)^2}{\probavailable} \norm{h^t_i + \nabla f_i(x^{t+1}) - \nabla f_i(x^{t}) - \frac{b}{\probpage} \left(h^t_i - \nabla f_i(x^{t})\right)}^2 \\
+    &=\frac{(1 - \probavailable)^2}{\probavailable} \norm{\nabla f_i(x^{t+1}) - \nabla f_i(x^{t}) - \frac{b}{\probpage} \left(h^t_i - \nabla f_i(x^{t})\right)}^2 \\
     &\quad + (1 - \probavailable) \norm{\nabla f_i(x^{t+1}) - \nabla f_i(x^{t}) - \frac{b}{\probpage} \left(h^t_i - \nabla f_i(x^{t})\right)}^2 \\
     &=\frac{1 - \probavailable}{\probavailable} \norm{\nabla f_i(x^{t+1}) - \nabla f_i(x^{t}) - \frac{b}{\probpage} \left(h^t_i - \nabla f_i(x^{t})\right)}^2.
   \end{align*}
