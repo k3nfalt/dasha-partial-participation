@@ -363,7 +363,7 @@ Then \algname{\algorithmname-PAGE}
       \label{eq:rate_dasha_pp_page}
       T \eqdef \cO\left(\frac{\Delta_0}{\varepsilon}\left[L + \frac{\omega}{\probavailable\sqrt{n}}\left(\widehat{L} + \frac{L_{\max}}{\sqrt{B}}\right) + \frac{1}{\probavailable}\sqrt{\frac{m}{n}}\left(\frac{\mathbbm{1}_{\probavailable}\widehat{L}}{\sqrt{B}} + \frac{L_{\max}}{B}\right)\right]\right)
     \end{align}
-    communication rounds to get an $\varepsilon$-solution and the expected \# of gradient calculations per node equals $\cO\left(m + B T\right).$
+    communication rounds to get an $\varepsilon$-solution and the expected number of gradient calculations per node equals $\cO\left(m + B T\right).$
 \end{restatable}
 
 The convergence rate the rate of the current state-of-the-art method \algname{DASHA-PAGE} without partial participation equals
@@ -379,7 +379,7 @@ In the following corollary, we consider Rand$K$ compressors (see Definition~\ref
       \label{eq:complexity:mini_batch_oracle:communication}
       \cO\left(d + \frac{L_{\max} \Delta_0 d}{\probavailable \varepsilon \sqrt{n}}\right),
   \end{align}
-and the expected \# of gradient calculations per node equals
+and the expected number of gradient calculations per node equals
   \begin{align}
       \label{eq:complexity:mini_batch_oracle}
       \cO\left(m + \frac{L_{\max} \Delta_0 \sqrt{m}}{\probavailable \varepsilon \sqrt{n}} \right).
@@ -433,7 +433,7 @@ In the following corollary, we consider Rand$K$ compressors (see Definition~\ref
       \label{eq:complexity:stochastic:communication}
       \cO\left(\frac{d \sigma}{\sqrt{\probavailable} \sqrt{n \varepsilon}} + \frac{L_{\sigma} \Delta_0 d}{\probavailable \sqrt{n} \varepsilon}\right),
   \end{align}
-  and the expected \# of stochastic gradient calculations per node equals
+  and the expected number of stochastic gradient calculations per node equals
   \begin{align}
       \label{eq:complexity:stochastic_oracle}
       \cO\left(\frac{\sigma^2}{\sqrt{\probavailable} n \varepsilon} + \frac{L_{\sigma} \Delta_0 \sigma}{\probavailable \varepsilon^{\nicefrac{3}{2}} n}\right).
@@ -1349,7 +1349,7 @@ $h^{t+1}_{1} \eqdef \frac{1}{n}\sum_{i=1}^n h^{t+1}_{i,1},$ and $h^{t+1}_{2} \eq
     \end{align*}
     steps to get $\varepsilon$-solution. Using the choice of $\probmega$ and the definition of $\mathbbm{1}_{\probavailable}$, we can get \eqref{eq:rate_dasha_pp_page}. 
 
-    Note that the expected \# of gradients calculations at each communication round equals $\probmega m + (1 - \probmega) B = \frac{2 m B}{m + B} \leq 2 B.$
+    Note that the expected number of gradients calculations at each communication round equals $\probmega m + (1 - \probmega) B = \frac{2 m B}{m + B} \leq 2 B.$
   \end{proof}
 
   \COROLLARYPAGERANDK*
@@ -2193,7 +2193,7 @@ $B = \cO\left(\frac{L_{\sigma}^2}{\widehat{L}^2}\right)$ to guarantee the degene
   \begin{align*}
     \widetilde{\cO}\left(\frac{d \sigma}{\probavailable \sqrt{\mu \varepsilon n}} + \frac{d L_{\sigma}}{\probavailable \mu \sqrt{n}}\right),
   \end{align*}
-  and the expected \# of stochastic gradient calculations per node equals
+  and the expected number of stochastic gradient calculations per node equals
   \begin{align*}
     \widetilde{\cO}\left(\frac{\sigma^2}{\probavailable \mu n \varepsilon} + \frac{\sigma L_{\sigma}}{\probavailable n \mu^{\nicefrac{3}{2}} \sqrt{\varepsilon}}\right).
   \end{align*}
@@ -2642,7 +2642,7 @@ We now provide the counterpart of Lemma~\ref{lemma:main_lemma}.
       \begin{align*}
         \widetilde{\cO}\left(\frac{\omega + 1}{\probavailable} + \frac{\omega}{\probavailable}\sqrt{\frac{\sigma^2}{\mu n \varepsilon B}} + \frac{\sigma^2}{\probavailable \mu n \varepsilon B} + \frac{L}{\mu} + \frac{\omega}{\probavailable \mu \sqrt{n}} \left(\widehat{L} + \frac{L_{\sigma}}{\sqrt{B}}\right) + \frac{\sigma}{\probavailable n \mu^{\nicefrac{3}{2}} \sqrt{\varepsilon B}}\left(\widehat{L} + \frac{L_{\sigma}}{\sqrt{B}}\right)\right)
       \end{align*}
-    communication rounds in the stochastic settings to get $\varepsilon$-solution. Note that $K = \cO\left(\frac{d}{\probavailable\sqrt{n}}\right).$ Considering Theorem~\ref{theorem:rand_k}, the communication complexity equals 
+    communication rounds in the stochastic settings to get $\varepsilon$-solution. Note that $K = \cO\left(\frac{d}{\probavailable\sqrt{n}}\right).$ Note that we can skip the initialization procedure and initialize $h^0_i$ and $g^0_i$, for instance, with zeros because the initialization error is under a logarithm. Considering Theorem~\ref{theorem:rand_k}, the communication complexity equals 
     \begin{align*}
       &\widetilde{\cO}\left(K\frac{\omega + 1}{\probavailable} + K\frac{\omega}{\probavailable}\sqrt{\frac{\sigma^2}{\mu n \varepsilon B}} + K\frac{\sigma^2}{\probavailable \mu n \varepsilon B} + K\frac{L}{\mu} + K\frac{\omega}{\probavailable \mu \sqrt{n}} \left(\widehat{L} + \frac{L_{\sigma}}{\sqrt{B}}\right) + K\frac{\sigma}{\probavailable n \mu^{\nicefrac{3}{2}} \sqrt{\varepsilon B}}\left(\widehat{L} + \frac{L_{\sigma}}{\sqrt{B}}\right)\right) \\
       &=\widetilde{\cO}\left(K\frac{\omega + 1}{\probavailable} + K\frac{\omega}{\probavailable}\sqrt{\frac{\sigma^2}{\mu n \varepsilon B}} + K\frac{\sigma^2}{\probavailable \mu n \varepsilon B} + K\frac{L}{\mu} + K\frac{\omega}{\probavailable \mu \sqrt{n}} \left(\widehat{L} + \frac{L_{\sigma}}{\sqrt{B}}\right) + K\frac{\sigma L_{\sigma}}{\probavailable n \mu^{\nicefrac{3}{2}} \sqrt{\varepsilon} B}\right) \\
@@ -2650,7 +2650,7 @@ We now provide the counterpart of Lemma~\ref{lemma:main_lemma}.
       &= \widetilde{\cO}\left(\frac{d}{\probavailable} + \frac{d \sigma}{\probavailable \sqrt{\mu n \varepsilon B}} + \frac{d \sigma}{\probavailable \sqrt{\mu \varepsilon n}} + \frac{d L}{\probavailable \mu \sqrt{n}} + \frac{d}{\probavailable \mu \sqrt{n}} \left(\widehat{L} + \frac{L_{\sigma}}{\sqrt{B}}\right) + \frac{d L_{\sigma}}{\probavailable \mu \sqrt{n}}\right) \\
       &= \widetilde{\cO}\left(\frac{d \sigma}{\probavailable \sqrt{\mu \varepsilon n}} + \frac{d L_{\sigma}}{\probavailable \mu \sqrt{n}}\right).
     \end{align*}
-    The expected \# of stochastic gradient calculations per node equals
+    The expected number of stochastic gradient calculations per node equals
     \begin{align*}
       &\widetilde{\cO}\left(B\frac{\omega + 1}{\probavailable} + B\frac{\omega}{\probavailable}\sqrt{\frac{\sigma^2}{\mu n \varepsilon B}} + B\frac{\sigma^2}{\probavailable \mu n \varepsilon B} + B\frac{L}{\mu} + B\frac{\omega}{\probavailable \mu \sqrt{n}} \left(\widehat{L} + \frac{L_{\sigma}}{\sqrt{B}}\right) + B\frac{\sigma}{\probavailable n \mu^{\nicefrac{3}{2}} \sqrt{\varepsilon B}}\left(\widehat{L} + \frac{L_{\sigma}}{\sqrt{B}}\right)\right) \\
       &=\widetilde{\cO}\left(B\frac{\omega + 1}{\probavailable} + B\frac{\omega}{\probavailable}\sqrt{\frac{\sigma^2}{\mu n \varepsilon B}} + B\frac{\sigma^2}{\probavailable \mu n \varepsilon B} + B\frac{L}{\mu} + B\frac{\omega}{\probavailable \mu \sqrt{n}} \left(\widehat{L} + \frac{L_{\sigma}}{\sqrt{B}}\right) + B\frac{\sigma}{\probavailable n \mu^{\nicefrac{3}{2}} \sqrt{\varepsilon B}}\left(\frac{L_{\sigma}}{\sqrt{B}}\right)\right) \\
@@ -2743,7 +2743,7 @@ We now provide the counterpart of Lemma~\ref{lemma:main_lemma}.
     needs
     $$T \eqdef \cO\left(\frac{\Delta_0}{\varepsilon}\vast[L + \left(\frac{\omega}{\probavailable\sqrt{n}} + \sqrt{\frac{d}{\probavailable^2 \zeta_{\cC} n}}\right) \left(\widehat{L} + \frac{L_{\sigma}}{\sqrt{B}}\right)  + \frac{\sigma}{\probavailable \sqrt{\varepsilon} n} \left(\frac{\widehat{L}}{\sqrt{B}} + \frac{L_{\sigma}}{B}\right)\vast] + \frac{\sigma^2}{\sqrt{\probavailable} n \varepsilon B}\right).$$
   
-    communication rounds to get an $\varepsilon$-solution, the communication complexity is equal to $\cO\left(d + \zeta_{\cC} T\right),$ and the number of stochastic gradient calculations per node equals $\cO(B_{\textnormal{init}} + BT),$ where $\zeta_{\cC}$ is the expected density from Definition~\ref{def:expected_density}.
+    communication rounds to get an $\varepsilon$-solution, the expected communication complexity is equal to $\cO\left(d + \zeta_{\cC} T\right),$ and the expected number of stochastic gradient calculations per node equals $\cO(B_{\textnormal{init}} + BT),$ where $\zeta_{\cC}$ is the expected density from Definition~\ref{def:expected_density}.
   \end{restatable}
 
   The main improvement of Corollary~\ref{cor:sync_stochastic} over Corollary~\ref{cor:stochastic} is the size of the initial batch size $B_{\textnormal{init}}$. However, Corollary~\ref{cor:stochastic:randk} reveals that we can avoid regimes when \algname{\algorithmname-MVR} is suboptimal.
@@ -2769,9 +2769,9 @@ We now provide the counterpart of Lemma~\ref{lemma:main_lemma}.
     then \algname{\algorithmname-SYNC-MVR}
     needs
     $$T \eqdef \widetilde{\cO}\left(\frac{\omega + 1}{\probavailable} + \frac{d}{\probavailable\zeta_{\cC}} + \frac{\sigma^2}{\probavailable \mu n \varepsilon B} + \frac{L}{\mu} + \frac{\omega}{\probavailable \mu \sqrt{n}} \left(\frac{L_{\sigma}}{\sqrt{B}} + \widehat{L}\right) + \left(\frac{\sqrt{d}}{\probavailable \mu \sqrt{\zeta_{\cC} n}} + \frac{\sigma}{\probavailable n \mu^{\nicefrac{3}{2}} \sqrt{\varepsilon B}}\right)\left(\frac{L_{\sigma}}{\sqrt{B}} + \widehat{L}\right) \right).$$
-    communication rounds to get an $\varepsilon$-solution, the communication complexity is equal to $\widetilde{\cO}\left(\zeta_{\cC} T\right),$ and the number of stochastic gradient calculations per node equals $\widetilde{\cO}(BT),$ where $\zeta_{\cC}$ is the expected density from Definition~\ref{def:expected_density}.
+    communication rounds to get an $\varepsilon$-solution, the expected communication complexity is equal to $\widetilde{\cO}\left(\zeta_{\cC} T\right),$ and the expected number of stochastic gradient calculations per node equals $\widetilde{\cO}(BT),$ where $\zeta_{\cC}$ is the expected density from Definition~\ref{def:expected_density}.
   \end{restatable}
-  The proof of this corollary almost repeats the proof of Corollary~\ref{cor:sync_stochastic}.
+  The proof of this corollary almost repeats the proof of Corollary~\ref{cor:sync_stochastic}. Note that we can skip the initialization procedure and initialize $h^0_i$ and $g^0_i$, for instance, with zeros because the initialization error is under a logarithm.
 
   Let us assume that $\frac{d}{\zeta_{\cC}} = \Theta\left(\omega\right)$ (holds for the Rand$K$ compressor), then the convergence rate of \algname{\algorithmname-SYNC-MVR} is 
   \begin{align}
@@ -3246,6 +3246,9 @@ First, we will prove two lemmas.
     T &=\cO\left(\frac{1}{\varepsilon}\vast[\Delta_0\left(L + \left(\frac{\omega}{\probavailable\sqrt{n}} + \sqrt{\frac{d}{\probavailable^2 \zeta_{\cC} n}}\right) \left(\widehat{L} + \frac{L_{\sigma}}{\sqrt{B}}\right)  + \frac{\sigma}{\probavailable \sqrt{\varepsilon} n} \left(\frac{\widehat{L}}{\sqrt{B}} + \frac{L_{\sigma}}{B}\right)\right) + \frac{\sigma^2}{n \probmega \probavailable B_{\textnormal{init}}} \vast]\right) \\
     &=\cO\left(\frac{\Delta_0}{\varepsilon}\vast[L + \left(\frac{\omega}{\probavailable\sqrt{n}} + \sqrt{\frac{d}{\probavailable^2 \zeta_{\cC} n}}\right) \left(\widehat{L} + \frac{L_{\sigma}}{\sqrt{B}}\right)  + \frac{\sigma}{\probavailable \sqrt{\varepsilon} n} \left(\frac{\widehat{L}}{\sqrt{B}} + \frac{L_{\sigma}}{B}\right)\vast] + \frac{\sigma^2}{\sqrt{\probavailable} n \varepsilon B}\right).
   \end{align*}
+
+  % The expected communication complexity and the expected number of stochastic gradient calculations per node follows from the choice of $\probmega.$
+  The expected communication complexity equals $\cO\left(d + \probmega d + (1 - \probmega) \zeta_{\cC} \right) = \cO\left(d + \zeta_{\cC} \right)$ and the expected number of stochastic gradient calculations per node equals $\cO\left(B_{\textnormal{init}} + \probmega B' + (1 - \probmega) B\right) = \cO\left(B_{\textnormal{init}} + B\right).$
 \end{proof}
 
 \CONVERGENCESYNCPLMVR*
