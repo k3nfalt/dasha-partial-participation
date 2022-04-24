@@ -695,9 +695,10 @@ We start the proof of theorems by providing standard lemmas from the nonconvex o
 \begin{lemma}
   \label{lemma:good_recursion}
   Suppose that Assumption \ref{ass:lower_bound} holds and
-  \begin{align*}
+  \begin{align}
+      \label{eq:private:good_recursion}
       \Exp{f(x^{t+1})} + \gamma \Psi^{t+1} \leq \Exp{f(x^t)} - \frac{\gamma}{2}\Exp{\norm{\nabla f(x^t)}^2} + \gamma \Psi^{t} + \gamma C,
-  \end{align*}
+  \end{align}
   where $\Psi^{t}$ is a sequence of numbers, $\Psi^{t} \geq 0$ for all $t \in [T]$, constant $C \geq 0$, and constant $\gamma > 0.$ Then 
   \begin{align}
       \label{eq:good_recursion}
@@ -707,7 +708,7 @@ We start the proof of theorems by providing standard lemmas from the nonconvex o
 \end{lemma}
 
 \begin{proof}
-  By unrolling \eqref{eq:good_recursion} for $t$ from $0$ to $T - 1$, we obtain
+  By unrolling \eqref{eq:private:good_recursion} for $t$ from $0$ to $T - 1$, we obtain
   \begin{align*}
       \frac{\gamma}{2}\sum_{t = 0}^{T - 1}\Exp{\norm{\nabla f(x^t)}^2} + \Exp{f(x^{T})} + \gamma \Psi^{T} \leq f(x^0) + \gamma \Psi^{0} + \gamma T C.
   \end{align*}
