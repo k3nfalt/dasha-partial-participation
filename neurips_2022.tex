@@ -2673,7 +2673,7 @@ We now provide the counterpart of Lemma~\ref{lemma:main_lemma}.
       \caption{\algname{\algorithmname-SYNC-MVR}}
       \label{alg:main_algorithm_mvr_sync}
       \begin{algorithmic}[1]
-      \STATE \textbf{Input:} starting point $x^0 \in R^d$, stepsize $\gamma > 0$, momentum $a \in (0, 1]$, momentum $b \in (0, 1]$, probability $\probmega \in (0, 1]$, batch size $B'$, number of iterations $T \geq 1$.
+      \STATE \textbf{Input:} starting point $x^0 \in \R^d$, stepsize $\gamma > 0$, momentum $a \in (0, 1]$, momentum $b \in (0, 1]$, probability $\probmega \in (0, 1]$, batch size $B'$ and $B$, probability $\probavailable \in (0, 1]$ that a node is \textit{participating}\textsuperscript{\red (a)}, number of iterations $T \geq 1$.
       \STATE Initialize $g^0_i$, $h^0_i$ on the nodes and $g^0 = \frac{1}{n}\sum_{i=1}^n g^0_i$ on the server
       \FOR{$t = 0, 1, \dots, T - 1$}
       \STATE $x^{t+1} = x^t - \gamma g^t$
@@ -2706,6 +2706,8 @@ We now provide the counterpart of Lemma~\ref{lemma:main_lemma}.
       \STATE $g^{t+1} = g^t + \frac{1}{n} \sum_{i=1}^{n} m^{t+1}_i$
       \ENDFOR
       \STATE \textbf{Output:} $\hat{x}^T$ chosen uniformly at random from $\{x^t\}_{k=0}^{T-1}$
+
+      {\red (a)}: For the formal description see Section~\ref{sec:partial_participation}.
       \end{algorithmic}
   \end{algorithm}
 
