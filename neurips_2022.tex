@@ -1509,7 +1509,7 @@ $h^{t+1}_{1} \eqdef \frac{1}{n}\sum_{i=1}^n h^{t+1}_{i,1},$ and $h^{t+1}_{2} \eq
     &\overset{\eqref{auxiliary:variance_decomposition}}{=}\ExpSub{B}{\norm{k^{t+1}_i - \ExpSub{B}{k^{t+1}_i}}^2}\\
     &\quad + \norm{\nabla f_i(x^{t+1}) - \nabla f_i(x^{t}) - b(h^t_i - \nabla f_i(x^{t}))}^2.
   \end{align*}
-  Using the same reasoning with Lemma~\ref{lemma:sampling} as before, we get
+  Using Lemma~\ref{lemma:sampling}, we get
   \begin{align*}
     &\ExpSub{B}{\norm{k^{t+1}_i}^2}\\
     &\leq\frac{m - B}{B m (m - 1)}\sum_{j=1}^m\norm{\nabla f_{ij}(x^{t+1}) - \nabla f_{ij}(x^{t}) - b \left(h^t_{ij} - \nabla f_{ij}(x^{t})\right)}^2\\
@@ -1698,7 +1698,8 @@ $h^{t+1}_{1} \eqdef \frac{1}{n}\sum_{i=1}^n h^{t+1}_{i,1},$ and $h^{t+1}_{2} \eq
     \end{align*}
     It is left to apply Lemma~\ref{lemma:good_recursion} with 
     \begin{eqnarray*}
-      \Psi^t &=& \frac{1}{b} \Exp{\norm{h^{t} - \nabla f(x^{t})}^2} \\
+      \Psi^t &=& \frac{(2 \omega + 1)}{\probavailable} \Exp{\norm{g^{t} - h^{t}}^2} + \frac{(\left(2 \omega + 1\right)\probavailable - \probpairaa)}{n \probavailable^2} \Exp{\frac{1}{n}\sum_{i=1}^n\norm{g^{t}_i - h^{t}_i}^2} \\
+      &\quad& + \frac{1}{b} \Exp{\norm{h^{t} - \nabla f(x^{t})}^2} \\
       &\quad& + \left(\frac{8 b \omega (2 \omega + 1)}{n \probavailable^2} + \frac{2 \left(\probavailable - \probpairaa\right)}{n \probavailable^2}\right)\Exp{\frac{1}{n}\sum_{i=1}^n\norm{h^{t}_i - \nabla f_i(x^{t})}^2} \\
       &\quad& + \left(\frac{24 b \omega (2 \omega + 1)}{n \probavailable^2 B} + \frac{6}{n \probavailable B}\right)\Exp{\frac{1}{nm}\sum_{i=1}^n\sum_{j=1}^m\norm{h^{t}_{ij} - \nabla f_{ij}(x^{t})}^2}
     \end{eqnarray*}
