@@ -401,11 +401,10 @@ We define $h^t \eqdef \frac{1}{n}\sum_{i=1}^n h^t_i$.
   and $g^{0}_i = h^{0}_i$ for all $i \in [n]$
   in Algorithm~\ref{alg:main_algorithm} \algname{(\algorithmname-MVR)}.
   Then 
-\begin{align*}
-  &\Exp{\norm{\nabla f(\widehat{x}^T)}^2} \leq \frac{1}{T}\vast[\frac{2 \Delta_0}{\gamma} + \frac{2}{b} \norm{h^{0} - \nabla f(x^{0})}^2 \\
-  &+ \left(\frac{32 b \omega (2 \omega + 1)}{n \probavailable^2} + \frac{4 \left(1 - \frac{\probpairaa}{\probavailable}\right)}{n \probavailable}\right)\left(\frac{1}{n}\sum_{i=1}^n\norm{h^{0}_i - \nabla f_i(x^{0})}^2\right)\vast] \\
+{\scriptsize\begin{align*}
+  &\Exp{\norm{\nabla f(\widehat{x}^T)}^2} \leq \frac{1}{T}\vast[\frac{2 \Delta_0}{\gamma} + \frac{2}{b} \norm{h^{0} - \nabla f(x^{0})}^2 + \left(\frac{32 b \omega (2 \omega + 1)}{n \probavailable^2} + \frac{4 \left(1 - \frac{\probpairaa}{\probavailable}\right)}{n \probavailable}\right)\left(\frac{1}{n}\sum_{i=1}^n\norm{h^{0}_i - \nabla f_i(x^{0})}^2\right)\vast] \\
   &+ \left(\frac{48 b^2 \omega (2 \omega + 1)}{\probavailable^2} + \frac{12 b}{\probavailable}\right) \frac{\sigma^2}{n B}.
-\end{align*}
+\end{align*}}
 \end{restatable}
 
 In the next corollary, we choose momentum $b$ and initialize vectors $h^{0}_i$ to get $\varepsilon$-solution. Let us define $\mathbbm{1}_{\probavailable} \eqdef \sqrt{1 - \frac{\probpairaa}{\probavailable}} \in [0, 1].$
