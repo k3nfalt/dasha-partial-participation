@@ -33,6 +33,7 @@
 \usepackage{footnote}
 \usepackage{mathtools}
 \usepackage[flushleft]{threeparttable}
+\usepackage{etoolbox}
 
 \newcommand{\alexander}[1]{\todo[inline]{\textbf{Alexander: }#1}}
 
@@ -616,6 +617,10 @@ Checklist section heading above along with the questions/answers below.
 \end{enumerate}
 
 \end{enumerate}
+
+% \ifdefined\fullpaper
+
+\ifdef{\shortpaper}{}{
 
 \newpage
 \appendix
@@ -3458,5 +3463,6 @@ The code was written in Python 3.6.8 using PyTorch 1.9 \cite{paszke2019pytorch}.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
+}
 
 \end{document}
