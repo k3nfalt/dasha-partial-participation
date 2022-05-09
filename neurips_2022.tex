@@ -218,6 +218,99 @@ However, previously proposed methods have limitations: i) methods from \citep{go
 \section{Contributions}
 We propose a \textit{new family of methods} \algname{\algorithmname} for the nonconvex distributed optimization. As far as we know, this is the first method that includes three key ingredients of federated learning methods: \textit{variance reduction of stochastic gradients, compressed communication, and partial participation}. We prove convergence rates and show that these methods have \textit{the optimal oracle complexity and the state-of-the-art communication complexity in the partial participation setting.} Moreover, in our work, we observe a nontrivial side-effect from mixing the variance reduction of stochastic gradients and partial participation. It is a general problem not related to our methods or analysis that we discuss in Section~\ref{sec:partial_participation_sampling}.
 
+\begin{figure}
+  \vspace*{-\baselineskip}
+  \begin{minipage}{\columnwidth}
+  \begin{algorithm}[H]
+    \caption{\algname{\algorithmname}}
+    \label{alg:main_algorithm}
+    \begin{algorithmic}[1]
+    \STATE \textbf{Input:} starting point $x^0 \in \R^d$, stepsize $\gamma > 0$, momentum $a \in (0, 1]$, 
+    momentum $b \in (0, 1]$, 
+    probability $\probpage \in (0, 1]$ (only in \algname{\algorithmname-PAGE}),
+    batch size $B$ (only in \algname{\algorithmname-PAGE}, \algname{\algorithmname-FINITE-MVR} and \algname{\algorithmname-MVR}),
+    probability $\probavailable \in (0, 1]$ that a node is \textit{participating}\textsuperscript{\red (a)},
+    number of iterations~$T \geq 1$
+    \STATE Initialize $g^0_i\in \R^d$, $h^0_i\in \R^d$ on the nodes and  $g^0 = \frac{1}{n}\sum_{i=1}^n g^0_i$ on the server
+    \STATE Initialize $h^0_{ij}\in \R^d$ on the nodes and take $h^0_i = \frac{1}{m}\sum_{j=1}^m h^0_{ij}$ (only in \algname{\algorithmname-FINITE-MVR})
+    \FOR{$t = 0, 1, \dots, T - 1$}
+    \STATE $x^{t+1} = x^t - \gamma g^t$ \alglinelabel{alg:main_algorithm:x_update} 
+    \STATE Broadcast $x^{t+1}, x^{t}$ to all \textit{participating}\textsuperscript{\red (a)} nodes
+    \FOR{$i = 1, \dots, n$ in parallel}
+    \IF{$i^{\textnormal{th}} \textnormal{ node is \textit{participating}}$\textsuperscript{\red (a)}}
+        \STATE Calculate $k^{t+1}_i$ \alglinelabel{alg:calculate_k} using Algorithm~\ref{alg:main_algorithm:dasha_pp}, \ref{alg:main_algorithm:dasha_pp_page}, \ref{alg:main_algorithm:dasha_pp_finite_mvr} or \ref{alg:main_algorithm:dasha_pp_mvr}
+        \STATE $h^{t+1}_i = h^t_i + \frac{1}{\probavailable}k^{t+1}_i$ 
+        \STATE $m^{t+1}_i = \cC_i\left(\frac{1}{\probavailable}k^{t+1}_i - \frac{a}{\probavailable} \left(g^{t}_i - h^{t}_i\right)\right)$
+        \STATE $g^{t+1}_i = g^{t}_i + m^{t+1}_i$
+        \STATE Send $m^{t+1}_i$ to the server
+    \ELSE
+        \STATE $h^{t+1}_{ij} = h^{t}_{ij}$ (only in \algname{\algorithmname-FINITE-MVR})
+        \STATE $h^{t+1}_i = h^{t}_i, \quad g^{t+1}_i = g^{t}_i, \quad m^{t+1}_i = 0$
+        % \STATE $$
+        % \STATE $g^{t+1}_i = g^{t}_i$
+    \ENDIF
+    \ENDFOR
+    \STATE $g^{t+1} = g^t + \frac{1}{n} \sum_{i=1}^n m^{t+1}_i$
+    \ENDFOR
+    \STATE \textbf{Output:} $\hat{x}^T$ chosen uniformly at random from $\{x^t\}_{k=0}^{T-1}$ 
+  
+    {\red (a)}: For the formal description see Section~\ref{sec:partial_participation}.
+    % (or $x^T$ under the P\L-condition)
+    \end{algorithmic}
+  \end{algorithm}
+  \end{minipage}
+  \begin{minipage}{\columnwidth}
+  \begin{algorithm}[H]
+    \caption{Calculate $k^{t+1}_i$ for \algname{\algorithmname} in the gradient setting. See line~\ref{alg:calculate_k} in Alg.~\ref{alg:main_algorithm}}
+    \label{alg:main_algorithm:dasha_pp}
+    \begin{algorithmic}[1]
+      \STATE $k^{t+1}_i = \nabla f_i(x^{t+1}) - \nabla f_i(x^{t}) - b \left(h^t_i - \nabla f_i(x^{t})\right)$ 
+    \end{algorithmic}
+  \end{algorithm}
+  \end{minipage}
+  \begin{minipage}{\columnwidth}
+  \begin{algorithm}[H]
+    \caption{Calculate $k^{t+1}_i$ for \algname{\algorithmname-PAGE} in the finite-sum setting. See line~\ref{alg:calculate_k} in Alg.~\ref{alg:main_algorithm}}
+    \label{alg:main_algorithm:dasha_pp_page}
+    \begin{algorithmic}[1]
+      \STATE Generate a random set $I^t_i$ of size $B$ from $[m]$ \textit{with replacement}
+      \STATE $k^{t+1}_i = 
+          \begin{cases}
+            \nabla f_i(x^{t+1}) - \nabla f_i(x^{t}) - \frac{b}{\probpage} \left(h^t_i - \nabla f_i(x^{t})\right),& \\ \qquad \textnormal{with probability $\probpage$ on all \textit{participating} nodes,} \\
+            \frac{1}{B}\sum_{j \in I^t_i}\left(\nabla f_{ij}(x^{t+1}) - \nabla f_{ij}(x^{t})\right), & \\
+            \qquad \textnormal{with probability $1 - \probpage$ on all \textit{participating} nodes} \end{cases}$
+    \end{algorithmic}
+  \end{algorithm}
+  \end{minipage}
+  \begin{minipage}{\columnwidth}
+  \begin{algorithm}[H]
+    \caption{Calc. $k^{t+1}_i$ for \algname{\algorithmname-FINITE-MVR} in the finite-sum setting. See line~\ref{alg:calculate_k} in Alg.~\ref{alg:main_algorithm}}
+    \label{alg:main_algorithm:dasha_pp_finite_mvr}
+    \begin{algorithmic}[1]
+      \STATE Generate a random set $I^t_i$ of size $B$ from $[m]$ \textit{without replacement}
+      \STATE $k^{t+1}_{ij} = 
+            \begin{cases}
+              \frac{m}{B}\left(\nabla f_{ij}(x^{t+1}) - \nabla f_{ij}(x^{t}) - b \left(h^t_{ij} - \nabla f_{ij}(x^{t})\right)\right), & j \in I^t_i,  \\
+              0, & j \not\in I^t_i
+            \end{cases}$
+      \STATE $h^{t+1}_{ij} = h^t_{ij} + \frac{1}{\probavailable} k^{t+1}_{ij}$
+      \STATE $k^{t+1}_i = \frac{1}{m}\sum_{j=1}^m k^{t+1}_{ij}$
+    \end{algorithmic}
+  \end{algorithm}
+  \end{minipage}
+  \begin{minipage}{\columnwidth}
+  \begin{algorithm}[H]
+    \caption{Calculate $k^{t+1}_i$ for \algname{\algorithmname-MVR} in the stochastic setting. See line~\ref{alg:calculate_k} in Alg.~\ref{alg:main_algorithm}}
+    \label{alg:main_algorithm:dasha_pp_mvr}
+    \begin{algorithmic}[1]
+      \STATE Generate i.i.d.\,samples $\{\xi^{t+1}_{ij}\}_{j=1}^B$ of size $B$ from $\mathcal{D}_i.$
+      \STATE $k^{t+1}_i = \frac{1}{B}\sum_{j=1}^B \nabla f_i(x^{t+1};\xi^{t+1}_{ij}) - \frac{1}{B}\sum_{j=1}^B \nabla f_i(x^{t};\xi^{t+1}_{ij}) - b \left(h^t_i - \frac{1}{B}\sum_{j=1}^B \nabla f_i(x^{t};\xi^{t+1}_{ij})\right)$
+    \end{algorithmic}
+  \end{algorithm}
+  \end{minipage}
+  % \end{minipage}
+  \end{figure}
+
 \section{Algorithm Description}
 
 We now present \algname{\algorithmname} (see Algorithm~\ref{alg:main_algorithm}), a family of methods to solve the optimization problem \eqref{eq:main_problem}. \algname{\algorithmname} is based on \algname{DASHA} by \cite{tyurin2022dasha}. One can easily show that \algname{\algorithmname} reduces to \algname{DASHA} when $\probavailable = 1.$
@@ -237,99 +330,6 @@ iii) In the finite-sum setting, we present two methods: \algname{\algorithmname-
 
 % \begin{minipage}{\textwidth}
 % \vspace*{-\baselineskip}
-
-\begin{figure}
-\vspace*{-\baselineskip}
-\begin{minipage}{\columnwidth}
-\begin{algorithm}[H]
-  \caption{\algname{\algorithmname}}
-  \label{alg:main_algorithm}
-  \begin{algorithmic}[1]
-  \STATE \textbf{Input:} starting point $x^0 \in \R^d$, stepsize $\gamma > 0$, momentum $a \in (0, 1]$, 
-  momentum $b \in (0, 1]$, 
-  probability $\probpage \in (0, 1]$ (only in \algname{\algorithmname-PAGE}),
-  batch size $B$ (only in \algname{\algorithmname-PAGE}, \algname{\algorithmname-FINITE-MVR} and \algname{\algorithmname-MVR}),
-  probability $\probavailable \in (0, 1]$ that a node is \textit{participating}\textsuperscript{\red (a)},
-  number of iterations~$T \geq 1$
-  \STATE Initialize $g^0_i\in \R^d$, $h^0_i\in \R^d$ on the nodes and  $g^0 = \frac{1}{n}\sum_{i=1}^n g^0_i$ on the server
-  \STATE Initialize $h^0_{ij}\in \R^d$ on the nodes and take $h^0_i = \frac{1}{m}\sum_{j=1}^m h^0_{ij}$ (only in \algname{\algorithmname-FINITE-MVR})
-  \FOR{$t = 0, 1, \dots, T - 1$}
-  \STATE $x^{t+1} = x^t - \gamma g^t$ \alglinelabel{alg:main_algorithm:x_update} 
-  \STATE Broadcast $x^{t+1}, x^{t}$ to all \textit{participating}\textsuperscript{\red (a)} nodes
-  \FOR{$i = 1, \dots, n$ in parallel}
-  \IF{$i^{\textnormal{th}} \textnormal{ node is \textit{participating}}$\textsuperscript{\red (a)}}
-      \STATE Calculate $k^{t+1}_i$ \alglinelabel{alg:calculate_k} using Algorithm~\ref{alg:main_algorithm:dasha_pp}, \ref{alg:main_algorithm:dasha_pp_page}, \ref{alg:main_algorithm:dasha_pp_finite_mvr} or \ref{alg:main_algorithm:dasha_pp_mvr}
-      \STATE $h^{t+1}_i = h^t_i + \frac{1}{\probavailable}k^{t+1}_i$ 
-      \STATE $m^{t+1}_i = \cC_i\left(\frac{1}{\probavailable}k^{t+1}_i - \frac{a}{\probavailable} \left(g^{t}_i - h^{t}_i\right)\right)$
-      \STATE $g^{t+1}_i = g^{t}_i + m^{t+1}_i$
-      \STATE Send $m^{t+1}_i$ to the server
-  \ELSE
-      \STATE $h^{t+1}_{ij} = h^{t}_{ij}$ (only in \algname{\algorithmname-FINITE-MVR})
-      \STATE $h^{t+1}_i = h^{t}_i, \quad g^{t+1}_i = g^{t}_i, \quad m^{t+1}_i = 0$
-      % \STATE $$
-      % \STATE $g^{t+1}_i = g^{t}_i$
-  \ENDIF
-  \ENDFOR
-  \STATE $g^{t+1} = g^t + \frac{1}{n} \sum_{i=1}^n m^{t+1}_i$
-  \ENDFOR
-  \STATE \textbf{Output:} $\hat{x}^T$ chosen uniformly at random from $\{x^t\}_{k=0}^{T-1}$ 
-
-  {\red (a)}: For the formal description see Section~\ref{sec:partial_participation}.
-  % (or $x^T$ under the P\L-condition)
-  \end{algorithmic}
-\end{algorithm}
-\end{minipage}
-\begin{minipage}{\columnwidth}
-\begin{algorithm}[H]
-  \caption{Calculate $k^{t+1}_i$ for \algname{\algorithmname} in the gradient setting. See line~\ref{alg:calculate_k} in Alg.~\ref{alg:main_algorithm}}
-  \label{alg:main_algorithm:dasha_pp}
-  \begin{algorithmic}[1]
-    \STATE $k^{t+1}_i = \nabla f_i(x^{t+1}) - \nabla f_i(x^{t}) - b \left(h^t_i - \nabla f_i(x^{t})\right)$ 
-  \end{algorithmic}
-\end{algorithm}
-\end{minipage}
-\begin{minipage}{\columnwidth}
-\begin{algorithm}[H]
-  \caption{Calculate $k^{t+1}_i$ for \algname{\algorithmname-PAGE} in the finite-sum setting. See line~\ref{alg:calculate_k} in Alg.~\ref{alg:main_algorithm}}
-  \label{alg:main_algorithm:dasha_pp_page}
-  \begin{algorithmic}[1]
-    \STATE Generate a random set $I^t_i$ of size $B$ from $[m]$ \textit{with replacement}
-    \STATE $k^{t+1}_i = 
-        \begin{cases}
-          \nabla f_i(x^{t+1}) - \nabla f_i(x^{t}) - \frac{b}{\probpage} \left(h^t_i - \nabla f_i(x^{t})\right),& \\ \qquad \textnormal{with probability $\probpage$ on all \textit{participating} nodes,} \\
-          \frac{1}{B}\sum_{j \in I^t_i}\left(\nabla f_{ij}(x^{t+1}) - \nabla f_{ij}(x^{t})\right), & \\
-          \qquad \textnormal{with probability $1 - \probpage$ on all \textit{participating} nodes} \end{cases}$
-  \end{algorithmic}
-\end{algorithm}
-\end{minipage}
-\begin{minipage}{\columnwidth}
-\begin{algorithm}[H]
-  \caption{Calc. $k^{t+1}_i$ for \algname{\algorithmname-FINITE-MVR} in the finite-sum setting. See line~\ref{alg:calculate_k} in Alg.~\ref{alg:main_algorithm}}
-  \label{alg:main_algorithm:dasha_pp_finite_mvr}
-  \begin{algorithmic}[1]
-    \STATE Generate a random set $I^t_i$ of size $B$ from $[m]$ \textit{without replacement}
-    \STATE $k^{t+1}_{ij} = 
-          \begin{cases}
-            \frac{m}{B}\left(\nabla f_{ij}(x^{t+1}) - \nabla f_{ij}(x^{t}) - b \left(h^t_{ij} - \nabla f_{ij}(x^{t})\right)\right), & j \in I^t_i,  \\
-            0, & j \not\in I^t_i
-          \end{cases}$
-    \STATE $h^{t+1}_{ij} = h^t_{ij} + \frac{1}{\probavailable} k^{t+1}_{ij}$
-    \STATE $k^{t+1}_i = \frac{1}{m}\sum_{j=1}^m k^{t+1}_{ij}$
-  \end{algorithmic}
-\end{algorithm}
-\end{minipage}
-\begin{minipage}{\columnwidth}
-\begin{algorithm}[H]
-  \caption{Calculate $k^{t+1}_i$ for \algname{\algorithmname-MVR} in the stochastic setting. See line~\ref{alg:calculate_k} in Alg.~\ref{alg:main_algorithm}}
-  \label{alg:main_algorithm:dasha_pp_mvr}
-  \begin{algorithmic}[1]
-    \STATE Generate i.i.d.\,samples $\{\xi^{t+1}_{ij}\}_{j=1}^B$ of size $B$ from $\mathcal{D}_i.$
-    \STATE $k^{t+1}_i = \frac{1}{B}\sum_{j=1}^B \nabla f_i(x^{t+1};\xi^{t+1}_{ij}) - \frac{1}{B}\sum_{j=1}^B \nabla f_i(x^{t};\xi^{t+1}_{ij}) - b \left(h^t_i - \frac{1}{B}\sum_{j=1}^B \nabla f_i(x^{t};\xi^{t+1}_{ij})\right)$
-  \end{algorithmic}
-\end{algorithm}
-\end{minipage}
-% \end{minipage}
-\end{figure}
 
 \section{Theorems}
 
