@@ -56,6 +56,13 @@
 \newcommand{\improvement}[1]{{\color{orange}#1}}
 \newcommand{\degeneration}[1]{{\color{red}#1}}
 
+\hypersetup{
+  colorlinks   = true, %Colours links instead of ugly boxes
+  urlcolor     = blue, %Colour for external hyperlinks
+  linkcolor    = {red!75!black}, %Colour of internal links
+  citecolor   = {blue!50!black} %Colour of citations
+}
+
 \title{A Computation and Communication Efficient Method for Distributed Nonconvex Problems \\ in the Partial Participation Setting}
 
 % The \author macro works with any number of authors. There are two commands
@@ -762,7 +769,7 @@ We define the Rand$K$ compressor that chooses without replacement $K$ coordinate
     \label{theorem:rand_k}
     If $\cC$ is Rand$K$, then $\cC \in \mathbb{U}\left(\frac{d}{k} - 1\right).$
 \end{theorem}
-See the proof in \cite{beznosikov2020biased}.
+See the proof in \citep{beznosikov2020biased}.
 
 \section{Proofs of Theorems}
 \label{sec:proof_of_theorems}
