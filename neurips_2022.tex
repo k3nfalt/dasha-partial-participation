@@ -90,7 +90,7 @@
 \maketitle
 
 \begin{abstract}
-  We present a new method that includes three key components of distributed optimization and federated learning: the variance reduction of stochastic gradients, compressed communication, and partial participation. We prove that the new methods have the optimal oracle complexity and the state-of-the-art communication complexity in the partial participation setting. Moreover, we observe that "1 + 1 + 1 is not 3": by mixing the variance reduction of stochastic gradients with compressed communication and partial participation, we catch side effects in theory. We explain their nature and possible workarounds.
+  We present a new method that includes three key components of distributed optimization and federated learning: variance reduction of stochastic gradients, compressed communication, and partial participation. We prove that the new method has optimal oracle complexity and state-of-the-art communication complexity in the partial participation setting. Moreover, we observe that "1 + 1 + 1 is not 3": by mixing variance reduction of stochastic gradients with compressed communication and partial participation, we do not obtain a fully synergetic effect. We explain the nature of this phenomenon, argue that this is to be expected, and propose possible workarounds.
 \end{abstract}
 
 \section{Introduction}
