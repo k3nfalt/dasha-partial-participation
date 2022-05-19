@@ -106,6 +106,7 @@ As in classical optimization tasks, one of the main current challenges is to fin
 % \end{enumerate}
 
 \section{Optimization Problem}
+\label{sec:opt_problem}
 Let us consider the nonconvex distributed optimization problem
 \begin{align}
     \label{eq:main_problem} 
@@ -486,6 +487,7 @@ Let us assume that $s \leq \nicefrac{n}{2}.$ Note that \eqref{eq:partial_partici
 % And taking batch size $B$ larger than 
 
 \section{Experiments}
+\label{sec:experiments}
 
 In experiments\footnote{Code: \url{https://github.com/mysteryresearcher/dasha-partial-participation}}, our main goal is to compare \algname{\algorithmname} with \algname{DASHA}. Clearly, \algname{\algorithmname} can not generally perform better than \algname{DASHA}.
 In different settings, we verify that the bigger $\probavailable$, the closer \algname{\algorithmname} is to \algname{DASHA}, i.e., \algname{\algorithmname} converges no slower than $\nicefrac{1}{\probavailable}$ times.
@@ -570,7 +572,7 @@ we see that the bigger probability $\probavailable = \nicefrac{s}{n}$ to $1$, th
   \item Do the main claims made in the abstract and introduction accurately reflect the paper's contributions and scope?
     \answerYes{}
   \item Did you describe the limitations of your work?
-    \answerYes{}
+    \answerYes{for instance, see Section~\ref{sec:partial_participation_sampling}}
   \item Did you discuss any potential negative societal impacts of your work?
     \answerNA{}
   \item Have you read the ethics review guidelines and ensured that your paper conforms to them?
@@ -580,29 +582,29 @@ we see that the bigger probability $\probavailable = \nicefrac{s}{n}$ to $1$, th
 \item If you are including theoretical results...
 \begin{enumerate}
   \item Did you state the full set of assumptions of all theoretical results?
-    \answerYes{}
+    \answerYes{see Section~\ref{sec:opt_problem}}
 	\item Did you include complete proofs of all theoretical results?
-    \answerYes{}
+    \answerYes{see Appendix}
 \end{enumerate}
 
 \item If you ran experiments...
 \begin{enumerate}
   \item Did you include the code, data, and instructions needed to reproduce the main experimental results (either in the supplemental material or as a URL)?
-    \answerYes{}
+    \answerYes{see Section~\ref{sec:experiments}}
   \item Did you specify all the training details (e.g., data splits, hyperparameters, how they were chosen)?
-    \answerYes{}
+    \answerYes{see Section~\ref{sec:experiments} and Section~\ref{sec:experiments_details}}
 	\item Did you report error bars (e.g., with respect to the random seed after running experiments multiple times)?
     \answerNo{}
 	\item Did you include the total amount of compute and the type of resources used (e.g., type of GPUs, internal cluster, or cloud provider)?
-    \answerYes{}
+    \answerYes{see Section~\ref{sec:experiments_details}}
 \end{enumerate}
 
 \item If you are using existing assets (e.g., code, data, models) or curating/releasing new assets...
 \begin{enumerate}
   \item If your work uses existing assets, did you cite the creators?
-    \answerYes{}
+    \answerYes{see Section~\ref{sec:experiments}}
   \item Did you mention the license of the assets?
-    \answerYes{}
+    \answerYes{see Section~\ref{sec:experiments_details}}
   \item Did you include any new assets either in the supplemental material or as a URL?
     \answerNA{}
   \item Did you discuss whether and how consent was obtained from people whose data you're using/curating?
