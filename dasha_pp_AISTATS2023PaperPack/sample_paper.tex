@@ -359,7 +359,7 @@ We now present the convergence rates theorems of \algname{\algorithmname} in dif
   % \end{align*}
 \end{restatable}
 
-Let us recall the convergence rate of \algname{DASHA} or \algname{MARINA} \citep{MARINA}, the number of communication rounds to get $\varepsilon$-solution equals
+Let us recall the convergence rate of \algname{MARINA} \citep{MARINA} or \algname{DASHA}, the number of communication rounds to get $\varepsilon$-solution equals
 $\cO\left(\frac{\Delta_0}{\varepsilon}\left[L + \frac{\omega}{\sqrt{n}}\widehat{L}\right]\right),$ while the rate of \algname{\algorithmname} equals $\cO\left(\frac{\Delta_0}{\varepsilon}\left[L + \frac{\omega + 1}{\probavailable \sqrt{n}}\widehat{L}\right]\right)$. Up to Lipschitz constants factors, we get the degeneration up to $\nicefrac{1}{\probavailable}$ factor due to the partial participation.
 
 \subsection{Finite-Sum Setting}
@@ -496,12 +496,61 @@ Let us assume that $s \leq \nicefrac{n}{2}.$ Note that \eqref{eq:partial_partici
 \section{Practical Verification of Theoretical Dependencies}
 \label{sec:experiments}
 
+\begin{figure}[h]
+  \centering
+  \begin{subfigure}{.5\textwidth}
+    \centering
+    \begin{tikzpicture}
+      \node[anchor=south west,inner sep=0] at (0,0) {\includegraphics[width=\textwidth]{experiments/neurips_2022_finite_sum_real-sim_nof_500_numnodes_100_more_probs_batch_size_1_longer.pdf}};
+      \draw [black,thick,<->] (4.5,2.2) -- (8.2,2.2) node[midway,yshift=-0.5em,xshift=+3.0em]{\scriptsize $\times 100 \textnormal{ slower}$};
+      \draw [black,thick,<->] (6.3,1.2) -- (8.2,1.2) node[midway,yshift=-0.5em,xshift=-4.0em]{\scriptsize $\times 10 \textnormal{ slower}$};
+      % \draw [black,ultra thick,decorate,decoration={brace,amplitude=20pt,raise=4ex}]
+      %   (7.0,3.0) -- (13.3,3.0) node[midway,yshift=+4.5em,xshift=+2em]{$\approx \times 100 \textnormal{ slower with } \probavailable = 0.01$};
+      % \draw [black,ultra thick,decorate,decoration={brace,amplitude=20pt,raise=4ex}]
+      %   (9.8,1.5) -- (13.3,1.5) node[midway,yshift=+4.5em,xshift=+1em]{$\approx \times 10 \textnormal{ slower with } \probavailable = 0.1$};
+    \end{tikzpicture}
+    \caption{Finite-sum setting, $K = 500$ in Rand$K$.}
+    \label{fig:real_sim_finite_sum}
+  \end{subfigure}\hfill
+  \begin{subfigure}{.5\textwidth}
+    \centering
+    \vspace{0.3cm}
+    % \includegraphics[width=0.75\linewidth]{experiments/neurips_2022_stochastic_real-sim_nof_200_numnodes_10_probs_mega_batch_100000_fix_nm_bug_longer.pdf}
+    \begin{tikzpicture}
+      \node[anchor=south west,inner sep=0] at (0,0) {\includegraphics[width=\textwidth]{experiments/neurips_2022_stochastic_real-sim_nof_200_numnodes_100_probs_mega_batch_10000_fix_nm_bug_longer.pdf}};
+      \draw [black,thick,<->] (4.5,0.9) -- (8.2,0.9) node[midway,yshift=+0.5em,xshift=+1.9em]{\scriptsize $\times 100 \textnormal{ slower}$};
+      \draw [black,thick,<->] (4.5,1.0) -- (6.4,1.0) node[midway,yshift=+0.5em,xshift=+0.2em]{\scriptsize $\times 10 \textnormal{ slower}$};
+      % \draw [black,ultra thick,decorate,decoration={brace,amplitude=20pt,raise=4ex}]
+      %   (7.3,0.8) -- (13.3,0.8) node[midway,yshift=+4.5em,xshift=+2em]{$\approx \times 100 \textnormal{ slower with } \probavailable = 0.01$};
+    \end{tikzpicture}
+    \caption{Stochastic setting, $\nicefrac{\sigma^2}{n \varepsilon B} = 10000,$ and $K = 200$ in Rand$K$.}
+    \label{fig:real_sim_stochastic}
+  \end{subfigure}
+  \caption{Classification task with the \textit{real-sim} dataset.}
+  \label{fig:test}
+  \end{figure}
+
 Our main goal is to verify the dependeces from the theory. We compare \algname{\algorithmname} with \algname{DASHA}. Clearly, \algname{\algorithmname} can not generally perform better than \algname{DASHA}.
 In different settings, we verify that the bigger $\probavailable$, the closer \algname{\algorithmname} is to \algname{DASHA}, i.e., \algname{\algorithmname} converges no slower than $\nicefrac{1}{\probavailable}$ times.
 % We verify that the convergence rates of \algname{\algorithmname} no worse than times $\nicefrac{1}{\probavailable}$. 
 
+In all experiments, we take the \textit{real-sim} dataset with dimension $d = \num[group-separator={,}]{20958}$ and the number of samples equals $\num[group-separator={,}]{72309}$ from LIBSVM datasets \citep{chang2011libsvm} (under the 3-clause BSD license), and randomly split the dataset between $n = 100$ nodes equally, ignoring residual samples.
 
-We use the standard setting in experiments\footnote{Code: https://github.com/mysteryresearcher/dasha-partial-participation} where all parameters except step sizes are taken as suggested in theory. Step sizes are finetuned from a set~$\{2^{i}\,|\,i \in [-10, 10]\}.$ We emulate the partial participation setting using $s$-nice sampling with the number of nodes $n = 100$. We consider the Rand$K$ compressor and take the batch size $B = 1$. All algorithms are tested on machine learning classification tasks with nonconvex loss functions (see details in Section~\ref{sec:experiments_details}). We plot the relation between communication rounds and values of the norm of gradients at each communication round.
+In the finite-sum setting, we solve a classification problem with functions
+$$f_i(x) \eqdef \frac{1}{m}\sum_{j=1}^m \left(1 - \frac{1}{1 + \exp(y_{ij} a_{ij}^\top x)}\right)^2,$$
+where $a_{ij} \in \R^{d}$ is the feature vector of a sample on the $i$\textsuperscript{th} node, $y_{ij} \in \{-1, 1\}$ is the corresponding label,  and $m$ is the number of samples on the $i$\textsuperscript{th} node for all $i \in [n].$
+
+In the stochastic setting, we consider functions
+\begin{align*}f_i(x_1, x_2) \eqdef & {\rm E}_{j \sim [m]}\vast[-\log\left(\frac{\exp\left(a_{ij}^\top x_{y_{ij}}\right)}{\sum_{y \in \{1, 2\}} \exp\left(a_{ij}^\top x_{y}\right)}\right) \\
+  &+ \lambda \sum_{y \in \{1, 2\}} \sum_{k = 1}^d \frac{\{x_{y}\}_k^2}{1 + \{x_{y}\}_k^2}\vast],\end{align*}
+where $x_1, x_2 \in \R^{d}$, $\{\cdot\}_k$ is an indexing operation,
+$a_{ij} \in \R^{d}$ is a feature of a sample on the $i$\textsuperscript{th} node, $y_{ij} \in \{1, 2\}$ is a corresponding label, $m$ is the number of samples located on the $i$\textsuperscript{th} node, constant $\lambda = 0.001$ for all $i \in [n].$
+
+The code was written in Python 3.6.8 using PyTorch 1.9 \citep{paszke2019pytorch}. A distributed environment was emulated on a machine with Intel(R) Xeon(R) Gold 6226R CPU @ 2.90GHz and 64 cores.
+
+We use the standard setting in experiments\footnote{Code: https://github.com/mysteryresearcher/dasha-partial-participation} where all parameters except step sizes are taken as suggested in theory. Step sizes are finetuned from a set~$\{2^{i}\,|\,i \in [-10, 10]\}.$ We emulate the partial participation setting using $s$-nice sampling with the number of nodes $n = 100$. We consider the Rand$K$ compressor and take the batch size $B = 1$. 
+% All algorithms are tested on machine learning classification tasks with nonconvex loss functions. 
+We plot the relation between communication rounds and values of the norm of gradients at each communication round.
 
 In the finite-sum (Figure~\ref{fig:real_sim_finite_sum}) and in the stochastic setting (Figure~\ref{fig:real_sim_stochastic}), 
 % we take the number of nodes $n = ?$, $K = ?$ in Rand$K,$ accuracy $\varepsilon$ such that $\nicefrac{\sigma^2}{n \varepsilon B} = ?.$ 
@@ -534,39 +583,6 @@ we see that the bigger probability $\probavailable = \nicefrac{s}{n}$ to $1$, th
 %   \label{fig:real_sim_stochastic}
 % \end{figure}
 
-\begin{figure}[h]
-\centering
-\begin{subfigure}{.5\textwidth}
-  \centering
-  \begin{tikzpicture}
-    \node[anchor=south west,inner sep=0] at (0,0) {\includegraphics[width=\textwidth]{experiments/neurips_2022_finite_sum_real-sim_nof_500_numnodes_100_more_probs_batch_size_1_longer.pdf}};
-    \draw [black,thick,<->] (4.5,2.2) -- (8.2,2.2) node[midway,yshift=-0.5em,xshift=+3.0em]{\scriptsize $\times 100 \textnormal{ slower}$};
-    \draw [black,thick,<->] (6.3,1.2) -- (8.2,1.2) node[midway,yshift=-0.5em,xshift=-4.0em]{\scriptsize $\times 10 \textnormal{ slower}$};
-    % \draw [black,ultra thick,decorate,decoration={brace,amplitude=20pt,raise=4ex}]
-    %   (7.0,3.0) -- (13.3,3.0) node[midway,yshift=+4.5em,xshift=+2em]{$\approx \times 100 \textnormal{ slower with } \probavailable = 0.01$};
-    % \draw [black,ultra thick,decorate,decoration={brace,amplitude=20pt,raise=4ex}]
-    %   (9.8,1.5) -- (13.3,1.5) node[midway,yshift=+4.5em,xshift=+1em]{$\approx \times 10 \textnormal{ slower with } \probavailable = 0.1$};
-  \end{tikzpicture}
-  \caption{Finite-sum setting, $K = 500$ in Rand$K$.}
-  \label{fig:real_sim_finite_sum}
-\end{subfigure}\hfill
-\begin{subfigure}{.5\textwidth}
-  \centering
-  \vspace{0.3cm}
-  % \includegraphics[width=0.75\linewidth]{experiments/neurips_2022_stochastic_real-sim_nof_200_numnodes_10_probs_mega_batch_100000_fix_nm_bug_longer.pdf}
-  \begin{tikzpicture}
-    \node[anchor=south west,inner sep=0] at (0,0) {\includegraphics[width=\textwidth]{experiments/neurips_2022_stochastic_real-sim_nof_200_numnodes_100_probs_mega_batch_10000_fix_nm_bug_longer.pdf}};
-    \draw [black,thick,<->] (4.5,0.9) -- (8.2,0.9) node[midway,yshift=+0.5em,xshift=+1.9em]{\scriptsize $\times 100 \textnormal{ slower}$};
-    \draw [black,thick,<->] (4.5,1.0) -- (6.4,1.0) node[midway,yshift=+0.5em,xshift=+0.2em]{\scriptsize $\times 10 \textnormal{ slower}$};
-    % \draw [black,ultra thick,decorate,decoration={brace,amplitude=20pt,raise=4ex}]
-    %   (7.3,0.8) -- (13.3,0.8) node[midway,yshift=+4.5em,xshift=+2em]{$\approx \times 100 \textnormal{ slower with } \probavailable = 0.01$};
-  \end{tikzpicture}
-  \caption{Stochastic setting, $\nicefrac{\sigma^2}{n \varepsilon B} = 10000,$ and $K = 200$ in Rand$K$.}
-  \label{fig:real_sim_stochastic}
-\end{subfigure}
-\caption{Classification task with the \textit{real-sim} dataset.}
-\label{fig:test}
-\end{figure}
 
 \bibliographystyle{apalike}
 \bibliography{sample_paper}
@@ -3404,20 +3420,9 @@ First, we will prove two lemmas.
     to conclude the proof.
 \end{proof}
 
-\section{Experiments Details}
-\label{sec:experiments_details}
-In all experiments, we take the \textit{real-sim} dataset with dimension $d = \num[group-separator={,}]{20958}$ and the number of samples equals $\num[group-separator={,}]{72309}$ from LIBSVM datasets \citep{chang2011libsvm} (under the 3-clause BSD license), and randomly split the dataset between $n = 100$ nodes equally, ignoring residual samples.
+% \section{Experiments Details}
+% \label{sec:experiments_details}
 
-In the finite-sum setting, we solve a classification problem with functions
-$$f_i(x) \eqdef \frac{1}{m}\sum_{j=1}^m \left(1 - \frac{1}{1 + \exp(y_{ij} a_{ij}^\top x)}\right)^2,$$
-where $a_{ij} \in \R^{d}$ is the feature vector of a sample on the $i$\textsuperscript{th} node, $y_{ij} \in \{-1, 1\}$ is the corresponding label,  and $m$ is the number of samples on the $i$\textsuperscript{th} node for all $i \in [n].$
-
-In the stochastic setting, we consider functions
-$$f_i(x_1, x_2) \eqdef {\rm E}_{j \sim [m]}\vast[-\log\left(\frac{\exp\left(a_{ij}^\top x_{y_{ij}}\right)}{\sum_{y \in \{1, 2\}} \exp\left(a_{ij}^\top x_{y}\right)}\right) + \lambda \sum_{y \in \{1, 2\}} \sum_{k = 1}^d \frac{\{x_{y}\}_k^2}{1 + \{x_{y}\}_k^2}\vast],$$
-where $x_1, x_2 \in \R^{d}$, $\{\cdot\}_k$ is an indexing operation,
-$a_{ij} \in \R^{d}$ is a feature of a sample on the $i$\textsuperscript{th} node, $y_{ij} \in \{1, 2\}$ is a corresponding label, $m$ is the number of samples located on the $i$\textsuperscript{th} node, constant $\lambda = 0.001$ for all $i \in [n].$
-
-The code was written in Python 3.6.8 using PyTorch 1.9 \citep{paszke2019pytorch}. A distributed environment was emulated on a machine with Intel(R) Xeon(R) Gold 6226R CPU @ 2.90GHz and 64 cores.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
