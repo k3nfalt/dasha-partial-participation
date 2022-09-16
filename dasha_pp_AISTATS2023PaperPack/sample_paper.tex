@@ -493,13 +493,15 @@ Next, we consider the same task in the partial participation setting with $s$--n
 Let us assume that $s \leq \nicefrac{n}{2}.$ Note that \eqref{eq:partial_participation_sampling:all_nodes} scales with any $B \geq 1,$ while \eqref{eq:partial_participation_sampling:s_nodes} only scales when $B = \cO\left(\nicefrac{\mathcal{L}_{\max}^2}{\widehat{\mathcal{L}}^2}\right).$ In other words, for large enough $B,$ the variance in \eqref{eq:partial_participation_sampling:s_nodes} does not significantly improves with the growth of $B$ due to the term $\widehat{\mathcal{L}}^2$. In our proof, due to partial participation, the variance from \eqref{eq:partial_participation_sampling:s_nodes} naturally appears, and we get the same effect. As was mentioned in Sections~\ref{sec:finite_sum_setting} and \ref{sec:stochastic_setting}, it can be seen in our convergence rate bounds.
 % And taking batch size $B$ larger than 
 
-\section{Experiments}
+\section{Practical Verification of Theoretical Dependencies}
 \label{sec:experiments}
 
-In experiments\footnote{Code: https://github.com/mysteryresearcher/dasha-partial-participation}, our main goal is to compare \algname{\algorithmname} with \algname{DASHA}. Clearly, \algname{\algorithmname} can not generally perform better than \algname{DASHA}.
+Our main goal is to verify the dependeces from the theory, we compare \algname{\algorithmname} with \algname{DASHA}. Clearly, \algname{\algorithmname} can not generally perform better than \algname{DASHA}.
 In different settings, we verify that the bigger $\probavailable$, the closer \algname{\algorithmname} is to \algname{DASHA}, i.e., \algname{\algorithmname} converges no slower than $\nicefrac{1}{\probavailable}$ times.
 % We verify that the convergence rates of \algname{\algorithmname} no worse than times $\nicefrac{1}{\probavailable}$. 
-We use the standard setting in experiments where all parameters except step sizes are taken as suggested in theory. Step sizes are finetuned from a set~$\{2^{i}\,|\,i \in [-10, 10]\}.$ We emulate the partial participation setting using $s$-nice sampling with the number of nodes $n = 100$. We consider the Rand$K$ compressor and take the batch size $B = 1$. All algorithms are tested on machine learning classification tasks with nonconvex loss functions (see details in Section~\ref{sec:experiments_details}). We plot the relation between communication rounds and values of the norm of gradients at each communication round.
+
+
+We use the standard setting in experiments\footnote{Code: https://github.com/mysteryresearcher/dasha-partial-participation} where all parameters except step sizes are taken as suggested in theory. Step sizes are finetuned from a set~$\{2^{i}\,|\,i \in [-10, 10]\}.$ We emulate the partial participation setting using $s$-nice sampling with the number of nodes $n = 100$. We consider the Rand$K$ compressor and take the batch size $B = 1$. All algorithms are tested on machine learning classification tasks with nonconvex loss functions (see details in Section~\ref{sec:experiments_details}). We plot the relation between communication rounds and values of the norm of gradients at each communication round.
 
 In the finite-sum (Figure~\ref{fig:real_sim_finite_sum}) and in the stochastic setting (Figure~\ref{fig:real_sim_stochastic}), 
 % we take the number of nodes $n = ?$, $K = ?$ in Rand$K,$ accuracy $\varepsilon$ such that $\nicefrac{\sigma^2}{n \varepsilon B} = ?.$ 
