@@ -180,8 +180,9 @@ We use the concept of unbiased compressors to alleviate the communication bottle
     there exists $\omega \in \R$ such that
     \begin{align}
         \label{eq:compressor}
-        \hspace{-0.2cm}\Exp{\cC(x)} = x, \qquad \Exp{\norm{\cC(x) - x}^2} \leq \omega \norm{x}^2, \qquad \forall x \in \R^d.
+        \hspace{-0.2cm}\Exp{\cC(x)} = x, \qquad \Exp{\norm{\cC(x) - x}^2} \leq \omega \norm{x}^2,
     \end{align}
+    for all $x \in \R^d.$
 \end{definition}
 We denote a set of stochastic mappings that satisfy Definition~\ref{def:unbiased_compression} as $\mathbb{U}(\omega).$
 In our methods, the nodes make use of unbiased compressors $\{\cC_i\}_{i=1}^n.$ 
