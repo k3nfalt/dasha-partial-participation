@@ -352,7 +352,7 @@ We now present the convergence rates theorems of \algname{\algorithmname} in dif
 
 \begin{restatable}{theorem}{CONVERGENCE}
   \label{theorem:gradient_oracle}
-  Suppose that Assumptions \ref{ass:lower_bound}, \ref{ass:lipschitz_constant}, \ref{ass:nodes_lipschitz_constant}, \ref{ass:compressors} and \ref{ass:partial_participation} hold. Let us take $a = \frac{\probavailable}{2 \omega + 1} ,$ $b = \frac{\probavailable}{2 - \probavailable},$ $$\gamma \leq \left(L + \sqrt{\frac{48 \omega \left(2 \omega + 1\right)}{n \probavailable^2} + \frac{16}{n \probavailable^2}\left(1 - \frac{\probpairaa}{\probavailable}\right)}\widehat{L}\right)^{-1},$$ and $g^{0}_i = h^{0}_i = \nabla f_i(x^0)$ for all $i \in [n]$
+  Suppose that Assumptions \ref{ass:lower_bound}, \ref{ass:lipschitz_constant}, \ref{ass:nodes_lipschitz_constant}, \ref{ass:compressors} and \ref{ass:partial_participation} hold. Let us take $a = \frac{\probavailable}{2 \omega + 1} ,$ $b = \frac{\probavailable}{2 - \probavailable},$ {\scriptsize \begin{align*}\gamma \leq \left(L + \left[\frac{48 \omega \left(2 \omega + 1\right)}{n \probavailable^2} + \frac{16}{n \probavailable^2}\left(1 - \frac{\probpairaa}{\probavailable}\right)\right]^{\nicefrac{1}{2}}\widehat{L}\right)^{-1},\end{align*}} and $g^{0}_i = h^{0}_i = \nabla f_i(x^0)$ for all $i \in [n]$
   in Algorithm~\ref{alg:main_algorithm} \algname{(\algorithmname)}, then $\Exp{\norm{\nabla f(\widehat{x}^T)}^2} \leq \frac{2 \Delta_0}{\gamma T}.$
   % \begin{align*}
   %     &\Exp{\norm{\nabla f(\widehat{x}^T)}^2} \leq \frac{1}{T}\Bigg[2 \Delta_0\left(L + \sqrt{\frac{48 \omega \left(2 \omega + 1\right)}{n \probavailable^2} + \frac{16}{n \probavailable^2}\left(1 - \frac{\probpairaa}{\probavailable}\right)} \widehat{L}\right)\Bigg].
@@ -369,7 +369,7 @@ $\cO\left(\frac{\Delta_0}{\varepsilon}\left[L + \frac{\omega}{\sqrt{n}}\widehat{
 \begin{restatable}{theorem}{CONVERGENCEPAGE}
   \label{theorem:page}
   Suppose that Assumptions \ref{ass:lower_bound}, \ref{ass:lipschitz_constant}, \ref{ass:nodes_lipschitz_constant}, \ref{ass:max_lipschitz_constant}, \ref{ass:compressors}, and \ref{ass:partial_participation} hold. Let us take $a = \frac{\probavailable}{2 \omega + 1} ,$ $b = \frac{\probpage \probavailable}{2 - \probavailable},$ probability $\probpage \in (0, 1]$,
-  {\scriptsize $$\gamma \leq \left(L + \sqrt{\frac{48 \omega (2 \omega + 1)}{n \probavailable^2} \left(\widehat{L}^2 + \frac{(1 - \probpage)L_{\max}^2}{B}\right) + \frac{16}{n \probavailable^2 \probpage} \left(\left(1 - \frac{\probpairaa}{\probavailable}\right)\widehat{L}^2 + \frac{(1 - \probpage)L_{\max}^2}{B}\right)}\right)^{-1}$$}
+  {\scriptsize \begin{align*}\gamma \leq \Bigg(L + \left[\frac{48 \omega (2 \omega + 1)}{n \probavailable^2} \left(\widehat{L}^2 + \frac{(1 - \probpage)L_{\max}^2}{B}\right) \right. \\ \left. + \frac{16}{n \probavailable^2 \probpage} \left(\left(1 - \frac{\probpairaa}{\probavailable}\right)\widehat{L}^2 + \frac{(1 - \probpage)L_{\max}^2}{B}\right)\right]^{\nicefrac{1}{2}}\Bigg)^{-1}\end{align*}}
   and $g^{0}_i = h^{0}_i = \nabla f_i(x^0)$ for all $i \in [n]$ in Algorithm~\ref{alg:main_algorithm} \algname{(\algorithmname-PAGE)}
   then $\Exp{\norm{\nabla f(\widehat{x}^T)}^2} \leq \frac{2 \Delta_0}{\gamma T}.$
   % \begin{align*}
@@ -490,7 +490,7 @@ Let us assume that $s \leq \nicefrac{n}{2}.$ Note that \eqref{eq:partial_partici
 \section{Experiments}
 \label{sec:experiments}
 
-In experiments\footnote{Code: \url{https://github.com/mysteryresearcher/dasha-partial-participation}}, our main goal is to compare \algname{\algorithmname} with \algname{DASHA}. Clearly, \algname{\algorithmname} can not generally perform better than \algname{DASHA}.
+In experiments\footnote{Code: https://github.com/mysteryresearcher/dasha-partial-participation}, our main goal is to compare \algname{\algorithmname} with \algname{DASHA}. Clearly, \algname{\algorithmname} can not generally perform better than \algname{DASHA}.
 In different settings, we verify that the bigger $\probavailable$, the closer \algname{\algorithmname} is to \algname{DASHA}, i.e., \algname{\algorithmname} converges no slower than $\nicefrac{1}{\probavailable}$ times.
 % We verify that the convergence rates of \algname{\algorithmname} no worse than times $\nicefrac{1}{\probavailable}$. 
 We use the standard setting in experiments where all parameters except step sizes are taken as suggested in theory. Step sizes are finetuned from a set~$\{2^{i}\,|\,i \in [-10, 10]\}.$ We emulate the partial participation setting using $s$-nice sampling with the number of nodes $n = 100$. We consider the Rand$K$ compressor and take the batch size $B = 1$. All algorithms are tested on machine learning classification tasks with nonconvex loss functions (see details in Section~\ref{sec:experiments_details}). We plot the relation between communication rounds and values of the norm of gradients at each communication round.
