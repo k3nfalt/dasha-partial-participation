@@ -344,7 +344,7 @@ iii) In the finite-sum setting, we present two methods: \algname{\algorithmname-
 
 \label{sec:theorems}
 
-We now present the convergence rates theorems of \algname{\algorithmname} in different settings. We will compare the theorems with the results of \algname{DASHA}. For any setting, suppose that \algname{DASHA} converges to $\varepsilon$-solution after $T$ communication rounds. Then, ideally, we would expect the convergence of the new algorithms to $\varepsilon$-solution after up to $\nicefrac{T}{\probavailable}$ communication rounds due to the partial participation. The detailed analysis of the algorithms under Polyak-\L ojasiewicz condition we provide in Section~\ref{sec:pl_condition}. Let us define $\Delta_0 \eqdef f(x^0) - f^*.$
+We now present the convergence rates theorems of \algname{\algorithmname} in different settings. We will compare the theorems with the results of SOTA methods, \algname{MARINA} \citep{MARINA} and \algname{DASHA} \citep{tyurin2022dasha}. Suppose that \algname{MARINA} or \algname{DASHA} converges to $\varepsilon$-solution after $T$ communication rounds. Then, ideally, we would expect the convergence of the new algorithms to $\varepsilon$-solution after up to $\nicefrac{T}{\probavailable}$ communication rounds due to the partial participation constraints. The detailed analysis of the algorithms under Polyak-\L ojasiewicz condition we provide in Section~\ref{sec:pl_condition}. Let us define $\Delta_0 \eqdef f(x^0) - f^*.$
 
 \subsection{Gradient Setting}
 
@@ -359,7 +359,7 @@ We now present the convergence rates theorems of \algname{\algorithmname} in dif
   % \end{align*}
 \end{restatable}
 
-Let us recall the convergence rate of \algname{MARINA} \citep{MARINA} or \algname{DASHA}, the number of communication rounds to get $\varepsilon$-solution equals
+Let us recall the convergence rate of \algname{MARINA} or \algname{DASHA}, the number of communication rounds to get $\varepsilon$-solution equals
 $\cO\left(\frac{\Delta_0}{\varepsilon}\left[L + \frac{\omega}{\sqrt{n}}\widehat{L}\right]\right),$ while the rate of \algname{\algorithmname} equals $\cO\left(\frac{\Delta_0}{\varepsilon}\left[L + \frac{\omega + 1}{\probavailable \sqrt{n}}\widehat{L}\right]\right)$. Up to Lipschitz constants factors, we get the degeneration up to $\nicefrac{1}{\probavailable}$ factor due to the partial participation.
 
 \subsection{Finite-Sum Setting}
