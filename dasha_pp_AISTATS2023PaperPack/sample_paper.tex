@@ -3404,7 +3404,7 @@ First, we will prove two lemmas.
 
 \section{Experiments Details}
 \label{sec:experiments_details}
-In all experiments, we take the \textit{real-sim} dataset with dimension $d = \num[group-separator={,}]{20958}$ and the number of samples equals $\num[group-separator={,}]{72309}$ from LIBSVM datasets \cite{chang2011libsvm} (under the 3-clause BSD license), and randomly split the dataset between $n = 100$ nodes equally, ignoring residual samples.
+In all experiments, we take the \textit{real-sim} dataset with dimension $d = \num[group-separator={,}]{20958}$ and the number of samples equals $\num[group-separator={,}]{72309}$ from LIBSVM datasets \citep{chang2011libsvm} (under the 3-clause BSD license), and randomly split the dataset between $n = 100$ nodes equally, ignoring residual samples.
 
 In the finite-sum setting, we solve a classification problem with functions
 $$f_i(x) \eqdef \frac{1}{m}\sum_{j=1}^m \left(1 - \frac{1}{1 + \exp(y_{ij} a_{ij}^\top x)}\right)^2,$$
@@ -3415,7 +3415,7 @@ $$f_i(x_1, x_2) \eqdef {\rm E}_{j \sim [m]}\vast[-\log\left(\frac{\exp\left(a_{i
 where $x_1, x_2 \in \R^{d}$, $\{\cdot\}_k$ is an indexing operation,
 $a_{ij} \in \R^{d}$ is a feature of a sample on the $i$\textsuperscript{th} node, $y_{ij} \in \{1, 2\}$ is a corresponding label, $m$ is the number of samples located on the $i$\textsuperscript{th} node, constant $\lambda = 0.001$ for all $i \in [n].$
 
-The code was written in Python 3.6.8 using PyTorch 1.9 \cite{paszke2019pytorch}. A distributed environment was emulated on a machine with Intel(R) Xeon(R) Gold 6226R CPU @ 2.90GHz and 64 cores.
+The code was written in Python 3.6.8 using PyTorch 1.9 \citep{paszke2019pytorch}. A distributed environment was emulated on a machine with Intel(R) Xeon(R) Gold 6226R CPU @ 2.90GHz and 64 cores.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
