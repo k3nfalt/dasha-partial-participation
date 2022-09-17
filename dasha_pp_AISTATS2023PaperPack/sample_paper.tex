@@ -202,9 +202,9 @@ The $i$\textsuperscript{th} node has only access to the gradient $\nabla f_i \,:
     %  \midrule
      \begin{tabular}{@{}c@{}}\algname{MARINA} \\ \citep{MARINA} \end{tabular} & \cmark & \xmark\textsuperscript{{\color{blue}(a)}} & \cmark\textsuperscript{{\color{blue}(b)}} & \begin{tabular}{@{}c@{}}Suboptimal convergence rate \\ (see \citep{tyurin2022dasha}). \end{tabular}\\
      \midrule
-     \begin{tabular}{@{}c@{}}\algname{FedPAGE} \\ \citep{zhao2021fedpage} \end{tabular} & \xmark & \xmark\textsuperscript{{\color{blue}(a)}} & \xmark & Suboptimal oracle complexity $\cO\left(\frac{m}{\varepsilon}\right)$. \\
+     \begin{tabular}{@{}c@{}}\algname{ZeroSARAH} \\ \citep{li2021zerosarah} \end{tabular} & \cmark & \cmark & \xmark & Only homogeneous regime, i.e., the functions $f_i$ are equal. \\
      \midrule
-     \begin{tabular}{@{}c@{}}\algname{ZeroSARAH} \\ \citep{li2021zerosarah} \end{tabular} & \cmark & \cmark & \xmark & Only homogeneous regime, i.e., $f_i = f$ for all $i \in [n]$. \\
+     \begin{tabular}{@{}c@{}}\algname{FedPAGE} \\ \citep{zhao2021fedpage} \end{tabular} & \xmark & \xmark\textsuperscript{{\color{blue}(a)}} & \xmark & Suboptimal oracle complexity $\cO\left(\frac{m}{\varepsilon}\right)$. \\
      \midrule
      \begin{tabular}{@{}c@{}}\algname{DASHA} \\ \citep{tyurin2022dasha} \end{tabular} & \cmark & \xmark & \cmark & --- \\
      \midrule
