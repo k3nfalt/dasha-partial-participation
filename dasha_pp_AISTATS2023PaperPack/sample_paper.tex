@@ -113,6 +113,38 @@ As in classical optimization tasks, one of the main current challenges is to fin
 %   \item Compression
 % \end{enumerate}
 
+\newcommand{\tablenote}{\color{orange} \textbf{!}}
+
+\begin{table*}
+  \caption{The comparison of methods that solve the problem \eqref{eq:main_problem} in the stochastic setting \eqref{eq:task_staochastic}.}
+  \label{table:comparison}
+  \centering 
+  \small
+  \begin{threeparttable}
+    \begin{tabular}{ccccc}
+      \midrule
+    Method & \emph{VR} & 
+    \emph{PP} & \emph{CC} & Limitations \\
+     \midrule\midrule
+     \begin{tabular}{@{}c@{}}\algname{SPIDER}, \algname{SARAH}, \algname{PAGE}, \algname{STORM} \\ \citep{SPIDER, SARAH} \\ \citep{PAGE, cutkosky2019momentum}\end{tabular} & \cmark & \xmark & \xmark & ---\\
+     \midrule
+     \begin{tabular}{@{}c@{}}\algname{MARINA} \\ \citep{MARINA} \end{tabular} & \cmark & \xmark\textsuperscript{{\color{blue}(a)}} & \tablenote\textsuperscript{{\color{blue}(b)}} & \begin{tabular}{@{}c@{}}Suboptimal convergence rate \\ (see \citep{tyurin2022dasha}) \end{tabular}\\
+     \midrule
+     \begin{tabular}{@{}c@{}}\algname{FedPAGE} \\ \citep{zhao2021fedpage} \end{tabular} & \xmark & \xmark\textsuperscript{{\color{blue}(a)}} & \xmark & Suboptimal oracle complexity $\cO\left(\frac{\sigma^2}{\varepsilon^2}\right)$ \\
+     \midrule
+     \begin{tabular}{@{}c@{}}\algname{FRECON} \\ \cite{zhao2021faster} \end{tabular} & \xmark & \cmark & \cmark & --- \\
+     \midrule
+     \begin{tabular}{@{}c@{}}\algname{DASHA} \\ \citep{tyurin2022dasha} \end{tabular} & \begin{tabular}{@{}c@{}}\cmark \\ \phantom{or} \\ \xmark \end{tabular} & \begin{tabular}{@{}c@{}}\xmark \\ or\\ \cmark \end{tabular} & \begin{tabular}{@{}c@{}}\cmark \\ \phantom{or}\\ \cmark \end{tabular} & --- \\
+    \midrule\midrule
+    \end{tabular}
+\begin{tablenotes}
+% \scriptsize
+\item [{\color{blue}(a)}] \algname{MARINA} and \algname{FedPAGE}, with a small probability, require the participation of all nodes so that they can not support partial participation from Section~\ref{sec:partial_participation}.
+\item [{\color{blue}(b)}] On average, \algname{MARINA} provides the compressed communication mechanism. However, with a small probability, this method sends non-compressed vectors.
+% \item [{\color{blue}(b)}] Does the algorithm require periodic synchronization between nodes? (see Section~\ref{sec:contributions})
+\end{tablenotes}
+\end{threeparttable}
+\end{table*}
 \section{Optimization Problem}
 \label{sec:opt_problem}
 Let us consider the nonconvex distributed optimization problem
