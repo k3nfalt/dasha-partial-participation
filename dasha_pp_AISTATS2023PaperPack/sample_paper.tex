@@ -139,7 +139,7 @@ The $i$\textsuperscript{th} node has only access to the gradient $\nabla f_i \,:
     The functions $f_i$ are $L_i$--smooth for all $i \in [n]$. Let us define $\widehat{L}^2 \eqdef \frac{1}{n} \sum_{i=1}^{n} L_i^2.$\footnote{Note that $L \leq \widehat{L},$ $\widehat{L} \leq L_{\max},$ and $\widehat{L} \leq L_{\sigma}.$}
 \end{assumption}
 
-\begin{table*}
+\begin{table*}[!ht]
   \caption{The comparison of methods that solve the problem \eqref{eq:main_problem} in the stochastic setting \eqref{eq:task_staochastic}. Abbr.: \emph{VR} (Variance Reduction) = Does a method have the optimal oracle complexity $\cO\left(\frac{\sigma^2}{\varepsilon} + \frac{\sigma}{\varepsilon^{\nicefrac{3}{2}}}\right)$?
   \emph{PP} (Partial Participation) = Does a method support partial participation from Section~\ref{sec:partial_participation}? \emph{CC} = Does a method have communication complexity equals to $\cO\left(\frac{d}{\sqrt{n} \varepsilon}\right)$ \iffalse w.r.t. the dimension $d$, the number of nodes $n,$ and accuracy $\varepsilon$ \fi ?}
   \label{table:comparison}
