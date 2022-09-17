@@ -630,8 +630,6 @@ In the stochastic setting, we consider functions
 where $x_1, x_2 \in \R^{d}$, $\{\cdot\}_k$ is an indexing operation,
 $a_{ij} \in \R^{d}$ is a feature of a sample on the $i$\textsuperscript{th} node, $y_{ij} \in \{1, 2\}$ is a corresponding label, $m$ is the number of samples located on the $i$\textsuperscript{th} node, constant $\lambda = 0.001$ for all $i \in [n].$
 
-The code was written in Python 3.6.8 using PyTorch 1.9 \citep{paszke2019pytorch}. A distributed environment was emulated on a machine with Intel(R) Xeon(R) Gold 6226R CPU @ 2.90GHz and 64 cores.
-
 We use the standard setting in experiments\footnote{Code: https://github.com/mysteryresearcher/dasha-partial-participation} where all parameters except step sizes are taken as suggested in theory. Step sizes are finetuned from a set~$\{2^{i}\,|\,i \in [-10, 10]\}.$ We emulate the partial participation setting using $s$-nice sampling with the number of nodes $n = 100$. We consider the Rand$K$ compressor and take the batch size $B = 1$. 
 % All algorithms are tested on machine learning classification tasks with nonconvex loss functions. 
 We plot the relation between communication rounds and values of the norm of gradients at each communication round.
@@ -3503,6 +3501,10 @@ First, we will prove two lemmas.
     and $C = \frac{20 \sigma^2}{n B'}$
     to conclude the proof.
 \end{proof}
+
+\section{Experiment Details}
+
+The code was written in Python 3.6.8 using PyTorch 1.9 \citep{paszke2019pytorch}. A distributed environment was emulated on a machine with Intel(R) Xeon(R) Gold 6226R CPU @ 2.90GHz and 64 cores.
 
 % \section{Analysis of \algname{STORM} in the Partial Participation Setting}
 % In this section, we present an analysis of \algname{STORM} in the partial participation setting. 
