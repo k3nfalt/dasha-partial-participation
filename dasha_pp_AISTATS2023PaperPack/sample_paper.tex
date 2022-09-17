@@ -128,7 +128,7 @@ As in classical optimization tasks, one of the main current challenges is to fin
      \midrule\midrule
      \begin{tabular}{@{}c@{}}\algname{SPIDER}, \algname{SARAH}, \algname{PAGE}, \algname{STORM} \\ \citep{SPIDER, SARAH} \\ \citep{PAGE, cutkosky2019momentum}\end{tabular} & \cmark & \xmark & \xmark & ---\\
      \midrule
-     \begin{tabular}{@{}c@{}}Naive centralized \end{tabular} & \cmark & \xmark\textsuperscript{{\color{blue}(a)}} & \tablenote\textsuperscript{{\color{blue}(b)}} & \begin{tabular}{@{}c@{}}Suboptimal convergence rate \\ (see \citep{tyurin2022dasha}). \end{tabular}\\
+     \begin{tabular}{@{}c@{}} Naive \algname{STORM} in the \emph{PP} setting \end{tabular} & \cmark & \cmark & \xmark & \\
      \midrule
      \begin{tabular}{@{}c@{}}\algname{MARINA} \\ \citep{MARINA} \end{tabular} & \cmark & \xmark\textsuperscript{{\color{blue}(a)}} & \tablenote\textsuperscript{{\color{blue}(b)}} & \begin{tabular}{@{}c@{}}Suboptimal convergence rate \\ (see \citep{tyurin2022dasha}). \end{tabular}\\
      \midrule
@@ -284,7 +284,7 @@ We propose a new family of methods \algname{\algorithmname} for the nonconvex di
 
 $\bullet$ This is the first method that includes three key ingredients of federated learning methods: \textit{variance reduction of stochastic gradients, compressed communication, and partial participation.} 
 
-$\bullet$ Moreover, this is the first method that combines variance reduction of stochastic gradients and partial participation flawlessly: i) it gets the optimal oracle complexity ii) does not require the participation of all nodes and the bounded gradients assumption.
+$\bullet$ Moreover, this is the first method that combines \textit{variance reduction of stochastic gradients and partial participation} flawlessly: i) it gets the optimal oracle complexity ii) does not require the participation of all nodes and the bounded gradients assumption.
 
 $\bullet$ We prove convergence rates and show that these methods have \textit{the optimal oracle complexity and the state-of-the-art communication complexity in the partial participation setting.} Moreover, in our work, we observe a nontrivial side-effect from mixing the variance reduction of stochastic gradients and partial participation. It is a general problem not related to our methods or analysis that we discuss in Section~\ref{sec:partial_participation_sampling}.
 
@@ -3470,6 +3470,10 @@ First, we will prove two lemmas.
     and $C = \frac{20 \sigma^2}{n B'}$
     to conclude the proof.
 \end{proof}
+
+\section{Analysis of \algname{STORM} in the Partial Participation Setting}
+In this section, we present an analysis of \algname{STORM} in the partial participation setting. 
+We assume that \algname{STORM} works with 
 
 % \section{Experiments Details}
 % \label{sec:experiments_details}
