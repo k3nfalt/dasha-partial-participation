@@ -175,7 +175,7 @@ The $i$\textsuperscript{th} node has only access to the gradient $\nabla f_i \,:
     \end{tabular}
     \begin{tablenotes}
       % \scriptsize
-      \item [{\color{blue}(a)}] \algname{MARINA} and \algname{FedPAGE}, with a small probability, require the participation of all nodes so that they can not support partial participation from Section~\ref{sec:partial_participation}. Nevertheless, these methods provide suboptimal oracle complexities.
+      \item [{\color{blue}(a)}] \algname{MARINA} and \algname{FedPAGE}, with a small probability, require the participation of all nodes so that they can not support partial participation from Section~\ref{sec:partial_participation}. Moreover, these methods provide suboptimal oracle complexities.
       \item [{\color{blue}(b)}] On average, \algname{MARINA} provides the compressed communication mechanism with complexity $\cO\left(\frac{d}{\sqrt{n} \varepsilon}\right).$ However, with a small probability, this method sends non-compressed vectors.
       \item [{\color{blue}(c)}] Note that \algname{MIME} and \algname{DASHA-PP} can not be directly compared because \algname{MIME} considers the online version of the problem \eqref{eq:main_problem}, and requires more strict assumptions.
       \item [{\color{blue}(d)}] Although \algname{MIME} obtains the convergence rate $\cO\left(\frac{1}{\varepsilon^{3/2}}\right)$ of a variance reduced method, it requires the calculation of the full (exact) gradients.
@@ -558,6 +558,26 @@ In the following corollary, we consider Rand$K$ compressors (see Definition~\ref
 We are aware that the initial batch size $B_{\textnormal{init}}$ can be suboptimal w.r.t.\,$\omega$ in \algname{\algorithmname-MVR} in some regimes (see also \citep{tyurin2022dasha}). This is a side effect of mixing the variance reduction of stochastic gradients and compression. However, Corollary~\ref{cor:stochastic:randk} reveals that we can escape these regimes by choosing the parameter $K$ of Rand$K$ compressors in a particular way. To get the complete picture, we analyze the same phenomenon under P\L\, condition (see Section~\ref{sec:pl_condition}) and provide a new method \algname{\algorithmname-SYNC-MVR} (see Section~\ref{sec:main_algorithm_mvr_sync}).
 
 % We believe that this is the price for not sending the full vectors and no synchronization in the stochastic setting and should be investigated further.
+
+\section{The Problem of Estimating the Mean in the Partial Participation Setting}
+\label{sec:partial_participation_sampling}
+We now provide the example to explain why the only choice of $B = \cO\left(\min\left\{\frac{1}{\probavailable}\sqrt{\frac{m}{n}},\frac{L_{\max}^2}{\mathbbm{1}_{\probavailable}^2 \widehat{L}^2}\right\}\right)$ and $B = \cO\left(\min\left\{\frac{\sigma}{\probavailable \sqrt{\varepsilon} n}, \frac{L_{\sigma}^2}{\mathbbm{1}_{\probavailable}^2 \widehat{L}^2}\right\}\right)$ in \algname{\algorithmname-PAGE} and \algname{\algorithmname-MVR}, accordingly, guarantees the degeneration up to $\nicefrac{1}{\probavailable}.$ This is surprising, because in methods with the variance reduction of stochastic gradients \citep{tyurin2022dasha,PAGE} we can take the size of batch size $B = \cO\left(\sqrt{\frac{m}{n}}\right)$ and $B = \cO\left(\frac{\sigma}{\sqrt{\varepsilon} n}\right)$ and guarantee the optimality. Note that the smaller the batch size $B$, the more the server and the nodes have to communicate to get $\varepsilon$-solution.
+
+% In Sections~\ref{sec:finite_sum_setting} and \ref{sec:stochastic_setting}, when we compare 
+Let us consider the task of estimating the mean of vectors in the distributed setting. Suppose that we have $n$ nodes, and each of them contains $m$ vectors $\{x_{ij}\}_{j=1}^m$, where $x_{ij} \in \R^d$ for all $i \in [n], j \in [m].$ First, let us consider that each node samples a mini-batch $I^i$ of size $B$ with replacement and sends it to the server. Then the server calculates the mean of the mini-batches from nodes. One can easily show that the variance of the estimator is
+\begin{align}
+  \label{eq:partial_participation_sampling:all_nodes}
+  &\Exp{\norm{\frac{1}{n B}\sum_{i=1}^n \sum_{j \in I^i} x_{ij} - \frac{1}{n m}\sum_{i=1}^n \sum_{j=1}^m x_{ij}}^2} \\
+  &= \frac{1}{n B} \frac{1}{n m} \sum_{i=1}^n \sum_{j=1}^m \norm{x_{ij} - \frac{1}{m}\sum_{j=1}^m x_{ij}}^2.\nonumber
+\end{align}
+Next, we consider the same task in the partial participation setting with $s$--nice sampling, i.e., we sample a random set $S \subset [n]$ of $s \in [n]$ nodes without replacement and receive the mini-batches only from the sampled nodes. Such sampling of nodes satisfy Assumption~\ref{ass:partial_participation} with $\probavailable = \nicefrac{s}{n}$ and $\probavailable = \nicefrac{s (s-1)}{n (n-1)}$. In this case, the variance of the estimator (See Lemma~\ref{lemma:sampling} with $r_i = 0$ and $s_i = \sum_{j \in I^i} x_{ij}$) is
+\begin{align}
+  \label{eq:partial_participation_sampling:s_nodes}
+  &\Exp{\norm{\frac{1}{s B}\sum_{i \in S} \sum_{j \in I^i} x_{ij} - \frac{1}{n m}\sum_{i=1}^n \sum_{j=1}^m x_{ij}}^2} \\
+  &= \frac{1}{s B}\underbrace{\frac{1}{n m} \sum_{i=1}^n \sum_{j=1}^m \norm{x_{ij} - \frac{1}{m}\sum_{j=1}^m x_{ij}}^2}_{\mathcal{L}_{\max}^2} \nonumber\\
+  &\quad+\frac{n - s}{s (n - 1)} \underbrace{\frac{1}{n} \sum_{i=1}^n \norm{\frac{1}{m}\sum_{j=1}^m x_{ij} - \frac{1}{n m}\sum_{i=1}^n \sum_{j=1}^m x_{ij}}^2}_{\widehat{\mathcal{L}}^2} \nonumber.
+\end{align}
+Let us assume that $s \leq \nicefrac{n}{2}.$ Note that \eqref{eq:partial_participation_sampling:all_nodes} scales with any $B \geq 1,$ while \eqref{eq:partial_participation_sampling:s_nodes} only scales when $B = \cO\left(\nicefrac{\mathcal{L}_{\max}^2}{\widehat{\mathcal{L}}^2}\right).$ In other words, for large enough $B,$ the variance in \eqref{eq:partial_participation_sampling:s_nodes} does not significantly improves with the growth of $B$ due to the term $\widehat{\mathcal{L}}^2$. In our proof, due to partial participation, the variance from \eqref{eq:partial_participation_sampling:s_nodes} naturally appears, and we get the same effect. As was mentioned in Sections~\ref{sec:finite_sum_setting} and \ref{sec:stochastic_setting}, it can be seen in our convergence rate bounds.
 % And taking batch size $B$ larger than 
 
 \section{Numerical Verification of Theoretical Dependencies}
@@ -663,36 +683,6 @@ we see that the bigger probability $\probavailable = \nicefrac{s}{n}$ to $1$, th
 \clearpage
 
 \part*{Appendix}
-
-\section{The Problem of Estimating the Mean in the Partial Participation Setting}
-\label{sec:partial_participation_sampling}
-We now provide the example to explain why the only choice of $B = \cO\left(\min\left\{\frac{1}{\probavailable}\sqrt{\frac{m}{n}},\frac{L_{\max}^2}{\mathbbm{1}_{\probavailable}^2 \widehat{L}^2}\right\}\right)$ and $B = \cO\left(\min\left\{\frac{\sigma}{\probavailable \sqrt{\varepsilon} n}, \frac{L_{\sigma}^2}{\mathbbm{1}_{\probavailable}^2 \widehat{L}^2}\right\}\right)$ in \algname{\algorithmname-PAGE} and \algname{\algorithmname-MVR}, accordingly, guarantees the degeneration up to $\nicefrac{1}{\probavailable}.$ This is surprising, because in methods with the variance reduction of stochastic gradients \citep{tyurin2022dasha,PAGE} we can take the size of batch size $B = \cO\left(\sqrt{\frac{m}{n}}\right)$ and $B = \cO\left(\frac{\sigma}{\sqrt{\varepsilon} n}\right)$ and guarantee the optimality. Note that the smaller the batch size $B$, the more the server and the nodes have to communicate to get $\varepsilon$-solution.
-
-% In Sections~\ref{sec:finite_sum_setting} and \ref{sec:stochastic_setting}, when we compare 
-Let us consider the task of estimating the mean of vectors in the distributed setting. Suppose that we have $n$ nodes, and each of them contains $m$ vectors $\{x_{ij}\}_{j=1}^m$, where $x_{ij} \in \R^d$ for all $i \in [n], j \in [m].$ First, let us consider that each node samples a mini-batch $I^i$ of size $B$ with replacement and sends it to the server. Then the server calculates the mean of the mini-batches from nodes. One can easily show that the variance of the estimator is
-% \begin{align}
-%   \label{eq:partial_participation_sampling:all_nodes}
-%   &\Exp{\norm{\frac{1}{n B}\sum_{i=1}^n \sum_{j \in I^i} x_{ij} - \frac{1}{n m}\sum_{i=1}^n \sum_{j=1}^m x_{ij}}^2} \\
-%   &= \frac{1}{n B} \frac{1}{n m} \sum_{i=1}^n \sum_{j=1}^m \norm{x_{ij} - \frac{1}{m}\sum_{j=1}^m x_{ij}}^2.\nonumber
-% \end{align}
-\begin{align}
-  \label{eq:partial_participation_sampling:all_nodes}
-  &\Exp{\norm{\frac{1}{n B}\sum_{i=1}^n \sum_{j \in I^i} x_{ij} - \frac{1}{n m}\sum_{i=1}^n \sum_{j=1}^m x_{ij}}^2}
-  = \frac{1}{n B} \frac{1}{n m} \sum_{i=1}^n \sum_{j=1}^m \norm{x_{ij} - \frac{1}{m}\sum_{j=1}^m x_{ij}}^2.
-\end{align}
-Next, we consider the same task in the partial participation setting with $s$--nice sampling, i.e., we sample a random set $S \subset [n]$ of $s \in [n]$ nodes without replacement and receive the mini-batches only from the sampled nodes. Such sampling of nodes satisfy Assumption~\ref{ass:partial_participation} with $\probavailable = \nicefrac{s}{n}$ and $\probavailable = \nicefrac{s (s-1)}{n (n-1)}$. In this case, the variance of the estimator (See Lemma~\ref{lemma:sampling} with $r_i = 0$ and $s_i = \sum_{j \in I^i} x_{ij}$) is
-% \begin{align}
-%   \label{eq:partial_participation_sampling:s_nodes}
-%   &\Exp{\norm{\frac{1}{s B}\sum_{i \in S} \sum_{j \in I^i} x_{ij} - \frac{1}{n m}\sum_{i=1}^n \sum_{j=1}^m x_{ij}}^2} \\
-%   &= \frac{1}{s B}\underbrace{\frac{1}{n m} \sum_{i=1}^n \sum_{j=1}^m \norm{x_{ij} - \frac{1}{m}\sum_{j=1}^m x_{ij}}^2}_{\mathcal{L}_{\max}^2} \nonumber\\
-%   &\quad+\frac{n - s}{s (n - 1)} \underbrace{\frac{1}{n} \sum_{i=1}^n \norm{\frac{1}{m}\sum_{j=1}^m x_{ij} - \frac{1}{n m}\sum_{i=1}^n \sum_{j=1}^m x_{ij}}^2}_{\widehat{\mathcal{L}}^2} \nonumber.
-% \end{align}
-\begin{align}
-  \label{eq:partial_participation_sampling:s_nodes}
-  \Exp{\norm{\frac{1}{s B}\sum_{i \in S} \sum_{j \in I^i} x_{ij} - \frac{1}{n m}\sum_{i=1}^n \sum_{j=1}^m x_{ij}}^2} &= \frac{1}{s B}\underbrace{\frac{1}{n m} \sum_{i=1}^n \sum_{j=1}^m \norm{x_{ij} - \frac{1}{m}\sum_{j=1}^m x_{ij}}^2}_{\mathcal{L}_{\max}^2} \\
-  &\quad+\frac{n - s}{s (n - 1)} \underbrace{\frac{1}{n} \sum_{i=1}^n \norm{\frac{1}{m}\sum_{j=1}^m x_{ij} - \frac{1}{n m}\sum_{i=1}^n \sum_{j=1}^m x_{ij}}^2}_{\widehat{\mathcal{L}}^2} \nonumber.
-\end{align}
-Let us assume that $s \leq \nicefrac{n}{2}.$ Note that \eqref{eq:partial_participation_sampling:all_nodes} scales with any $B \geq 1,$ while \eqref{eq:partial_participation_sampling:s_nodes} only scales when $B = \cO\left(\nicefrac{\mathcal{L}_{\max}^2}{\widehat{\mathcal{L}}^2}\right).$ In other words, for large enough $B,$ the variance in \eqref{eq:partial_participation_sampling:s_nodes} does not significantly improves with the growth of $B$ due to the term $\widehat{\mathcal{L}}^2$. In our proof, due to partial participation, the variance from \eqref{eq:partial_participation_sampling:s_nodes} naturally appears, and we get the same effect. As was mentioned in Sections~\ref{sec:finite_sum_setting} and \ref{sec:stochastic_setting}, it can be seen in our convergence rate bounds.
 
 \section{Auxiliary facts}
 We list auxiliary facts that we use in our proofs:
