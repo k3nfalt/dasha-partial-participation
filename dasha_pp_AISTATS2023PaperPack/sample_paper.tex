@@ -113,11 +113,35 @@ As in classical optimization tasks, one of the main current challenges is to fin
 %   \item Compression
 % \end{enumerate}
 
-\newcommand{\tablenote}{\color{orange} \textbf{!}}
+\section{Optimization Problem}
+\label{sec:opt_problem}
+Let us consider the nonconvex distributed optimization problem
+\begin{align}
+    \label{eq:main_problem} 
+    \min \limits_{x \in \R^d}\left\{f(x) \eqdef \frac{1}{n}\sum \limits_{i=1}^n f_i(x)\right\},
+\end{align}
+where $f_i\,:\,\R^d \rightarrow \R$ is a smooth nonconvex function for all $i \in [n] \eqdef \{1, \dots, n\}.$ The full information about function $f_i$ is stored on $i$\textsuperscript{th} node. The communication between nodes is maintained in the parameters server fashion \citep{kairouz2021advances}: we have a server that receives compressed information from nodes, updates a state, and broadcasts an updated model.\footnote{Note that this strategy can be used in peer-to-peer communication, assuming that the server is an abstraction and all its algorithmic steps are performed on each node.} Since we work in the nonconvex world, our goal is to find an $\varepsilon$-solution ($\varepsilon$-stationary point) of \eqref{eq:main_problem}: a (possibly random) point $\widehat{x}\in \R^d$, such that ${\rm E}\big[\norm{\nabla f(\widehat{x})}^2\big] \leq \varepsilon.$
+
+We consider three settings:
+\begin{enumerate}[leftmargin=0.75cm]
+\item \textbf{Gradient Setting.}
+The $i$\textsuperscript{th} node has only access to the gradient $\nabla f_i \,:\,\R^d \rightarrow \R^d$ of function $f_i$. Moreover, the following assumptions for the functions $f_i$ hold.
+\begin{assumption}
+    \label{ass:lower_bound}
+    There exists $f^* \in \R$ such that $f(x) \geq f^*$ for all $x \in \R$.
+\end{assumption}
+\begin{assumption}
+    \label{ass:lipschitz_constant}
+    The function $f$ is $L$--smooth, i.e., $\norm{\nabla f(x) - \nabla f(y)} \leq L \norm{x - y}$ for all $x, y \in \R^d.$
+\end{assumption}
+\begin{assumption} \leavevmode
+    \label{ass:nodes_lipschitz_constant}
+    The functions $f_i$ are $L_i$--smooth for all $i \in [n]$. Let us define $\widehat{L}^2 \eqdef \frac{1}{n} \sum_{i=1}^{n} L_i^2.$\footnote{Note that $L \leq \widehat{L},$ $\widehat{L} \leq L_{\max},$ and $\widehat{L} \leq L_{\sigma}.$}
+\end{assumption}
 
 \begin{table*}
   \caption{The comparison of methods that solve the problem \eqref{eq:main_problem} in the stochastic setting \eqref{eq:task_staochastic}. Abbr.: \emph{VR} (Variance Reduction) = Does a method have the optimal oracle complexity $\cO\left(\frac{\sigma^2}{\varepsilon} + \frac{\sigma}{\varepsilon^{\nicefrac{3}{2}}}\right)$?
-  \emph{PP} (Partial Participation) = Does a method support partial participation from Section~\ref{sec:partial_participation}? \emph{CC} = Does a method have communication complexity equals to $\cO\left(\frac{d}{\sqrt{n} \varepsilon}\right)$ w.r.t. the dimension $d$, the number of nodes $n,$ and accuracy $\varepsilon$?}
+  \emph{PP} (Partial Participation) = Does a method support partial participation from Section~\ref{sec:partial_participation}? \emph{CC} = Does a method have communication complexity equals to $\cO\left(\frac{d}{\sqrt{n} \varepsilon}\right)$ \iffalse w.r.t. the dimension $d$, the number of nodes $n,$ and accuracy $\varepsilon$ \fi ?}
   \label{table:comparison}
   \centering 
   \small
@@ -159,31 +183,6 @@ As in classical optimization tasks, one of the main current challenges is to fin
 \end{tablenotes}
 \end{threeparttable}
 \end{table*}
-\section{Optimization Problem}
-\label{sec:opt_problem}
-Let us consider the nonconvex distributed optimization problem
-\begin{align}
-    \label{eq:main_problem} 
-    \min \limits_{x \in \R^d}\left\{f(x) \eqdef \frac{1}{n}\sum \limits_{i=1}^n f_i(x)\right\},
-\end{align}
-where $f_i\,:\,\R^d \rightarrow \R$ is a smooth nonconvex function for all $i \in [n] \eqdef \{1, \dots, n\}.$ The full information about function $f_i$ is stored on $i$\textsuperscript{th} node. The communication between nodes is maintained in the parameters server fashion \citep{kairouz2021advances}: we have a server that receives compressed information from nodes, updates a state, and broadcasts an updated model.\footnote{Note that this strategy can be used in peer-to-peer communication, assuming that the server is an abstraction and all its algorithmic steps are performed on each node.} Since we work in the nonconvex world, our goal is to find an $\varepsilon$-solution ($\varepsilon$-stationary point) of \eqref{eq:main_problem}: a (possibly random) point $\widehat{x}\in \R^d$, such that ${\rm E}\big[\norm{\nabla f(\widehat{x})}^2\big] \leq \varepsilon.$
-
-We consider three settings:
-\begin{enumerate}[leftmargin=0.75cm]
-\item \textbf{Gradient Setting.}
-The $i$\textsuperscript{th} node has only access to the gradient $\nabla f_i \,:\,\R^d \rightarrow \R^d$ of function $f_i$. Moreover, the following assumptions for the functions $f_i$ hold.
-\begin{assumption}
-    \label{ass:lower_bound}
-    There exists $f^* \in \R$ such that $f(x) \geq f^*$ for all $x \in \R$.
-\end{assumption}
-\begin{assumption}
-    \label{ass:lipschitz_constant}
-    The function $f$ is $L$--smooth, i.e., $\norm{\nabla f(x) - \nabla f(y)} \leq L \norm{x - y}$ for all $x, y \in \R^d.$
-\end{assumption}
-\begin{assumption} \leavevmode
-    \label{ass:nodes_lipschitz_constant}
-    The functions $f_i$ are $L_i$--smooth for all $i \in [n]$. Let us define $\widehat{L}^2 \eqdef \frac{1}{n} \sum_{i=1}^{n} L_i^2.$\footnote{Note that $L \leq \widehat{L},$ $\widehat{L} \leq L_{\max},$ and $\widehat{L} \leq L_{\sigma}.$}
-\end{assumption}
 
 \item \textbf{Finite-Sum Setting.}
 The functions $\{f_i\}_{i=1}^n$ have the finite-sum form
