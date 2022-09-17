@@ -281,13 +281,13 @@ From the beginning of federated learning era, the partial participation has been
 However, previously proposed methods have limitations: i) methods from \citep{MARINA, zhao2021fedpage} still require synchronization of all nodes with a small probability. ii) in the stochastic settings, proposed methods with the partial participation mechanism \citep{tyurin2022dasha, zhao2021faster, karimireddy2020scaffold, mcmahan2017communication} provide results without variance reduction techniques from \citep{SPIDER, PAGE, cutkosky2019momentum} and, therefore, get suboptimal oracle complexities. Note that the papers by \cite{tyurin2022dasha} and \cite{zhao2021faster} provide algorithms that reduce the variance \textit{only from compressors} (in the partial participation and stochastic setting). iii) in the finite-sum setting, the work by \cite{li2021zerosarah} focuses on the homogeneous regime only (the functions $f_i$ are equal). iv) The paper by \cite{karimireddy2020mime} considers the online version of the problem \eqref{eq:main_problem}. Therefore, \cite{karimireddy2020mime} require stricter assumptions, including the bounded inter-client gradient variance assumption. Also, their method calculates the full gradient in every communication round.
 
 \section{Contributions}
-We propose a new family of methods \algname{\algorithmname} for the nonconvex distributed optimization. 
+We propose a new method \algname{\algorithmname} for the nonconvex distributed optimization.
 
-$\bullet$ This is the first method that includes three key ingredients of federated learning methods: \textit{variance reduction of stochastic gradients, compressed communication, and partial participation.} 
+$\bullet$ As far as we know, this is the first method that includes three key ingredients of federated learning methods: \textit{variance reduction of stochastic gradients, compressed communication, and partial participation.} 
 
 $\bullet$ Moreover, this is the first method that combines \textit{variance reduction of stochastic gradients and partial participation} flawlessly: i) it gets the optimal oracle complexity ii) does not require the participation of all nodes and the bounded gradients assumption.
 
-$\bullet$ We prove convergence rates and show that these methods have \textit{the optimal oracle complexity and the state-of-the-art communication complexity in the partial participation setting.} Moreover, in our work, we observe a nontrivial side-effect from mixing the variance reduction of stochastic gradients and partial participation. It is a general problem not related to our methods or analysis that we discuss in Section~\ref{sec:partial_participation_sampling}.
+$\bullet$ We prove convergence rates and show that this method has \textit{the optimal oracle complexity and the state-of-the-art communication complexity in the partial participation setting.} Moreover, in our work, we observe a nontrivial side-effect from mixing the variance reduction of stochastic gradients and partial participation. It is a general problem not related to our methods or analysis that we discuss in Section~\ref{sec:partial_participation_sampling}.
 
 \begin{algorithm*}
   \caption{\algname{\algorithmname}}
