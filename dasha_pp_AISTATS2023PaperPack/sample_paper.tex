@@ -163,7 +163,7 @@ The $i$\textsuperscript{th} node has only access to the gradient $\nabla f_i \,:
      \midrule
      \begin{tabular}{@{}c@{}}\algname{FedAvg} \\ \citep{karimireddy2020scaffold} \end{tabular} & \xmark & \cmark & \xmark & Bounded gradients (dissimilarity) assumption of $f_i$. \\
      \midrule
-     \begin{tabular}{@{}c@{}}\algname{SCAFFOLD} \\ \citep{karimireddy2020scaffold} \end{tabular} & \xmark & \cmark & \xmark & Suboptimal convergence rate\textsuperscript{{\color{blue}(e)}} \\
+     \begin{tabular}{@{}c@{}}\algname{SCAFFOLD} \\ \citep{karimireddy2020scaffold} \end{tabular} & \xmark & \cmark & \xmark & Suboptimal convergence rate\textsuperscript{{\color{blue}(e)}}. \\
      \midrule
      \begin{tabular}{@{}c@{}}\algname{MIME}\textsuperscript{{\color{blue}(c)}} \\ \citep{karimireddy2020mime} \end{tabular} & \xmark\textsuperscript{{\color{blue}(d)}} & \cmark & \xmark & \begin{tabular}{@{}c@{}}Calculates full gradient. \\ Bounded gradients (dissimilarity) assumption of $f_i$. \end{tabular} \\
      \midrule
@@ -174,7 +174,7 @@ The $i$\textsuperscript{th} node has only access to the gradient $\nabla f_i \,:
     \end{tabular}
 \begin{tablenotes}
 % \scriptsize
-\item [{\color{blue}(a)}] \algname{MARINA} and \algname{FedPAGE}, with a small probability, require the participation of all nodes so that they can not support partial participation from Section~\ref{sec:partial_participation}.
+\item [{\color{blue}(a)}] \algname{MARINA} and \algname{FedPAGE}, with a small probability, require the participation of all nodes so that they can not support partial participation from Section~\ref{sec:partial_participation}. Nevertheless, these methods provide suboptimal oracle complexities.
 \item [{\color{blue}(b)}] On average, \algname{MARINA} provides the compressed communication mechanism with complexity $\cO\left(\frac{d}{\sqrt{n} \varepsilon}\right).$ However, with a small probability, this method sends non-compressed vectors.
 \item [{\color{blue}(c)}] Note that \algname{MIME} and \algname{DASHA-PP} can not be directly compared because \algname{MIME} considers the online version of the problem \eqref{eq:main_problem}, and requires more strict assumptions.
 \item [{\color{blue}(d)}] Although \algname{MIME} obtains the convergence rate $\cO\left(\frac{1}{\varepsilon^{3/2}}\right)$ of a variance reduced method, it requires the calculation of the full (exact) gradients.
