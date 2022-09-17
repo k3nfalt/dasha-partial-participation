@@ -128,17 +128,19 @@ As in classical optimization tasks, one of the main current challenges is to fin
      \midrule\midrule
      \begin{tabular}{@{}c@{}}\algname{SPIDER}, \algname{SARAH}, \algname{PAGE}, \algname{STORM} \\ \citep{SPIDER, SARAH} \\ \citep{PAGE, cutkosky2019momentum}\end{tabular} & \cmark & \xmark & \xmark & ---\\
      \midrule
-     \begin{tabular}{@{}c@{}}\algname{MARINA} \\ \citep{MARINA} \end{tabular} & \cmark & \xmark\textsuperscript{{\color{blue}(a)}} & \tablenote\textsuperscript{{\color{blue}(b)}} & \begin{tabular}{@{}c@{}}Suboptimal convergence rate \\ (see \citep{tyurin2022dasha}) \end{tabular}\\
+     \begin{tabular}{@{}c@{}}Naive centralized \end{tabular} & \cmark & \xmark\textsuperscript{{\color{blue}(a)}} & \tablenote\textsuperscript{{\color{blue}(b)}} & \begin{tabular}{@{}c@{}}Suboptimal convergence rate \\ (see \citep{tyurin2022dasha}). \end{tabular}\\
      \midrule
-     \begin{tabular}{@{}c@{}}\algname{FedPAGE} \\ \citep{zhao2021fedpage} \end{tabular} & \xmark & \xmark\textsuperscript{{\color{blue}(a)}} & \xmark & Suboptimal oracle complexity $\cO\left(\frac{\sigma^2}{\varepsilon^2}\right)$ \\
+     \begin{tabular}{@{}c@{}}\algname{MARINA} \\ \citep{MARINA} \end{tabular} & \cmark & \xmark\textsuperscript{{\color{blue}(a)}} & \tablenote\textsuperscript{{\color{blue}(b)}} & \begin{tabular}{@{}c@{}}Suboptimal convergence rate \\ (see \citep{tyurin2022dasha}). \end{tabular}\\
+     \midrule
+     \begin{tabular}{@{}c@{}}\algname{FedPAGE} \\ \citep{zhao2021fedpage} \end{tabular} & \xmark & \xmark\textsuperscript{{\color{blue}(a)}} & \xmark & Suboptimal oracle complexity $\cO\left(\frac{\sigma^2}{\varepsilon^2}\right)$. \\
      \midrule
      \begin{tabular}{@{}c@{}}\algname{FRECON} \\ \citep{zhao2021faster} \end{tabular} & \xmark & \cmark & \cmark & --- \\
      \midrule
-     \begin{tabular}{@{}c@{}}\algname{FedAvg} \\ \citep{karimireddy2020scaffold} \end{tabular} & ? & ? & ? & --- \\
+     \begin{tabular}{@{}c@{}}\algname{FedAvg} \\ \citep{karimireddy2020scaffold} \end{tabular} & \xmark & \cmark & \xmark & Bounded gradients (dissimilarity) assumption of $f_i$. \\
      \midrule
-     \begin{tabular}{@{}c@{}}\algname{SCAFFOLD} \\ \citep{karimireddy2020scaffold} \end{tabular} & ? & ? & ? & --- \\
+     \begin{tabular}{@{}c@{}}\algname{SCAFFOLD} \\ \citep{karimireddy2020scaffold} \end{tabular} & \xmark & \cmark & \xmark & Suboptimal convergence rate\textsuperscript{{\color{blue}(e)}} \\
      \midrule
-     \begin{tabular}{@{}c@{}}\algname{MIME}\textsuperscript{[{\color{blue}(c)}]} \\ \citep{karimireddy2020mime} \end{tabular} & \xmark\textsuperscript{{\color{blue}(d)}} & \cmark & \xmark & \begin{tabular}{@{}c@{}}Calculates full gradient \\ Bounded gradients assumption \end{tabular} \\
+     \begin{tabular}{@{}c@{}}\algname{MIME}\textsuperscript{{\color{blue}(c)}} \\ \citep{karimireddy2020mime} \end{tabular} & \xmark\textsuperscript{{\color{blue}(d)}} & \cmark & \xmark & \begin{tabular}{@{}c@{}}Calculates full gradient. \\ Bounded gradients (dissimilarity) assumption of $f_i$. \end{tabular} \\
      \midrule
      \begin{tabular}{@{}c@{}}\algname{DASHA} \\ \citep{tyurin2022dasha} \end{tabular} & \begin{tabular}{@{}c@{}}\cmark \\ \phantom{or} \\ \xmark \end{tabular} & \begin{tabular}{@{}c@{}}\xmark \\ or\\ \cmark \end{tabular} & \begin{tabular}{@{}c@{}}\cmark \\ \phantom{or}\\ \cmark \end{tabular} & --- \\
     \midrule\midrule
@@ -147,8 +149,9 @@ As in classical optimization tasks, one of the main current challenges is to fin
 % \scriptsize
 \item [{\color{blue}(a)}] \algname{MARINA} and \algname{FedPAGE}, with a small probability, require the participation of all nodes so that they can not support partial participation from Section~\ref{sec:partial_participation}.
 \item [{\color{blue}(b)}] On average, \algname{MARINA} provides the compressed communication mechanism. However, with a small probability, this method sends non-compressed vectors.
-\item [{\color{blue}(c)}] Note that \algname{MIME} and \algname{DASHA-PP} can be directly compared because \algname{MIME} considers the online version of the problem \eqref{eq:main_problem}, and requires more strict assumptions.
-\item [{\color{blue}(d)}] Although \algname{MIME} obtains the convergence rate $\cO\left(\frac{1}{\varepsilon^{3/2}}\right)$ of a variance reduces method, it requires the calculation of the full (exact) gradient.
+\item [{\color{blue}(c)}] Note that \algname{MIME} and \algname{DASHA-PP} can not be directly compared because \algname{MIME} considers the online version of the problem \eqref{eq:main_problem}, and requires more strict assumptions.
+\item [{\color{blue}(d)}] Although \algname{MIME} obtains the convergence rate $\cO\left(\frac{1}{\varepsilon^{3/2}}\right)$ of a variance reduced method, it requires the calculation of the full (exact) gradient.
+\item [{\color{blue}(e)}] It can be seen when $\sigma^2 = 0.$ Let us consider the $s$-nice sampling of the nodes, then \algname{SCAFFOLD} requires $\cO\left(\frac{n^{3/2}}{\varepsilon s^{3/2}}\right)$ communication rounds to get $\varepsilon$-solution, while \algname{DASHA-PP} requires $\cO\left(\frac{\sqrt{n}}{\varepsilon s}\right)$ communication rounds (see Theorem~\ref{theorem:stochastic} with $\omega = 0,$ $b = \frac{\probavailable}{2 - \probavailable},$ and $\probavailable = \frac{s}{n}$).
 % \item [{\color{blue}(b)}] Does the algorithm require periodic synchronization between nodes? (see Section~\ref{sec:contributions})
 \end{tablenotes}
 \end{threeparttable}
@@ -272,7 +275,7 @@ Many methods analyzed optimization methods with the unbiased compressors \citep{
 
 \textbf{3. Partial participation} \\
 From the beginning of federated learning era, the partial participation has been considered to be the essential feature of distributed optimization methods \citep{mcmahan2017communication, konevcny2016federated, kairouz2021advances}. 
-However, previously proposed methods have limitations: i) methods from \citep{MARINA, zhao2021fedpage} still require synchronization of all nodes with a small probability. ii) in the stochastic settings, proposed methods with the partial participation mechanism \citep{tyurin2022dasha, zhao2021faster, karimireddy2020scaffold, mcmahan2017communication} provide results without variance reduction techniques from \citep{SPIDER, PAGE, cutkosky2019momentum} and, therefore, get suboptimal oracle complexities. Note that the papers by \cite{tyurin2022dasha} and \cite{zhao2021faster} provide algorithms that reduce the variance \textit{only from compressors in the partial participation and stochastic setting}. iii) in the finite-sum setting, the work by \cite{li2021zerosarah} focuses on the homogeneous regime only (the functions $f_i$ are equal). iv) The paper by \cite{karimireddy2020mime} considers the online version of the problem \eqref{eq:main_problem}. Therefore, \cite{karimireddy2020mime} require stricter assumptions, including the bounded inter-client gradient variance assumption. Also, their method calculates the full gradient in every communication round.
+However, previously proposed methods have limitations: i) methods from \citep{MARINA, zhao2021fedpage} still require synchronization of all nodes with a small probability. ii) in the stochastic settings, proposed methods with the partial participation mechanism \citep{tyurin2022dasha, zhao2021faster, karimireddy2020scaffold, mcmahan2017communication} provide results without variance reduction techniques from \citep{SPIDER, PAGE, cutkosky2019momentum} and, therefore, get suboptimal oracle complexities. Note that the papers by \cite{tyurin2022dasha} and \cite{zhao2021faster} provide algorithms that reduce the variance \textit{only from compressors} (in the partial participation and stochastic setting). iii) in the finite-sum setting, the work by \cite{li2021zerosarah} focuses on the homogeneous regime only (the functions $f_i$ are equal). iv) The paper by \cite{karimireddy2020mime} considers the online version of the problem \eqref{eq:main_problem}. Therefore, \cite{karimireddy2020mime} require stricter assumptions, including the bounded inter-client gradient variance assumption. Also, their method calculates the full gradient in every communication round.
 
 \section{Contributions}
 We propose a \textit{new family of methods} \algname{\algorithmname} for the nonconvex distributed optimization. This is the first method that includes three key ingredients of federated learning methods: \textit{variance reduction of stochastic gradients, compressed communication, and partial participation}. We prove convergence rates and show that these methods have \textit{the optimal oracle complexity and the state-of-the-art communication complexity in the partial participation setting.} Moreover, in our work, we observe a nontrivial side-effect from mixing the variance reduction of stochastic gradients and partial participation. It is a general problem not related to our methods or analysis that we discuss in Section~\ref{sec:partial_participation_sampling}.
