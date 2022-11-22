@@ -14,6 +14,7 @@
 \usepackage{xspace}         % fix spacing around commands
 
 \newcommand{\cC}{\mathcal{C}}
+\newcommand{\R}{\mathbb{R}} % reals
 
 \begin{document}
 
@@ -48,9 +49,9 @@ This is the mean-squared smoothness property that is used in \textbf{all papers 
 Cutkosky et al., SPIDER: Near-optimal non-convex optimization via stochastic path integrated differential estimator 
 Fang et al.)
 
-3. This part is indeed can be confusing. We mean that the compressors are \emph{statistically} independent. In other words, $\cC_1(x_1), \dots, \cC_n(x_n)$ are independent random vectors.
+3. This part is indeed can be confusing. We mean that the compressors are \emph{statistically} independent. In other words, $\cC_1(x_1), \dots, \cC_n(x_n)$ are independent random vectors for all $x_1, \dots, x_n \in \R^d$.
 
-4. In order to get the computational and communication complexities, we have to substitute an explicit formula of $\omega$ from Definition 1. It may differ for different compressors (see On Biased Compression for Distributed Learning Beznosikov et al). So it is not possible to provide a nice corollary that will work for any compressor. The good news is that RandK is the simplest compressor. By showing an improvement for RandK, we can expect that more advanced compressors will have even better theoretical guarantees.
+4. In order to get the computational and communication complexities, we have to substitute an explicit formula of $\omega$ from Definition 1. It may differ for different compressors (see On Biased Compression for Distributed Learning Beznosikov et al). So it is not possible to provide a nice corollary that will work for any compressor. The good news is that RandK is the simplest compressor. By showing an improvement for RandK, we can expect that more advanced compressors will have even better theoretical and practical guarantees.
 
 5. We also discuss it after Corollaries 1, 3, and 4.
 
@@ -58,7 +59,9 @@ Fang et al.)
 
 1. (Challenge in Theoretical Analysis)
 
-2. If you read papers from Tables 1 and 2, you will find that virtually all of them extend the theory from some previous papers. The research on the optimization methods is incremental. It is not very obvious why it is a weakness of our paper and not others.
+2.a If you read papers from Tables 1 and 2, you will find that virtually all of them extend the theory from some previous papers. The research on the optimization methods is incremental. It is not very obvious why it is a weakness of our paper and not others. 
+
+2.b Our assumptions are general and not stronger than the assumptions of methods from Tables 1 and 2. Our analysis is independent and requires additional mathematical techniques that we provide in our proofs.
 
 3. (Experiments)
 
