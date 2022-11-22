@@ -34,7 +34,16 @@
 % \end{minipage}
 % \end{verbatim}
 
-We want to thank the reviewers for their comments.
+We want to thank the reviewers for their comments. \textbf{For all reviewers}, we want to answer the common questions
+
+\textbf{\textit{Why is this problem a challenge?}}
+
+In (SPIDER: Near-optimal non-convex optimization via stochastic path integrated differential estimator 
+Fang et al. 2018) was presented a new method SPIDER that improved the oracle complexity the classical SGD method from $\nicefrac{\sigma^2}{\varepsilon^2}$ to $\nicefrac{\sigma}{\varepsilon^{3/2}}.$ Numerous papers that we present in Table 1, tried to understand how to apply this idea to distributed optimization. As the reviewers can see, that is not a very trivial task, and all previous methods have significant drawbacks. We made a new step that fixed all previously known drawbacks. \emph{The fact that at least 7 papers from different research groups could not completely solve the problem is a challenge.}
+
+\textbf{\textit{What is challenging in theoretical analysis, and what is the difference from previous methods?}}
+
+We discuss it in Section 5 and explain the difference between the new method and the DASHA method. But the proofs are the central part of our paper. As in all mathematical papers, all insights are hidden there. For instance, in the main part, we say:``while in DASHA, the randomness from compressors is independent of the randomness from stochastic gradients, in DASHA-PP, these two randomnesses are coupled by the randomness from the partial participation.'' This is the best that we can do in the main part of the paper.
 
 \textbf{Reviewer #2:}
 
