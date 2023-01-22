@@ -1,12 +1,12 @@
 # Fdb version 3
-["bibtex paper"] 1674364776 "paper.aux" "paper.bbl" "paper" 1674364846
+["bibtex paper"] 1674364776 "paper.aux" "paper.bbl" "paper" 1674364962
   "./icml2023.bst" 1672727823 27147 6b71b3d7a2f07477af75aa14d559effb ""
-  "paper.aux" 1674364844 33478 f89bdb6d52eee6300d96f3553ab69590 "pdflatex"
+  "paper.aux" 1674364849 33478 f89bdb6d52eee6300d96f3553ab69590 "pdflatex"
   "paper.bib" 1674294811 32360 afedfd6fb3efcc558022b4084b111d6d ""
   (generated)
   "paper.bbl"
   "paper.blg"
-["pdflatex"] 1674364846 "paper.tex" "paper.pdf" "paper" 1674364846
+["pdflatex"] 1674364962 "paper.tex" "paper.pdf" "paper" 1674364962
   "/Users/alexatiurin/Library/texlive/2021/texmf-var/fonts/pk/ljfour/public/bbm/bbm10.600pk" 1632769550 6964 b5d8a9ac777f3bebcc9c2f4e3e1bb03a ""
   "/Users/alexatiurin/Library/texlive/2021/texmf-var/fonts/pk/ljfour/public/bbm/bbm6.600pk" 1650276969 4216 a051c92d9fc1dbe653b314290d9afb25 ""
   "/Users/alexatiurin/Library/texlive/2021/texmf-var/fonts/pk/ljfour/public/bbm/bbm7.600pk" 1650265402 4840 0e6ab879c1d0eb4f4538a818b9b44940 ""
@@ -290,15 +290,13 @@
   "fancyhdr.sty" 1672727314 21006 088e3513a90ac3aa21515dd46e858ae4 ""
   "icml2023.sty" 1673078890 27888 5d2d5d3bcd7161421f3fd4a95cd5a7b6 ""
   "macros.tex" 1674292838 5367 80c5222ddfe9f36eb2014070151938a6 ""
-  "paper.aux" 1674364844 33478 f89bdb6d52eee6300d96f3553ab69590 "pdflatex"
+  "paper.aux" 1674364849 33478 f89bdb6d52eee6300d96f3553ab69590 "pdflatex"
   "paper.bbl" 1674364776 13650 3ca3c9f9575a5ee47e438692b5cb8e77 "bibtex paper"
-  "paper.out" 1674364842 0 d41d8cd98f00b204e9800998ecf8427e "pdflatex"
-  "paper.tex" 1674364843 405559 9e8d4f29b75714528ad697918586b4df ""
-  "paper.toc" 1674364842 0 d41d8cd98f00b204e9800998ecf8427e "pdflatex"
+  "paper.out" 1674364847 0 d41d8cd98f00b204e9800998ecf8427e "pdflatex"
+  "paper.tex" 1674364962 405561 4e7a25add7debae5a4377ba3e760cb1a ""
   (generated)
   "paper.log"
-  "paper.toc"
-  "paper.out"
   "macros.aux"
+  "paper.out"
   "paper.aux"
   "paper.pdf"
