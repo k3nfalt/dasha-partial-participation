@@ -2,6 +2,8 @@
 
 \documentclass{article}
 
+\usepackage{icml2023}
+
 % Recommended, but optional, packages for figures and better typesetting:
 \usepackage{microtype}
 \usepackage{graphicx}
@@ -19,7 +21,7 @@
 \newcommand{\theHalgorithm}{\arabic{algorithm}}
 
 % Use the following line for the initial blind version submitted for review:
-\usepackage{icml2023}
+
 
 % If accepted, instead use the following line for the camera-ready submission:
 % \usepackage[accepted]{icml2023}
@@ -41,6 +43,10 @@
 \usepackage{xcolor}         % colors
 \usepackage{enumitem}
 \usepackage{tabularx}
+
+% \usepackage[titletoc,toc,page]{appendix}
+% \usepackage{minitoc}
+% \usepackage{caption}
 
 \newcommand{\alexander}[1]{\todo[inline]{\textbf{Alexander: }#1}}
 
@@ -651,10 +657,14 @@ Let us assume that $s \leq \nicefrac{n}{2}.$ Note that \eqref{eq:partial_partici
 % APPENDIX
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\clearpage
+% \addtocontents{toc}{\protect\setcounter{tocdepth}{2}}
 \newpage
 \appendix
-
 \onecolumn
+\tableofcontents
+\newpage
+
 \section{Numerical Verification of Theoretical Dependencies}
 \label{sec:experiments}
 
