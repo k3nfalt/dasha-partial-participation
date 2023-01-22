@@ -291,7 +291,7 @@ The $i$\textsuperscript{th} node has only access to the gradient $\nabla f_i \,:
 \item \textbf{Finite-Sum Setting.}
 The functions $\{f_i\}_{i=1}^n$ have the finite-sum form
 \begin{align}
-    \label{eq:task_minibatch} f_i(x) = \frac{1}{n}\sum \limits_{j=1}^m f_{ij}(x), \qquad \forall i \in [n],
+    \label{eq:task_minibatch} f_i(x) = \frac{1}{m}\sum \limits_{j=1}^m f_{ij}(x), \qquad \forall i \in [n],
 \end{align}
 where $f_{ij} :\R^d  \rightarrow \R$ is a smooth nonconvex  function for all $j \in [m].$
 We assume that Assumptions~\ref{ass:lower_bound}, \ref{ass:lipschitz_constant} and \ref{ass:nodes_lipschitz_constant} hold and the following assumption.
