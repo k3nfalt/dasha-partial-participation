@@ -478,11 +478,11 @@ $\bullet$ We prove convergence rates and show that this method has \textit{the o
   \end{algorithmic}
 \end{algorithm*}
 
-\section{Algorithm Description and Main Challenges Towards Partial Participation}
+\section{Algorithm Description and Main Challenges To Partial Participation}
 
-We now present \algname{\algorithmname} (see Algorithm~\ref{alg:main_algorithm}), a family of methods to solve the optimization problem \eqref{eq:main_problem}. When we started investigating the problem, we took \algname{DASHA} as a baseline method for two reasons: the family of algorithms \algname{DASHA} provides the current state-of-the-art communication complexities in the \emph{non-partial participation} setting, and, unlike \algname{MARINA}, it does not send non-compressed gradients. Let us briefly discuss the main idea of \algname{DASHA}, its problem in the \emph{partial participation} setting, and why the refinement of \algname{DASHA} is not an exercise.
+We now present \algname{\algorithmname} (see Algorithm~\ref{alg:main_algorithm}), a family of methods to solve the optimization problem \eqref{eq:main_problem}. When we started investigating the problem, we took \algname{DASHA} as a baseline method for two reasons: the family of algorithms \algname{DASHA} provides the current state-of-the-art communication complexities in the \emph{non-partial participation} setting, and, unlike \algname{MARINA}, it does not send non-compressed gradients and does not synchronize all nodes. Let us briefly discuss the main idea of \algname{DASHA}, its problem in the \emph{partial participation} setting, and why the refinement of \algname{DASHA} is not an exercise.
 
-In fact, \algname{DASHA} supports the partial participation of nodes \emph{in the gradient setting}. Since the nodes only do the following steps (see full algorithm in Algorithm~\ref{alg:main_algorithm_dasha}):
+$\bullet$ In fact, \algname{DASHA} supports the partial participation of nodes \emph{in the gradient setting}. Since the nodes only do the following steps (see full algorithm in Algorithm~\ref{alg:main_algorithm_dasha}):
 \begin{align*}
   g^{t+1}_i = g^{t}_i + \cC_i\left(\nabla f_i(x^{t+1}) - \nabla f_i(x^{t}) - a \left(g^{t}_i - \nabla f_i(x^{t})\right)\right)
 \end{align*}
@@ -498,6 +498,11 @@ The main observation is that we can do this trick since the nodes only need the 
 
 % \algname{\algorithmname} is based on \algname{DASHA}. One can easily show that \algname{\algorithmname} reduces to \algname{DASHA} when $\probavailable = 1.$
 % The refinement of \algname{DASHA} is not an exercise, let us point out the main differences: 
+$\bullet$ However, we focus our attention on partial participation in the finite-sum and stochastic settings. Let us consider the nodes' steps in \algname{DASHA-MVR} (see Algorithm~\ref{alg:main_algorithm_dasha_mvr}):
+\begin{align*}
+  &h^{t+1}_i = \nabla f_i(x^{t+1};\xi^{t+1}_{i}) + (1 - b) (h^t_i - \nabla f_i(x^{t};\xi^{t+1}_{i})) \\
+  &g^{t+1}_i = g^{t}_i + \cC_i\left(h^{t+1}_i - h^{t}_i - a \left(g^{t}_i - h^{t}_i\right)\right)
+\end{align*}
 
 i) The theoretical analysis of \algname{\algorithmname} is more complicated: while in \algname{DASHA}, the randomness from compressors is independent of the randomness from stochastic gradients, in \algname{\algorithmname}, these two randomnesses are coupled by the randomness from the partial participation. Moreover, the new methods have to reduce the variance from partial participation. 
 % The theoretical analysis of \algname{\algorithmname} is more complicated: while in \algname{DASHA}, the randomness from compressors is conditionally independent from the randomness from stochastic gradients 
@@ -510,7 +515,7 @@ ii) In the gradient setting, comparing the structure of algorithms \algname{\alg
 iii) In the finite-sum setting, we present two methods: \algname{\algorithmname-PAGE} and \algname{\algorithmname-FINITE-MVR}. The former is based on \algname{PAGE} \citep{PAGE} and with small probability $\probpage$ calculates the full gradients of the functions $f_i$. The latter always calculates mini-batches, but it needs extra memory $\cO\left(d m\right)$ per node to store vectors $h^{t}_{ij}$.
 
 % \alexander{To say something like that}
-In the beginning, we suggest the reader follow the proof of Theorem~\ref{theorem:gradient_oracle} in the gradient setting, which takes a small part of the paper. Although the proof seems to be dense and large, the size of the appendix is justified by the fact that we consider different settings and P\L-condition.
+At the first reading of the proofs, we suggest the reader follow the proof of Theorem~\ref{theorem:gradient_oracle} in the gradient setting, which takes a small part of the paper. Although the proof seems to be dense and large, the size of the appendix is justified by the fact that we consider different settings and P\L-condition.
 
 % \setlength{\floatsep}{0pt}% Remove \textfloatsep
 
@@ -787,8 +792,8 @@ we see that the bigger probability $\probavailable = \nicefrac{s}{n}$ to $1$, th
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\section{Original \algname{DASHA} Method}
-To simplify the discussion and explanation from the main part, we present the algorithm of \algname{DASHA} \citep{tyurin2022dasha}
+\section{Original \algname{DASHA} and \algname{DASHA-MVR} Methods}
+To simplify the discussion and explanation from the main part, we present the algorithms from \citep{tyurin2022dasha}
 
 \begin{algorithm*}
   \caption{\algname{DASHA}}
@@ -801,7 +806,7 @@ To simplify the discussion and explanation from the main part, we present the al
   \STATE $x^{t+1} = x^t - \gamma g^t$ \alglinelabel{alg:main_algorithm:x_update} 
   \STATE Broadcast $x^{t+1}, x^{t}$ to all \textit{participating}\textsuperscript{\red (a)} nodes
   \FOR{$i = 1, \dots, n$ in parallel}
-  \STATE $m^{t+1}_i = \cC_i\left(\nabla f_i(x^{t+1}) - \nabla f_i(x^{t}) - a \left(g^{t}_i - \nabla f_i(x^{t})\right)\right)$
+  \STATE {\green $m^{t+1}_i = \cC_i\left(\nabla f_i(x^{t+1}) - \nabla f_i(x^{t}) - a \left(g^{t}_i - \nabla f_i(x^{t})\right)\right)$}
   \STATE $g^{t+1}_i = g^{t}_i + m^{t+1}_i$
   \STATE Send $m^{t+1}_i$ to the server
   \ENDFOR
@@ -811,6 +816,28 @@ To simplify the discussion and explanation from the main part, we present the al
   \end{algorithmic}
 \end{algorithm*}
 
+
+\begin{algorithm*}
+  \caption{\algname{DASHA-MVR} (with batch size $B = 1$)}
+  \label{alg:main_algorithm_dasha_mvr}
+  \begin{algorithmic}[1]
+  \STATE \textbf{Input:} starting point $x^0 \in \R^d$, stepsize $\gamma > 0$, momentums $a, b \in (0, 1]$, 
+  number of iterations~$T \geq 1$
+  \STATE Initialize $g^0_i\in \R^d$ on the nodes and  $g^0 = \frac{1}{n}\sum_{i=1}^n g^0_i$ on the server
+  \FOR{$t = 0, 1, \dots, T - 1$}
+  \STATE $x^{t+1} = x^t - \gamma g^t$ \alglinelabel{alg:main_algorithm:x_update} 
+  \STATE Broadcast $x^{t+1}, x^{t}$ to all \textit{participating}\textsuperscript{\red (a)} nodes
+  \FOR{$i = 1, \dots, n$ in parallel}
+  \STATE {\green $h^{t+1}_i = \nabla f_i(x^{t+1};\xi^{t+1}_{i}) + (1 - b) (h^t_i - \nabla f_i(x^{t};\xi^{t+1}_{i})), \quad \xi^{t+1}_{i} \sim \mathcal{D}_i$}
+  \STATE {\green $m^{t+1}_i = \cC_i\left(h^{t+1}_i - h^{t}_i - a \left(g^{t}_i - h^{t}_i\right)\right)$}
+  \STATE $g^{t+1}_i = g^{t}_i + m^{t+1}_i$
+  \STATE Send $m^{t+1}_i$ to the server
+  \ENDFOR
+  \STATE $g^{t+1} = g^t + \frac{1}{n} \sum_{i=1}^n m^{t+1}_i$
+  \ENDFOR
+  \STATE \textbf{Output:} $\hat{x}^T$ chosen uniformly at random from $\{x^t\}_{k=0}^{T-1}$ 
+  \end{algorithmic}
+\end{algorithm*}
 
 \newpage
 
