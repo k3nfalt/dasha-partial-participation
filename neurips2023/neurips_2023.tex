@@ -557,7 +557,7 @@ $\cO\left(\frac{\Delta_0}{\varepsilon}\left[L + \frac{\omega}{\sqrt{n}}\widehat{
 \begin{restatable}{theorem}{CONVERGENCEPAGE}
   \label{theorem:page}
   Suppose that Assumptions \ref{ass:lower_bound}, \ref{ass:lipschitz_constant}, \ref{ass:nodes_lipschitz_constant}, \ref{ass:max_lipschitz_constant}, \ref{ass:compressors}, and \ref{ass:partial_participation} hold. Let us take $a = \frac{\probavailable}{2 \omega + 1} ,$ $b = \frac{\probpage \probavailable}{2 - \probavailable},$ probability $\probpage \in (0, 1]$,
-  {\scriptsize \begin{align*}&\gamma \leq \Bigg(L + \left[\frac{48 \omega (2 \omega + 1)}{n \probavailable^2} \left(\widehat{L}^2 + \frac{(1 - \probpage)L_{\max}^2}{B}\right) \right. \\ &\left. + \frac{16}{n \probavailable^2 \probpage} \left(\left(1 - \frac{\probpairaa}{\probavailable}\right)\widehat{L}^2 + \frac{(1 - \probpage)L_{\max}^2}{B}\right)\right]^{\nicefrac{1}{2}}\Bigg)^{-1}\end{align*}}
+  {\scriptsize \begin{align*}&\gamma \leq \Bigg(L + \left[\frac{48 \omega (2 \omega + 1)}{n \probavailable^2} \left(\widehat{L}^2 + \frac{(1 - \probpage)L_{\max}^2}{B}\right) + \frac{16}{n \probavailable^2 \probpage} \left(\left(1 - \frac{\probpairaa}{\probavailable}\right)\widehat{L}^2 + \frac{(1 - \probpage)L_{\max}^2}{B}\right)\right]^{\nicefrac{1}{2}}\Bigg)^{-1}\end{align*}}
   and $g^{0}_i = h^{0}_i = \nabla f_i(x^0)$ for all $i \in [n]$ in Algorithm~\ref{alg:main_algorithm} \algname{(\algorithmname-PAGE)}
   then $\Exp{\norm{\nabla f(\widehat{x}^T)}^2} \leq \frac{2 \Delta_0}{\gamma T}.$
   % \begin{align*}
@@ -576,8 +576,7 @@ Then \algname{\algorithmname-PAGE}
     \begin{align}
     % \begin{split}
       \label{eq:rate_dasha_pp_page}
-      T &\eqdef \cO\Bigg(\frac{\Delta_0}{\varepsilon}\Bigg[L + \frac{\omega}{\probavailable\sqrt{n}}\left(\widehat{L} + \frac{L_{\max}}{\sqrt{B}}\right) \\
-      &+ \frac{1}{\probavailable}\sqrt{\frac{m}{n}}\left(\frac{\mathbbm{1}_{\probavailable}\widehat{L}}{\sqrt{B}} + \frac{L_{\max}}{B}\right)\Bigg]\Bigg) \nonumber
+      T &\eqdef \cO\Bigg(\frac{\Delta_0}{\varepsilon}\Bigg[L + \frac{\omega}{\probavailable\sqrt{n}}\left(\widehat{L} + \frac{L_{\max}}{\sqrt{B}}\right) + \frac{1}{\probavailable}\sqrt{\frac{m}{n}}\left(\frac{\mathbbm{1}_{\probavailable}\widehat{L}}{\sqrt{B}} + \frac{L_{\max}}{B}\right)\Bigg]\Bigg)
     % \end{split}
     \end{align}
     communication rounds to get an $\varepsilon$-solution and the expected number of gradient calculations per node equals $\cO\left(m + B T\right).$
@@ -614,12 +613,12 @@ We define $h^t \eqdef \frac{1}{n}\sum_{i=1}^n h^t_i$.
 \begin{restatable}{theorem}{CONVERGENCEMVR}
   \label{theorem:stochastic}
   Suppose that Assumptions \ref{ass:lower_bound}, \ref{ass:lipschitz_constant}, \ref{ass:nodes_lipschitz_constant}, \ref{ass:stochastic_unbiased_and_variance_bounded}, \ref{ass:mean_square_smoothness}, \ref{ass:compressors} and \ref{ass:partial_participation} hold. Let us take $a = \frac{\probavailable}{2\omega + 1}$, $b~\in~\left(0, \frac{\probavailable}{2 - \probavailable}\right]$, 
-  {\scriptsize \begin{align*}&\gamma \leq \Bigg(L + \left[\frac{48 \omega (2 \omega + 1)}{n \probavailable^2} \left(\widehat{L}^2 + \frac{(1 - b)^2 L_{\sigma}^2}{B}\right) \right.\\&\left. + \frac{12}{n \probavailable b}\left(\left(1 - \frac{\probpairaa}{\probavailable}\right) \widehat{L}^2 + \frac{(1 - b)^2 L_{\sigma}^2}{B}\right)\right]^{\nicefrac{1}{2}}\Bigg)^{-1},\end{align*}}
+  {\scriptsize \begin{align*}&\gamma \leq \Bigg(L + \left[\frac{48 \omega (2 \omega + 1)}{n \probavailable^2} \left(\widehat{L}^2 + \frac{(1 - b)^2 L_{\sigma}^2}{B}\right) + \frac{12}{n \probavailable b}\left(\left(1 - \frac{\probpairaa}{\probavailable}\right) \widehat{L}^2 + \frac{(1 - b)^2 L_{\sigma}^2}{B}\right)\right]^{\nicefrac{1}{2}}\Bigg)^{-1},\end{align*}}
   and $g^{0}_i = h^{0}_i$ for all $i \in [n]$
   in Algorithm~\ref{alg:main_algorithm} \algname{(\algorithmname-MVR)}.
   Then 
 {\scriptsize\begin{align*}
-  &\Exp{\norm{\nabla f(\widehat{x}^T)}^2} \leq \frac{1}{T}\vast[\frac{2 \Delta_0}{\gamma} + \frac{2}{b} \norm{h^{0} - \nabla f(x^{0})}^2 \\&+ \left(\frac{32 b \omega (2 \omega + 1)}{n \probavailable^2} + \frac{4 \left(1 - \frac{\probpairaa}{\probavailable}\right)}{n \probavailable}\right)\left(\frac{1}{n}\sum_{i=1}^n\norm{h^{0}_i - \nabla f_i(x^{0})}^2\right)\vast] \\
+  &\Exp{\norm{\nabla f(\widehat{x}^T)}^2} \leq \frac{1}{T}\vast[\frac{2 \Delta_0}{\gamma} + \frac{2}{b} \norm{h^{0} - \nabla f(x^{0})}^2 + \left(\frac{32 b \omega (2 \omega + 1)}{n \probavailable^2} + \frac{4 \left(1 - \frac{\probpairaa}{\probavailable}\right)}{n \probavailable}\right)\left(\frac{1}{n}\sum_{i=1}^n\norm{h^{0}_i - \nabla f_i(x^{0})}^2\right)\vast] \\
   &+ \left(\frac{48 b^2 \omega (2 \omega + 1)}{\probavailable^2} + \frac{12 b}{\probavailable}\right) \frac{\sigma^2}{n B}.
 \end{align*}}
 \end{restatable}
@@ -630,7 +629,7 @@ In the next corollary, we choose momentum $b$ and initialize vectors $h^{0}_i$ t
   \label{cor:stochastic}
   Suppose that assumptions from Theorem~\ref{theorem:stochastic} hold, momentum $b = \Theta\left(\min \left\{\ \frac{\probavailable}{\omega}\sqrt{\frac{n \varepsilon B}{\sigma^2}}, \frac{\probavailable n \varepsilon B}{\sigma^2}\right\}\right),$ $\frac{\sigma^2}{n \varepsilon B} \geq 1,$
   and $h^{0}_i = \frac{1}{B_{\textnormal{init}}} \sum_{k = 1}^{B_{\textnormal{init}}} \nabla f_i(x^0; \xi^0_{ik})$ for all $i \in [n],$ and batch size $B_{\textnormal{init}} = \Theta\left(\frac{\sqrt{\probavailable} B}{b}\right),$ then Algorithm~\ref{alg:main_algorithm} \algname{(\algorithmname-MVR)} needs
-  \begin{align*}&T \eqdef \cO\Bigg(\frac{\Delta_0}{\varepsilon}\Bigg[L + \frac{\omega}{\probavailable\sqrt{n}}\left(\widehat{L} + \frac{L_{\sigma}}{\sqrt{B}}\right) \\&+ \frac{\sigma}{\probavailable \sqrt{\varepsilon} n}\left(\frac{\mathbbm{1}_{\probavailable}\widehat{L}}{\sqrt{B}} + \frac{L_\sigma}{B}\right)\Bigg] + \frac{\sigma^2}{\sqrt{\probavailable} n \varepsilon B}\Bigg)\end{align*}
+  \begin{align*}&T \eqdef \cO\Bigg(\frac{\Delta_0}{\varepsilon}\Bigg[L + \frac{\omega}{\probavailable\sqrt{n}}\left(\widehat{L} + \frac{L_{\sigma}}{\sqrt{B}}\right) + \frac{\sigma}{\probavailable \sqrt{\varepsilon} n}\left(\frac{\mathbbm{1}_{\probavailable}\widehat{L}}{\sqrt{B}} + \frac{L_\sigma}{B}\right)\Bigg] + \frac{\sigma^2}{\sqrt{\probavailable} n \varepsilon B}\Bigg)\end{align*}
   communication rounds to get an $\varepsilon$-solution and the number of stochastic gradient calculations per node equals $\cO(B_{\textnormal{init}} + BT).$
 \end{restatable}
 
