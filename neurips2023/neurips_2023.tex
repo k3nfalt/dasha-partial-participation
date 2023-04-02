@@ -548,7 +548,7 @@ We now present the convergence rates theorems of \algname{\algorithmname} in dif
 \end{restatable}
 
 Let us recall the convergence rate of \algname{MARINA} or \algname{DASHA}, the number of communication rounds to get $\varepsilon$-solution equals
-$\cO\left(\frac{\Delta_0}{\varepsilon}\left[L + \frac{\omega}{\sqrt{n}}\widehat{L}\right]\right),$ while the rate of \algname{\algorithmname} equals $\cO\left(\frac{\Delta_0}{\varepsilon}\left[L + \frac{\omega + 1}{\probavailable \sqrt{n}}\widehat{L}\right]\right)$. Up to Lipschitz constants factors, we get the degeneration up to $\nicefrac{1}{\probavailable}$ factor due to the partial participation.
+$\cO\left(\frac{\Delta_0}{\varepsilon}\left[L + \frac{\omega}{\sqrt{n}}\widehat{L}\right]\right),$ while the rate of \algname{\algorithmname} equals $\cO\left(\frac{\Delta_0}{\varepsilon}\left[L + \frac{\omega + 1}{\probavailable \sqrt{n}}\widehat{L}\right]\right)$. Up to Lipschitz constants factors, we get the degeneration up to $\nicefrac{1}{\probavailable}$ factor due to the partial participation. This is the perfect result since each worker sends useful information with the probability $\probavailable.$
 
 \subsection{Finite-Sum Setting}
 
@@ -613,7 +613,7 @@ We define $h^t \eqdef \frac{1}{n}\sum_{i=1}^n h^t_i$.
 \begin{restatable}{theorem}{CONVERGENCEMVR}
   \label{theorem:stochastic}
   Suppose that Assumptions \ref{ass:lower_bound}, \ref{ass:lipschitz_constant}, \ref{ass:nodes_lipschitz_constant}, \ref{ass:stochastic_unbiased_and_variance_bounded}, \ref{ass:mean_square_smoothness}, \ref{ass:compressors} and \ref{ass:partial_participation} hold. Let us take $a = \frac{\probavailable}{2\omega + 1}$, $b~\in~\left(0, \frac{\probavailable}{2 - \probavailable}\right]$, 
-  {\scriptsize \begin{align*}&\gamma \leq \Bigg(L + \left[\frac{48 \omega (2 \omega + 1)}{n \probavailable^2} \left(\widehat{L}^2 + \frac{(1 - b)^2 L_{\sigma}^2}{B}\right) + \frac{12}{n \probavailable b}\left(\left(1 - \frac{\probpairaa}{\probavailable}\right) \widehat{L}^2 + \frac{(1 - b)^2 L_{\sigma}^2}{B}\right)\right]^{\nicefrac{1}{2}}\Bigg)^{-1},\end{align*}}
+  {\scriptsize $\gamma \leq \Bigg(L + \left[\frac{48 \omega (2 \omega + 1)}{n \probavailable^2} \left(\widehat{L}^2 + \frac{(1 - b)^2 L_{\sigma}^2}{B}\right) + \frac{12}{n \probavailable b}\left(\left(1 - \frac{\probpairaa}{\probavailable}\right) \widehat{L}^2 + \frac{(1 - b)^2 L_{\sigma}^2}{B}\right)\right]^{\nicefrac{1}{2}}\Bigg)^{-1},$}
   and $g^{0}_i = h^{0}_i$ for all $i \in [n]$
   in Algorithm~\ref{alg:main_algorithm} \algname{(\algorithmname-MVR)}.
   Then 
