@@ -343,12 +343,11 @@ We now try to formalize the notion of partial participation. Let us assume that 
   \label{ass:partial_participation}
   The partial participation of nodes has the following distribution: exists constants $\probavailable \in (0, 1]$ and $\probpairaa \in [0, 1],$ such that
   \begin{enumerate}
-    \Item \begin{align*}\Prob\left(i^{\textnormal{th}} \textnormal{ node is \textit{participating}}\right) = \probavailable, \quad \forall i \in [n],\end{align*}
+    \Item \begin{align*}\Prob\left(i^{\textnormal{th}} \textnormal{ node is \textit{participating}}\right) = \probavailable \quad \forall i \in [n],\end{align*}
     % \Item \begin{align*}\Prob\Big(&i^{\textnormal{th}} \textnormal{ node is \textit{participating}} \textnormal{ AND } \\
     %   &j^{\textnormal{th}} \textnormal{ node is \textit{participating}}\Big) = \probpairaa,\end{align*}
     %   for all $i \neq j \in [n].$
-    \Item \begin{align*}\Prob\left(i^{\textnormal{th}} \textnormal{ and } j^{\textnormal{th}} \textnormal{ nodes are \textit{participating}}\right) = \probpairaa,\end{align*}
-      for all $i \neq j \in [n].$
+    \Item \begin{align*}\Prob\left(i^{\textnormal{th}} \textnormal{ and } j^{\textnormal{th}} \textnormal{ nodes are \textit{participating}}\right) = \probpairaa \quad \forall i \neq j \in [n].\end{align*}
     \Item \begin{align} \label{eq:partial_participation_constraint}
       \probpairaa \leq \probavailable^2,
     \end{align}
