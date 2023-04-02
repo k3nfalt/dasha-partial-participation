@@ -180,10 +180,10 @@ Let us consider the nonconvex distributed optimization problem
 \end{align}
 where $f_i\,:\,\R^d \rightarrow \R$ is a smooth nonconvex function for all $i \in [n] \eqdef \{1, \dots, n\}.$ The full information about function $f_i$ is stored on $i$\textsuperscript{th} node. The communication between nodes is maintained in the parameters server fashion \citep{kairouz2021advances}: we have a server that receives compressed information from nodes, updates a state, and broadcasts an updated model.\footnote{Note that this strategy can be used in peer-to-peer communication, assuming that the server is an abstraction and all its algorithmic steps are performed on each node.} Since we work in the nonconvex world, our goal is to find an $\varepsilon$-solution ($\varepsilon$-stationary point) of \eqref{eq:main_problem}: a (possibly random) point $\widehat{x}\in \R^d$, such that ${\rm E}\big[\norm{\nabla f(\widehat{x})}^2\big] \leq \varepsilon.$
 
-We consider three settings:
-\begin{enumerate}[leftmargin=0.75cm]
+We consider three settings: \\
 % \begin{enumerate}[leftmargin=0.75cm]
-\item \textbf{Gradient Setting.}
+% \begin{enumerate}[leftmargin=0.75cm]
+1. \textbf{Gradient Setting.}
 The $i$\textsuperscript{th} node has only access to the gradient $\nabla f_i \,:\,\R^d \rightarrow \R^d$ of function $f_i$. Moreover, the following assumptions for the functions $f_i$ hold.
 \begin{assumption}
     \label{ass:lower_bound}
@@ -278,7 +278,7 @@ The $i$\textsuperscript{th} node has only access to the gradient $\nabla f_i \,:
 \end{threeparttable}
 \end{table*}
 
-\item \textbf{Finite-Sum Setting.}
+\\ 2. \textbf{Finite-Sum Setting.}
 The functions $\{f_i\}_{i=1}^n$ have the finite-sum form
 \begin{align}
     \label{eq:task_minibatch} f_i(x) = \frac{1}{m}\sum \limits_{j=1}^m f_{ij}(x), \qquad \forall i \in [n],
@@ -288,8 +288,8 @@ We assume that Assumptions~\ref{ass:lower_bound}, \ref{ass:lipschitz_constant} a
 \begin{assumption}
   \label{ass:max_lipschitz_constant}
   The function $f_{ij}$ is $L_{ij}$-smooth for all $i \in [n], j \in [m].$ Let $L_{\max} \eqdef \max_{i \in [n], j \in [m]} L_{ij}.$
-\end{assumption}
-\item \textbf{Stochastic Setting.}
+\end{assumption} \\
+3. \textbf{Stochastic Setting.}
 The function $f_i$ is an expectation of a stochastic function, 
 \begin{align}
     \label{eq:task_staochastic}
@@ -308,7 +308,7 @@ We assume that Assumptions~\ref{ass:lower_bound}, \ref{ass:lipschitz_constant} a
   \label{ass:mean_square_smoothness}
   For all $i \in [n]$ and for all $x, y \in \R,$ the stochastic gradient $\nabla f_i(x;\xi)$ satisfies the mean-squared smoothness property, i.e., $\ExpSub{\xi}{\norm{\nabla f_i(x;\xi) - \nabla f_i(y;\xi)}^2} \leq L_{\sigma}^2 \norm{x - y}^2.$
 \end{assumption}
-\end{enumerate}
+% \end{enumerate}
 We compare algorithms using \textit{the oracle complexity}, i.e., the number of (stochastic) gradients that each node has to calculate to get $\varepsilon$-solution, and \textit{the communication complexity}, i.e., the number of bits that each node has to send to the server to get $\varepsilon$-solution.
 
 \subsection{Unbiased Compressors}
