@@ -472,7 +472,7 @@ $\bullet$ We prove convergence rates and show that this method has \textit{the o
 
 We now present \algname{\algorithmname} (see Algorithm~\ref{alg:main_algorithm}), a family of methods to solve the optimization problem \eqref{eq:main_problem}. When we started investigating the problem, we took \algname{DASHA} as a baseline method for two reasons: the family of algorithms \algname{DASHA} provides the current state-of-the-art communication complexities in the \emph{non-partial participation} setting, and, unlike \algname{MARINA}, it does not send non-compressed gradients and does not synchronize all nodes. Let us briefly discuss the main idea of \algname{DASHA}, its problem in the \emph{partial participation} setting, and why the refinement of \algname{DASHA} is not an exercise.
 
-In fact, \algname{DASHA} supports the partial participation of nodes \emph{in the gradient setting}. Since the nodes only do the following steps (see full algorithm in Algorithm~\ref{alg:main_algorithm_dasha}):
+In fact, the original \algname{DASHA} method supports the partial participation of nodes \emph{in the gradient setting}. Since the nodes only do the following steps (see full algorithm in Algorithm~\ref{alg:main_algorithm_dasha}):
 % \begin{align*}
 %   g^{t+1}_i = g^{t}_i + \cC_i\left(\nabla f_i(x^{t+1}) - \nabla f_i(x^{t}) - a \left(g^{t}_i - \nabla f_i(x^{t})\right)\right).
 % \end{align*}
