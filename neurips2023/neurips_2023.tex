@@ -501,10 +501,12 @@ However, we focus our attention on partial participation \emph{in the finite-sum
 \end{align}
 Even if we use the same trick for \eqref{eq:explain_g}, we still have to update \eqref{eq:explain_h} in every iteration of the algorithm since $g^{t+1}_i$ additionally depends on $h^{t+1}_i$ and $h^{t}_i.$ In other words, if a node does not update $g_i^{\cdot}$ and does not send anything to the server, it still has to update $h^{\cdot}_i,$ what is impossible without the points $x^{t+1}$ and $x^{t}.$
 One of the main challenges was to ``guess'' how to generalize \eqref{eq:explain_h} and \eqref{eq:explain_g} to the partial participation setting. We now provide a solution (\algname{\algorithmname-MVR} with the batch size $B = 1$):
-\begin{align}
+\begin{eqnarray}
+\begin{aligned}
   & h^{t+1}_i = h^t_i + \frac{1}{\probavailable}k^{t+1}_i, \,k^{t+1}_i = \nabla f_i(x^{t+1};\xi^{t+1}_{i}) - \nabla f_i(x^{t};\xi^{t+1}_{i}) - b \left(h^t_i - \nabla f_i(x^{t};\xi^{t+1}_{i})\right), \label{eq:explain_h_new}\\
-  & g^{t+1}_i = g^{t}_i + \cC_i\left(\frac{1}{\probavailable}k^{t+1}_i - \frac{a}{\probavailable} \left(g^{t}_i - h^{t}_i\right)\right) \textnormal{with pr. } \probavailable, \textnormal{ and } h^{t+1}_i = h^{t}_i,\, g^{t+1}_i = g^{t}_i \textnormal{ with pr. } 1 - \probavailable. \nonumber
-\end{align}
+  & g^{t+1}_i = g^{t}_i + \cC_i\left(\frac{1}{\probavailable}k^{t+1}_i - \frac{a}{\probavailable} \left(g^{t}_i - h^{t}_i\right)\right) \textnormal{with } \probavailable, \textnormal{ and } h^{t+1}_i = h^{t}_i,\, g^{t+1}_i = g^{t}_i \textnormal{ with } 1 - \probavailable.
+\end{aligned}
+\end{eqnarray}
 Now both control variables $g_i^{t}$ and $h_i^{t}$ do not change with the probability $1 - \probavailable.$ However, when the $i$\textsuperscript{th} node participates, the update rule of $g_i^{t+1}$ and $h_i^{t+1}$ was modified to make the proof work. When $\probavailable = 1$ (no partial participation), the updates rule from \eqref{eq:explain_h_new} reduce to \eqref{eq:explain_h} and \eqref{eq:explain_g}.
 
 % The theoretical analysis of the new algorithm became more complicated: while in \algname{DASHA}, the randomness from compressors is independent of the randomness from stochastic gradients (see \eqref{eq:explain_h} and \eqref{eq:explain_g}). In \eqref{eq:explain_h_new} (see also main Algorithm~\ref{alg:main_algorithm}), these two randomnesses are coupled by the randomness from the partial participation. 
