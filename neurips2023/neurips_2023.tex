@@ -507,7 +507,7 @@ One of the main challenges was to ``guess'' how to generalize \eqref{eq:explain_
   & \textnormal{and } h^{t+1}_i = h^{t}_i,\, g^{t+1}_i = g^{t}_i \textnormal{ with probability } 1 - \probavailable.
 \end{aligned}
 \end{eqnarray}
-Now both control variables $g_i^{t}$ and $h_i^{t}$ do not change with the probability $1 - \probavailable.$ However, when the $i$\textsuperscript{th} node participates, the update rule of $g_i^{t+1}$ and $h_i^{t+1}$ was modified to make the proof work. When $\probavailable = 1$ (no partial participation), the update rules from \eqref{eq:explain_h_new} reduce to \eqref{eq:explain_h} and \eqref{eq:explain_g}.
+Now both control variables $g_i^{t}$ and $h_i^{t}$ do not change with the probability $1 - \probavailable.$ When the $i$\textsuperscript{th} node participates, the update rule of $g_i^{t+1}$ and $h_i^{t+1}$ was modified to make the proof work. When $\probavailable = 1$ (no partial participation), the update rules from \eqref{eq:explain_h_new} reduce to \eqref{eq:explain_h} and \eqref{eq:explain_g}.
 
 % The theoretical analysis of the new algorithm became more complicated: while in \algname{DASHA}, the randomness from compressors is independent of the randomness from stochastic gradients (see \eqref{eq:explain_h} and \eqref{eq:explain_g}). In \eqref{eq:explain_h_new} (see also main Algorithm~\ref{alg:main_algorithm}), these two randomnesses are coupled by the randomness from the partial participation. 
 The theoretical analysis of the new algorithm became more complicated: unlike \eqref{eq:explain_h} and \eqref{eq:explain_g}, the control variables $h^{t+1}_i$ and $g^{t+1}_i$ in \eqref{eq:explain_h_new} (see also main Algorithm~\ref{alg:main_algorithm}) are coupled by the randomness from the partial participation. 
