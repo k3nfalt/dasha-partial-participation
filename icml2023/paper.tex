@@ -493,7 +493,7 @@ The partial participation mechanism (independent participation from Section~\ref
     0,& \textnormal{with probability } 1 - p\\
   \end{cases}
 \end{align*}
-The main observation is that we can do this trick since the nodes only need the points $x^{t+1}$ and $x^{t}$ to do a step.
+With probability $1 - p,$ a node does not update $g_i^{\cdot}$ and does not send anything to the server. The main observation is that we can do this trick since the nodes only need the points $x^{t+1}$ and $x^{t}$ to do the step.
 % The main observation here is that the nodes only need the points $x^{t+1}$ $x^{t}$
 
 % \algname{\algorithmname} is based on \algname{DASHA}. One can easily show that \algname{\algorithmname} reduces to \algname{DASHA} when $\probavailable = 1.$
