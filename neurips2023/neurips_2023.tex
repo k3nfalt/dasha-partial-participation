@@ -500,7 +500,7 @@ However, we focus our attention on partial participation \emph{in the finite-sum
   &g^{t+1}_i = g^{t}_i + \cC_i\left(h^{t+1}_i - h^{t}_i - a \left(g^{t}_i - h^{t}_i\right)\right). \label{eq:explain_g}
 \end{align}
 Even if we use the same trick for \eqref{eq:explain_g}, we still have to update \eqref{eq:explain_h} in every iteration of the algorithm since $g^{t+1}_i$ additionally depends on $h^{t+1}_i$ and $h^{t}_i.$ In other words, if a node does not update $g_i^{\cdot}$ and does not send anything to the server, it still has to update $h^{\cdot}_i,$ what is impossible without the points $x^{t+1}$ and $x^{t}.$
-One of the main challenges was to ``guess'' how to generalize \eqref{eq:explain_h} and \eqref{eq:explain_g} to the partial participation setting. We now provide a solution:
+One of the main challenges was to ``guess'' how to generalize \eqref{eq:explain_h} and \eqref{eq:explain_g} to the partial participation setting. We now provide a solution (\algname{\algorithmname-MVR} with the batch size $B = 1$):
 \begin{align}
   & h^{t+1}_i = h^t_i + \frac{1}{\probavailable}k^{t+1}_i, \,k^{t+1}_i = \nabla f_i(x^{t+1};\xi^{t+1}_{i}) - \nabla f_i(x^{t};\xi^{t+1}_{i}) - b \left(h^t_i - \nabla f_i(x^{t};\xi^{t+1}_{i})\right), \label{eq:explain_h_new}\\
   & g^{t+1}_i = g^{t}_i + \cC_i\left(\frac{1}{\probavailable}k^{t+1}_i - \frac{a}{\probavailable} \left(g^{t}_i - h^{t}_i\right)\right) \textnormal{with pr. } \probavailable, \textnormal{ and } h^{t+1}_i = h^{t}_i,\, g^{t+1}_i = g^{t}_i \textnormal{ with pr. } 1 - \probavailable. \nonumber
