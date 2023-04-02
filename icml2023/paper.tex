@@ -482,12 +482,19 @@ $\bullet$ We prove convergence rates and show that this method has \textit{the o
 
 We now present \algname{\algorithmname} (see Algorithm~\ref{alg:main_algorithm}), a family of methods to solve the optimization problem \eqref{eq:main_problem}. When we started investigating the problem, we took \algname{DASHA} as a baseline method for two reasons: the family of algorithms \algname{DASHA} provides the current state-of-the-art communication complexities in the \emph{non-partial participation} setting, and, unlike \algname{MARINA}, it does not send non-compressed gradients. Let us briefly discuss the main idea of \algname{DASHA}, its problem in the \emph{partial participation} setting, and why the refinement of \algname{DASHA} is not an exercise.
 
-i) \emph{In the gradient setting}, the nodes in \algname{DASHA} (see full algorithm in Algorithm~\ref{alg:main_algorithm_dasha}) only do the following steps:
+In fact, \algname{DASHA} supports the partial participation of nodes \emph{in the gradient setting}. Since the nodes only do the following steps (see full algorithm in Algorithm~\ref{alg:main_algorithm_dasha}):
 \begin{align*}
   g^{t+1}_i = g^{t}_i + \cC_i\left(\nabla f_i(x^{t+1}) - \nabla f_i(x^{t}) - a \left(g^{t}_i - \nabla f_i(x^{t})\right)\right)
 \end{align*}
-
-\alexander{Finish}
+The partial participation mechanism (independent participation from Section~\ref{sec:partial_participation}) can be easily implemented here if we redefine the compressor and use another one instead:
+\begin{align*}
+  \cC_{i,p} \eqdef \begin{cases}
+    \frac{1}{p}\cC_{i},& \textnormal{with probability } p\\
+    0,& \textnormal{with probability } 1 - p\\
+  \end{cases}
+\end{align*}
+The main observation is that we can do this trick since the nodes only need the points $x^{t+1}$ and $x^{t}$ to do a step.
+% The main observation here is that the nodes only need the points $x^{t+1}$ $x^{t}$
 
 % \algname{\algorithmname} is based on \algname{DASHA}. One can easily show that \algname{\algorithmname} reduces to \algname{DASHA} when $\probavailable = 1.$
 % The refinement of \algname{DASHA} is not an exercise, let us point out the main differences: 
@@ -501,6 +508,9 @@ ii) In the gradient setting, comparing the structure of algorithms \algname{\alg
 % ii) In \algname{DASHA}, the momentum $b$ is used only to reduce the variance of stochastic gradients. In \algname{\algorithmname}, the momentum $b$ plays the second role. It also helps to reduce the variance of partial participation randomness. That is why it also appears in the gradient and finite-sum settings. 
 
 iii) In the finite-sum setting, we present two methods: \algname{\algorithmname-PAGE} and \algname{\algorithmname-FINITE-MVR}. The former is based on \algname{PAGE} \citep{PAGE} and with small probability $\probpage$ calculates the full gradients of the functions $f_i$. The latter always calculates mini-batches, but it needs extra memory $\cO\left(d m\right)$ per node to store vectors $h^{t}_{ij}$.
+
+% \alexander{To say something like that}
+In the beginning, we suggest the reader follow the proof of Theorem~\ref{theorem:gradient_oracle} in the gradient setting, which takes a small part of the paper. Although the proof seems to be dense and large, the size of the appendix is justified by the fact that we consider different settings and P\L-condition.
 
 % \setlength{\floatsep}{0pt}% Remove \textfloatsep
 
