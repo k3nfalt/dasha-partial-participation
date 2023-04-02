@@ -488,7 +488,7 @@ The partial participation mechanism (independent participation from Section~\ref
     g^{t}_i, \hspace{6.0cm}\textnormal{w.p. } 1 - \probavailable.
   \end{cases}
 \end{align*}
-With probability $1 - \probavailable,$ a node does not update $g_i^{\cdot}$ and does not send anything to the server. The main observation is that we can do this trick since $g^{t+1}_i$ depends only on the vectors $x^{t+1},$ $x^{t},$ and $g^{t}_i$.
+With probability $1 - \probavailable,$ a node does not update $g_i^{t}$ and does not send anything to the server. The main observation is that we can do this trick since $g^{t+1}_i$ depends only on the vectors $x^{t+1},$ $x^{t},$ and $g^{t}_i$.
 % The main observation here is that the nodes only need the points $x^{t+1}$ $x^{t}$
 
 % \algname{\algorithmname} is based on \algname{DASHA}. One can easily show that \algname{\algorithmname} reduces to \algname{DASHA} when $\probavailable = 1.$
@@ -498,7 +498,7 @@ However, we focus our attention on partial participation \emph{in the finite-sum
   &h^{t+1}_i = \nabla f_i(x^{t+1};\xi^{t+1}_{i}) + (1 - b) (h^t_i - \nabla f_i(x^{t};\xi^{t+1}_{i})), \label{eq:explain_h}\\
   &g^{t+1}_i = g^{t}_i + \cC_i\left(h^{t+1}_i - h^{t}_i - a \left(g^{t}_i - h^{t}_i\right)\right). \label{eq:explain_g}
 \end{align}
-Even if we use the same trick for \eqref{eq:explain_g}, we still have to update \eqref{eq:explain_h} in every iteration of the algorithm since $g^{t+1}_i$ additionally depends on $h^{t+1}_i$ and $h^{t}_i.$ In other words, if a node does not update $g_i^{\cdot}$ and does not send anything to the server, it still has to update $h^{\cdot}_i,$ what is impossible without the points $x^{t+1}$ and $x^{t}.$
+Even if we use the same trick for \eqref{eq:explain_g}, we still have to update \eqref{eq:explain_h} in every iteration of the algorithm since $g^{t+1}_i$ additionally depends on $h^{t+1}_i$ and $h^{t}_i.$ In other words, if a node does not update $g_i^{t}$ and does not send anything to the server, it still has to update $h^{t}_i,$ what is impossible without the points $x^{t+1}$ and $x^{t}.$
 One of the main challenges was to ``guess'' how to generalize \eqref{eq:explain_h} and \eqref{eq:explain_g} to the partial participation setting. We now provide a solution (\algname{\algorithmname-MVR} with the batch size $B = 1$):
 \begin{eqnarray}
 \begin{aligned}
