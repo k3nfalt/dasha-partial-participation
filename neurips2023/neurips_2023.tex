@@ -794,7 +794,7 @@ To simplify the discussion and explanation from the main part, we present the al
   number of iterations~$T \geq 1$
   \STATE Initialize $g^0_i\in \R^d$ on the nodes and  $g^0 = \frac{1}{n}\sum_{i=1}^n g^0_i$ on the server
   \FOR{$t = 0, 1, \dots, T - 1$}
-  \STATE $x^{t+1} = x^t - \gamma g^t$ \alglinelabel{alg:main_algorithm:x_update} 
+  \STATE $x^{t+1} = x^t - \gamma g^t$
   \STATE Broadcast $x^{t+1}, x^{t}$ to all \textit{participating}\textsuperscript{\red (a)} nodes
   \FOR{$i = 1, \dots, n$ in parallel}
   \STATE {\green $m^{t+1}_i = \cC_i\left(\nabla f_i(x^{t+1}) - \nabla f_i(x^{t}) - a \left(g^{t}_i - \nabla f_i(x^{t})\right)\right)$}
@@ -816,7 +816,7 @@ To simplify the discussion and explanation from the main part, we present the al
   number of iterations~$T \geq 1$
   \STATE Initialize $g^0_i\in \R^d$ on the nodes and  $g^0 = \frac{1}{n}\sum_{i=1}^n g^0_i$ on the server
   \FOR{$t = 0, 1, \dots, T - 1$}
-  \STATE $x^{t+1} = x^t - \gamma g^t$ \alglinelabel{alg:main_algorithm:x_update} 
+  \STATE $x^{t+1} = x^t - \gamma g^t$
   \STATE Broadcast $x^{t+1}, x^{t}$ to all \textit{participating}\textsuperscript{\red (a)} nodes
   \FOR{$i = 1, \dots, n$ in parallel}
   \STATE {\green $h^{t+1}_i = \nabla f_i(x^{t+1};\xi^{t+1}_{i}) + (1 - b) (h^t_i - \nabla f_i(x^{t};\xi^{t+1}_{i})), \quad \xi^{t+1}_{i} \sim \mathcal{D}_i$}
