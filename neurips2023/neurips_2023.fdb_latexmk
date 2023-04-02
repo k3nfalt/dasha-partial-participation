@@ -1,12 +1,12 @@
 # Fdb version 3
-["bibtex neurips_2023"] 1680449097 "neurips_2023.aux" "neurips_2023.bbl" "neurips_2023" 1680449543
+["bibtex neurips_2023"] 1680457344 "neurips_2023.aux" "neurips_2023.bbl" "neurips_2023" 1680457371
   "/usr/local/texlive/2021/texmf-dist/bibtex/bst/base/apalike.bst" 1292289607 24635 604dafcc79f521a11ea73e506e1fbd98 ""
-  "neurips_2023.aux" 1680449543 53984 eef3be112e1ac6b892bbababe90a2fec "pdflatex"
+  "neurips_2023.aux" 1680457371 53984 1e35e202483c7f18c0e6dd8db211e8c3 "pdflatex"
   "neurips_2023.bib" 1680419633 32680 455aa6c100ecb1127f15a1c2ccd979b6 ""
   (generated)
   "neurips_2023.bbl"
   "neurips_2023.blg"
-["pdflatex"] 1680449540 "neurips_2023.tex" "neurips_2023.pdf" "neurips_2023" 1680449543
+["pdflatex"] 1680457368 "neurips_2023.tex" "neurips_2023.pdf" "neurips_2023" 1680457371
   "/Users/alexatiurin/Library/texlive/2021/texmf-var/fonts/pk/ljfour/public/bbm/bbm10.600pk" 1632769550 6964 b5d8a9ac777f3bebcc9c2f4e3e1bb03a ""
   "/Users/alexatiurin/Library/texlive/2021/texmf-var/fonts/pk/ljfour/public/bbm/bbm6.600pk" 1650276969 4216 a051c92d9fc1dbe653b314290d9afb25 ""
   "/Users/alexatiurin/Library/texlive/2021/texmf-var/fonts/pk/ljfour/public/bbm/bbm7.600pk" 1650265402 4840 0e6ab879c1d0eb4f4538a818b9b44940 ""
@@ -286,16 +286,16 @@
   "experiments/neurips_2022_finite_sum_real-sim_nof_500_numnodes_100_more_probs_batch_size_1_longer.pdf" 1680419258 79482 4564e30cd631d52e19f65ba8ce298afe ""
   "experiments/neurips_2022_stochastic_real-sim_nof_200_numnodes_100_probs_mega_batch_10000_fix_nm_bug_longer.pdf" 1680419258 86143 7e27385fc5bb0318176067d812f639bb ""
   "macros.tex" 1680419251 5367 80c5222ddfe9f36eb2014070151938a6 ""
-  "neurips_2023.aux" 1680449543 53984 eef3be112e1ac6b892bbababe90a2fec "pdflatex"
-  "neurips_2023.bbl" 1680449097 11545 d846accb66d8fee9cfb40e00945c0d28 "bibtex neurips_2023"
-  "neurips_2023.out" 1680449543 7837 a16c1c82bc63de72c5b534ec7daa93fc "pdflatex"
+  "neurips_2023.aux" 1680457371 53984 1e35e202483c7f18c0e6dd8db211e8c3 "pdflatex"
+  "neurips_2023.bbl" 1680457344 11545 d846accb66d8fee9cfb40e00945c0d28 "bibtex neurips_2023"
+  "neurips_2023.out" 1680457371 7837 a16c1c82bc63de72c5b534ec7daa93fc "pdflatex"
   "neurips_2023.sty" 1680045558 11306 7a0a622cd12ea31e106a743bb7d4c3c6 ""
-  "neurips_2023.tex" 1680449540 413950 cdda5322ced37bf81eeeee0366360e2b ""
-  "neurips_2023.toc" 1680449543 6029 c2fe191633c5f39dc0772b2abfebd78f "pdflatex"
+  "neurips_2023.tex" 1680457367 413978 927cd6acf69fe9e40756315182c0c33c ""
+  "neurips_2023.toc" 1680457371 6029 b387a1fa53a7cc7e3e551889fd0b0f6f "pdflatex"
   (generated)
   "neurips_2023.toc"
   "macros.aux"
   "neurips_2023.aux"
   "neurips_2023.out"
-  "neurips_2023.log"
   "neurips_2023.pdf"
+  "neurips_2023.log"
