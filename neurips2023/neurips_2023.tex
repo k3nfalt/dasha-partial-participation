@@ -493,7 +493,7 @@ With probability $1 - p,$ a node does not update $g_i^{\cdot}$ and does not send
 
 % \algname{\algorithmname} is based on \algname{DASHA}. One can easily show that \algname{\algorithmname} reduces to \algname{DASHA} when $\probavailable = 1.$
 % The refinement of \algname{DASHA} is not an exercise, let us point out the main differences: 
-However, we focus our attention on partial participation \emph{in the finite-sum and stochastic settings}. Consider the nodes' steps in \algname{DASHA-MVR} (see Algorithm~\ref{alg:main_algorithm_dasha_mvr}) that is designed for the stochastic setting:
+However, we focus our attention on partial participation \emph{in the finite-sum and stochastic settings}. Consider the nodes' steps in \algname{DASHA-MVR} \citep{tyurin2022dasha} (see Algorithm~\ref{alg:main_algorithm_dasha_mvr}) that is designed for the stochastic setting:
 \begin{align}
   &h^{t+1}_i = \nabla f_i(x^{t+1};\xi^{t+1}_{i}) + (1 - b) (h^t_i - \nabla f_i(x^{t};\xi^{t+1}_{i})), \label{eq:explain_h}\\
   &g^{t+1}_i = g^{t}_i + \cC_i\left(h^{t+1}_i - h^{t}_i - a \left(g^{t}_i - h^{t}_i\right)\right). \label{eq:explain_g}
@@ -503,10 +503,11 @@ One of the main challenges was to ``guess'' how to generalize \eqref{eq:explain_
 \begin{eqnarray}
 \begin{aligned}
   & h^{t+1}_i = h^t_i + \frac{1}{\probavailable}k^{t+1}_i, \,k^{t+1}_i = \nabla f_i(x^{t+1};\xi^{t+1}_{i}) - \nabla f_i(x^{t};\xi^{t+1}_{i}) - b \left(h^t_i - \nabla f_i(x^{t};\xi^{t+1}_{i})\right), \label{eq:explain_h_new}\\
-  & g^{t+1}_i = g^{t}_i + \cC_i\left(\frac{1}{\probavailable}k^{t+1}_i - \frac{a}{\probavailable} \left(g^{t}_i - h^{t}_i\right)\right) \textnormal{with } \probavailable, \textnormal{ and } h^{t+1}_i = h^{t}_i,\, g^{t+1}_i = g^{t}_i \textnormal{ with } 1 - \probavailable.
+  & g^{t+1}_i = g^{t}_i + \cC_i\left(\frac{1}{\probavailable}k^{t+1}_i - \frac{a}{\probavailable} \left(g^{t}_i - h^{t}_i\right)\right) \textnormal{with probability } \probavailable, \\
+  & \textnormal{and } h^{t+1}_i = h^{t}_i,\, g^{t+1}_i = g^{t}_i \textnormal{ with probability } 1 - \probavailable.
 \end{aligned}
 \end{eqnarray}
-Now both control variables $g_i^{t}$ and $h_i^{t}$ do not change with the probability $1 - \probavailable.$ However, when the $i$\textsuperscript{th} node participates, the update rule of $g_i^{t+1}$ and $h_i^{t+1}$ was modified to make the proof work. When $\probavailable = 1$ (no partial participation), the updates rule from \eqref{eq:explain_h_new} reduce to \eqref{eq:explain_h} and \eqref{eq:explain_g}.
+Now both control variables $g_i^{t}$ and $h_i^{t}$ do not change with the probability $1 - \probavailable.$ However, when the $i$\textsuperscript{th} node participates, the update rule of $g_i^{t+1}$ and $h_i^{t+1}$ was modified to make the proof work. When $\probavailable = 1$ (no partial participation), the update rules from \eqref{eq:explain_h_new} reduce to \eqref{eq:explain_h} and \eqref{eq:explain_g}.
 
 % The theoretical analysis of the new algorithm became more complicated: while in \algname{DASHA}, the randomness from compressors is independent of the randomness from stochastic gradients (see \eqref{eq:explain_h} and \eqref{eq:explain_g}). In \eqref{eq:explain_h_new} (see also main Algorithm~\ref{alg:main_algorithm}), these two randomnesses are coupled by the randomness from the partial participation. 
 The theoretical analysis of the new algorithm became more complicated: unlike \eqref{eq:explain_h} and \eqref{eq:explain_g}, the control variables $h^{t+1}_i$ and $g^{t+1}_i$ in \eqref{eq:explain_h_new} (see also main Algorithm~\ref{alg:main_algorithm}) are coupled by the randomness from the partial participation. 
