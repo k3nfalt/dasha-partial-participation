@@ -478,10 +478,19 @@ $\bullet$ We prove convergence rates and show that this method has \textit{the o
   \end{algorithmic}
 \end{algorithm*}
 
-\section{Algorithm Description}
+\section{Algorithm Description and Main Challenges Towards Partial Participation}
 
-We now present \algname{\algorithmname} (see Algorithm~\ref{alg:main_algorithm}), a family of methods to solve the optimization problem \eqref{eq:main_problem}. \algname{\algorithmname} is based on \algname{DASHA}. One can easily show that \algname{\algorithmname} reduces to \algname{DASHA} when $\probavailable = 1.$
-The refinement of \algname{DASHA} is not an exercise, let us point out the main differences: 
+We now present \algname{\algorithmname} (see Algorithm~\ref{alg:main_algorithm}), a family of methods to solve the optimization problem \eqref{eq:main_problem}. When we started investigating the problem, we took \algname{DASHA} as a baseline method for two reasons: the family of algorithms \algname{DASHA} provides the current state-of-the-art communication complexities in the \emph{non-partial participation} setting, and, unlike \algname{MARINA}, it does not send non-compressed gradients. Let us briefly discuss the main idea of \algname{DASHA}, its problem in the \emph{partial participation} setting, and why the refinement of \algname{DASHA} is not an exercise.
+
+i) \emph{In the gradient setting}, the nodes in \algname{DASHA} (see full algorithm in Algorithm~\ref{alg:main_algorithm_dasha}) only do the following steps:
+\begin{align*}
+  g^{t+1}_i = g^{t}_i + \cC_i\left(\nabla f_i(x^{t+1}) - \nabla f_i(x^{t}) - a \left(g^{t}_i - \nabla f_i(x^{t})\right)\right)
+\end{align*}
+
+\alexander{Finish}
+
+% \algname{\algorithmname} is based on \algname{DASHA}. One can easily show that \algname{\algorithmname} reduces to \algname{DASHA} when $\probavailable = 1.$
+% The refinement of \algname{DASHA} is not an exercise, let us point out the main differences: 
 
 i) The theoretical analysis of \algname{\algorithmname} is more complicated: while in \algname{DASHA}, the randomness from compressors is independent of the randomness from stochastic gradients, in \algname{\algorithmname}, these two randomnesses are coupled by the randomness from the partial participation. Moreover, the new methods have to reduce the variance from partial participation. 
 % The theoretical analysis of \algname{\algorithmname} is more complicated: while in \algname{DASHA}, the randomness from compressors is conditionally independent from the randomness from stochastic gradients 
@@ -730,6 +739,8 @@ In the finite-sum (Figure~\ref{fig:real_sim_finite_sum}) and in the stochastic s
 % we take the number of nodes $n = ?$, $K = ?$ in Rand$K,$ accuracy $\varepsilon$ such that $\nicefrac{\sigma^2}{n \varepsilon B} = ?.$ 
 we see that the bigger probability $\probavailable = \nicefrac{s}{n}$ to $1$, the closer \algname{\algorithmname} to \algname{DASHA}. Moreover, \algname{\algorithmname} with $s = 10$ and $s = 1$ converges approximately $\times 10$ ($= \nicefrac{1}{\probavailable}$) and $\times 100$ ($= \nicefrac{1}{\probavailable}$) times slower, accordingly. Our theory predicts such behavior.
 
+\newpage
+
 % \begin{figure}[h]
 %   \centering
 %   % \includegraphics[width=0.75\linewidth]{experiments/neurips_2022_stochastic_real-sim_nof_200_numnodes_10_probs_mega_batch_100000_fix_nm_bug_longer.pdf}
@@ -765,6 +776,33 @@ we see that the bigger probability $\probavailable = \nicefrac{s}{n}$ to $1$, th
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{Original \algname{DASHA} Method}
+To simplify the discussion and explanation from the main part, we present the algorithm of \algname{DASHA} \citep{tyurin2022dasha}
+
+\begin{algorithm*}
+  \caption{\algname{DASHA}}
+  \label{alg:main_algorithm_dasha}
+  \begin{algorithmic}[1]
+  \STATE \textbf{Input:} starting point $x^0 \in \R^d$, stepsize $\gamma > 0$, momentum $a \in (0, 1]$, 
+  number of iterations~$T \geq 1$
+  \STATE Initialize $g^0_i\in \R^d$ on the nodes and  $g^0 = \frac{1}{n}\sum_{i=1}^n g^0_i$ on the server
+  \FOR{$t = 0, 1, \dots, T - 1$}
+  \STATE $x^{t+1} = x^t - \gamma g^t$ \alglinelabel{alg:main_algorithm:x_update} 
+  \STATE Broadcast $x^{t+1}, x^{t}$ to all \textit{participating}\textsuperscript{\red (a)} nodes
+  \FOR{$i = 1, \dots, n$ in parallel}
+  \STATE $m^{t+1}_i = \cC_i\left(\nabla f_i(x^{t+1}) - \nabla f_i(x^{t}) - a \left(g^{t}_i - \nabla f_i(x^{t})\right)\right)$
+  \STATE $g^{t+1}_i = g^{t}_i + m^{t+1}_i$
+  \STATE Send $m^{t+1}_i$ to the server
+  \ENDFOR
+  \STATE $g^{t+1} = g^t + \frac{1}{n} \sum_{i=1}^n m^{t+1}_i$
+  \ENDFOR
+  \STATE \textbf{Output:} $\hat{x}^T$ chosen uniformly at random from $\{x^t\}_{k=0}^{T-1}$ 
+  \end{algorithmic}
+\end{algorithm*}
+
+
+\newpage
 
 \section{Auxiliary facts}
 We list auxiliary facts that we use in our proofs:
