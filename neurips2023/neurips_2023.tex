@@ -198,48 +198,48 @@ The $i$\textsuperscript{th} node has only access to the gradient $\nabla f_i \,:
     The functions $f_i$ are $L_i$--smooth for all $i \in [n]$. Let us define $\widehat{L}^2 \eqdef \frac{1}{n} \sum_{i=1}^{n} L_i^2.$\footnote{Note that $L \leq \widehat{L},$ $\widehat{L} \leq L_{\max},$ and $\widehat{L} \leq L_{\sigma}.$}
 \end{assumption}
 
-\begin{table*}[!ht]
-  \caption{Summary of methods that solve the problem \eqref{eq:main_problem} in the stochastic setting \eqref{eq:task_staochastic}. Abbr.: \emph{VR} (Variance Reduction) = Does a method have the optimal oracle complexity $\cO\left(\frac{\sigma^2}{\varepsilon} + \frac{\sigma}{\varepsilon^{\nicefrac{3}{2}}}\right)$?
+\begin{table*}
+  \caption{\small Summary of methods that solve the problem \eqref{eq:main_problem} in the stochastic setting \eqref{eq:task_staochastic}. Abbr.: \emph{VR} (Variance Reduction) = Does a method have the optimal oracle complexity $\cO\left(\frac{\sigma^2}{\varepsilon} + \frac{\sigma}{\varepsilon^{\nicefrac{3}{2}}}\right)$?
   \emph{PP} (Partial Participation) = Does a method support partial participation from Section~\ref{sec:partial_participation}? \emph{CC} = Does a method have the communication complexity equals to $\cO\left(\frac{d}{\sqrt{n} \varepsilon}\right)$ \iffalse w.r.t. the dimension $d$, the number of nodes $n,$ and accuracy $\varepsilon$ \fi ?}
   \label{table:comparison}
   \centering 
-  \small
+  \scriptsize
   \begin{threeparttable}
     \begin{tabular}{ccccc}
       \midrule
     Method & \emph{VR} & 
     \emph{PP} & \emph{CC} & Limitations \\
      \midrule\midrule
-     \begin{tabular}{@{}c@{}}\algname{SPIDER}, \algname{SARAH}, \algname{PAGE}, \algname{STORM} \\ \citep{SPIDER, SARAH} \\ \citep{PAGE, cutkosky2019momentum}\end{tabular} & \cmark & \xmark & \xmark & ---\\
+     \begin{tabular}{@{}c@{}}\algnamesmall{SPIDER}, \algnamesmall{SARAH}, \algnamesmall{PAGE}, \algnamesmall{STORM} \\ \citep{SPIDER, SARAH} \\ \citep{PAGE, cutkosky2019momentum}\end{tabular} & \cmark & \xmark & \xmark & ---\\
      \midrule
-    %  \begin{tabular}{@{}c@{}} Naive \algname{STORM} in the \emph{PP} setting \end{tabular} & ? & \cmark & \xmark & \\
+    %  \begin{tabular}{@{}c@{}} Naive \algnamesmall{STORM} in the \emph{PP} setting \end{tabular} & ? & \cmark & \xmark & \\
     %  \midrule
-     \begin{tabular}{@{}c@{}}\algname{MARINA} \\ \citep{MARINA} \end{tabular} & \cmark & \xmark\textsuperscript{{\color{blue}(a)}} & \cmark\textsuperscript{{\color{blue}(b)}} & \begin{tabular}{@{}c@{}}Suboptimal convergence rate \\ (see \citep{tyurin2022dasha}). \end{tabular}\\
+     \begin{tabular}{@{}c@{}}\algnamesmall{MARINA} \\ \citep{MARINA} \end{tabular} & \cmark & \xmark\textsuperscript{{\color{blue}(a)}} & \cmark\textsuperscript{{\color{blue}(b)}} & \begin{tabular}{@{}c@{}}Suboptimal convergence rate \\ (see \citep{tyurin2022dasha}). \end{tabular}\\
      \midrule
-     \begin{tabular}{@{}c@{}}\algname{FedPAGE} \\ \citep{zhao2021fedpage} \end{tabular} & \xmark & \xmark\textsuperscript{{\color{blue}(a)}} & \xmark & Suboptimal oracle complexity $\cO\left(\frac{\sigma^2}{\varepsilon^2}\right)$. \\
+     \begin{tabular}{@{}c@{}}\algnamesmall{FedPAGE} \\ \citep{zhao2021fedpage} \end{tabular} & \xmark & \xmark\textsuperscript{{\color{blue}(a)}} & \xmark & Suboptimal oracle complexity $\cO\left(\frac{\sigma^2}{\varepsilon^2}\right)$. \\
      \midrule
-     \begin{tabular}{@{}c@{}}\algname{FRECON} \\ \citep{zhao2021faster} \end{tabular} & \xmark & \cmark & \cmark & --- \\
+     \begin{tabular}{@{}c@{}}\algnamesmall{FRECON} \\ \citep{zhao2021faster} \end{tabular} & \xmark & \cmark & \cmark & --- \\
      \midrule
-     \begin{tabular}{@{}c@{}}\algname{FedAvg} \\ \citep{mcmahan2017communication, karimireddy2020scaffold} \end{tabular} & \xmark & \cmark & \xmark & Bounded gradients (dissimilarity) assumption of $f_i$.\\
+     \begin{tabular}{@{}c@{}}\algnamesmall{FedAvg} \\ \citep{mcmahan2017communication, karimireddy2020scaffold} \end{tabular} & \xmark & \cmark & \xmark & Bounded gradients (dissimilarity) assumption of $f_i$.\\
      \midrule
-     \begin{tabular}{@{}c@{}}\algname{SCAFFOLD} \\ \citep{karimireddy2020scaffold} \end{tabular} & \xmark & \cmark & \xmark & Suboptimal convergence rate\textsuperscript{{\color{blue}(e)}}. \\
+     \begin{tabular}{@{}c@{}}\algnamesmall{SCAFFOLD} \\ \citep{karimireddy2020scaffold} \end{tabular} & \xmark & \cmark & \xmark & Suboptimal convergence rate\textsuperscript{{\color{blue}(e)}}. \\
      \midrule
-     \begin{tabular}{@{}c@{}}\algname{MIME}\textsuperscript{{\color{blue}(c)}} \\ \citep{karimireddy2020mime} \end{tabular} & \xmark\textsuperscript{{\color{blue}(d)}} & \cmark & \xmark & \begin{tabular}{@{}c@{}}Calculates full gradient. \\ Bounded gradients (dissimilarity) assumption of $f_i$. \\ Suboptimal oracle complexity $\cO\left(\nicefrac{1}{\varepsilon^{3/2}}\right)$ in the setting \eqref{eq:task_minibatch}.\end{tabular} \\
+     \begin{tabular}{@{}c@{}}\algnamesmall{MIME}\textsuperscript{{\color{blue}(c)}} \\ \citep{karimireddy2020mime} \end{tabular} & \xmark\textsuperscript{{\color{blue}(d)}} & \cmark & \xmark & \begin{tabular}{@{}c@{}}Calculates full gradient. \\ Bounded gradients (dissimilarity) assumption of $f_i$. \\ Suboptimal oracle complexity $\cO\left(\nicefrac{1}{\varepsilon^{3/2}}\right)$ \\ in the setting \eqref{eq:task_minibatch}.\end{tabular} \\
      \midrule
-     \begin{tabular}{@{}c@{}}\algname{CE-LSGD} (for Partial Participation)\textsuperscript{{\color{blue}(c)}} \\ \citep{pateltowards} \\ (concurrent work) \end{tabular} & \cmark & \cmark & \xmark & \begin{tabular}{@{}c@{}}Bounded gradients (dissimilarity) assumption of $f_i$. \\ Suboptimal oracle complexity $\cO\left(\nicefrac{1}{\varepsilon^{3/2}}\right)$ in the setting \eqref{eq:task_minibatch}.\end{tabular} \\
+     \begin{tabular}{@{}c@{}}\algnamesmall{CE-LSGD} (for Partial Participation)\textsuperscript{{\color{blue}(c)}} \\ \citep{pateltowards} \\ (concurrent work) \end{tabular} & \cmark & \cmark & \xmark & \begin{tabular}{@{}c@{}}Bounded gradients (dissimilarity) assumption of $f_i$. \\ Suboptimal oracle complexity $\cO\left(\nicefrac{1}{\varepsilon^{3/2}}\right)$ \\ in the setting \eqref{eq:task_minibatch}.\end{tabular} \\
      \midrule
-     \begin{tabular}{@{}c@{}}\algname{DASHA} \\ \citep{tyurin2022dasha} \end{tabular} & \begin{tabular}{@{}c@{}}\cmark \\ \phantom{or} \\ \xmark \end{tabular} & \begin{tabular}{@{}c@{}}\xmark \\ or\\ \cmark \end{tabular} & \begin{tabular}{@{}c@{}}\cmark \\ \phantom{or}\\ \cmark \end{tabular} & --- \\
+     \begin{tabular}{@{}c@{}}\algnamesmall{DASHA} \\ \citep{tyurin2022dasha} \end{tabular} & \begin{tabular}{@{}c@{}}\cmark \\ \phantom{or} \\ \xmark \end{tabular} & \begin{tabular}{@{}c@{}}\xmark \\ or\\ \cmark \end{tabular} & \begin{tabular}{@{}c@{}}\cmark \\ \phantom{or}\\ \cmark \end{tabular} & --- \\
      \midrule
-     \begin{tabular}{@{}c@{}}\algname{DASHA-PP} \\ (new) \end{tabular} & \cmark & \cmark & \cmark & --- \\
+     \begin{tabular}{@{}c@{}}\algnamesmall{DASHA-PP} \\ (new) \end{tabular} & \cmark & \cmark & \cmark & --- \\
     \midrule\midrule
     \end{tabular}
     \begin{tablenotes}
       % \scriptsize
-      \item [{\color{blue}(a)}] \algname{MARINA} and \algname{FedPAGE}, with a small probability, require the participation of all nodes so that they can not support partial participation from Section~\ref{sec:partial_participation}. Moreover, these methods provide suboptimal oracle complexities.
-      \item [{\color{blue}(b)}] On average, \algname{MARINA} provides the compressed communication mechanism with complexity $\cO\left(\frac{d}{\sqrt{n} \varepsilon}\right).$ However, with a small probability, this method sends non-compressed vectors.
-      \item [{\color{blue}(c)}] Note that \algname{MIME} and \algname{CE-LSGD} can not be directly compared with \algname{DASHA-PP} because \algname{MIME} and \algname{CE-LSGD} consider the online version of the problem \eqref{eq:main_problem}, and require more strict assumptions.
-      \item [{\color{blue}(d)}] Although \algname{MIME} obtains the convergence rate $\cO\left(\frac{1}{\varepsilon^{3/2}}\right)$ of a variance reduced method, it requires the calculation of the full (exact) gradients.
-      \item [{\color{blue}(e)}] It can be seen when $\sigma^2 = 0.$ Let us consider the $s$-nice sampling of the nodes, then \algname{SCAFFOLD} requires $\cO\left(\frac{n^{3/2}}{\varepsilon s^{3/2}}\right)$ communication rounds to get $\varepsilon$-solution, while \algname{DASHA-PP} requires $\cO\left(\frac{\sqrt{n}}{\varepsilon s}\right)$ communication rounds (see Theorem~\ref{theorem:stochastic} with $\omega = 0,$ $b = \frac{\probavailable}{2 - \probavailable},$ and $\probavailable = \frac{s}{n}$).
+      \item [{\color{blue}(a)}] \algnamesmall{MARINA} and \algnamesmall{FedPAGE}, with a small probability, require the participation of all nodes so that they can not support partial participation from Section~\ref{sec:partial_participation}. Moreover, these methods provide suboptimal oracle complexities.
+      \item [{\color{blue}(b)}] On average, \algnamesmall{MARINA} provides the compressed communication mechanism with complexity $\cO\left(\frac{d}{\sqrt{n} \varepsilon}\right).$ However, with a small probability, this method sends non-compressed vectors.
+      \item [{\color{blue}(c)}] Note that \algnamesmall{MIME} and \algnamesmall{CE-LSGD} can not be directly compared with \algnamesmall{DASHA-PP} because \algnamesmall{MIME} and \algnamesmall{CE-LSGD} consider the online version of the problem \eqref{eq:main_problem}, and require more strict assumptions.
+      \item [{\color{blue}(d)}] Although \algnamesmall{MIME} obtains the convergence rate $\cO\left(\frac{1}{\varepsilon^{3/2}}\right)$ of a variance reduced method, it requires the calculation of the full (exact) gradients.
+      \item [{\color{blue}(e)}] It can be seen when $\sigma^2 = 0.$ Let us consider the $s$-nice sampling of the nodes, then \algnamesmall{SCAFFOLD} requires $\cO\left(\frac{n^{3/2}}{\varepsilon s^{3/2}}\right)$ communication rounds to get $\varepsilon$-solution, while \algnamesmall{DASHA-PP} requires $\cO\left(\frac{\sqrt{n}}{\varepsilon s}\right)$ communication rounds (see Theorem~\ref{theorem:stochastic} with $\omega = 0,$ $b = \frac{\probavailable}{2 - \probavailable},$ and $\probavailable = \frac{s}{n}$).
       % \item [{\color{blue}(b)}] Does the algorithm require periodic synchronization between nodes? (see Section~\ref{sec:contributions})
     \end{tablenotes}
 \end{threeparttable}
