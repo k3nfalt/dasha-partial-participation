@@ -251,39 +251,6 @@ where $f_{ij} :\R^d  \rightarrow \R$ is a smooth nonconvex  function for all $j 
 \end{threeparttable}
 \end{table*}
 
-\begin{table*}
-  \caption{\small Summary of methods that solve the problem \eqref{eq:main_problem} in the finite-sum setting \eqref{eq:task_minibatch}. Abbr.: \emph{VR} (Variance Reduction) = Does a method have the optimal oracle complexity $\cO\left(m + \frac{\sqrt{m}}{\varepsilon}\right)$? \emph{PP} and \emph{CC} are defined in Table~\ref{table:comparison}.}
-  \label{table:comparison_finite}
-  \centering 
-  \scriptsize
-  \begin{threeparttable}
-    \begin{tabular}{ccccc}
-      \midrule
-    Method & \emph{VR} & 
-    \emph{PP} & \emph{CC} & Limitations \\
-     \midrule\midrule
-     \begin{tabular}{@{}c@{}}\algnamesmall{SPIDER}, \algnamesmall{PAGE} \\ \citep{SPIDER, PAGE} \end{tabular} & \cmark & \xmark & \xmark & ---\\
-     \midrule
-    %  \begin{tabular}{@{}c@{}} Naive \algnamesmall{STORM} in the \emph{PP} setting \end{tabular} & ? & \cmark & \xmark & \\
-    %  \midrule
-     \begin{tabular}{@{}c@{}}\algnamesmall{MARINA} \\ \citep{MARINA} \end{tabular} & \cmark & \xmark\textsuperscript{{\color{blue}(a)}} & \cmark\textsuperscript{{\color{blue}(b)}} & \begin{tabular}{@{}c@{}}Suboptimal convergence rate \\ (see \citep{tyurin2022dasha}). \end{tabular}\\
-     \midrule
-     \begin{tabular}{@{}c@{}}\algnamesmall{ZeroSARAH} \\ \citep{li2021zerosarah} \end{tabular} & \cmark & \cmark & \xmark & Only homogeneous regime, i.e., the functions $f_i$ are equal. \\
-     \midrule
-     \begin{tabular}{@{}c@{}}\algnamesmall{FedPAGE} \\ \citep{zhao2021fedpage} \end{tabular} & \xmark & \xmark\textsuperscript{{\color{blue}(a)}} & \xmark & Suboptimal oracle complexity $\cO\left(\frac{m}{\varepsilon}\right)$. \\
-     \midrule
-     \begin{tabular}{@{}c@{}}\algnamesmall{DASHA} \\ \citep{tyurin2022dasha} \end{tabular} & \cmark & \xmark & \cmark & --- \\
-     \midrule
-     \begin{tabular}{@{}c@{}}\algnamesmall{DASHA-PP} \\ (new) \end{tabular} & \cmark & \cmark & \cmark & --- \\
-    \midrule\midrule
-    \end{tabular}
-    \begin{tablenotes}
-      % \scriptsize
-      \item [{\color{blue}(a)}, {\color{blue}(b)}]: see Table~\ref{table:comparison}.
-    \end{tablenotes}
-\end{threeparttable}
-\end{table*}
-
 We assume that Assumptions~\ref{ass:lower_bound}, \ref{ass:lipschitz_constant} and \ref{ass:nodes_lipschitz_constant} hold and the following assumption.
 \begin{assumption}
   \label{ass:max_lipschitz_constant}
@@ -354,6 +321,39 @@ We now try to formalize the notion of partial participation. Let us assume that 
   \end{enumerate}
   and these events from different communication rounds are independent.
 \end{assumption}
+
+\begin{table*}
+  \caption{\small Summary of methods that solve the problem \eqref{eq:main_problem} in the finite-sum setting \eqref{eq:task_minibatch}. Abbr.: \emph{VR} (Variance Reduction) = Does a method have the optimal oracle complexity $\cO\left(m + \frac{\sqrt{m}}{\varepsilon}\right)$? \emph{PP} and \emph{CC} are defined in Table~\ref{table:comparison}.}
+  \label{table:comparison_finite}
+  \centering 
+  \scriptsize
+  \begin{threeparttable}
+    \begin{tabular}{ccccc}
+      \midrule
+    Method & \emph{VR} & 
+    \emph{PP} & \emph{CC} & Limitations \\
+     \midrule\midrule
+     \begin{tabular}{@{}c@{}}\algnamesmall{SPIDER}, \algnamesmall{PAGE} \\ \citep{SPIDER, PAGE} \end{tabular} & \cmark & \xmark & \xmark & ---\\
+     \midrule
+    %  \begin{tabular}{@{}c@{}} Naive \algnamesmall{STORM} in the \emph{PP} setting \end{tabular} & ? & \cmark & \xmark & \\
+    %  \midrule
+     \begin{tabular}{@{}c@{}}\algnamesmall{MARINA} \\ \citep{MARINA} \end{tabular} & \cmark & \xmark\textsuperscript{{\color{blue}(a)}} & \cmark\textsuperscript{{\color{blue}(b)}} & \begin{tabular}{@{}c@{}}Suboptimal convergence rate \\ (see \citep{tyurin2022dasha}). \end{tabular}\\
+     \midrule
+     \begin{tabular}{@{}c@{}}\algnamesmall{ZeroSARAH} \\ \citep{li2021zerosarah} \end{tabular} & \cmark & \cmark & \xmark & Only homogeneous regime, i.e., the functions $f_i$ are equal. \\
+     \midrule
+     \begin{tabular}{@{}c@{}}\algnamesmall{FedPAGE} \\ \citep{zhao2021fedpage} \end{tabular} & \xmark & \xmark\textsuperscript{{\color{blue}(a)}} & \xmark & Suboptimal oracle complexity $\cO\left(\frac{m}{\varepsilon}\right)$. \\
+     \midrule
+     \begin{tabular}{@{}c@{}}\algnamesmall{DASHA} \\ \citep{tyurin2022dasha} \end{tabular} & \cmark & \xmark & \cmark & --- \\
+     \midrule
+     \begin{tabular}{@{}c@{}}\algnamesmall{DASHA-PP} \\ (new) \end{tabular} & \cmark & \cmark & \cmark & --- \\
+    \midrule\midrule
+    \end{tabular}
+    \begin{tablenotes}
+      % \scriptsize
+      \item [{\color{blue}(a)}, {\color{blue}(b)}]: see Table~\ref{table:comparison}.
+    \end{tablenotes}
+\end{threeparttable}
+\end{table*}
 
 We are not fighting for the full generality and believe that more complex sampling strategies can be considered in the analysis. For simplicity, we settle upon Assumption~\ref{ass:partial_participation}. Standard partial participation strategies, including $s$--nice sampling, where the server chooses uniformly $s$ nodes without replacement ($\probavailable = \nicefrac{s}{n}$ and $\probpairaa~=~\nicefrac{s(s-1)}{n(n-1)}$),
 and independent participation, where each node independently participates with probability $\probavailable$ (due to independence, we have $\probpairaa = \probavailable^2$), satisfy Assumption~\ref{ass:partial_participation}. In the literature, $s$--nice sampling is one of the most popular strategies \citep{zhao2021faster, richtarik2021ef21, reddi2020adaptive, konevcny2016federated}. 
