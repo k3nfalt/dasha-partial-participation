@@ -474,13 +474,16 @@ We now present \algname{\algorithmname} (see Algorithm~\ref{alg:main_algorithm})
 
 $\bullet$ In fact, \algname{DASHA} supports the partial participation of nodes \emph{in the gradient setting}. Since the nodes only do the following steps (see full algorithm in Algorithm~\ref{alg:main_algorithm_dasha}):
 \begin{align*}
-  g^{t+1}_i = g^{t}_i + \cC_i\left(\nabla f_i(x^{t+1}) - \nabla f_i(x^{t}) - a \left(g^{t}_i - \nabla f_i(x^{t})\right)\right)
+  g^{t+1}_i = g^{t}_i + \cC_i\left(\nabla f_i(x^{t+1}) - \nabla f_i(x^{t}) - a \left(g^{t}_i - \nabla f_i(x^{t})\right)\right).
 \end{align*}
 The partial participation mechanism (independent participation from Section~\ref{sec:partial_participation}) can be easily implemented here if we redefine the compressor and use another one instead:
 \begin{align*}
-  \cC_{i,p} \eqdef \begin{cases}
-    \frac{1}{p}\cC_{i},& \textnormal{with probability } p\\
-    0,& \textnormal{with probability } 1 - p\\
+  \cC_{i}^p \eqdef \begin{cases}
+    \frac{1}{p}\cC_{i},& \textnormal{with } \probavailable,\\
+    0,& \textnormal{with } 1 - \probavailable.
+  \end{cases} \Rightarrow g^{t+1}_i = \begin{cases}
+    g^{t}_i + \frac{1}{\probavailable}\cC_i\left(\nabla f_i(x^{t+1}) - \nabla f_i(x^{t}) - a \left(g^{t}_i - \nabla f_i(x^{t})\right)\right),\\
+    0.
   \end{cases}
 \end{align*}
 With probability $1 - p,$ a node does not update $g_i^{\cdot}$ and does not send anything to the server. The main observation is that we can do this trick since the nodes only need the points $x^{t+1}$ and $x^{t}$ to do the step.
@@ -488,10 +491,10 @@ With probability $1 - p,$ a node does not update $g_i^{\cdot}$ and does not send
 
 % \algname{\algorithmname} is based on \algname{DASHA}. One can easily show that \algname{\algorithmname} reduces to \algname{DASHA} when $\probavailable = 1.$
 % The refinement of \algname{DASHA} is not an exercise, let us point out the main differences: 
-$\bullet$ However, we focus our attention on partial participation in the finite-sum and stochastic settings. Let us consider the nodes' steps in \algname{DASHA-MVR} (see Algorithm~\ref{alg:main_algorithm_dasha_mvr}):
+$\bullet$ However, we focus our attention on partial participation \emph{in the finite-sum and stochastic settings}. Consider the nodes' steps in \algname{DASHA-MVR} (see Algorithm~\ref{alg:main_algorithm_dasha_mvr}) that is designed for the stochastic setting:
 \begin{align*}
-  &h^{t+1}_i = \nabla f_i(x^{t+1};\xi^{t+1}_{i}) + (1 - b) (h^t_i - \nabla f_i(x^{t};\xi^{t+1}_{i})) \\
-  &g^{t+1}_i = g^{t}_i + \cC_i\left(h^{t+1}_i - h^{t}_i - a \left(g^{t}_i - h^{t}_i\right)\right)
+  &h^{t+1}_i = \nabla f_i(x^{t+1};\xi^{t+1}_{i}) + (1 - b) (h^t_i - \nabla f_i(x^{t};\xi^{t+1}_{i})), \\
+  &g^{t+1}_i = g^{t}_i + \cC_i\left(h^{t+1}_i - h^{t}_i - a \left(g^{t}_i - h^{t}_i\right)\right).
 \end{align*}
 
 i) The theoretical analysis of \algname{\algorithmname} is more complicated: while in \algname{DASHA}, the randomness from compressors is independent of the randomness from stochastic gradients, in \algname{\algorithmname}, these two randomnesses are coupled by the randomness from the partial participation. Moreover, the new methods have to reduce the variance from partial participation. 
