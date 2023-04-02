@@ -507,18 +507,21 @@ One of the main challenges was to ``guess'' how to generalize \eqref{eq:explain_
 \end{align}
 Now both control variables $g_i^{t}$ and $h_i^{t}$ do not change with the probability $\probavailable.$ However, this required changing the update rule of $g_i^{t+1}$ and $h_i^{t+1}$ to make the proof work.
 
-i) The theoretical analysis of \algname{\algorithmname} is more complicated: while in \algname{DASHA}, the randomness from compressors is independent of the randomness from stochastic gradients, in \algname{\algorithmname}, these two randomnesses are coupled by the randomness from the partial participation. Moreover, the new methods have to reduce the variance from partial participation. 
+The theoretical analysis of the new algorithm became more complicated: while in \algname{DASHA}, the randomness from compressors is independent of the randomness from stochastic gradients (see \eqref{eq:explain_h} and \eqref{eq:explain_g}). In \eqref{eq:explain_h_new} (see also main Algorithm~\ref{alg:main_algorithm}), these two randomnesses are coupled by the randomness from the partial participation. Going deeper into details, one can compare Lemma~I.2 from \citep{tyurin2022dasha} and Lemma~\ref{lemma:g_h}. While the former lemma does not use the knowledge about the update rule of $h^{t+1}_i,$ uses only \eqref{eq:compressor}, \eqref{auxiliary:jensen_inequality}, and \eqref{auxiliary:variance_decomposition}, the latter lemma additionally explicitly uses that $h^{t+1}_i = h^t_i + \frac{1}{\probavailable}k^{t+1}_i,$ surgically copes with the expectations $\ExpSub{\cC}{\cdot}$ and $\ExpSub{\probavailable}{\cdot}$ (for instance, it is not trivial in each order one should apply the expectations), and uses the sampling lemma (Lemma~\ref{lemma:sampling}). The same reasoning applies to other part of the analysis. 
+% Moreover, the new methods have to reduce the variance from partial participation. 
+
+% i) The theoretical analysis of \algname{\algorithmname} is more complicated: while in \algname{DASHA}, the randomness from compressors is independent of the randomness from stochastic gradients, in \algname{\algorithmname}, these two randomnesses are coupled by the randomness from the partial participation. Moreover, the new methods have to reduce the variance from partial participation. 
 % The theoretical analysis of \algname{\algorithmname} is more complicated: while in \algname{DASHA}, the randomness from compressors is conditionally independent from the randomness from stochastic gradients 
 % ii) if some node participates, then it does \algname{DASHA}-like steps; otherwise, it does nothing. 
 % iii) some steps are scaled by \nicefrac{1}{\probavailable} to preserve ``unbiasedness''. 
 
-ii) In the gradient setting, comparing the structure of algorithms \algname{\algorithmname} and \algname{DASHA}, one can see that in \algname{\algorithmname} we added at least two crucial things: the momentum $b$, which helps to reduce the variance of partial participation randomness, and the proper scaling by $\nicefrac{1}{\probavailable}$. Note that in finite-sum and stochastic settings, in \algname{\algorithmname-FINITE-MVR} and \algname{\algorithmname-MVR}, accordingly, the momentum $b$ plays the dual role; it also helps to reduce the variance of stochastic gradients.
-% ii) In \algname{DASHA}, the momentum $b$ is used only to reduce the variance of stochastic gradients. In \algname{\algorithmname}, the momentum $b$ plays the second role. It also helps to reduce the variance of partial participation randomness. That is why it also appears in the gradient and finite-sum settings. 
+% ii) In the gradient setting, comparing the structure of algorithms \algname{\algorithmname} and \algname{DASHA}, one can see that in \algname{\algorithmname} we added at least two crucial things: the momentum $b$, which helps to reduce the variance of partial participation randomness, and the proper scaling by $\nicefrac{1}{\probavailable}$. Note that in finite-sum and stochastic settings, in \algname{\algorithmname-FINITE-MVR} and \algname{\algorithmname-MVR}, accordingly, the momentum $b$ plays the dual role; it also helps to reduce the variance of stochastic gradients.
+% % ii) In \algname{DASHA}, the momentum $b$ is used only to reduce the variance of stochastic gradients. In \algname{\algorithmname}, the momentum $b$ plays the second role. It also helps to reduce the variance of partial participation randomness. That is why it also appears in the gradient and finite-sum settings. 
 
-iii) In the finite-sum setting, we present two methods: \algname{\algorithmname-PAGE} and \algname{\algorithmname-FINITE-MVR}. The former is based on \algname{PAGE} \citep{PAGE} and with small probability $\probpage$ calculates the full gradients of the functions $f_i$. The latter always calculates mini-batches, but it needs extra memory $\cO\left(d m\right)$ per node to store vectors $h^{t}_{ij}$.
+% iii) In the finite-sum setting, we present two methods: \algname{\algorithmname-PAGE} and \algname{\algorithmname-FINITE-MVR}. The former is based on \algname{PAGE} \citep{PAGE} and with small probability $\probpage$ calculates the full gradients of the functions $f_i$. The latter always calculates mini-batches, but it needs extra memory $\cO\left(d m\right)$ per node to store vectors $h^{t}_{ij}$.
 
 % \alexander{To say something like that}
-At the first reading of the proofs, we suggest the reader follow the proof of Theorem~\ref{theorem:gradient_oracle} in the gradient setting, which takes a small part of the paper. Although the proof seems to be dense and large, the size of the appendix is justified by the fact that we consider different settings and P\L-condition.
+At the first reading of the proofs, we suggest the reader follow the proof of Theorem~\ref{theorem:gradient_oracle} in the gradient setting, which takes a small part of the paper. Although the appendix seems to be dense and large, the size is justified by the fact that we consider four different settings and P\L-condition ($4 \times 2$ independent tracks of the proofs).
 
 % \setlength{\floatsep}{0pt}% Remove \textfloatsep
 
@@ -1030,6 +1033,7 @@ The lemma can be easily checked with the direct calculation.
 
 \subsection{Generic Lemmas}
 \begin{lemma}
+  \label{lemma:g_h}
   Suppose that Assumptions~\ref{ass:compressors} and \ref{ass:partial_participation} hold and let us consider sequences $g^{t+1}_i$, $h^{t+1}_i,$ and $k^{t+1}_i$ from Algorithm~\ref{alg:main_algorithm}, then
   \begin{align}
       \label{eq:compressor_global_error}
