@@ -498,7 +498,7 @@ However, we focus our attention on partial participation \emph{in the finite-sum
   &h^{t+1}_i = \nabla f_i(x^{t+1};\xi^{t+1}_{i}) + (1 - b) (h^t_i - \nabla f_i(x^{t};\xi^{t+1}_{i})), \label{eq:explain_h}\\
   &g^{t+1}_i = g^{t}_i + \cC_i\left(h^{t+1}_i - h^{t}_i - a \left(g^{t}_i - h^{t}_i\right)\right). \label{eq:explain_g}
 \end{align}
-Even if we use the same trick for \eqref{eq:explain_g}, we still have to update \eqref{eq:explain_h} in every iteration of the algorithm since $g^{t+1}_i$ additionally depends on $h^{t+1}_i$ and $h^{t}_i.$ In other words, if a node does not update $g_i^{t}$ and does not send anything to the server, it still has to update $h^{t}_i,$ what is impossible without the points $x^{t+1}$ and $x^{t}.$
+Now we have two sequences $h^{t}_i$ and $g^{t}_i.$ Even if we use the same trick for \eqref{eq:explain_g}, we still have to update \eqref{eq:explain_h} in every iteration of the algorithm since $g^{t+1}_i$ additionally depends on $h^{t+1}_i$ and $h^{t}_i.$ In other words, if a node does not update $g_i^{t}$ and does not send anything to the server, it still has to update $h^{t}_i,$ what is impossible without the points $x^{t+1}$ and $x^{t}.$
 One of the main challenges was to ``guess'' how to generalize \eqref{eq:explain_h} and \eqref{eq:explain_g} to the partial participation setting. We now provide a solution (\algname{\algorithmname-MVR} with the batch size $B = 1$):
 \begin{eqnarray}
 \begin{aligned}
@@ -507,7 +507,7 @@ One of the main challenges was to ``guess'' how to generalize \eqref{eq:explain_
   & \textnormal{and } h^{t+1}_i = h^{t}_i,\, g^{t+1}_i = g^{t}_i \textnormal{ with probability } 1 - \probavailable.
 \end{aligned}
 \end{eqnarray}
-Now both control variables $g_i^{t}$ and $h_i^{t}$ do not change with the probability $1 - \probavailable.$ When the $i$\textsuperscript{th} node participates, the update rule of $g_i^{t+1}$ and $h_i^{t+1}$ was modified to make the proof work. When $\probavailable = 1$ (no partial participation), the update rules from \eqref{eq:explain_h_new} reduce to \eqref{eq:explain_h} and \eqref{eq:explain_g}.
+Now both control variables $g_i^{t}$ and $h_i^{t}$ do not change with the probability $1 - \probavailable.$ When the $i$\textsuperscript{th} node participates, the update rules of $g_i^{t+1}$ and $h_i^{t+1}$ in \eqref{eq:explain_h_new} were adapted to make the proof work. When $\probavailable = 1$ (no partial participation), the update rules from \eqref{eq:explain_h_new} reduce to \eqref{eq:explain_h} and \eqref{eq:explain_g}.
 
 % The theoretical analysis of the new algorithm became more complicated: while in \algname{DASHA}, the randomness from compressors is independent of the randomness from stochastic gradients (see \eqref{eq:explain_h} and \eqref{eq:explain_g}). In \eqref{eq:explain_h_new} (see also main Algorithm~\ref{alg:main_algorithm}), these two randomnesses are coupled by the randomness from the partial participation. 
 The theoretical analysis of the new algorithm became more complicated: unlike \eqref{eq:explain_h} and \eqref{eq:explain_g}, the control variables $h^{t+1}_i$ and $g^{t+1}_i$ in \eqref{eq:explain_h_new} (see also main Algorithm~\ref{alg:main_algorithm}) are coupled by the randomness from the partial participation. 
