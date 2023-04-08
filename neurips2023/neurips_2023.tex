@@ -478,10 +478,10 @@ In fact, the original \algname{DASHA} method supports the partial participation 
   \label{eq:explain_g_grad}
   g^{t+1}_i = g^{t}_i + \cC_i\left(\nabla f_i(x^{t+1}) - (1 - a)\nabla f_i(x^{t}) - a g^{t}_i\right).
 \end{align}
-The partial participation mechanism (independent participation from Section~\ref{sec:partial_participation}) can be easily implemented here if we temporally redefine the compressor and use another one\footnote{If $\cC_{i} \in \mathbb{U}\left(\omega\right),$ then $\cC_{i}^p \in \mathbb{U}\left(\nicefrac{\omega + 1}{\probavailable} - 1\right).$} instead:
+The partial participation mechanism (independent participation from Section~\ref{sec:partial_participation}) can be easily implemented here if we temporally redefine the compressor and use another one\footnote{If $\cC_{i} \in \mathbb{U}\left(\omega\right),$ then $\cC_{i}^{\probavailable} \in \mathbb{U}\left(\nicefrac{\omega + 1}{\probavailable} - 1\right).$} instead:
 \begin{align*}
   \cC_{i}^{\probavailable} \eqdef \begin{cases}
-    \frac{1}{p}\cC_{i},\textnormal{w.p. } \probavailable,\\
+    \frac{1}{\probavailable}\cC_{i},\textnormal{w.p. } \probavailable,\\
     0, \hspace{0.2cm} \textnormal{w.p. } 1 - \probavailable.
   \end{cases} \overset{\eqref{eq:explain_g_grad}}{\Rightarrow} g^{t+1}_i = \begin{cases}
     g^{t}_i + \frac{1}{\probavailable}\cC_i\left(\nabla f_i(x^{t+1}) - (1 - a)\nabla f_i(x^{t}) - a g^{t}_i\right), \textnormal{w.p. } \probavailable\\
