@@ -1,0 +1,80 @@
+\documentclass{article}
+\usepackage[utf8]{inputenc}
+\usepackage{microtype}
+\usepackage{graphicx}
+% \usepackage{subfigure}
+\usepackage{booktabs} % for professional tables
+\usepackage{hyperref}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{mathtools}
+\usepackage{amsthm}
+\usepackage{footnote}
+\usepackage{mathtools}
+\usepackage[flushleft]{threeparttable}
+\usepackage{etoolbox}
+\usepackage{nicefrac}       % compact symbols for 1/2, etc.
+\usepackage{microtype}      % microtypography
+\usepackage{xcolor}         % colors
+\usepackage{enumitem}
+\usepackage{tabularx}
+
+\include{macros}
+
+\title{Extra Experiments}
+
+\begin{document}
+\maketitle
+
+In this experiments, we compare our new algorithm \algname{DASHA-PP} with previous baselines \algname{MARINA} and \algname{FRECON} in the partial participation setting.
+\section*{Warm Up: Gradient Setting}
+\begin{figure}[h]
+\includegraphics[width=\textwidth]{neurips_2022_gradient_mushrooms_nodes_100_coord_10_prob_0_01_seeds_3_no_init_with_pp_marina.pdf}
+\caption{Classification task with the \textit{mushrooms} dataset.}
+\label{fig:gradient}
+\end{figure}
+\section*{Finite-Sum Setting}
+We do have experiments with \algname{FRECON} because the corresponding authors do not consider \algname{FRECON} in the finite-sum setting.
+
+\begin{figure}[h]
+    \begin{subfigure}{.5\textwidth}
+        \includegraphics[width=\textwidth]{neurips_2022_finite_sum_mnist_nof_7850_numnodes_10_more_probs_batch_size_10_split_by_labels_logistic.pdf}
+        \caption{MNIST, BZ = 10}
+    \end{subfigure}
+    \begin{subfigure}{.5\textwidth}
+        \includegraphics[width=\textwidth]{neurips_2022_finite_sum_mnist_nof_7850_numnodes_10_more_probs_batch_size_100_split_by_labels_logistic.pdf}
+        \caption{MNIST, BZ = 100}
+    \end{subfigure}
+\caption{Classification task with the \textit{mushrooms} dataset.}
+\label{fig:finite-sum-mnist}
+\end{figure}
+
+\begin{figure}[h]
+    \begin{subfigure}{.5\textwidth}
+        \includegraphics[width=\textwidth]{neurips_2022_finite_sum_real-sim_nof_500_numnodes_100_more_probs_batch_size_1.pdf}
+        \caption{MNIST, BZ = 1}
+    \end{subfigure}
+    \begin{subfigure}{.5\textwidth}
+        \includegraphics[width=\textwidth]{neurips_2022_finite_sum_real-sim_nof_500_numnodes_100_more_probs_batch_size_1000.pdf}
+        \caption{MNIST, BZ = 1000}
+    \end{subfigure}
+\caption{Classification task with the \textit{mushrooms} dataset.}
+\label{fig:finite-sum-real-sim}
+\end{figure}
+
+\clearpage
+\section*{Stochastic Setting}
+\begin{figure}[h]
+    \begin{subfigure}{.5\textwidth}
+        \includegraphics[width=\textwidth]{neurips_2022_stochastic_real-sim_nof_200_numnodes_10_probs_mega_batch_100000_fix_nm_bug.pdf}
+        \caption{MNIST, BZ = 1}
+    \end{subfigure}
+    \begin{subfigure}{.5\textwidth}
+        \includegraphics[width=\textwidth]{?}
+        \caption{MNIST, BZ = 100}
+    \end{subfigure}
+\caption{Classification task with the \textit{mushrooms} dataset.}
+\label{fig:finite-sum-mnist}
+\end{figure}
+
+\end{document}
