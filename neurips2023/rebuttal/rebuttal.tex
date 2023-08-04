@@ -1,4 +1,4 @@
-\documentclass{article}
+\documentclass[12pt]{article}
 \usepackage[utf8]{inputenc}
 \usepackage{microtype}
 \usepackage{graphicx}
@@ -18,27 +18,50 @@
 \usepackage{xcolor}         % colors
 \usepackage{enumitem}
 \usepackage{tabularx}
+\usepackage[margin=0.5in]{geometry}
 
 \include{macros}
 
-\title{Extra Experiments}
-
 \begin{document}
-\maketitle
+\begin{center}
+    Extra Experiments
+\end{center}
 
-In this experiments, we compare our new algorithm \algname{DASHA-PP} with previous baselines \algname{MARINA} and \algname{FRECON} in the partial participation setting. We consider \algname{MARINA} and \algname{FRECON} because they are the previous baselines in the \emph{partial participation setting with compression}.
+In this experiments, we compare our new algorithm \algname{DASHA-PP} with previous baselines \algname{MARINA} and \algname{FRECON} in the partial participation setting. We consider \algname{MARINA} and \algname{FRECON} because they are the previous SOTA methods in the \emph{partial participation setting with compression}. We consider the same optimization problem and setup as in Section~A of the paper.
 % \section*{Warm Up: Gradient Setting}
 % \begin{figure}[h]
 % \includegraphics[width=\textwidth]{neurips_2022_gradient_mushrooms_nodes_100_coord_10_prob_0_01_seeds_3_no_init_with_pp_marina.pdf}
 % \caption{Classification task with the \textit{mushrooms} dataset.}
 % \label{fig:gradient}
 % \end{figure}
-\section*{Finite-Sum Setting}
-We do not have experiments with \algname{FRECON} because the authors of \algname{FRECON} do not consider it in the finite-sum setting.
 
-\begin{figure}[h]
+\begin{center}
+    \bf Stochastic Setting
+\end{center}
+
+In Figure~\ref{fig:stochastic}, we compare all three methods in the stochastic setting on two different datasets: \textit{real-sim} and \textit{MNIST}. The parameter $s$ means the number of clients participating in each round. We can see that \algname{DASHA-PP} has better convergence rates than \algname{FRECON}. \algname{DASHA-PP} with $s \in \{5, 10\}$ even improves \algname{MARINA} that works in the full participation regime (one should expect that convergence rate of \algname{MARINA} with partial participation will be even worse).
+
+\begin{figure}[H]
     \begin{subfigure}{.5\textwidth}
-        \includegraphics[width=\textwidth]{neurips_2022_finite_sum_mnist_nof_7850_numnodes_10_more_probs_batch_size_10_split_by_labels_logistic.pdf}
+        \includegraphics[width=\textwidth]{neurips_2022_stochastic_real-sim_nof_200_numnodes_10_probs_mega_batch_100000_fix_nm_bug.pdf}
+        \caption{\textit{real-sim}}
+    \end{subfigure}
+    \begin{subfigure}{.5\textwidth}
+        \includegraphics[width=\textwidth]{neurips_2023_stochastic_mnist_nof_100_numnodes_10_probs_mega_batch_100000_batch_size_10_longer.pdf}
+        \caption{\textit{MNIST}}
+    \end{subfigure}
+\caption{Classification task with the \textit{mushrooms} dataset.}
+\label{fig:stochastic}
+\end{figure}
+
+\begin{center}
+    \bf Finite-Sum Setting
+\end{center}
+In Figure~\ref{fig:finite-sum}, we consider the finite-sum setting. We do not have experiments with \algname{FRECON} because the authors of \algname{FRECON} do not consider it in the finite-sum setting. We can see that \algname{DASHA-PP} with $s \in \{50, 90, 100\}$ converges faster than \algname{MARINA} (that works in the full participation regime).
+
+\begin{figure}[H]
+    \begin{subfigure}{.5\textwidth}
+        \includegraphics[width=\textwidth]{neurips_2022_finite_sum_real-sim_nof_500_numnodes_100_more_probs_batch_size_1.pdf}
         \caption{MNIST, BZ = 10}
     \end{subfigure}
     \begin{subfigure}{.5\textwidth}
@@ -46,35 +69,20 @@ We do not have experiments with \algname{FRECON} because the authors of \algname
         \caption{MNIST, BZ = 100}
     \end{subfigure}
 \caption{Classification task with the \textit{mushrooms} dataset.}
-\label{fig:finite-sum-mnist}
+\label{fig:finite-sum}
 \end{figure}
 
-\begin{figure}[h]
-    \begin{subfigure}{.5\textwidth}
-        \includegraphics[width=\textwidth]{neurips_2022_finite_sum_real-sim_nof_500_numnodes_100_more_probs_batch_size_1.pdf}
-        \caption{REAL-SIM, BZ = 1}
-    \end{subfigure}
-    \begin{subfigure}{.5\textwidth}
-        \includegraphics[width=\textwidth]{neurips_2022_finite_sum_real-sim_nof_500_numnodes_100_more_probs_batch_size_1000.pdf}
-        \caption{REAL-SIM, BZ = 1000}
-    \end{subfigure}
-\caption{Classification task with the \textit{mushrooms} dataset.}
-\label{fig:finite-sum-real-sim}
-\end{figure}
-
-\clearpage
-\section*{Stochastic Setting}
-\begin{figure}[h]
-    \begin{subfigure}{.5\textwidth}
-        \includegraphics[width=\textwidth]{neurips_2022_stochastic_real-sim_nof_200_numnodes_10_probs_mega_batch_100000_fix_nm_bug.pdf}
-        \caption{real-sim, BZ = 1}
-    \end{subfigure}
-    \begin{subfigure}{.5\textwidth}
-        \includegraphics[width=\textwidth]{?}
-        \caption{MNIST, BZ = 100}
-    \end{subfigure}
-\caption{Classification task with the \textit{mushrooms} dataset.}
-\label{fig:finite-sum-mnist}
-\end{figure}
+% \begin{figure}[H]
+%     \begin{subfigure}{.5\textwidth}
+%         \includegraphics[width=\textwidth]{neurips_2022_finite_sum_real-sim_nof_500_numnodes_100_more_probs_batch_size_1.pdf}
+%         \caption{REAL-SIM, BZ = 1}
+%     \end{subfigure}
+%     \begin{subfigure}{.5\textwidth}
+%         \includegraphics[width=\textwidth]{neurips_2022_finite_sum_real-sim_nof_500_numnodes_100_more_probs_batch_size_1000.pdf}
+%         \caption{REAL-SIM, BZ = 1000}
+%     \end{subfigure}
+% \caption{Classification task with the \textit{mushrooms} dataset.}
+% \label{fig:finite-sum-real-sim}
+% \end{figure}
 
 \end{document}
