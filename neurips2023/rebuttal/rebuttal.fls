@@ -1226,14 +1226,9 @@ INPUT /usr/local/texlive/2023/texmf-dist/fonts/tfm/public/amsfonts/symbols/msbm1
 INPUT /usr/local/texlive/2023/texmf-dist/fonts/tfm/public/amsfonts/symbols/msbm7.tfm
 INPUT /usr/local/texlive/2023/texmf-dist/fonts/tfm/public/cm/cmr9.tfm
 INPUT /usr/local/texlive/2023/texmf-dist/fonts/tfm/public/cm/cmss9.tfm
+INPUT /usr/local/texlive/2023/texmf-dist/fonts/tfm/public/cm/cmti10.tfm
 INPUT /usr/local/texlive/2023/texmf-dist/fonts/tfm/public/cm/cmr12.tfm
 INPUT /usr/local/texlive/2023/texmf-dist/fonts/tfm/public/cm/cmbx12.tfm
-INPUT ./neurips_2022_gradient_mushrooms_nodes_100_coord_10_prob_0_01_seeds_3_no_init_with_pp_marina.pdf
-INPUT ./neurips_2022_gradient_mushrooms_nodes_100_coord_10_prob_0_01_seeds_3_no_init_with_pp_marina.pdf
-INPUT neurips_2022_gradient_mushrooms_nodes_100_coord_10_prob_0_01_seeds_3_no_init_with_pp_marina.pdf
-INPUT ./neurips_2022_gradient_mushrooms_nodes_100_coord_10_prob_0_01_seeds_3_no_init_with_pp_marina.pdf
-INPUT ./neurips_2022_gradient_mushrooms_nodes_100_coord_10_prob_0_01_seeds_3_no_init_with_pp_marina.pdf
-INPUT /usr/local/texlive/2023/texmf-dist/fonts/tfm/public/cm/cmti10.tfm
 INPUT ./neurips_2022_finite_sum_mnist_nof_7850_numnodes_10_more_probs_batch_size_10_split_by_labels_logistic.pdf
 INPUT ./neurips_2022_finite_sum_mnist_nof_7850_numnodes_10_more_probs_batch_size_10_split_by_labels_logistic.pdf
 INPUT neurips_2022_finite_sum_mnist_nof_7850_numnodes_10_more_probs_batch_size_10_split_by_labels_logistic.pdf

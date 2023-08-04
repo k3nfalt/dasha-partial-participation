@@ -26,15 +26,15 @@
 \begin{document}
 \maketitle
 
-In this experiments, we compare our new algorithm \algname{DASHA-PP} with previous baselines \algname{MARINA} and \algname{FRECON} in the partial participation setting.
-\section*{Warm Up: Gradient Setting}
-\begin{figure}[h]
-\includegraphics[width=\textwidth]{neurips_2022_gradient_mushrooms_nodes_100_coord_10_prob_0_01_seeds_3_no_init_with_pp_marina.pdf}
-\caption{Classification task with the \textit{mushrooms} dataset.}
-\label{fig:gradient}
-\end{figure}
+In this experiments, we compare our new algorithm \algname{DASHA-PP} with previous baselines \algname{MARINA} and \algname{FRECON} in the partial participation setting. We consider \algname{MARINA} and \algname{FRECON} because they are the previous baselines in the \emph{partial participation setting with compression}.
+% \section*{Warm Up: Gradient Setting}
+% \begin{figure}[h]
+% \includegraphics[width=\textwidth]{neurips_2022_gradient_mushrooms_nodes_100_coord_10_prob_0_01_seeds_3_no_init_with_pp_marina.pdf}
+% \caption{Classification task with the \textit{mushrooms} dataset.}
+% \label{fig:gradient}
+% \end{figure}
 \section*{Finite-Sum Setting}
-We do have experiments with \algname{FRECON} because the corresponding authors do not consider \algname{FRECON} in the finite-sum setting.
+We do not have experiments with \algname{FRECON} because the authors of \algname{FRECON} do not consider it in the finite-sum setting.
 
 \begin{figure}[h]
     \begin{subfigure}{.5\textwidth}
@@ -52,11 +52,11 @@ We do have experiments with \algname{FRECON} because the corresponding authors d
 \begin{figure}[h]
     \begin{subfigure}{.5\textwidth}
         \includegraphics[width=\textwidth]{neurips_2022_finite_sum_real-sim_nof_500_numnodes_100_more_probs_batch_size_1.pdf}
-        \caption{MNIST, BZ = 1}
+        \caption{REAL-SIM, BZ = 1}
     \end{subfigure}
     \begin{subfigure}{.5\textwidth}
         \includegraphics[width=\textwidth]{neurips_2022_finite_sum_real-sim_nof_500_numnodes_100_more_probs_batch_size_1000.pdf}
-        \caption{MNIST, BZ = 1000}
+        \caption{REAL-SIM, BZ = 1000}
     \end{subfigure}
 \caption{Classification task with the \textit{mushrooms} dataset.}
 \label{fig:finite-sum-real-sim}
@@ -67,7 +67,7 @@ We do have experiments with \algname{FRECON} because the corresponding authors d
 \begin{figure}[h]
     \begin{subfigure}{.5\textwidth}
         \includegraphics[width=\textwidth]{neurips_2022_stochastic_real-sim_nof_200_numnodes_10_probs_mega_batch_100000_fix_nm_bug.pdf}
-        \caption{MNIST, BZ = 1}
+        \caption{real-sim, BZ = 1}
     \end{subfigure}
     \begin{subfigure}{.5\textwidth}
         \includegraphics[width=\textwidth]{?}
