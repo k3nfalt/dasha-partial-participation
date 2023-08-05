@@ -27,7 +27,7 @@
     Extra Experiments
 \end{center}
 
-In this experiments, we compare our new algorithm \algname{DASHA-PP} with previous baselines \algname{MARINA} and \algname{FRECON} in the partial participation setting (the comparisons of \algname{DASHA-PP} with \algname{DASHA} we present in Section~A of the paper). We consider \algname{MARINA} and \algname{FRECON} because they are the previous SOTA methods in the \emph{partial participation setting with compression}. We investigate the same optimization problem and setup as in Section~A of the paper.
+In this experiments, we compare our new algorithm \algname{DASHA-PP} with previous baselines \algname{MARINA} and \algname{FRECON} in the partial participation setting (the comparisons of \algname{DASHA-PP} with \algname{DASHA} we present in Section~A of the paper). We consider \algname{MARINA} and \algname{FRECON} because they are the previous SOTA methods in the \emph{partial participation setting with {\bf compression}}. We investigate the same optimization problem and setup as in Section~A of the paper.
 % \section*{Warm Up: Gradient Setting}
 % \begin{figure}[h]
 % \includegraphics[width=\textwidth]{neurips_2022_gradient_mushrooms_nodes_100_coord_10_prob_0_01_seeds_3_no_init_with_pp_marina.pdf}
@@ -57,20 +57,35 @@ In Figure~\ref{fig:stochastic}, we compare all three methods in the stochastic s
 \begin{center}
     \bf Finite-Sum Setting
 \end{center}
-In Figure~\ref{fig:finite-sum}, we consider the finite-sum setting. We do not have experiments with \algname{FRECON} because the authors of \algname{FRECON} do not consider it in the finite-sum setting. We can see that \algname{DASHA-PP} with $s \in \{50, 90, 100\}$ converges faster than \algname{MARINA} (that works in the full participation regime).
+In Figure~\ref{fig:finite-sum}, we consider the finite-sum setting. 
+We can see that \algname{DASHA-PP} with the number of participated clients $s \in \{50, 90, 100\}$ (in \textit{real-sim}) and $s \in \{5, 9, 10\}$ (in \textit{MNIST}) converges faster than \algname{MARINA} (that works in the full participation regime!). Since \algname{FRECON} does not support variance reduction of stochastic gradients, it converges to less accurate solutions..
+% We do not have experiments with \algname{FRECON} because the authors of \algname{FRECON} do not consider it in the finite-sum setting. We can see that \algname{DASHA-PP} with $s \in \{50, 90, 100\}$ converges faster than \algname{MARINA} (that works in the full participation regime).
 
 \begin{figure}[H]
     \begin{subfigure}{.5\textwidth}
-        \includegraphics[width=\textwidth]{tmp_launch/neurips_2022_finite_sum_real-sim_nof_500_numnodes_100_more_probs_batch_size_1.pdf}
+        \includegraphics[width=\textwidth]{neurips_2022_finite_sum_real-sim_nof_500_numnodes_100_more_probs_batch_size_1_frecon.pdf}
         \caption{\textit{real-sim}}
     \end{subfigure}
     \begin{subfigure}{.5\textwidth}
-        \includegraphics[width=\textwidth]{tmp_launch/neurips_2022_finite_sum_mnist_nof_7850_numnodes_10_more_probs_batch_size_100_split_by_labels_logistic.pdf}
+        \includegraphics[width=\textwidth]{neurips_2022_finite_sum_mnist_nof_1000_numnodes_10_more_probs_batch_size_100_split_by_labels_logistic_frecon.pdf}
         \caption{\textit{MNIST}}
     \end{subfigure}
 \caption{Classification task}
 \label{fig:finite-sum}
 \end{figure}
+
+% \begin{figure}[H]
+%     \begin{subfigure}{.5\textwidth}
+%         \includegraphics[width=\textwidth]{tmp_launch/neurips_2022_finite_sum_real-sim_nof_500_numnodes_100_more_probs_batch_size_1.pdf}
+%         \caption{\textit{real-sim}}
+%     \end{subfigure}
+%     \begin{subfigure}{.5\textwidth}
+%         \includegraphics[width=\textwidth]{tmp_launch/neurips_2022_finite_sum_mnist_nof_7850_numnodes_10_more_probs_batch_size_100_split_by_labels_logistic.pdf}
+%         \caption{\textit{MNIST}}
+%     \end{subfigure}
+% \caption{Classification task}
+% \label{fig:finite-sum}
+% \end{figure}
 
 % \begin{figure}[H]
 %     \begin{subfigure}{.5\textwidth}
