@@ -42,7 +42,7 @@ In this experiments, we compare our new algorithm \algname{DASHA-PP} with previo
 % \begin{center}
 %     \bf Finite-Sum Setting
 % \end{center}
-{1. \bf Finite-Sum Setting.} In Figures~\ref{fig:finite-sum-real-sim} and \ref{fig:finite-sum-mnist}, we compare all three methods in the finite-sum setting on two different datasets: \textit{real-sim} and \textit{MNIST}. The parameter $s$ is the number of clients participating in each round.
+{1. \bf Finite-Sum Setting.} In Figures~\ref{fig:finite-sum-real-sim} and \ref{fig:finite-sum-mnist}, we compare all three methods in the finite-sum setting on two different datasets: \textit{real-sim} and \textit{MNIST}. The parameter $s$ is the number of clients participating in each round that are selected randomly using the $s$-nice sampling (server chooses uniformly $s$ nodes without replacement).
 We can see that \algname{DASHA-PP} converges faster than \algname{MARINA}. Since \algname{FRECON} does not support variance reduction of stochastic gradients, it converges to less accurate solutions.
 % We do not have experiments with \algname{FRECON} because the authors of \algname{FRECON} do not consider it in the finite-sum setting. We can see that \algname{DASHA-PP} with $s \in \{50, 90, 100\}$ converges faster than \algname{MARINA} (that works in the full participation regime).
 \vspace{-0.3cm}
