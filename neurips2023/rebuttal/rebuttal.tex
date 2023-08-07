@@ -58,7 +58,6 @@ We can see that \algname{DASHA-PP} converges faster than \algname{MARINA}. Since
 \caption{Classification task on \textit{real-sim}}
 \label{fig:finite-sum-real-sim}
 \end{figure}
-
 \begin{figure}[H]
     \begin{subfigure}{.33\textwidth}
         \includegraphics[width=\textwidth]{neurips_2022_finite_sum_mnist_nof_1000_numnodes_10_more_probs_batch_size_100_split_by_labels_logistic_frecon_number_of_workers_1.pdf}
@@ -94,20 +93,53 @@ We can see that \algname{DASHA-PP} converges faster than \algname{MARINA}. Since
     \bf Stochastic Setting
 \end{center}
 
-In Figure~\ref{fig:stochastic}, we consider the stochastic setting. We can see that \algname{DASHA-PP} has better convergence rates than \algname{FRECON}. \algname{DASHA-PP} with $s \in \{5, 10\}$ even improves \algname{MARINA} that works in the \emph{full participation regime} (one should expect that convergence rate of \algname{MARINA} with partial participation will be even worse).
+In Figures~\ref{fig:stoch-real-sim} and \ref{fig:stoch-sum-mnist}, we consider the stochastic setting. We can see that \algname{DASHA-PP} convergences to low accuracy solutions, unlike \algname{FRECON}. Also, \algname{DASHA-PP} improves \algname{MARINA}.
 
 \begin{figure}[H]
-    \begin{subfigure}{.5\textwidth}
-        \includegraphics[width=\textwidth]{tmp_launch/neurips_2022_stochastic_real-sim_nof_200_numnodes_10_probs_mega_batch_100000_fix_nm_bug.pdf}
-        \caption{\textit{real-sim}}
+    \begin{subfigure}{.33\textwidth}
+        \includegraphics[width=\textwidth]{neurips_2022_stochastic_real-sim_nof_200_numnodes_10_probs_mega_batch_100000_fix_nm_bug_number_of_workers_1.pdf}
+        \caption{10 \% of nodes participating}
     \end{subfigure}
-    \begin{subfigure}{.5\textwidth}
-        \includegraphics[width=\textwidth]{tmp_launch/neurips_2023_stochastic_mnist_nof_100_numnodes_10_probs_mega_batch_100000_batch_size_10_longer.pdf}
-        \caption{\textit{MNIST}}
+    \begin{subfigure}{.33\textwidth}
+        \includegraphics[width=\textwidth]{neurips_2022_stochastic_real-sim_nof_200_numnodes_10_probs_mega_batch_100000_fix_nm_bug_number_of_workers_5.pdf}
+        \caption{50 \% of nodes participating}
     \end{subfigure}
-\caption{Classification task}
-\label{fig:stochastic}
+    \begin{subfigure}{.33\textwidth}
+        \includegraphics[width=\textwidth]{neurips_2022_stochastic_real-sim_nof_200_numnodes_10_probs_mega_batch_100000_fix_nm_bug_number_of_workers_10.pdf}
+        \caption{100 \% of nodes participating}
+    \end{subfigure}
+\caption{Classification task on \textit{real-sim}}
+\label{fig:stoch-real-sim}
 \end{figure}
+\begin{figure}[H]
+    \begin{subfigure}{.33\textwidth}
+        \includegraphics[width=\textwidth]{neurips_2023_stochastic_mnist_nof_100_numnodes_10_probs_mega_batch_100000_batch_size_10_longer_number_of_workers_1.pdf}
+        \caption{10 \% of nodes participating}
+    \end{subfigure}
+    \begin{subfigure}{.33\textwidth}
+        \includegraphics[width=\textwidth]{neurips_2023_stochastic_mnist_nof_100_numnodes_10_probs_mega_batch_100000_batch_size_10_longer_number_of_workers_5.pdf}
+        \caption{50 \% of nodes participating}
+    \end{subfigure}
+    \begin{subfigure}{.33\textwidth}
+        \includegraphics[width=\textwidth]{neurips_2023_stochastic_mnist_nof_100_numnodes_10_probs_mega_batch_100000_batch_size_10_longer_number_of_workers_10.pdf}
+        \caption{100 \% of nodes participating}
+    \end{subfigure}
+    \caption{Classification task on \textit{MNIST}}
+\label{fig:stoch-sum-mnist}
+\end{figure}
+
+% \begin{figure}[H]
+%     \begin{subfigure}{.5\textwidth}
+%         \includegraphics[width=\textwidth]{tmp_launch/neurips_2022_stochastic_real-sim_nof_200_numnodes_10_probs_mega_batch_100000_fix_nm_bug.pdf}
+%         \caption{\textit{real-sim}}
+%     \end{subfigure}
+%     \begin{subfigure}{.5\textwidth}
+%         \includegraphics[width=\textwidth]{tmp_launch/neurips_2023_stochastic_mnist_nof_100_numnodes_10_probs_mega_batch_100000_batch_size_10_longer.pdf}
+%         \caption{\textit{MNIST}}
+%     \end{subfigure}
+% \caption{Classification task}
+% \label{fig:stochastic}
+% \end{figure}
 
 % \begin{figure}[H]
 %     \begin{subfigure}{.5\textwidth}
