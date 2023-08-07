@@ -18,16 +18,20 @@
 \usepackage{xcolor}         % colors
 \usepackage{enumitem}
 \usepackage{tabularx}
-\usepackage[margin=0.5in]{geometry}
+\usepackage[margin=0.4in]{geometry}
+% \setlength\cellspacetoplimit{2pt} % add extra space above cell content
+% \setlength\cellspacebottomlimit{2pt} % add extra space below cell content
+\setlength{\abovecaptionskip}{2pt}
+\thispagestyle{empty}
 
 \include{macros}
 
 \begin{document}
+\vspace{-8cm}
 \begin{center}
     Extra Experiments
 \end{center}
-
-In this experiments, we compare our new algorithm \algname{DASHA-PP} with previous baselines \algname{MARINA} and \algname{FRECON} in the partial participation setting (the comparisons of \algname{DASHA-PP} with \algname{DASHA} we present in Section~A of the paper). We consider \algname{MARINA} and \algname{FRECON} because they are the previous SOTA methods in the \emph{partial participation setting with {\bf compression}}. We investigate the same optimization problem and setup as in Section~A of the paper. All methods use the Rand$K$ compressor in these experiments.
+In this experiments, we compare our new algorithm \algname{DASHA-PP} with previous baselines \algname{MARINA} and \algname{FRECON} in the partial participation setting (the comparisons of \algname{DASHA-PP} with \algname{DASHA} we present in Section~A of the paper). We consider \algname{MARINA} and \algname{FRECON} because they are the previous SOTA methods in the \emph{partial participation setting with {\bf compression}}. We investigate the same optimization problem and setup as in Section~A of the paper. One can find the details (loss functions, batch size, exact parameters) in Section~A. All methods use the Rand$K$ compressor in these experiments.
 % \section*{Warm Up: Gradient Setting}
 % \begin{figure}[h]
 % \includegraphics[width=\textwidth]{neurips_2022_gradient_mushrooms_nodes_100_coord_10_prob_0_01_seeds_3_no_init_with_pp_marina.pdf}
@@ -35,13 +39,13 @@ In this experiments, we compare our new algorithm \algname{DASHA-PP} with previo
 % \label{fig:gradient}
 % \end{figure}
 
-\begin{center}
-    \bf Finite-Sum Setting
-\end{center}
-In Figures~\ref{fig:finite-sum-real-sim} and \ref{fig:finite-sum-mnist}, we compare all three methods in the finite-sum setting on two different datasets: \textit{real-sim} and \textit{MNIST}. The parameter $s$ is the number of clients participating in each round.
+% \begin{center}
+%     \bf Finite-Sum Setting
+% \end{center}
+{1. \bf Finite-Sum Setting.} In Figures~\ref{fig:finite-sum-real-sim} and \ref{fig:finite-sum-mnist}, we compare all three methods in the finite-sum setting on two different datasets: \textit{real-sim} and \textit{MNIST}. The parameter $s$ is the number of clients participating in each round.
 We can see that \algname{DASHA-PP} converges faster than \algname{MARINA}. Since \algname{FRECON} does not support variance reduction of stochastic gradients, it converges to less accurate solutions.
 % We do not have experiments with \algname{FRECON} because the authors of \algname{FRECON} do not consider it in the finite-sum setting. We can see that \algname{DASHA-PP} with $s \in \{50, 90, 100\}$ converges faster than \algname{MARINA} (that works in the full participation regime).
-
+\vspace{-0.3cm}
 \begin{figure}[H]
     \begin{subfigure}{.33\textwidth}
         \includegraphics[width=\textwidth]{neurips_2022_finite_sum_real-sim_nof_500_numnodes_100_more_probs_batch_size_1_frecon_number_of_workers_1.pdf}
@@ -58,6 +62,7 @@ We can see that \algname{DASHA-PP} converges faster than \algname{MARINA}. Since
 \caption{Classification task on \textit{real-sim}}
 \label{fig:finite-sum-real-sim}
 \end{figure}
+\vspace{-0.5cm}
 \begin{figure}[H]
     \begin{subfigure}{.33\textwidth}
         \includegraphics[width=\textwidth]{neurips_2022_finite_sum_mnist_nof_1000_numnodes_10_more_probs_batch_size_100_split_by_labels_logistic_frecon_number_of_workers_1.pdf}
@@ -88,12 +93,12 @@ We can see that \algname{DASHA-PP} converges faster than \algname{MARINA}. Since
 % \label{fig:finite-sum}
 % \end{figure}
 
-
-\begin{center}
-    \bf Stochastic Setting
-\end{center}
-
-In Figures~\ref{fig:stoch-real-sim} and \ref{fig:stoch-sum-mnist}, we consider the stochastic setting. We can see that \algname{DASHA-PP} convergences to low accuracy solutions, unlike \algname{FRECON}. Also, \algname{DASHA-PP} improves \algname{MARINA}.
+% \vspace{-0.5cm}
+% \begin{center}
+%     \bf Stochastic Setting
+% \end{center}
+\vspace{-0.3cm}
+{2. \bf Stochastic Setting.} In Figures~\ref{fig:stoch-real-sim} and \ref{fig:stoch-sum-mnist}, we consider the stochastic setting. We can see that \algname{DASHA-PP} convergences to low accuracy solutions, unlike \algname{FRECON}. Moreover, \algname{DASHA-PP} improves the convergence rates of \algname{MARINA}.
 
 \begin{figure}[H]
     \begin{subfigure}{.33\textwidth}
