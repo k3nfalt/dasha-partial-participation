@@ -622,9 +622,6 @@ INPUT /usr/local/texlive/2023/texmf-dist/tex/latex/amscls/amsthm.sty
 INPUT ./macros.tex
 INPUT ./macros.tex
 INPUT ./macros.tex
-INPUT ./macros.tex
-INPUT ./macros.tex
-INPUT ./macros.tex
 INPUT macros.tex
 INPUT ./macros.tex
 INPUT ./macros.tex
