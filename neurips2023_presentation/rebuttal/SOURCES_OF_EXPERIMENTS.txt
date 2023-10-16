@@ -1,0 +1,6 @@
+# PLOTS GENERATED WITH:
+for f in /home/tyurina/exepriments/neurips_2022_finite_sum_*; do echo $f && python3.7 ./code/distributed_optimization_library/experiments/plots/dasha_partial_participation/plot_vr-marina_real-sim_mini-batch.py --dumps_paths $f --output_path ~/tmp_launch/"${f##*/}" --ignore_methods "DASHA-PAGE" ; done
+for f in /home/tyurina/exepriments/neurips_2023_stochastic_*; do echo $f && python3.7 ./code/distributed_optimization_library/experiments/plots/dasha_partial_participation/plot_vr-marina_real-sim_stochastic.py --dumps_paths $f --output_path ~/tmp_launch/"${f##*/}" --ignore_methods "DASHA-SYNC-MVR" "DASHA-MVR"; done
+# AND WITH
+~/notebooks/dasha-partial-participation-mini-batch-with-frecon.ipynb
+in ibex
