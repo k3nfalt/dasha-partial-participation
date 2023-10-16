@@ -190,19 +190,19 @@ where $f_{ij} :\R^d  \rightarrow \R$ is a smooth nonconvex  function for all $j 
      \midrule
     %  \begin{tabular}{@{}c@{}} Naive \algnamesmall{STORM} in the \emph{PP} setting \end{tabular} & ? & \cmark & \xmark & \\
     %  \midrule
-     \begin{tabular}{@{}c@{}}\algnamesmall{MARINA} \\ \citep{MARINA} \end{tabular} & \cmark & \xmark\textsuperscript{{\color{blue}(a)}} & \cmark\textsuperscript{{\color{blue}(b)}} & \begin{tabular}{@{}c@{}}Suboptimal convergence rate \\ (see \citep{tyurin2022dasha}). \end{tabular}\\
+     \begin{tabular}{@{}c@{}}\algnamesmall{MARINA} \\ \citep{MARINA} \end{tabular} & \cmark & \xmark & \cmark & \begin{tabular}{@{}c@{}}Suboptimal convergence rate.\end{tabular}\\
      \midrule
-     \begin{tabular}{@{}c@{}}\algnamesmall{FedPAGE} \\ \citep{zhao2021fedpage} \end{tabular} & \xmark & \xmark\textsuperscript{{\color{blue}(a)}} & \xmark & Suboptimal oracle complexity $\cO\left(\frac{\sigma^2}{\varepsilon^2}\right)$. \\
+     \begin{tabular}{@{}c@{}}\algnamesmall{FedPAGE} \\ \citep{zhao2021fedpage} \end{tabular} & \xmark & \xmark & \xmark & Suboptimal oracle complexity $\cO\left(\frac{\sigma^2}{\varepsilon^2}\right)$. \\
      \midrule
      \begin{tabular}{@{}c@{}}\algnamesmall{FRECON} \\ \citep{zhao2021faster} \end{tabular} & \xmark & \cmark & \cmark & --- \\
      \midrule
      \begin{tabular}{@{}c@{}}\algnamesmall{FedAvg} \\ \citep{mcmahan2017communication, karimireddy2020scaffold} \end{tabular} & \xmark & \cmark & \xmark & Bounded gradients (dissimilarity) assumption of $f_i$.\\
      \midrule
-     \begin{tabular}{@{}c@{}}\algnamesmall{SCAFFOLD} \\ \citep{karimireddy2020scaffold} \end{tabular} & \xmark & \cmark & \xmark & Suboptimal convergence rate\textsuperscript{{\color{blue}(e)}}. \\
+     \begin{tabular}{@{}c@{}}\algnamesmall{SCAFFOLD} \\ \citep{karimireddy2020scaffold} \end{tabular} & \xmark & \cmark & \xmark & Suboptimal convergence rate. \\
      \midrule
-     \begin{tabular}{@{}c@{}}\algnamesmall{MIME}\textsuperscript{{\color{blue}(c)}} \\ \citep{karimireddy2020mime} \end{tabular} & \xmark\textsuperscript{{\color{blue}(d)}} & \cmark & \xmark & \begin{tabular}{@{}c@{}}Calculates full gradient. \\ Bounded gradients (dissimilarity) assumption of $f_i$. \\ Suboptimal oracle compl. $\cO\left(\nicefrac{1}{\varepsilon^{3/2}}\right)$ in the setting \eqref{eq:task_minibatch}.\end{tabular} \\
+     \begin{tabular}{@{}c@{}}\algnamesmall{MIME} \\ \citep{karimireddy2020mime} \end{tabular} & \xmark & \cmark & \xmark & \begin{tabular}{@{}c@{}}Calculates full gradient. \\ Bounded gradients (dissimilarity) assumption of $f_i$. \\ Suboptimal oracle compl. $\cO\left(\nicefrac{1}{\varepsilon^{3/2}}\right)$ in the finite-sum setting.\end{tabular} \\
      \midrule
-     \begin{tabular}{@{}c@{}}\algnamesmall{CE-LSGD} (for Partial Participation)\textsuperscript{{\color{blue}(c)}} \\ \citep{pateltowards} (concurrent work) \end{tabular} & \cmark & \cmark & \xmark & \begin{tabular}{@{}c@{}}Bounded gradients (dissimilarity) assumption of $f_i$. \\ Suboptimal oracle compl. $\cO\left(\nicefrac{1}{\varepsilon^{3/2}}\right)$ in the setting \eqref{eq:task_minibatch}.\end{tabular} \\
+     \begin{tabular}{@{}c@{}}\algnamesmall{CE-LSGD} (for Partial Participation) \\ \citep{pateltowards} (concurrent work) \end{tabular} & \cmark & \cmark & \xmark & \begin{tabular}{@{}c@{}}Bounded gradients (dissimilarity) assumption of $f_i$. \\ Suboptimal oracle compl. $\cO\left(\nicefrac{1}{\varepsilon^{3/2}}\right)$ in the finite-sum setting.\end{tabular} \\
      \midrule
      \begin{tabular}{@{}c@{}}\algnamesmall{DASHA} \\ \citep{tyurin2022dasha} \end{tabular} & \begin{tabular}{@{}c@{}}\cmark \\ \phantom{or} \\ \xmark \end{tabular} & \begin{tabular}{@{}c@{}}\xmark \\ or\\ \cmark \end{tabular} & \begin{tabular}{@{}c@{}}\cmark \\ \phantom{or}\\ \cmark \end{tabular} & --- \\
      \midrule
@@ -585,6 +585,23 @@ and the expected number of gradient calculations per node equals
   $
   % \end{align}}
 \end{restatable}
+
+\newtheorem*{corollary*}{Corollary}
+\newpage
+\begin{corollary*}[Informal]
+  The communication complexity is
+  % {\scriptsize\begin{align}
+  $$
+      \cO\left(d + \frac{d}{\probavailable \varepsilon \sqrt{n}}\right),
+  $$
+  % \end{align}}
+and the expected number of gradient calculations per node equals
+% {\scriptsize\begin{align}
+  $$
+      \cO\left(m + \frac{\sqrt{m}}{\probavailable \varepsilon \sqrt{n}} \right).
+  $$
+\end{corollary*}
+
 The convergence rate of \algname{\algorithmname-FINITE-MVR} is provided in Section~\ref{sec:proof_finite_mvr}. 
 % The conclusions are the same for the method.
 
@@ -625,18 +642,17 @@ The convergence rate of the \algname{DASHA-SYNC-MVR}, the state-of-the-art metho
 % In the following corollary, we consider Rand$K$ compressors and show that with the particular choice of parameters $$
 In the following corollary, we consider Rand$K$ compressors (see Definition~\ref{def:rand_k}) and show that with the particular choice of parameters, up to the Lipschitz constants factors, \algname{\algorithmname-MVR} gets the optimal oracle complexity and SOTA communication complexity of \algname{DASHA-SYNC-MVR} method. Indeed, comparing the following result with \citep[Corollary 6.9]{tyurin2022dasha}, one can see that we get the degeneration up to $\nicefrac{1}{\probavailable}$ factor, which is expected in the partial participation setting. Note that the complexities improve with the number of workers $n.$
 
-\begin{restatable}{corollary}{COROLLARYSTOCHASTICRANDK}
+\begin{corollary*}[Informal]
   \label{cor:stochastic:randk}
-  Suppose that assumptions of Corollary~\ref{cor:stochastic} hold, batch size $B \leq \min\left\{\frac{\sigma}{\probavailable\sqrt{\varepsilon} n}, \frac{L_{\sigma}^2}{\mathbbm{1}_{\probavailable}^2 \widehat{L}^2}\right\},$ we take Rand$K$ compressors with $K = \Theta\left(\frac{B d \sqrt{\varepsilon n}}{\sigma}\right).$ Then
-  the communication complexity equals 
-  $
-      \cO\left(\frac{d \sigma}{\sqrt{\probavailable} \sqrt{n \varepsilon}} + \frac{L_{\sigma} \Delta_0 d}{\probavailable \sqrt{n} \varepsilon}\right),
-  $
+  The communication complexity equals 
+  $$
+      \cO\left(\frac{d \sigma}{\sqrt{\probavailable} \sqrt{n \varepsilon}} + \frac{d}{\probavailable \sqrt{n} \varepsilon}\right),
+  $$
   and the expected number of stochastic gradient calculations per node equals
-  $
-      \cO\left(\frac{\sigma^2}{\sqrt{\probavailable} n \varepsilon} + \frac{L_{\sigma} \Delta_0 \sigma}{\probavailable \varepsilon^{\nicefrac{3}{2}} n}\right).
-  $
-\end{restatable}
+  $$
+      \cO\left(\frac{\sigma^2}{\sqrt{\probavailable} n \varepsilon} + \frac{\sigma}{\probavailable \varepsilon^{\nicefrac{3}{2}} n}\right).
+  $$
+\end{corollary*}
 
 We are aware that the initial batch size $B_{\textnormal{init}}$ can be suboptimal w.r.t.\,$\omega$ in \algname{\algorithmname-MVR} in some regimes (see also \citep{tyurin2022dasha}). This is a side effect of mixing the variance reduction of stochastic gradients and compression. However, Corollary~\ref{cor:stochastic:randk} reveals that we can escape these regimes by choosing the parameter $K$ of Rand$K$ compressors in a particular way. To get the complete picture, we analyze the same phenomenon under P\L\, condition (see Section~\ref{sec:pl_condition}) and provide a new method \algname{\algorithmname-SYNC-MVR} (see Section~\ref{sec:main_algorithm_mvr_sync}).
 
